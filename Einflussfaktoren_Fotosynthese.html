@@ -1,0 +1,2226 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Photosynthese-Simulation (Engelmann-ähnlich) – V9</title>
+  <style>
+    :root{
+      /* Lab / research theme (cool, neutral) */
+      --bg0:#050812;
+      --bg1:#0a1220;
+      --panel:rgba(14,22,36,.88);
+      --panel2:rgba(10,16,28,.70);
+      --text:#eef3ff;
+      --muted:#b9c6dd;
+      --line:rgba(120,150,200,.20);
+      --accent:#7dd3fc;      /* lab cyan */
+      --accent2:#a78bfa;     /* violet */
+      --warn:#ffd56a;
+      --bad:#ff7a7a;
+      --shadow: 0 14px 36px rgba(0,0,0,.40);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 680px at 12% 0%, rgba(125,211,252,.14), transparent 60%),
+        radial-gradient(900px 600px at 100% 18%, rgba(167,139,250,.12), transparent 55%),
+        radial-gradient(820px 520px at 34% 100%, rgba(255,213,106,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        linear-gradient(115deg, rgba(120,150,200,.06) 0 1px, transparent 1px 100%),
+        linear-gradient(25deg, rgba(120,150,200,.04) 0 1px, transparent 1px 100%);
+      background-size: 56px 56px, 80px 80px;
+      pointer-events:none;
+      opacity:.35;
+      mix-blend-mode:screen;
+    }
+
+    header{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+      background: linear-gradient(180deg, rgba(14,22,36,.88), rgba(10,16,28,.60));
+      backdrop-filter: blur(6px);
+      position:sticky; top:0; z-index:20;
+    }
+    header h1{font-size:16px;margin:0;font-weight:720; letter-spacing:.2px}
+    header .sub{color:var(--muted);font-size:13px}
+
+    .wrap{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap:12px;
+      padding:12px;
+      max-width:1380px;
+      margin:0 auto;
+    }
+
+    .card{
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .card::after{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(700px 220px at 30% 0%, rgba(125,211,252,.12), transparent 65%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .stage{padding:10px}
+    .right{display:grid;grid-template-rows:auto auto 1fr auto;gap:12px}
+
+    .controls,.lensbox,.proto,.teacher{padding:12px; position:relative; z-index:1}
+    .controls h2,.lensbox h2,.proto h2,.teacher h2{
+      margin:0 0 10px;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.2px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .controls h2::before,
+    .lensbox h2::before,
+    .proto h2::before,
+    .teacher h2::before{
+      content:"";
+      width:10px;height:10px;border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(125,211,252,.55));
+      box-shadow: 0 0 0 3px rgba(125,211,252,.16);
+    }
+
+    /* Left layout */
+    .leftStack{display:grid;grid-template-rows:auto auto;gap:10px;position:relative;z-index:1}
+    .simFrame{
+      position:relative;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(234,246,239,.12);
+      background: rgba(0,0,0,.10);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+        canvas{
+      display:block;
+      width:100%;
+      height:auto;
+      background: linear-gradient(180deg, rgba(5,18,12,.85), rgba(3,14,10,.85));
+    }
+
+    /* Student diagrams (3x) */
+    .diagGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    .diagCard{
+      padding:10px;
+      border-radius:14px;
+      border:1px solid rgba(234,246,239,.12);
+      background: rgba(0,0,0,.10);
+      position:relative;
+      overflow:hidden;
+    }
+    .diagCard .ttl{
+      font-size:12px;
+      color:var(--muted);
+      margin:0 0 8px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+    }
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(125,211,252,.10);
+      border:1px solid rgba(125,211,252,.22);
+      font-size:12px;
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+      white-space:nowrap;
+    }
+
+    /* Controls */
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:10px;margin-bottom:10px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    label{font-size:12px;color:var(--muted); letter-spacing:.15px}
+    .inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+    .togglePrism{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+      padding:6px 8px;
+      border-radius:12px;
+      border:1px solid rgba(234,246,239,.14);
+      background: rgba(0,0,0,.12);
+    }
+    .togglePrism input{position:absolute;opacity:0;width:0;height:0}
+    .togglePrism .switch{
+      width:44px;height:24px;border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.16);
+      position:relative; flex:0 0 auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+    }
+    .togglePrism .switch::after{
+      content:"";
+      position:absolute; top:50%; left:3px;
+      transform:translateY(-50%);
+      width:18px;height:18px;border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(125,211,252,.55));
+      border:1px solid rgba(255,255,255,.20);
+      transition: left .15s ease, background .15s ease;
+      box-shadow: 0 6px 14px rgba(0,0,0,.35);
+    }
+    .togglePrism input:checked + .switch{
+      background: rgba(125,211,252,.18);
+      border-color: rgba(125,211,252,.32);
+    }
+    .togglePrism input:checked + .switch::after{
+      left:22px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(167,139,250,.60));
+    }
+    .togglePrism input:focus-visible + .switch{
+      outline:none;
+      box-shadow: 0 0 0 3px rgba(125,211,252,.16), inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    select, input[type="range"], button, textarea{font:inherit}
+    select{
+      width:100%;
+      padding:9px 10px;
+      border-radius:12px;
+      border:1px solid rgba(234,246,239,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline:none;
+    }
+    select:focus{border-color: rgba(125,211,252,.45); box-shadow: 0 0 0 3px rgba(125,211,252,.12)}
+    input[type="range"]{
+      width:100%;
+      -webkit-appearance:none;
+      height:6px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(125,211,252,.70), rgba(167,139,250,.50));
+      outline:none;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      width:18px;height:18px;border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(125,211,252,.75));
+      border:1px solid rgba(255,255,255,.20);
+      box-shadow: 0 6px 18px rgba(0,0,0,.35);
+      cursor:pointer;
+    }
+    input[type="range"]::-moz-range-thumb{
+      width:18px;height:18px;border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(125,211,252,.75));
+      border:1px solid rgba(255,255,255,.20);
+      box-shadow: 0 6px 18px rgba(0,0,0,.35);
+      cursor:pointer;
+    }
+
+    .btns{display:flex;gap:8px;flex-wrap:wrap}
+    button{
+      border-radius:12px;
+      padding:9px 12px;
+      cursor:pointer;
+      color:var(--text);
+      border:1px solid rgba(125,211,252,.26);
+      background: linear-gradient(180deg, rgba(125,211,252,.16), rgba(125,211,252,.08));
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
+    }
+    button:hover{background: linear-gradient(180deg, rgba(125,211,252,.22), rgba(125,211,252,.10))}
+    button.secondary{
+      border-color: rgba(234,246,239,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+    }
+    button.secondary:hover{background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05))}
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:8px;
+      margin-top:10px;
+    }
+    .kpis .pill{
+      width:100%;
+      background: rgba(0,0,0,.14);
+      border-color: rgba(234,246,239,.14);
+      font-variant-numeric: tabular-nums;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    /* Toggle switch */
+    .switch{position:relative;display:inline-block;width:52px;height:28px;vertical-align:middle}
+    .switch input{opacity:0;width:0;height:0}
+    .slider{
+      position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;
+      background: rgba(234,246,239,.12);
+      transition:.2s;border-radius:999px;
+      border:1px solid rgba(234,246,239,.16)
+    }
+    .slider:before{
+      position:absolute;content:"";height:22px;width:22px;left:3px;top:2px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(125,211,252,.75));
+      transition:.2s;border-radius:999px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.30);
+    }
+    .switch input:checked + .slider{
+      background: rgba(125,211,252,.22);
+      border-color: rgba(125,211,252,.35);
+    }
+    .switch input:checked + .slider:before{transform:translateX(23px)}
+    .switchlabel{font-size:12px;color:var(--muted)}
+
+    /* Lens box */
+    .lensRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .lensMetric{
+      border:1px solid rgba(234,246,239,.12);
+      border-radius:14px;
+      padding:10px;
+      background: rgba(0,0,0,.10);
+    }
+    .lensMetric .k{font-size:12px;color:var(--muted)}
+    .lensMetric .v{font-size:18px;font-weight:720;margin-top:4px;font-variant-numeric: tabular-nums}
+
+    textarea{
+      width:100%;
+      min-height:90px;
+      resize:vertical;
+      border-radius:14px;
+      padding:10px;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(234,246,239,.14);
+      color:var(--text);
+      outline:none;
+    }
+    textarea:focus{border-color: rgba(125,211,252,.45); box-shadow: 0 0 0 3px rgba(125,211,252,.12)}
+    .smallnote{font-size:12px;color:var(--muted);line-height:1.35;margin-top:6px}
+
+    .log{
+      border-radius:14px;
+      border:1px dashed rgba(234,246,239,.18);
+      padding:10px;
+      max-height:320px;
+      overflow:auto;
+      background: rgba(0,0,0,.12);
+    }
+    .entry{
+      padding:10px;
+      border-radius:14px;
+      border:1px solid rgba(234,246,239,.10);
+      background: rgba(255,255,255,.03);
+      margin-bottom:10px;
+    }
+    .entry .meta{font-size:12px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+    .entry .txt{margin-top:6px;white-space:pre-wrap;font-size:13px;line-height:1.35}
+    .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .thumbs img{max-width:160px;border-radius:12px;border:1px solid rgba(234,246,239,.14)}
+
+    details{
+      border:1px solid rgba(234,246,239,.14);
+      border-radius:14px;
+      padding:10px;
+      background: rgba(0,0,0,.10);
+    }
+    summary{cursor:pointer;color:var(--text);font-size:13px}
+    summary::marker{color: rgba(125,211,252,.85)}
+    .teacherGrid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+    .teacherCard{border:1px solid rgba(234,246,239,.12);border-radius:14px;padding:10px;background: rgba(255,255,255,.03)}
+    .teacherCard .ttl{font-size:12px;color:var(--muted);margin-bottom:6px}
+
+    @media (max-width: 980px){
+      .wrap{grid-template-columns:1fr}
+      .right{grid-template-rows:auto auto auto auto}
+      .kpis{grid-template-columns: repeat(2, minmax(0,1fr));}
+      .lensRow{grid-template-columns:1fr}
+    }
+  
+    /* High-contrast / projector-friendly tweaks */
+    canvas{ image-rendering:auto; }
+    .diag canvas{ background: rgba(0,0,0,.25); }
+    .pill{ font-weight:600; }
+    .infoBtn{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:18px; height:18px; border-radius:999px;
+      margin-left:6px;
+      border:1px solid rgba(234,246,239,.35);
+      background: rgba(0,0,0,.25);
+      color: rgba(234,246,239,.92);
+      font-size:12px; line-height:1;
+      cursor:pointer;
+    }
+    .infoBtn:hover{ background: rgba(0,0,0,.40); }
+
+    .seg{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:0;
+      width:100%;
+      border:1px solid rgba(234,246,239,.18);
+      border-radius:12px;
+      overflow:hidden;
+      background: rgba(0,0,0,.18);
+    }
+    .seg input{ position:absolute; opacity:0; pointer-events:none; }
+    .seg label{
+      text-align:center;
+      padding:8px 10px;
+      cursor:pointer;
+      user-select:none;
+      font-size:13px;
+      color: rgba(234,246,239,.78);
+      border-right:1px solid rgba(234,246,239,.12);
+    }
+    .seg label:last-of-type{ border-right:none; }
+    .seg input:checked + label{
+      background: rgba(125,211,252,.18);
+      color: rgba(234,246,239,.95);
+    }
+
+    .measureBox{ margin-bottom:10px; }
+    .tableWrap{
+      max-height:220px;
+      overflow:auto;
+      border:1px solid rgba(234,246,239,.14);
+      border-radius:12px;
+      background: rgba(0,0,0,.18);
+      margin-top:8px;
+    }
+    table{ width:100%; border-collapse:collapse; }
+    th, td{
+      padding:7px 8px;
+      font-size:12px;
+      border-bottom:1px solid rgba(234,246,239,.10);
+      white-space:nowrap;
+    }
+    th{
+      position:sticky; top:0;
+      background: rgba(0,0,0,.35);
+      color: rgba(234,246,239,.90);
+      text-align:left;
+      z-index:2;
+    }
+    td{ color: rgba(234,246,239,.82); }
+    tr:hover td{ background: rgba(255,255,255,.03); }
+
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center; justify-content:center;
+      background: rgba(0,0,0,.60);
+      z-index:50;
+      padding:16px;
+    }
+    .modal[aria-hidden="false"]{ display:flex; }
+    .modalCard{
+      width:min(560px, 96vw);
+      border-radius:16px;
+      border:1px solid rgba(234,246,239,.16);
+      background: rgba(10,14,20,.96);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .modalHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 12px;
+      border-bottom:1px solid rgba(234,246,239,.12);
+    }
+    .modalTitle{ font-weight:700; color: rgba(234,246,239,.92); }
+    .modalClose{
+      width:34px; height:34px;
+      border-radius:12px;
+      border:1px solid rgba(234,246,239,.18);
+      background: rgba(0,0,0,.25);
+      color: rgba(234,246,239,.92);
+      cursor:pointer;
+      font-size:18px;
+      line-height:1;
+    }
+    .modalClose:hover{ background: rgba(0,0,0,.40); }
+    .modalBody{ padding:12px 12px 14px 12px; color: rgba(234,246,239,.84); line-height:1.45; }
+
+</style>
+</head>
+
+<body>
+<header>
+  <h1>Einflussfaktoren der Fotosynthese - Erweiterter Engelmann Versuch</h1>
+  <div class="sub">Untersuchung verschiedener Einflussfaktoren auf die Fotosynthese</div>
+</header>
+
+<div id="errOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.72); z-index:9999; padding:24px;">
+  <div style="max-width:900px; margin:40px auto; background:#fff; color:#111; border-radius:14px; padding:16px 18px; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;">
+    <h2 style="margin:0 0 8px; font-size:18px;">Simulation konnte nicht starten</h2>
+    <div style="color:#333; font-size:13px; line-height:1.4;">
+      Es liegt ein JavaScript-Fehler vor. Bitte unten stehende Meldung kopieren (oder Screenshot) und schicken.
+    </div>
+    <pre id="errText" style="white-space:pre-wrap; background:#f5f5f5; border:1px solid #ddd; border-radius:10px; padding:10px; margin:12px 0 0; font-size:12px;"></pre>
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="errClose" style="padding:8px 10px; border-radius:10px; border:1px solid #ccc; background:#fff; cursor:pointer;">Schließen</button>
+      <button id="errReload" style="padding:8px 10px; border-radius:10px; border:1px solid #ccc; background:#fff; cursor:pointer;">Neu laden</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card" style="grid-column:1 / -1; padding:12px 14px;">
+    <details>
+      <summary><b>Versuchsaufbau</b> (aufklappen)</summary>
+      <div class="smallnote" style="margin-top:10px; line-height:1.45">
+        Der <b>Engelmann-Versuch</b> untersucht die Photosynthese über die <b>Sauerstoffbildung</b>.<br>
+        Eine <b>Fadenalge</b> (z.&nbsp;B. <i>Spirogyra</i>) liegt in einem Wassertropfen unter dem Mikroskop.
+        <b>Weißes Licht</b> wird mit einem <b>Prisma</b> in Spektralfarben zerlegt und als farbiger Streifen auf die Alge projiziert,
+        sodass entlang der Alge unterschiedliche Wellenlängen einwirken.<br>
+        In die Umgebung werden <b>bewegliche, aerobe Bakterien</b> gegeben. Sie benötigen Sauerstoff und dienen deshalb als
+        <b>biologischer Indikator</b>: Wo lokal mehr O₂ vorhanden ist, kann sich ihre Verteilung verändern.
+        So lässt sich räumlich (entlang des Spektrums) beobachten, wie stark die Photosynthese unter den jeweiligen Bedingungen abläuft,
+      </div>
+    </details>
+  </div>
+
+  <!-- LEFT: simulation + 3 student diagrams -->
+  <div class="card stage">
+    <div class="leftStack">
+      <div class="simFrame">
+                <canvas id="sim" width="1040" height="540" aria-label="Simulation"></canvas>
+      </div>
+
+      <div class="diagGrid" aria-label="Diagramme">
+        <div class="diagCard">
+          <div class="ttl">
+            <span>Diagramm 1: Beleuchtungsstärke</span>
+            <span class="pill" id="pillLight">Apparente Fotosynthese (gesamt): –</span>
+          </div>
+          <canvas id="diagLight" width="1040" height="170"></canvas>
+        </div>
+        <div class="diagCard">
+          <div class="ttl">
+            <span>Diagramm 2: Temperatur</span>
+            <span class="pill" id="pillTemp">Apparente Fotosynthese (gesamt): –</span>
+          </div>
+          <canvas id="diagTemp" width="1040" height="170"></canvas>
+        </div>
+        <div class="diagCard">
+          <div class="ttl">
+            <span>Diagramm 3: CO₂-Gehalt</span>
+            <span class="pill" id="pillCO2">Apparente Fotosynthese (gesamt): –</span>
+          </div>
+          <canvas id="diagCO2" width="1040" height="170"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: controls + lens readout + protocol + teacher (moved down) -->
+  <div class="right">
+    <div class="card controls">
+      <h2>Parameter</h2>
+
+      <div class="row">
+        <div class="field">
+          <label>Anzeige <button class="infoBtn" data-tip="psTerms" aria-label="Info: Apparente und reelle Fotosynthese">i</button></label>
+          <div class="seg" role="group" aria-label="Anzeige: apparente oder reelle Fotosynthese">
+            <input type="radio" name="viewMode" id="modeApp" value="app" checked>
+            <label for="modeApp">Apparente Fotosynthese</label>
+            <input type="radio" name="viewMode" id="modeReal" value="real">
+            <label for="modeReal">Reelle Fotosynthese</label>
+          </div>
+</div>
+      </div>
+<div class="kpis" id="kpiModeRow" style="margin-top:8px">
+        <span class="pill" id="kpiApp">Apparente: –</span>
+        <span class="pill" id="kpiReal">Reelle: –</span>
+        <span class="pill" id="kpiResp">Atmung: –</span>
+      </div>
+
+
+      <div class="row">
+        <div class="field">
+          <label for="lightColor">Lichtfarbe <button type="button" class="infoBtn" data-tip="lightColor" aria-label="Info: Lichtfarbe">i</button></label>
+          <select id="lightColor">
+            <option value="white">weiß (breitbandig)</option>
+            <option value="blue">blau</option>
+            <option value="green">grün</option>
+            <option value="red">rot</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Prisma <button type="button" class="infoBtn" data-tip="prism" aria-label="Info: Prisma">i</button></label>
+          <label class="togglePrism">
+            <input id="prism" type="checkbox" />
+            <span class="switch" aria-hidden="true"></span>
+            <span class="pill">Spektrum 400–700 nm</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="light">Beleuchtungsstärke: <span id="lightVal" class="pill">–</span> <button type="button" class="infoBtn" data-tip="light" aria-label="Info: Beleuchtungsstärke">i</button></label>
+          <input id="light" type="range" min="0" max="100" step="1" value="25" />
+        </div>
+
+        <div class="field">
+          <label for="co2">CO₂-Zufuhr: <span id="co2Val" class="pill">–</span> <button type="button" class="infoBtn" data-tip="co2" aria-label="Info: CO₂-Zufuhr">i</button></label>
+          <input id="co2" type="range" min="0" max="100" step="1" value="55" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="temp">Temperatur: <span id="tempVal" class="pill">–</span> <button type="button" class="infoBtn" data-tip="temp" aria-label="Info: Temperatur">i</button></label>
+          <input id="temp" type="range" min="0" max="50" step="0.5" value="22" />
+        </div>
+        <div class="field">
+          <label>Simulation</label>
+          <div class="btns">
+            <button id="reset">Reset</button>
+            <button class="secondary" id="pause">Pause</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpis">
+        <span class="pill" id="kpiWL">λ: –</span>
+        <span class="pill" id="kpiPS">PS: –</span>
+        <span class="pill" id="kpiO2">O₂ (rel.): –</span>
+        <span class="pill" id="kpiTemp">T-Faktor: –</span>
+        <span class="pill" id="kpiLight">Licht-Faktor: –</span>
+        <span class="pill" id="kpiCO2">CO₂-Faktor: –</span>
+      </div>
+
+      <details style="margin-top:10px">
+        <summary>Legende: Parameter & Modellannahmen (aufklappen)</summary>
+        <div class="smallnote" style="margin-top:10px">
+          <b>Lichtfarbe:</b> bestimmt, wie gut die Alge Licht nutzen kann (bei Prisma je nach Wellenlänge entlang der Breite).<br>
+          <b>Beleuchtungsstärke:</b> Mehr Licht erhöht die Photosynthese bis zur Sättigung (bei sehr viel Licht nimmt der Zugewinn ab).<br>
+          <b>CO₂-Zufuhr:</b> mehr CO₂ erhöht die Photosynthese bis zur Sättigung.<br>
+          <b>Temperatur:</b> steigt bis zum Optimum, danach sinkt sie; bei sehr hohen Temperaturen fällt die Aktivität stark ab.<br>
+          <b>Bakterien:</b> sammeln sich dort, wo mehr O₂ entsteht (Proxy für Photosynthese).<br><b>Diagramme:</b> Mausrad = Zoom, Ziehen = Verschieben, Doppelklick = Reset.
+        </div>
+      </details>
+
+    </div>
+
+    <div class="card lensbox">
+      <h2>Messfenster an der Lupe</h2>
+      <div class="lensRow">
+        <div class="lensMetric">
+          <div class="k">Relative Fotosynthese (an Lupenposition)</div>
+          <div class="v" id="lensPS">– %</div>
+                  </div>
+        <div class="lensMetric">
+          <div class="k">Bakterienhäufung (Lupe)</div>
+          <div class="v" id="lensCL">– %</div>
+          <div class="smallnote">Vergleich zum Durchschnitt im Becken: positive Werte bedeuten Häufung im Messfenster.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card proto">
+      <h2>Protokoll</h2>
+
+      <div class="measureBox">
+        <div class="btns">
+          <button id="saveMeasure">Messpunkt speichern</button>
+          <button class="secondary" id="exportPdf">PDF-Export</button>
+          <button class="secondary" id="clearMeasure">Messreihe löschen</button>
+        </div>
+        <div class="tableWrap" aria-label="Messreihe">
+          <table id="measureTable">
+            <thead>
+              <tr>
+                <th>Zeit</th>
+                <th>Licht&nbsp;(%)</th>
+                <th>CO₂&nbsp;(%)</th>
+                <th>T&nbsp;(°C)</th>
+                <th>Farbe</th>
+                <th>Prisma</th>
+                <th>λ&nbsp;(nm)</th>
+                <th>Reelle&nbsp;(%)</th>
+                <th>Atmung&nbsp;(%)</th>
+                <th>Apparente&nbsp;(%)</th>
+              </tr>
+            </thead>
+            <tbody id="measureBody"></tbody>
+          </table>
+        </div>
+        <div class="smallnote" style="margin-top:6px">
+          Gespeichert wird der Messwert im aktuellen Messfenster (Lupe) zusammen mit den aktuellen Reglereinstellungen.
+        </div>
+      </div>
+
+      <textarea id="note" placeholder="Beobachtung/Hypothese/Versuchsplan/Ergebnis/Interpretation …"></textarea>
+      <div class="btns">
+        <button id="addNote">Notiz speichern</button>
+        <button id="snapshot">Momentaufnahme (Sim + Diagramme)</button>
+        <button class="secondary" id="exportPDF">Export: PDF (Drucken)</button>
+        <button class="secondary" id="clearLog">Log löschen</button>
+      </div>
+      <div class="smallnote">
+        PDF-Export öffnet einen Report-Tab. Dort im Druckdialog „Als PDF speichern“ wählen.
+      </div>
+      <div class="log" id="log"></div>
+    </div>
+</div>
+</div>
+
+
+<div class="modal" id="tipModal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modalCard" role="document">
+    <div class="modalHead">
+      <div class="modalTitle" id="tipTitle">Info</div>
+      <button class="modalClose" id="tipClose" aria-label="Schließen">×</button>
+    </div>
+    <div class="modalBody" id="tipBody"></div>
+  </div>
+</div>
+
+
+<script>
+(() => {
+
+  // Global error overlay (helps diagnose blank canvas)
+  const __err = document.getElementById("errOverlay");
+  const __errText = document.getElementById("errText");
+  const __errClose = document.getElementById("errClose");
+  const __errReload = document.getElementById("errReload");
+  if(__errClose) __errClose.addEventListener("click", ()=>{ __err.style.display="none"; });
+  if(__errReload) __errReload.addEventListener("click", ()=>{ location.reload(); });
+  window.addEventListener("error", (ev) => {
+    try{
+      if(!__err) return;
+      __err.style.display = "block";
+      if(__errText){
+        __errText.textContent =
+          (ev.message||"Fehler") + "\n" +
+          (ev.filename? (ev.filename + ":" + ev.lineno + ":" + ev.colno) : "") + "\n" +
+          (ev.error && ev.error.stack ? ev.error.stack : "");
+      }
+    }catch(_){}
+  });
+
+  // -----------------------------
+  // DOM + Canvas
+  // -----------------------------
+  const sim = document.getElementById("sim");
+  const ctx = sim.getContext("2d");
+
+  const diagLight = document.getElementById("diagLight");
+  const d1 = diagLight.getContext("2d");
+  const diagTemp = document.getElementById("diagTemp");
+  const d2 = diagTemp.getContext("2d");
+  const diagCO2 = document.getElementById("diagCO2");
+  const d3 = diagCO2.getContext("2d");
+
+  // Enable zoom/pan interactions on the three student diagrams
+  bindZoom(diagLight, "light");
+  bindZoom(diagTemp,  "temp");
+  bindZoom(diagCO2,   "co2");
+
+  const elColor = document.getElementById("lightColor");
+  const elPrism = document.getElementById("prism");
+  const elLight = document.getElementById("light");
+  const elTemp = document.getElementById("temp");
+  const elCO2 = document.getElementById("co2");
+  // Anzeige-Modus (app/real)
+  let viewMode = "app";
+  const modeInputs = Array.from(document.querySelectorAll('input[name="viewMode"]'));
+  function setViewMode(v){
+    viewMode = v;
+    drawStudentDiagrams();
+    updateDisplays();
+  }
+  modeInputs.forEach(r=>r.addEventListener("change", ()=>{ if(r.checked) setViewMode(r.value); }));
+
+  function yRangeForMode(){
+    if(viewMode === "real") return {yMin:0, yMax:100, yLab:"Reelle Fotosynthese (%)"};
+    return {yMin:-20, yMax:100, yLab:"Apparente Fotosynthese (%)"};
+  }
+
+  function componentsAtLens(){
+    const x = magnifier.x;
+    const T = +elTemp.value;
+    const I = currentIntensity();
+    const C = +elCO2.value;
+    const gross = psGrossAtX(x, T, I, C);
+    const resp  = respirationPct(T);
+    const net   = gross - resp;
+    return {gross, resp, net};
+  }
+  function yForMode(gross, resp, net){
+    if(viewMode === "real") return gross;
+    return net; // apparente Fotosynthese
+  }
+  function labelForMode(){
+    if(viewMode === "real") return "Reelle Fotosynthese";
+    return "Apparente Fotosynthese";
+  }
+
+  // Tooltips / Pop-up-Infos
+  const tipModal = document.getElementById("tipModal");
+  const tipTitle = document.getElementById("tipTitle");
+  const tipBody = document.getElementById("tipBody");
+  const tipClose = document.getElementById("tipClose");
+
+  
+const TIP_TEXT = {
+  psTerms: {
+    title: "Apparente und reelle Fotosynthese",
+    body: "<b>Reelle Fotosynthese</b> entspricht der gesamten photosynthetischen O<sub>2</sub>-Produktion bzw. CO<sub>2</sub>-Fixierung ohne Abzug der Atmung.<br><br><b>Apparente Fotosynthese</b> ist die nach außen messbare apparente Rate: Reelle Fotosynthese minus Atmung. Sie kann bei sehr ungünstigen Bedingungen auch <b>negativ</b> sein, wenn die Atmung überwiegt."
+  },
+lightColor: {
+      title: "Lichtfarbe",
+      body: "Legt (ohne Prisma) die dominierende Wellenlänge fest bzw. filtert (mit Prisma) das Spektrum. Damit ändert sich die Lichtqualität, nicht die Beleuchtungsstärke."
+    },
+    prism: {
+      title: "Prisma",
+      body: "Mit Prisma wird weißes Licht in ein Spektrum zerlegt (400–700 nm). Entlang der Alge wirken unterschiedliche Wellenlängen."
+    },
+    light: {
+      title: "Beleuchtungsstärke",
+      body: "Maß für die Lichtintensität (Photonenfluss). Mehr Licht erhöht die mögliche Photosynthese bis zur Sättigung – vorausgesetzt andere Faktoren limitieren nicht."
+    },
+    co2: {
+      title: "CO₂-Zufuhr",
+      body: "Maß für das CO₂-Angebot als Substrat der Kohlenstofffixierung. Niedrige Werte können die Photosynthese begrenzen, hohe Werte führen zur Sättigung."
+    },
+    temp: {
+      title: "Temperatur",
+      body: "Beeinflusst enzymatische Reaktionen. Typisch: Anstieg bis zum Optimum; bei hohen Temperaturen sinkt die Aktivität durch Denaturierung/Stress deutlich."
+    }
+  };
+
+  function openTip(key){
+    const t = TIP_TEXT[key] || {title:"Info", body:"–"};
+    tipTitle.textContent = t.title;
+    tipBody.innerHTML = t.body;
+    tipModal.setAttribute("aria-hidden","false");
+  }
+  function closeTip(){
+    tipModal.setAttribute("aria-hidden","true");
+  }
+  document.querySelectorAll(".infoBtn").forEach(btn=>{
+    btn.addEventListener("click", ()=>openTip(btn.dataset.tip));
+  });
+  if(tipClose) tipClose.addEventListener("click", closeTip);
+  if(tipModal) tipModal.addEventListener("click", (ev)=>{ if(ev.target === tipModal) closeTip(); });
+  window.addEventListener("keydown", (ev)=>{ if(ev.key === "Escape" && tipModal.getAttribute("aria-hidden")==="false") closeTip(); });
+
+  // Messreihe
+  const elSaveMeasure = document.getElementById("saveMeasure");
+  const elExportPdf = document.getElementById("exportPdf");
+  const elClearMeasure = document.getElementById("clearMeasure");
+  const elMeasureBody = document.getElementById("measureBody");
+  const measures = [];
+
+  function formatTime(d){
+    const pad = (n)=>String(n).padStart(2,"0");
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  function renderMeasures(){
+    if(!elMeasureBody) return;
+    elMeasureBody.innerHTML = measures.map(m=>`
+      <tr>
+        <td>${m.time}</td>
+        <td>${m.light}</td>
+        <td>${m.co2}</td>
+        <td>${m.temp}</td>
+        <td>${m.color}</td>
+        <td>${m.prism}</td>
+        <td>${m.lam}</td>
+        <td>${m.gross}</td>
+        <td>${m.resp}</td>
+        <td>${m.net}</td>
+      </tr>
+    `).join("");
+  }
+  function downloadBlob(blob, filename){
+    const a = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportProtocolAsPdf(){
+    const stamp = new Date();
+    const dateStr = stamp.toLocaleString('de-DE');
+    const safeStamp = stamp.toISOString().slice(0,19).replace(/[:T]/g,"-");
+
+    const canvIds = [
+      {id:"sim", title:"Simulation"},
+      {id:"diagLight", title:"Diagramm: Beleuchtungsstärke"},
+      {id:"diagCO2", title:"Diagramm: CO₂-Zufuhr"},
+      {id:"diagTemp", title:"Diagramm: Temperatur"},
+    ];
+    const images = canvIds.map(c=>{
+      const el = document.getElementById(c.id);
+      if(!el || !el.toDataURL) return null;
+      try{
+        return {title:c.title, data: el.toDataURL("image/png", 1.0)};
+      }catch(e){
+        return null;
+      }
+    }).filter(Boolean);
+
+    const table = document.getElementById("measureTable");
+    const tableHtml = table ? table.outerHTML : "<p>Keine Messreihe verfügbar.</p>";
+
+    const settings = {
+      light: (+elLight.value).toFixed(0) + " %",
+      co2: (+elCO2.value).toFixed(0) + " %",
+      temp: (+elTemp.value).toFixed(1) + " °C",
+      color: (elColor && elColor.options[elColor.selectedIndex]) ? elColor.options[elColor.selectedIndex].text : (elColor?.value || ""),
+      prism: elPrism?.checked ? "ja" : "nein",
+      view: viewMode || "app",
+    };
+    const viewMap = {app:"Apparente Fotosynthese", real:"Reelle Fotosynthese"};
+    const viewLabel = viewMap[settings.view] || settings.view;
+
+    const htmlDoc = `<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Protokoll_${safeStamp}</title>
+<style>
+  @page { size: A4; margin: 14mm; }
+  body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:#000; }
+  h1{ font-size: 16pt; margin: 0 0 6mm 0; }
+  h2{ font-size: 12pt; margin: 6mm 0 3mm 0; }
+  .meta{ font-size: 10pt; margin-bottom: 6mm; }
+  .meta .row{ margin: 1.5mm 0; }
+  .grid{ display: grid; grid-template-columns: 1fr; gap: 6mm; }
+  figure{ margin:0; page-break-inside: avoid; }
+  figcaption{ font-size: 10pt; margin: 2mm 0 0 0; }
+  img{ width: 100%; height: auto; border: 1px solid #000; }
+  table{ width:100%; border-collapse: collapse; font-size: 9pt; }
+  th, td{ border: 1px solid #000; padding: 2.2mm; text-align: center; }
+  th{ font-weight: 700; }
+  .note{ font-size: 9pt; margin-top: 3mm; }
+</style>
+</head>
+<body>
+  <h1>Einflussfaktoren der Fotosynthese – Protokoll</h1>
+  <div class="meta">
+    <div class="row"><b>Export:</b> ${dateStr}</div>
+    <div class="row"><b>Ansicht:</b> ${viewLabel}</div>
+    <div class="row"><b>Aktuelle Einstellungen:</b> Licht ${settings.light}, CO₂ ${settings.co2}, Temperatur ${settings.temp}, Lichtfarbe ${settings.color}, Prisma ${settings.prism}</div>
+  </div>
+
+  <h2>Aufnahmen</h2>
+  <div class="grid">
+    ${images.map(im=>`<figure><img src="${im.data}" alt="${im.title}"><figcaption>${im.title}</figcaption></figure>`).join("") || "<p>Keine Aufnahmen verfügbar.</p>"}
+  </div>
+
+  <h2>Messreihe</h2>
+  ${tableHtml}
+  <div class="note">Hinweis: Der Export nutzt den Druckdialog des Browsers. Dort kann als PDF gespeichert werden.</div>
+</body>
+</html>`;
+
+    const w = window.open("", "_blank");
+    if(!w){
+      alert("PDF-Export wurde vom Browser blockiert (Pop-up). Bitte Pop-ups für diese Seite erlauben.");
+      return;
+    }
+    w.document.open();
+    w.document.write(htmlDoc);
+    w.document.close();
+    w.focus();
+    // Druckdialog nach dem Rendern öffnen
+    w.onload = ()=>{
+      w.print();
+      // optional: nach Druck schließen (manche Browser blockieren das)
+      w.onafterprint = ()=>{ try{ w.close(); }catch(e){} };
+    };
+  }
+  if(elSaveMeasure) elSaveMeasure.addEventListener("click", ()=>{
+    const now = new Date();
+    const lam = localWavelengthAt(magnifier.x);
+    const {gross, resp, net} = componentsAtLens();
+    measures.push({
+      time: formatTime(now),
+      light: (+elLight.value).toFixed(0),
+      co2: (+elCO2.value).toFixed(0),
+      temp: (+elTemp.value).toFixed(1),
+      color: elColor.value,
+      prism: elPrism.checked ? "ja" : "nein",
+      lam: Math.round(lam),
+      gross: gross.toFixed(1),
+      resp: resp.toFixed(1),
+      net: net.toFixed(1),
+    });
+    renderMeasures();
+  });  if(elClearMeasure) elClearMeasure.addEventListener("click", ()=>{
+    measures.length = 0;
+    renderMeasures();
+  });
+  if(elExportPdf) elExportPdf.addEventListener("click", exportProtocolAsPdf);
+
+
+  const tempVal = document.getElementById("tempVal");
+  const co2Val = document.getElementById("co2Val");
+  const lightVal = document.getElementById("lightVal");
+
+  const kpiWL = document.getElementById("kpiWL");
+  const kpiPS = document.getElementById("kpiPS");
+  const kpiO2 = document.getElementById("kpiO2");
+  const kpiTemp = document.getElementById("kpiTemp");
+  const kpiLight = document.getElementById("kpiLight");
+  const kpiCO2 = document.getElementById("kpiCO2");
+  const kpiApp = document.getElementById("kpiApp");
+  const kpiReal = document.getElementById("kpiReal");
+  const kpiResp = document.getElementById("kpiResp");
+
+  const lensPS = document.getElementById("lensPS");
+  const lensCL = document.getElementById("lensCL");
+
+  const pillLight = document.getElementById("pillLight");
+  const pillTemp = document.getElementById("pillTemp");
+  const pillCO2 = document.getElementById("pillCO2");
+
+  const btnReset = document.getElementById("reset");
+  const btnPause = document.getElementById("pause");
+
+  const note = document.getElementById("note");
+  const logEl = document.getElementById("log");
+  const btnAddNote = document.getElementById("addNote");
+  const btnSnap = document.getElementById("snapshot");
+  const btnExportPDF = document.getElementById("exportPDF");
+  const btnClearLog = document.getElementById("clearLog");
+
+  // -----------------------------
+  // Helpers
+  // -----------------------------
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+  // -----------------------------
+  // Diagram zoom/pan state
+  const chartZoom = {
+    light: {x0:0, x1:1},
+    temp:  {x0:0, x1:1},
+    co2:   {x0:0, x1:1},
+    drag:  null
+  };
+  const lastAxes = {light:null, temp:null, co2:null};
+
+  function clampZoom(z){
+    const minW = 0.08;
+    let w = z.x1 - z.x0;
+    w = Math.max(minW, Math.min(1, w));
+    const c = (z.x0+z.x1)/2;
+    z.x0 = c - w/2; z.x1 = c + w/2;
+    if(z.x0 < 0){ z.x1 -= z.x0; z.x0 = 0; }
+    if(z.x1 > 1){ z.x0 -= (z.x1-1); z.x1 = 1; }
+    z.x0 = clamp(z.x0,0,1); z.x1 = clamp(z.x1,0,1);
+  }
+
+  function bindZoom(canvas, key){
+    canvas.addEventListener("wheel", (ev)=>{
+      ev.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const x = (ev.clientX - rect.left) * (canvas.width/rect.width);
+      const A = lastAxes[key];
+      if(!A) return;
+      const uPlot = clamp((x - A.x0) / (A.x1 - A.x0), 0, 1);
+      const z = chartZoom[key];
+      const uData = z.x0 + uPlot*(z.x1-z.x0);
+
+      const zoomIn = ev.deltaY < 0;
+      const factor = zoomIn ? 0.85 : 1.18;
+      const w = (z.x1 - z.x0) * factor;
+      const leftShare = (uData - z.x0) / (z.x1 - z.x0 + 1e-9);
+      z.x0 = uData - leftShare * w;
+      z.x1 = z.x0 + w;
+      clampZoom(z);
+      drawStudentDiagrams();
+    }, {passive:false});
+
+    canvas.addEventListener("dblclick", ()=>{
+      chartZoom[key].x0 = 0; chartZoom[key].x1 = 1;
+      drawStudentDiagrams();
+    });
+
+    canvas.addEventListener("mousedown", (ev)=>{
+      const rect = canvas.getBoundingClientRect();
+      const x = (ev.clientX - rect.left) * (canvas.width/rect.width);
+      chartZoom.drag = {key, xStart:x, z0: {...chartZoom[key]}};
+    });
+    window.addEventListener("mouseup", ()=>{ chartZoom.drag = null; });
+    window.addEventListener("mousemove", (ev)=>{
+      if(!chartZoom.drag || chartZoom.drag.key !== key) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (ev.clientX - rect.left) * (canvas.width/rect.width);
+      const dx = x - chartZoom.drag.xStart;
+
+      const A = lastAxes[key];
+      if(!A) return;
+      const du = dx / (A.x1 - A.x0);
+      const z = chartZoom[key];
+      const w = chartZoom.drag.z0.x1 - chartZoom.drag.z0.x0;
+      z.x0 = chartZoom.drag.z0.x0 - du*w;
+      z.x1 = z.x0 + w;
+      clampZoom(z);
+      drawStudentDiagrams();
+    });
+  }
+  function lightRGBA(color, a){
+    // css rgba string for lamp glow depending on selected light color
+    if(color==="blue") return `rgba(120,170,255,${a})`;
+    if(color==="green") return `rgba(130,255,170,${a})`;
+    if(color==="red") return `rgba(255,150,130,${a})`;
+    return `rgba(255,255,255,${a})`;
+  }
+  function lerp(a,b,t){ return a + (b-a)*t; }
+  function roundRect(g, x, y, w, h, r){
+    r = Math.min(r, w/2, h/2);
+    if(g.roundRect){
+      g.beginPath();
+      g.roundRect(x,y,w,h,r);
+      g.closePath();
+      return;
+    }
+    g.beginPath();
+    g.moveTo(x+r, y);
+    g.arcTo(x+w, y, x+w, y+h, r);
+    g.arcTo(x+w, y+h, x, y+h, r);
+    g.arcTo(x, y+h, x, y, r);
+    g.arcTo(x, y, x+w, y, r);
+    g.closePath();
+  }
+  function gauss(x, mu, sigma){
+    const z=(x-mu)/sigma;
+    return Math.exp(-0.5*z*z);
+  }
+
+  // -----------------------------
+  // Simulation constants
+  // -----------------------------
+  const W = sim.width, H = sim.height;
+  const topH = 190;
+  const waterY0 = topH;
+  const waterH = H - waterY0 - 18;
+  const tankPad = 44;
+
+  const algae = {
+    y: waterY0 + waterH*0.52,
+    length: (W - 2*(tankPad+10)),
+    radius: 30,
+    thickness: 30
+  };
+
+  // Fixed bacteria count
+  const BACTERIA_N = 260;
+
+  // -----------------------------
+  // O2 field grid
+  // -----------------------------
+  const grid = { nx: 120, ny: 56 };
+  const o2 = new Float32Array(grid.nx * grid.ny);
+  const o2b = new Float32Array(grid.nx * grid.ny);
+  function idx(i,j){ return j*grid.nx + i; }
+
+  // -----------------------------
+  // Action spectrum (normalized)
+  // -----------------------------
+  function actionSpectrumRaw(lambda){
+    const blue = 0.95*gauss(lambda, 440, 22);
+    const red  = 1.00*gauss(lambda, 670, 28);
+    const minor = 0.15*gauss(lambda, 590, 70);
+    return clamp(blue + red + minor, 0, 1.25);
+  }
+  let ACTION_PEAK = 1;
+  (function computeActionPeak(){
+    let m = 0;
+    for(let lam=400; lam<=700; lam+=1) m = Math.max(m, actionSpectrumRaw(lam));
+    ACTION_PEAK = m || 1;
+  })();
+  function actionSpectrum(lambda){
+    return clamp(actionSpectrumRaw(lambda)/ACTION_PEAK, 0, 1);
+  }
+
+  // -----------------------------
+  // Light model
+  // -----------------------------
+  function colorToPeak(color){
+    if(color==="blue") return 450;
+    if(color==="green") return 540;
+    if(color==="red") return 660;
+    return 560;
+  }
+  function spectrumAtX(x){
+    const x0 = tankPad + 20, x1 = W - (tankPad + 20);
+    const t = clamp((x - x0) / (x1 - x0), 0, 1);
+    return 400 + 300*t;
+  }
+  function monochromeWeight(lambda, color){
+    if(color==="white") return 1.0;
+    const peak = colorToPeak(color);
+    const sigma = (color==="green") ? 18 : 16;
+    return gauss(lambda, peak, sigma);
+  }
+  function currentIntensity(){
+    return clamp((+elLight.value)/100, 0, 1);
+  }
+  function lightFactor(I){
+    const Ik = 0.28;
+    return clamp(I / (I + Ik), 0, 1);
+  }
+  const LIGHT_MAX = lightFactor(1.0);
+  function lightFactorNorm(I){
+    return clamp(lightFactor(I)/LIGHT_MAX, 0, 1);
+  }
+
+  // -----------------------------
+  // CO2 model (normalized)
+  // -----------------------------
+  function co2FactorRel(Cpct){
+    const C = clamp(Cpct, 0, 100) / 100;
+    const K = 0.30;
+    return clamp(C / (C + K), 0, 1);
+  }
+  const CO2_MAX = co2FactorRel(100);
+  function co2FactorNorm(Cpct){
+    return clamp(co2FactorRel(Cpct) / (CO2_MAX || 1), 0, 1);
+  }
+
+  // -----------------------------
+  // Temperature model (normalized)
+  // -----------------------------
+  function smoothstep(a,b,x){
+    const t = clamp((x-a)/(b-a), 0, 1);
+    return t*t*(3-2*t);
+  }
+
+  // -----------------------------
+  // Temperature model (light-dependent)
+  // - weak light: broad plateau (light-limited)
+  // - strong light: pronounced optimum + heat inhibition
+  // -----------------------------
+  function tempWeakShape(T){
+    // Schwachlicht: Temperatur ist über einen breiten Mittelbereich nicht limitierend
+    // -> Anstieg bis Plateau, dann abrupter Einbruch durch Denaturierung bei hoher T.
+    const t = clamp(T, 0, 60);
+    if(t <= 25) return clamp(t/25, 0, 1);          // Aktivierung bis ~25°C
+    if(t <= 45) return 1;                          // Plateau (lichtlimitiert)
+    if(t >= 50) return 0;                          // ab ~50°C praktisch keine PS mehr
+    // abrupte Denaturierung 45–50°C
+    return clamp(1 - smoothstep(45, 50, t), 0, 1);
+  }
+
+  function tempStrongShape(T){
+    const t = clamp(T, 0, 60);
+    const peak = gauss(t, 37, 10);                 // Optimum ~37°C
+    const cold = clamp((t + 2)/6, 0, 1);           // Fade-in unter ~0°C
+    // Denaturierung: ab ~45°C zunehmend, ab ~50°C praktisch 0
+    const heat = (t <= 45) ? 1 : (t >= 50 ? 0 : clamp((50 - t)/5, 0, 1));
+    return clamp(peak * cold * heat, 0, 1);
+  }
+
+  // Normalized temperature factor (0..1), blended by current light level I (0..1)
+  function tempFactorNorm(T, I){
+    const L = clamp(I, 0, 1);
+    const w = smoothstep(0.45, 0.90, L);        // 0=weak-light curve, 1=strong-light curve
+    return clamp(lerp(tempWeakShape(T), tempStrongShape(T), w), 0, 1);
+  }
+
+  // -----------------------------
+  // Relative PS model (0..100%)
+  // -----------------------------
+  function localWavelengthAt(x){
+    if(elPrism.checked) return spectrumAtX(x);
+    return colorToPeak(elColor.value);
+  }
+  function actionAtX(x){
+    if(elPrism.checked){
+      const lam = spectrumAtX(x);
+      const specFilter = monochromeWeight(lam, elColor.value);
+      return clamp(actionSpectrum(lam) * specFilter, 0, 1);
+    } else {
+      if(elColor.value === "white"){
+        const samples = [420,450,500,540,580,620,660,690];
+        let sum=0;
+        for(const lam of samples) sum += actionSpectrum(lam);
+        return clamp(sum/samples.length, 0, 1);
+      } else {
+        const lam = colorToPeak(elColor.value);
+        return clamp(actionSpectrum(lam), 0, 1);
+      }
+    }
+  }
+  function respirationPct(T){
+    // Respiration (Zellatmung) as % of max gross photosynthesis.
+    // Biological rationale (didactic):
+    // - increases with temperature in the moderate range (Q10 behaviour),
+    // - but collapses at high temperature due to heat damage/denaturation and membrane impairment.
+    // Note: Photosynthesis is modelled as more heat-sensitive, so net rates can still become negative.
+    const t = clamp(T, -5, 60);
+
+    const base20 = 9;     // % at 20°C
+    const q10    = 1.35;  // moderate temperature sensitivity for respiration
+
+    // Q10-like rise relative to 20°C (up to ~45°C)
+    let r = base20 * Math.pow(q10, (t - 20)/10);
+
+    // Limit unrealistically high values in the mid range
+    r = clamp(r, 4, 22);
+
+    // Heat-denaturation / heat damage: start ~50°C, strong collapse by ~60°C
+    // At 60°C respiration is near-zero (didactically: enzymes/membranes fail).
+    const denat = 1 - 0.92 * smoothstep(50, 60, t); // 1 → ~0.08
+    r *= clamp(denat, 0.02, 1);
+
+    return clamp(r, 0, 22);
+  }
+
+  function psGrossAtX(x, T, I, CO2pct){
+    const a = actionAtX(x);
+    const lf = lightFactorNorm(I);
+    const tf = tempFactorNorm(T, I);
+    const cf = co2FactorNorm(CO2pct);
+    return clamp(100 * a * lf * tf * cf, 0, 100);
+  }
+
+  // Net photosynthesis proxy (O2 production minus respiration); can be negative
+  function psRelativeAtX(x, T, I, CO2pct){
+    return psGrossAtX(x,T,I,CO2pct) - respirationPct(T);
+  }
+
+  // -----------------------------
+  // Bacteria particles
+  // -----------------------------
+  let bacteria = [];
+  function spawnBacteria(n){
+    bacteria = [];
+    for(let k=0;k<n;k++){
+      bacteria.push({
+        x: tankPad+20 + Math.random()*(W-2*(tankPad+20)),
+        y: waterY0 + 10 + Math.random()*(waterH-20),
+        vx: (Math.random()*2-1)*0.4,
+        vy: (Math.random()*2-1)*0.4,
+      });
+    }
+  }
+
+  // -----------------------------
+  // Magnifier
+  // -----------------------------
+  const magnifier = { x: W*0.70, y: waterY0 + waterH*0.42, r: 44, dragging:false, dx:0, dy:0 };
+
+  // -----------------------------
+  // Protocol log
+  // -----------------------------
+  const logEntries = [];
+  function fmtTime(d){
+    const pad = n => String(n).padStart(2,"0");
+    return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  function currentParams(){
+    return {
+      lightColor: elColor.value,
+      prism: elPrism.checked,
+      lightPct: +elLight.value,
+      intensity: currentIntensity(),
+      temperature: +elTemp.value,
+      co2: +elCO2.value,
+      lambdaAtLens: Math.round(localWavelengthAt(magnifier.x))
+    };
+  }
+  function renderLog(){
+    logEl.innerHTML = "";
+    for(const e of logEntries.slice().reverse()){
+      const div = document.createElement("div");
+      div.className = "entry";
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      const p = e.params;
+      meta.textContent =
+        `${e.time} | Licht: ${p.lightColor}${p.prism?" + Prisma":""} | Beleuchtung=${p.lightPct}% | T=${p.temperature.toFixed(1)}°C | CO₂=${p.co2}% | λ(Lupe)≈${p.lambdaAtLens}nm`;
+      div.appendChild(meta);
+
+      if(e.text){
+        const txt = document.createElement("div");
+        txt.className = "txt";
+        txt.textContent = e.text;
+        div.appendChild(txt);
+      }
+
+      const thumbs = document.createElement("div");
+      thumbs.className = "thumbs";
+      if(e.imgSim){
+        const im = document.createElement("img");
+        im.src = e.imgSim;
+        im.alt = "Snapshot Simulation";
+        thumbs.appendChild(im);
+      }
+      if(e.imgDiag){
+        const im2 = document.createElement("img");
+        im2.src = e.imgDiag;
+        im2.alt = "Snapshot Diagramme";
+        thumbs.appendChild(im2);
+      }
+      if(thumbs.children.length) div.appendChild(thumbs);
+
+      logEl.appendChild(div);
+    }
+  }
+
+  // -----------------------------
+  // O2 field
+  // -----------------------------
+  function sampleO2At(x, y){
+    const i = clamp(Math.floor((x / W) * grid.nx), 0, grid.nx-1);
+    const j = clamp(Math.floor(((y - waterY0) / waterH) * grid.ny), 0, grid.ny-1);
+    return o2[idx(i,j)];
+  }
+  function diffuseO2(dt){
+    const nx=grid.nx, ny=grid.ny;
+    const diff = 0.92;
+    const decay = 0.985;
+    for(let j=0;j<ny;j++){
+      for(let i=0;i<nx;i++){
+        const id = idx(i,j);
+        const c = o2[id];
+        const l = o2[idx(Math.max(i-1,0),j)];
+        const r = o2[idx(Math.min(i+1,nx-1),j)];
+        const u = o2[idx(i,Math.max(j-1,0))];
+        const d = o2[idx(i,Math.min(j+1,ny-1))];
+        const lap = (l+r+u+d - 4*c);
+        o2b[id] = (c + diff*lap*dt) * Math.pow(decay, dt*60);
+      }
+    }
+    o2.set(o2b);
+  }
+  function addO2Sources(dt){
+    const nx=grid.nx;
+    const yBand = algae.y;
+
+    const x0 = tankPad+20;
+    const x1 = W-(tankPad+20);
+
+    const bandThickness = algae.thickness*0.65;
+    const sourceScale = 0.020;
+
+    const T = +elTemp.value;
+    const I = currentIntensity();
+    const C = +elCO2.value;
+
+    const steps = 210;
+    for(let s=0;s<steps;s++){
+      const x = lerp(x0, x1, s/(steps-1));
+      const psPct = psRelativeAtX(x, T, I, C);
+      const ps = psPct/100; // may be negative (consumption)
+      const i = clamp(Math.floor((x/W)*nx), 0, nx-1);
+
+      const yTop = yBand - bandThickness;
+      const yBot = yBand + bandThickness;
+      for(let k=0;k<3;k++){
+        const y = lerp(yTop, yBot, (k+0.5)/3);
+        const j = clamp(Math.floor(((y - waterY0)/waterH)*grid.ny), 0, grid.ny-1);
+        o2[idx(i,j)] += ps * sourceScale * dt * 60;
+      }
+    }
+  }
+  function moveBacteria(dt){
+    for(const b of bacteria){
+      const jitter = 0.70;
+      b.vx += (Math.random()*2-1)*jitter*dt*60;
+      b.vy += (Math.random()*2-1)*jitter*dt*60;
+
+      const s = 7;
+      const oR = sampleO2At(b.x+s, b.y);
+      const oL = sampleO2At(b.x-s, b.y);
+      const oU = sampleO2At(b.x, b.y-s);
+      const oD = sampleO2At(b.x, b.y+s);
+      const gx = (oR - oL);
+      const gy = (oD - oU);
+
+      const chem = 0.60;
+      b.vx += chem*gx*dt*60;
+      b.vy += chem*gy*dt*60;
+
+      const vmax = 2.3;
+      const sp = Math.hypot(b.vx,b.vy);
+      if(sp>vmax){ b.vx = b.vx/sp*vmax; b.vy = b.vy/sp*vmax; }
+
+      b.x += b.vx*dt*60;
+      b.y += b.vy*dt*60;
+
+      const xMin = tankPad+18, xMax = W-(tankPad+18);
+      const yMin = waterY0+8, yMax = waterY0+waterH-8;
+      if(b.x<xMin){ b.x=xMin; b.vx*=-0.6; }
+      if(b.x>xMax){ b.x=xMax; b.vx*=-0.6; }
+      if(b.y<yMin){ b.y=yMin; b.vy*=-0.6; }
+      if(b.y>yMax){ b.y=yMax; b.vy*=-0.6; }
+    }
+  }
+
+  // -----------------------------
+  // Rendering (simulation)
+  // -----------------------------
+  function drawBackground(){
+    ctx.clearRect(0,0,W,H);
+
+    // Top "lab bench" header area
+    const hdr = ctx.createLinearGradient(0,0,0,topH);
+    hdr.addColorStop(0, "#07140f");
+    hdr.addColorStop(1, "#0a1e15");
+    ctx.fillStyle = hdr;
+    ctx.fillRect(0,0,W,topH);
+
+    // Water
+    const g = ctx.createLinearGradient(0,waterY0,0,H);
+    g.addColorStop(0,"#0b2f4c");
+    g.addColorStop(1,"#071a33");
+    ctx.fillStyle = g;
+    ctx.fillRect(0,waterY0,W,waterH);
+
+    // Tank frame
+    ctx.strokeStyle = "rgba(234,246,239,.14)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(tankPad,waterY0+2,W-2*tankPad,waterH-4);
+
+    // subtle bubbles / particles
+    ctx.fillStyle = "rgba(255,255,255,.04)";
+    for(let i=0;i<110;i++){
+      const x = tankPad+16 + Math.random()*(W-2*(tankPad+16));
+      const y = waterY0+10 + Math.random()*(waterH-20);
+      ctx.beginPath();
+      ctx.arc(x,y, Math.random()*1.5+0.3, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function drawLightAndPrism(){
+    const I = currentIntensity();
+    const baseAlpha = 0.08 + 0.38*I;
+
+    const lx = 95, ly = 36;
+
+    // Large fluorescent tube lamp (Leuchtstoffröhre) – primary light source
+    const lampX0 = tankPad+20, lampX1 = W-(tankPad+20);
+    const tubeW = (lampX1-lampX0) * 0.78;
+    const tubeH = 44;
+    const tubeX = (W - tubeW)/2;
+    const tubeY = 26;
+
+    // glow
+    const glow = ctx.createRadialGradient(W/2, tubeY + tubeH/2, tubeH/2, W/2, tubeY + tubeH/2, tubeW*0.65);
+    glow.addColorStop(0, lightRGBA(elColor.value, 0.14 + 0.32*I));
+    glow.addColorStop(0.45, lightRGBA(elColor.value, 0.06 + 0.18*I));
+    glow.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(tubeX - tubeW*0.20, tubeY - 26, tubeW*1.40, tubeH + 62);
+
+    // tube body
+    const body = ctx.createLinearGradient(0, tubeY, 0, tubeY + tubeH);
+    body.addColorStop(0, "rgba(255,255,255,.20)");
+    body.addColorStop(0.5, "rgba(255,255,255,.10)");
+    body.addColorStop(1, "rgba(0,0,0,.12)");
+    ctx.fillStyle = body;
+    ctx.strokeStyle = "rgba(234,246,239,.16)";
+    ctx.lineWidth = 2;
+    roundRect(ctx, tubeX, tubeY, tubeW, tubeH, 22);
+    ctx.fill();
+    ctx.stroke();
+
+    // inner bright core
+    const core = ctx.createLinearGradient(0, tubeY, 0, tubeY + tubeH);
+    core.addColorStop(0, lightRGBA(elColor.value, 0.38 + 0.30*I));
+    core.addColorStop(0.5, lightRGBA(elColor.value, 0.22 + 0.22*I));
+    core.addColorStop(1, lightRGBA(elColor.value, 0.30 + 0.26*I));
+    ctx.fillStyle = core;
+    roundRect(ctx, tubeX + 14, tubeY + 10, tubeW - 28, tubeH - 20, 18);
+    ctx.fill();
+
+    // subtle rays downward
+    ctx.strokeStyle = lightRGBA(elColor.value, 0.05 + 0.10*I);
+    ctx.lineWidth = 2;
+    for(let k=0;k<14;k++){
+      const rx = tubeX + 24 + k*((tubeW-48)/13);
+      ctx.beginPath();
+      ctx.moveTo(rx, tubeY + tubeH + 4);
+      ctx.lineTo(rx, tubeY + tubeH + 22 + 30*I);
+      ctx.stroke();
+    }
+
+
+    const prism = { x: 300, y: 16, w: 64, h: 58 };
+
+    const x0 = tankPad+20, x1 = W-(tankPad+20);
+    const specH = 30;
+    const specY = 78;
+
+    if(elPrism.checked){
+      const grad = ctx.createLinearGradient(x0,0,x1,0);
+      grad.addColorStop(0.00, `rgba(110,80,220,${0.85*baseAlpha+0.10})`);
+      grad.addColorStop(0.17, `rgba(90,120,255,${0.85*baseAlpha+0.10})`);
+      grad.addColorStop(0.35, `rgba(60,210,255,${0.85*baseAlpha+0.10})`);
+      grad.addColorStop(0.50, `rgba(90,240,120,${0.85*baseAlpha+0.10})`);
+      grad.addColorStop(0.68, `rgba(255,240,90,${0.85*baseAlpha+0.10})`);
+      grad.addColorStop(0.82, `rgba(255,160,60,${0.85*baseAlpha+0.10})`);
+      grad.addColorStop(1.00, `rgba(255,70,70,${0.85*baseAlpha+0.10})`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(x0, specY, x1-x0, specH);
+
+      if(elColor.value !== "white"){
+        const steps = 170;
+        for(let s=0;s<steps;s++){
+          const x = lerp(x0, x1, s/(steps-1));
+          const lam = spectrumAtX(x);
+          const w = monochromeWeight(lam, elColor.value);
+          const a = 1 - clamp(w*2.0, 0, 1);
+          ctx.fillStyle = `rgba(0,0,0,${0.52*a})`;
+          ctx.fillRect(x, specY, (x1-x0)/steps+1, specH);
+        }
+      }
+
+      const beamY0 = specY + specH + 4;
+      const beamY1 = waterY0-2;
+      const waterGrad = ctx.createLinearGradient(0, beamY0, 0, beamY1);
+      waterGrad.addColorStop(0, `rgba(255,255,255,${0.05+0.10*I})`);
+      waterGrad.addColorStop(1, `rgba(255,255,255,0)`);
+      ctx.fillStyle = waterGrad;
+      ctx.fillRect(x0, beamY0, x1-x0, beamY1-beamY0);
+
+    } else {
+      const beamY0 = tubeY + tubeH + 8;
+      const beamY1 = waterY0-2;
+      let beam;
+      if(elColor.value==="blue") beam = `rgba(90,140,255,${baseAlpha})`;
+      else if(elColor.value==="green") beam = `rgba(110,255,160,${baseAlpha})`;
+      else if(elColor.value==="red") beam = `rgba(255,120,110,${baseAlpha})`;
+      else beam = `rgba(255,255,255,${baseAlpha})`;
+      ctx.fillStyle = beam;
+      ctx.fillRect(x0, beamY0, x1-x0, beamY1-beamY0);
+    }
+
+    // labels
+    ctx.fillStyle = "rgba(234,246,239,.90)";
+    ctx.font = "13px system-ui";
+    ctx.fillStyle = "rgba(234,246,239,.70)";
+  }
+
+  function drawAlgae(){
+    const x0 = tankPad+20;
+    const x1 = W-(tankPad+20);
+    const cx = (x0+x1)/2;
+
+    ctx.save();
+    ctx.translate(cx, algae.y);
+
+    ctx.fillStyle = "rgba(0,0,0,.25)";
+    ctx.beginPath();
+    ctx.ellipse(0, 7, algae.length/2, algae.radius, 0, 0, Math.PI*2);
+    ctx.fill();
+
+    const ag = ctx.createLinearGradient(-algae.length/2,0,algae.length/2,0);
+    ag.addColorStop(0,"rgba(200,240,205,.85)");
+    ag.addColorStop(0.5,"rgba(120,220,155,.92)");
+    ag.addColorStop(1,"rgba(200,240,205,.85)");
+    ctx.fillStyle = ag;
+    ctx.strokeStyle = "rgba(234,246,239,.18)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, algae.length/2, algae.radius, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "rgba(60,150,90,.45)";
+    ctx.beginPath();
+    ctx.ellipse(0, 0, algae.length/2.05, algae.radius/2.2, 0, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawBacteria(){
+    for(const b of bacteria){
+      const o = sampleO2At(b.x, b.y);
+      const a = clamp(0.22 + o*1.9, 0.18, 1.0);
+      ctx.fillStyle = `rgba(255,220,190,${a})`;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, 2.0, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function drawMagnifier(){
+    ctx.save();
+    ctx.strokeStyle = "rgba(122,162,255,.85)";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(magnifier.x, magnifier.y, magnifier.r, 0, Math.PI*2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(122,162,255,.70)";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(magnifier.x + magnifier.r*0.65, magnifier.y + magnifier.r*0.65);
+    ctx.lineTo(magnifier.x + magnifier.r*1.25, magnifier.y + magnifier.r*1.25);
+    ctx.stroke();
+
+    ctx.fillStyle = "rgba(122,162,255,.06)";
+    ctx.beginPath();
+    ctx.arc(magnifier.x, magnifier.y, magnifier.r, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawWavelengthScale(){
+    if(!elPrism.checked) return;
+    const x0 = tankPad+20, x1 = W-(tankPad+20);
+    const y = 118;
+    ctx.strokeStyle = "rgba(234,246,239,.16)";
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x1,y); ctx.stroke();
+
+    ctx.fillStyle = "rgba(234,246,239,.65)";
+    ctx.font = "11px system-ui";
+    for(const lam of [400,450,500,550,600,650,700]){
+      const t = (lam-400)/300;
+      const x = lerp(x0, x1, t);
+      ctx.beginPath(); ctx.moveTo(x,y-4); ctx.lineTo(x,y+4); ctx.stroke();
+      ctx.fillText(String(lam), x-10, y-8);
+    }
+
+    const lamLens = localWavelengthAt(magnifier.x);
+    ctx.fillStyle = "rgba(234,246,239,.85)";
+    ctx.font = "12px system-ui";
+    ctx.fillText(`Lupe: λ ≈ ${Math.round(lamLens)} nm`, 55, H-18);
+  }
+
+  // -----------------------------
+  // Student diagrams (3x visible)
+  // Canonical curves are shown (others at max). Marker shows current setting on that axis.
+  // -----------------------------
+  function drawAxes(g, w, h, xLab, yMin=0, yMax=100, yLab="rel. PS (%)"){
+    g.clearRect(0,0,w,h);
+    // darker backdrop for projector contrast
+    g.fillStyle = "rgba(0,0,0,.28)";
+    g.fillRect(0,0,w,h);
+
+    const padL=64, padR=16, padT=16, padB=34;
+    const x0=padL, x1=w-padR, y0=h-padB, y1=padT;
+
+    g.strokeStyle="rgba(234,246,239,.28)";
+    g.lineWidth=1.2;
+    g.beginPath(); g.moveTo(x0,y1); g.lineTo(x0,y0); g.lineTo(x1,y0); g.stroke();
+
+    g.fillStyle="rgba(234,246,239,.88)";
+    g.font="14px system-ui";
+    g.fillText(yLab, 10, 20);
+    g.fillStyle="rgba(234,246,239,.75)";
+    g.font="13px system-ui";
+    g.fillText(xLab, w*0.36, h-9);
+
+    let ticks;
+    if(yMin < 0 && yMax <= 20){
+      // respiration-focused range
+      ticks = [];
+      const step = 10;
+      let t0 = Math.ceil(yMin/step)*step;
+      for(let t=t0; t<=yMax+1e-9; t+=step) ticks.push(t);
+    }else if(yMin < 0){
+      ticks = [-20,0,20,40,60,80,100];
+    }else{
+      ticks = [0,25,50,75,100];
+    }
+
+    g.font="13px system-ui";
+    for(const t of ticks){
+      const tt = (t - yMin) / (yMax - yMin);
+      const y=lerp(y0,y1, clamp(tt,0,1));
+      g.strokeStyle="rgba(234,246,239,.12)";
+      g.beginPath(); g.moveTo(x0,y); g.lineTo(x1,y); g.stroke();
+      g.fillStyle="rgba(234,246,239,.72)";
+      g.fillText(String(t), 22, y+4);
+    }
+    return {x0,x1,y0,y1,yMin,yMax};
+  }
+
+  function plotCurve(g, A, values, color, zx0=0, zx1=1){
+    g.strokeStyle = color;
+    g.lineWidth = 2;
+    g.beginPath();
+    let started = false;
+    const n = values.length;
+    for(let i=0;i<n;i++){
+      const u = i/(n-1);
+      if(u < zx0 || u > zx1) continue;
+      const uu = (u - zx0) / (zx1 - zx0);
+      const x = lerp(A.x0, A.x1, uu);
+      const t = (values[i] - A.yMin) / (A.yMax - A.yMin);
+      const y = lerp(A.y0, A.y1, clamp(t,0,1));
+      if(!started){ g.moveTo(x,y); started=true; } else { g.lineTo(x,y); }
+    }
+    if(started) g.stroke();
+  }
+
+  function vLine(g, A, u, color, label=null, zx0=0, zx1=1){
+    if(u < zx0 || u > zx1) return;
+    const uu = (u - zx0) / (zx1 - zx0);
+    const x = lerp(A.x0, A.x1, uu);
+    g.save();
+    g.setLineDash([6,4]);
+    g.strokeStyle=color;
+    g.lineWidth=1.5;
+    g.beginPath(); g.moveTo(x,A.y1); g.lineTo(x,A.y0); g.stroke();
+    g.restore();
+    if(label){
+      g.fillStyle="rgba(234,246,239,.70)";
+      g.font="12px system-ui";
+      g.fillText(label, x+6, A.y1+14);
+    }
+  }
+
+  function hLine(g, A, y, color, label=null, uFrom=0, zx0=0, zx1=1){
+    const t = (y - A.yMin) / (A.yMax - A.yMin);
+    const yy = lerp(A.y0, A.y1, clamp(t,0,1));
+    const u0 = clamp((uFrom - zx0)/(zx1 - zx0), 0, 1);
+    const x0 = lerp(A.x0, A.x1, u0);
+    g.save();
+    g.setLineDash([6,4]);
+    g.strokeStyle=color;
+    g.lineWidth=1.5;
+    g.beginPath(); g.moveTo(x0,yy); g.lineTo(A.x1,yy); g.stroke();
+    g.restore();
+
+    // optional label (e.g., "Sättigung")
+    if(label){
+      g.save();
+      g.font="12px system-ui";
+      g.textAlign="right";
+      g.textBaseline="bottom";
+
+      const xLabel = A.x1 - 6;
+      const yLabel = yy - 4;
+
+      // subtle background for readability
+      const pad = 4;
+      const mw = g.measureText(label).width;
+      const bw = mw + pad*2;
+      const bh = 14;
+      const bx = xLabel - bw;
+      const by = yLabel - bh;
+
+      g.fillStyle = "rgba(0,0,0,.35)";
+      g.fillRect(bx, by, bw, bh);
+
+      g.fillStyle="rgba(234,246,239,.78)";
+      g.fillText(label, xLabel - pad, yLabel);
+      g.restore();
+    }
+  }
+
+
+function marker(g, A, u, y, color, zx0=0, zx1=1){
+    if(u < zx0 || u > zx1) return;
+    const uu = (u - zx0) / (zx1 - zx0);
+    const x = lerp(A.x0, A.x1, uu);
+    const t = (y - A.yMin) / (A.yMax - A.yMin);
+    const yy = lerp(A.y0, A.y1, clamp(t,0,1));
+    g.fillStyle = color;
+    g.beginPath(); g.arc(x,yy,4,0,Math.PI*2); g.fill();
+    g.strokeStyle = "rgba(255,255,255,.85)";
+    g.lineWidth = 1;
+    g.beginPath(); g.arc(x,yy,4,0,Math.PI*2); g.stroke();
+  }
+
+function drawStudentDiagrams(){
+    const Tcur = +elTemp.value;
+    const Icur = currentIntensity();
+    const Ccur = +elCO2.value;
+    const aCur = actionAtX(magnifier.x);   // light-quality factor (0..1) at current lens/wavelength
+    const tfCur = tempFactorNorm(Tcur, Icur);
+    const lfCur = lightFactorNorm(Icur);
+    const cfCur = co2FactorNorm(Ccur);
+
+    const zL = chartZoom.light;
+    const zT = chartZoom.temp;
+    const zC = chartZoom.co2;
+
+    const R = yRangeForMode();
+
+    // Diagram 1: Light saturation (0..1)
+    {
+      const w=diagLight.width, h=diagLight.height;
+      const A=drawAxes(d1,w,h,"Beleuchtungsstärke (rel.)", R.yMin, R.yMax, R.yLab);
+      lastAxes.light = A;
+      const N=140;
+      const vals=[];
+      for(let i=0;i<N;i++){
+        const u=i/(N-1);
+        const I=u;
+                        const gross = 100 * aCur * tempFactorNorm(Tcur, Icur) * co2FactorNorm(Ccur) * lightFactorNorm(I);
+        vals.push(gross - respirationPct(Tcur));
+      }
+      plotCurve(d1,A,vals,"rgba(125,211,252,.95)", zL.x0, zL.x1);
+
+      // Kompensationspunkt: Apparente Fotosynthese = 0
+      let uComp=null;
+      for(let i=1;i<vals.length;i++){
+        if(vals[i] >= 0 && vals[i-1] < 0){
+          const u0=(i-1)/(vals.length-1), u1=i/(vals.length-1);
+          const y0=vals[i-1], y1=vals[i];
+          const t=(0 - y0)/(y1 - y0);
+          uComp = u0 + (u1-u0)*t;
+          break;
+        }
+      }
+      // Kompensationspunkt nur anzeigen, wenn Beleuchtungsstärke-Regler > 0
+      if(uComp!==null && (+elLight.value) > 0) vLine(d1,A,uComp,"rgba(255,255,255,.42)","Komp.", zL.x0, zL.x1);
+
+      // Sättigungslinie: nur anzeigen, wenn Beleuchtungsstärke am Maximum steht
+      if((+elLight.value) >= 100){
+        const grossAsym = (100 * aCur * tempFactorNorm(Tcur, Icur) * co2FactorNorm(Ccur) * 1);
+        const respAsym = respirationPct(Tcur);
+        const netAsym = grossAsym - respAsym;
+        const yAsym = yForMode(grossAsym, respAsym, netAsym);
+        hLine(d1,A,yAsym,"rgba(255,255,255,.22)","Sättigung", 0, zL.x0, zL.x1);
+      }
+const uCur = clamp(Icur/1.0,0,1);
+                  const grossCur = (100 * aCur * tempFactorNorm(Tcur, Icur) * co2FactorNorm(Ccur) * lightFactorNorm(Icur));
+      const respCur = respirationPct(Tcur);
+      const netCur = grossCur - respCur;
+      const yCur = yForMode(grossCur, respCur, netCur);
+      marker(d1,A,uCur,yCur,"rgba(125,211,252,.95)", zL.x0, zL.x1);
+      pillLight.textContent = `${labelForMode()} (gesamt): ${yCur.toFixed(0)}%`;
+    }
+
+    // Diagram 2: Temperature optimum
+    {
+      const w=diagTemp.width, h=diagTemp.height;
+      const A=drawAxes(d2,w,h,"Temperatur (°C)", R.yMin, R.yMax, R.yLab);
+      lastAxes.temp = A;
+      const N=160;
+      const vals=[];
+      for(let i=0;i<N;i++){
+        const u=i/(N-1);
+        const T=50*u;
+                { const gross = 100 * aCur * lightFactorNorm(Icur) * co2FactorNorm(Ccur) * tempFactorNorm(T, Icur);
+        const resp = respirationPct(T);
+        const net = gross - resp;
+        vals.push(yForMode(gross, resp, net)); }
+      }
+      plotCurve(d2,A,vals,"rgba(122,162,255,.95)", zT.x0, zT.x1);
+      const uCur = clamp(Tcur/50,0,1);
+            const grossCur = (100 * aCur * lightFactorNorm(Icur) * co2FactorNorm(Ccur) * tempFactorNorm(Tcur, Icur));
+      const respCur = respirationPct(Tcur);
+      const netCur = grossCur - respCur;
+      const yCur = yForMode(grossCur, respCur, netCur);
+      marker(d2,A,uCur,yCur,"rgba(122,162,255,.95)", zT.x0, zT.x1);
+      pillTemp.textContent = `${labelForMode()} (gesamt): ${yCur.toFixed(0)}%`;
+    }
+
+    // Diagram 3: CO2 saturation
+    {
+      const w=diagCO2.width, h=diagCO2.height;
+      const A=drawAxes(d3,w,h,"CO₂ (rel. %)", R.yMin, R.yMax, R.yLab);
+      lastAxes.co2 = A;
+      const N=140;
+      const vals=[];
+      for(let i=0;i<N;i++){
+        const u=i/(N-1);
+        const C=100*u;
+                        const gross = 100 * aCur * lightFactorNorm(Icur) * tempFactorNorm(Tcur, Icur) * co2FactorNorm(C);
+        const resp = respirationPct(Tcur);
+        const net = gross - resp;
+        vals.push(yForMode(gross, resp, net));
+      }
+      plotCurve(d3,A,vals,"rgba(255,213,106,.90)", zC.x0, zC.x1);
+
+      // Kompensationspunkt (Apparente = 0)
+      let uComp=null;
+      for(let i=1;i<vals.length;i++){
+        if(vals[i] >= 0 && vals[i-1] < 0){
+          const u0=(i-1)/(vals.length-1), u1=i/(vals.length-1);
+          const y0=vals[i-1], y1=vals[i];
+          const t=(0 - y0)/(y1 - y0);
+          uComp = u0 + (u1-u0)*t;
+          break;
+        }
+      }
+      // Kompensationspunkt nur anzeigen, wenn CO₂-Regler > 0
+      if(uComp!==null && (+elCO2.value) > 0) vLine(d3,A,uComp,"rgba(255,255,255,.42)","Komp.", zC.x0, zC.x1);
+
+      // Sättigungslinie: nur anzeigen, wenn CO₂-Regler am Maximum steht
+      if((+elCO2.value) >= 100){
+        const grossAsym = (100 * aCur * lightFactorNorm(Icur) * tempFactorNorm(Tcur, Icur) * 1);
+        const respAsym = respirationPct(Tcur);
+        const netAsym = grossAsym - respAsym;
+        const yAsym = yForMode(grossAsym, respAsym, netAsym);
+        hLine(d3,A,yAsym,"rgba(255,255,255,.22)","Sättigung", 0, zC.x0, zC.x1);
+      }
+      const uCur = clamp(Ccur/100,0,1);
+                  const grossCur = (100 * aCur * lightFactorNorm(Icur) * tempFactorNorm(Tcur, Icur) * co2FactorNorm(Ccur));
+      const respCur = respirationPct(Tcur);
+      const netCur = grossCur - respCur;
+      const yCur = yForMode(grossCur, respCur, netCur);
+      marker(d3,A,uCur,yCur,"rgba(255,213,106,.90)", zC.x0, zC.x1);
+      pillCO2.textContent = `${labelForMode()} (gesamt): ${yCur.toFixed(0)}%`;
+    }
+  }
+
+  // -----------------------------
+  // KPI + lens updates
+  // -----------------------------
+  function updateDisplays(){
+    tempVal.textContent = `${(+elTemp.value).toFixed(1)} °C`;
+    co2Val.textContent = `${(+elCO2.value).toFixed(0)} %`;
+    lightVal.textContent = `${(+elLight.value).toFixed(0)} %`;
+  }
+
+  function updateKPIs(){
+    const T=+elTemp.value;
+    const I=currentIntensity();
+    const C=+elCO2.value;
+    const lam=localWavelengthAt(magnifier.x);
+
+    const lf=lightFactorNorm(I);
+    const tf=tempFactorNorm(T, I);
+    const cf=co2FactorNorm(C);
+    const gross=psGrossAtX(magnifier.x,T,I,C); // reelle Fotosynthese
+    const resp=respirationPct(T);              // Atmung (fix im Modell)
+    const net=gross - resp;                    // apparente Fotosynthese
+
+    const o2Rel=clamp(net, -100, 100); // Anzeige kann negativ sein
+
+    // Cluster-Index: Vergleich mit Erwartungswert bei gleichmäßiger Verteilung
+    let inside=0;
+    for(const b of bacteria){
+      if(Math.hypot(b.x-magnifier.x,b.y-magnifier.y) < magnifier.r) inside++;
+    }
+    const xMin = tankPad+18, xMax = W-(tankPad+18);
+    const yMin = waterY0+8, yMax = waterY0+waterH-8;
+    const tankArea = Math.max(1, (xMax-xMin) * (yMax-yMin));
+    const lensArea = Math.PI * magnifier.r * magnifier.r;
+    const expected = Math.max(0.5, BACTERIA_N * (lensArea / tankArea));
+    const clusterIdx = inside / expected; // ~1 = zufällig/gleichmäßig, >1 = Anreicherung
+
+    const shown = (viewMode === "real") ? gross : net;
+
+    kpiWL.textContent = `λ: ${Math.round(lam)} nm`;
+    kpiPS.textContent = `${labelForMode()}: ${shown.toFixed(1)}%`;
+
+    if(kpiApp && kpiReal && kpiResp){
+      kpiApp.textContent  = `Apparente: ${net.toFixed(1)}%`;
+      kpiReal.textContent = `Reelle: ${gross.toFixed(1)}%`;
+      kpiResp.textContent = `Atmung: ${resp.toFixed(1)}%`;
+    }
+
+    kpiO2.textContent = `O₂ (apparente): ${o2Rel.toFixed(0)}%`;
+    kpiTemp.textContent = `T-Faktor: ${tf.toFixed(2)}`;
+    kpiLight.textContent = `Licht-Faktor: ${lf.toFixed(2)}`;
+    kpiCO2.textContent = `CO₂-Faktor: ${cf.toFixed(2)}`;
+
+    lensPS.textContent = `${shown.toFixed(1)} %`;
+    const deltaPct = (clusterIdx - 1) * 100;
+    const sign = deltaPct >= 0 ? "+" : "";
+    lensCL.textContent = `${sign}${deltaPct.toFixed(0)}%`;
+  }
+
+  // -----------------------------
+  // Drag magnifier
+  // -----------------------------
+  function canvasPos(evt){
+    const rect = sim.getBoundingClientRect();
+    const x = (evt.clientX - rect.left) * (sim.width / rect.width);
+    const y = (evt.clientY - rect.top) * (sim.height / rect.height);
+    return {x,y};
+  }
+  sim.addEventListener("pointerdown", (evt) => {
+    const p = canvasPos(evt);
+    const d = Math.hypot(p.x - magnifier.x, p.y - magnifier.y);
+    if(d <= magnifier.r + 8){
+      magnifier.dragging = true;
+      magnifier.dx = p.x - magnifier.x;
+      magnifier.dy = p.y - magnifier.y;
+      sim.setPointerCapture(evt.pointerId);
+    }
+  });
+  sim.addEventListener("pointermove", (evt) => {
+    if(!magnifier.dragging) return;
+    const p = canvasPos(evt);
+    const xMin = tankPad+22, xMax = W-(tankPad+22);
+    magnifier.x = clamp(p.x - magnifier.dx, xMin, xMax);
+    magnifier.y = clamp(p.y - magnifier.dy, waterY0+10, waterY0+waterH-10);
+  });
+  sim.addEventListener("pointerup", () => { magnifier.dragging = false; });
+
+  // -----------------------------
+  // Controls
+  // -----------------------------
+  let paused=false;
+  btnReset.addEventListener("click", () => {
+    o2.fill(0); o2b.fill(0);
+    spawnBacteria(BACTERIA_N);
+  });
+  btnPause.addEventListener("click", () => {
+    paused = !paused;
+    btnPause.textContent = paused ? "Weiter" : "Pause";
+  });
+  elTemp.addEventListener("input", updateDisplays);
+  elCO2.addEventListener("input", updateDisplays);
+  elLight.addEventListener("input", updateDisplays);
+
+  // -----------------------------
+  // Snapshot + PDF report
+  // -----------------------------
+  function composeDiagramsImage(){
+    // stack three diagrams into one image
+    const w = diagLight.width;
+    const h = diagLight.height + diagTemp.height + diagCO2.height;
+    const off = document.createElement("canvas");
+    off.width = w; off.height = h;
+    const g = off.getContext("2d");
+    g.drawImage(diagLight, 0, 0);
+    g.drawImage(diagTemp, 0, diagLight.height);
+    g.drawImage(diagCO2, 0, diagLight.height + diagTemp.height);
+    return off.toDataURL("image/png");
+  }
+
+  btnAddNote.addEventListener("click", () => {
+    const txt = note.value.trim();
+    if(!txt) return;
+    logEntries.push({ time: fmtTime(new Date()), params: currentParams(), text: txt });
+    note.value = "";
+    renderLog();
+  });
+
+  btnSnap.addEventListener("click", () => {
+    const imgSim = sim.toDataURL("image/png");
+    const imgDiag = composeDiagramsImage();
+    const txt = note.value.trim();
+    logEntries.push({ time: fmtTime(new Date()), params: currentParams(), text: txt, imgSim, imgDiag });
+    note.value = "";
+    renderLog();
+  });
+
+  btnClearLog.addEventListener("click", () => {
+    logEntries.length = 0;
+    renderLog();
+  });
+
+  function openReportAndPrint(){
+    const entriesHtml = logEntries.map(e => {
+      const txt = (e.text||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+      const simImg = e.imgSim ? `<img src="${e.imgSim}" alt="Snapshot Simulation">` : "";
+      const diagImg = e.imgDiag ? `<img src="${e.imgDiag}" alt="Snapshot Diagramme">` : "";
+      const p = e.params;
+      return `
+        <section class="entry">
+          <div class="meta">${e.time} | Licht: ${p.lightColor}${p.prism?" + Prisma":""} | Beleuchtung=${p.lightPct}% | T=${p.temperature.toFixed(1)}°C | CO₂=${p.co2}% | λ(Lupe)≈${p.lambdaAtLens}nm</div>
+          ${txt ? `<pre class="txt">${txt}</pre>` : ""}
+          <div class="imgs">${simImg}${diagImg}</div>
+        </section>`;
+    }).join("");
+
+    const emptyHtml = '<p style="color:#444">Keine Einträge vorhanden.</p>';
+
+    const html = `<!doctype html><html lang="de"><head><meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>Protokoll-Report – Photosynthese-Simulation</title>
+      <style>
+        body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#ffffff;color:#111}
+        header{padding:16px 18px;border-bottom:1px solid #ddd}
+        h1{margin:0;font-size:18px}
+        .sub{color:#444;font-size:12px;margin-top:6px}
+        main{max-width:980px;margin:0 auto;padding:14px 18px}
+        .entry{padding:12px 14px;margin:12px 0;border:1px solid #ddd;border-radius:12px}
+        .meta{color:#444;font-size:12px}
+        .txt{white-space:pre-wrap;font-size:13px;line-height:1.35;margin:10px 0 0}
+        .imgs{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+        img{max-width:460px;border-radius:10px;border:1px solid #ddd}
+        @media print{
+          .entry{break-inside:avoid}
+          img{max-width:100%}
+        }
+      </style>
+      </head><body>
+      <header>
+        <h1>Protokoll-Report – Photosynthese-Simulation</h1>
+        <div class="sub">Erstellt am ${fmtTime(new Date())}. Export als PDF: Browser-Druckdialog → „Als PDF speichern“.</div>
+      </header>
+      <main>
+        ${entriesHtml || emptyHtml}
+      </main>
+      <script>
+        window.addEventListener('load', () => { setTimeout(() => window.print(), 250); });
+      <\/script>
+      </body></html>`;
+
+    const w = window.open("", "_blank");
+    if(!w){ alert("Popup blockiert. Bitte Popups erlauben oder Report in neuem Tab zulassen."); return; }
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  }
+  btnExportPDF.addEventListener("click", openReportAndPrint);
+
+  // -----------------------------
+  // Main loop
+  // -----------------------------
+  let last = performance.now();
+
+  function step(now){
+    const dt = clamp((now - last)/1000, 0, 0.05);
+    last = now;
+
+    if(!paused){
+      diffuseO2(dt);
+      addO2Sources(dt);
+      moveBacteria(dt);
+    }
+
+    drawBackground();
+    drawLightAndPrism();
+    drawAlgae();
+    drawBacteria();
+    drawMagnifier();
+    drawWavelengthScale();
+
+    updateDisplays();
+    updateKPIs();
+    drawStudentDiagrams();
+
+    requestAnimationFrame(step);
+  }
+
+  // init
+  spawnBacteria(BACTERIA_N);
+  updateDisplays();
+  renderLog();
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
