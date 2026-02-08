@@ -529,7 +529,7 @@ button:active{
     "Käfer_Grau","Käfer_Grün","Käfer_Lila","Käfer_Orange","Käfer_Rot","Käfer_Schwarz",
     "Käfer_Türkis","Käfer_Weiß"
   ];
-  const START_PER_TYPE = 7;
+  const START_PER_TYPE = 6;
 
   const BUG_COLORS = new Map([
     ["Käfer_Blau", "#2563eb"],
@@ -705,7 +705,7 @@ button:active{
   function choose(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
   function bugSize(){
-    const base = Math.round(Math.min(W,H)*0.022);
+    const base = Math.round(Math.min(W,H)*0.026);
     return Math.max(BUG_DRAW_MIN, Math.min(BUG_DRAW_MAX, base));
   }
 
