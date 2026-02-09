@@ -1,0 +1,3226 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Erforschung des Insektenbeines</title>
+  <style>
+    :root{
+      --bg:#2a2a22;
+      --panel: rgba(36,33,24,.78);
+      --border: rgba(255,255,255,.14);
+      --text:#f3f0e6;
+      --muted:#d1c7b2;
+      --accent:#8faa63;      /* olivgruen */
+      --accent2:#c2a26a;     /* messing */
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      /* UI background image (liegt in Insektenbilder/Hintergrund.png) */
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(180deg, rgba(28,25,18,.72) 0%, rgba(28,25,18,.86) 70%),
+        url('Insektenbilder/Hintergrund.png');
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: cover;
+      background-attachment: fixed;
+      color:var(--text);
+    }
+    header{
+      padding:18px 20px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(8px);
+    }
+    header h1{margin:0;font-size:18px;letter-spacing:.2px;font-weight:700}
+    header p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.35}
+
+    .app{
+      display:grid;
+      grid-template-columns:280px 1fr 420px;
+      gap:16px;
+      padding:16px;
+      max-width:1600px;
+      margin:0 auto;
+    }
+
+    .left,.middle,.right{min-width:0}
+    @media (max-width:1280px){
+      .app{grid-template-columns:260px 1fr}
+      .right{grid-column:1/-1}
+    }
+    @media (max-width:760px){
+      .app{grid-template-columns:1fr}
+      .left{order:2}
+      .middle{order:1}
+      .right{order:3}
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .hd{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .title{font-weight:700;font-size:14px;letter-spacing:.2px}
+    .sub{margin-top:4px;color:var(--muted);font-size:12px;line-height:1.25}
+    .bd{padding:14px}
+
+    /* left list */
+    .seg{display:inline-flex;gap:6px;align-items:center}
+    .seg .lbl{color:var(--muted);font-size:12px;margin-right:4px}
+    .seg button{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:999px;
+      padding:7px 10px;
+      font-weight:700;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .seg button.active{
+      border-color:rgba(125,211,252,.75);
+      background:rgba(125,211,252,.12);
+    }
+
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{
+      display:grid;
+      grid-template-columns:74px 1fr;
+      gap:10px;
+      padding:10px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--panel);
+      cursor:pointer;
+      transition:transform .12s ease,border-color .12s ease,background .12s ease;
+    }
+    .item:hover{transform:translateY(-1px);border-color:rgba(125,211,252,.35)}
+    .item.active{border-color:rgba(125,211,252,.7);background:rgba(125,211,252,.10)}
+    .thumb{
+      width:74px;height:56px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      overflow:hidden;
+      background:rgba(0,0,0,.25);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .meta .name{font-weight:750;font-size:13px}
+    .meta .hint{margin-top:3px;color:var(--muted);font-size:12px;line-height:1.25}
+
+    /* middle controls */
+    .controls{
+      display:grid;
+      grid-template-columns:minmax(240px,1fr) minmax(240px,1fr) auto;
+      gap:12px 14px;
+      align-items:end;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--panel);
+    }
+    .ctrl{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .ctrl .lbl{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.1;
+    }
+    .ctrl .val{
+      font-size:12px;
+      color:var(--muted);
+      height:14px;           /* reserviert Platz, damit beide Regler auf einer Ebene bleiben */
+      line-height:14px;
+    }
+    .ctrl .val.empty{visibility:hidden;} /* Fokus bekommt gleich hohe Zeile */
+    .actions{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      align-items:end;
+      white-space:nowrap;
+    }
+    .controls input[type="range"]{width:100%}
+    input[type="range"]{
+      width:100%;
+      -webkit-appearance:none;
+      appearance:none;
+      height:12px;
+      border-radius:999px;
+      background:rgba(125,211,252,.20);
+      box-shadow:inset 0 0 0 1px rgba(125,211,252,.35), 0 4px 14px rgba(0,0,0,.30);
+      outline:none;
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      appearance:none;
+      width:22px;height:22px;
+      border-radius:50%;
+      background:rgba(125,211,252,.92);
+      border:2px solid rgba(13,22,45,.85);
+      box-shadow:0 6px 18px rgba(0,0,0,.35);
+      cursor:pointer;
+    }
+    input[type="range"]::-moz-range-thumb{
+      width:22px;height:22px;
+      border-radius:50%;
+      background:rgba(125,211,252,.92);
+      border:2px solid rgba(13,22,45,.85);
+      box-shadow:0 6px 18px rgba(0,0,0,.35);
+      cursor:pointer;
+    }
+    input[type="range"]::-moz-range-track{
+      height:12px;border-radius:999px;
+      background:rgba(125,211,252,.20);
+      box-shadow:inset 0 0 0 1px rgba(125,211,252,.35);
+    }
+    .btn{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(125,211,252,.12);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:750;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .btn:hover{border-color:rgba(125,211,252,.55)}
+    .btn.ghost{background:rgba(255,255,255,.06)}
+
+    /* microscope scopes */
+    .scope{
+      position:relative;
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      overflow:hidden;
+      background:#fff;            /* Okularrand/Hintergrund schwarz */
+      aspect-ratio:16/10;
+      min-height:420px;
+      user-select:none;
+      cursor:grab;
+      touch-action:none;          /* wichtig für Touch-Pan */
+    }
+
+/* Mikroskop-Okular: Kreisfeld + Vignette */
+.scope::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:6; /* über Bild+Canvas, unter Badges/Help */
+  background:
+    radial-gradient(circle closest-side at 50% 50%,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0) 68%,
+      rgba(0,0,0,1) 72%,
+      rgba(0,0,0,1) 100%);
+}
+.scope::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:7;
+  background:
+    radial-gradient(circle closest-side at 50% 50%,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0) 55%,
+      rgba(0,0,0,.30) 70%,
+      rgba(0,0,0,1) 100%);
+}
+
+
+
+    .scope:active{cursor:grabbing}
+    .scope.draw{cursor:crosshair}
+    .frame.draw{cursor:crosshair}
+    .frame.draw .img-layer{cursor:crosshair}
+
+    .img-layer{
+      position:absolute;
+      left:50%;top:50%;
+      transform:translate(-50%,-50%) scale(1);
+      transform-origin:center;
+      width:92%;height:92%;
+      display:flex;align-items:center;justify-content:center;
+      will-change:transform;
+    }
+    .scope img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      border-radius:10px;
+      background:#000;            /* flüssiger Übergang (außerhalb/innerhalb weiß) */
+      pointer-events:none;
+    }
+    .badge{
+      position:absolute;left:12px;top:12px;
+      padding:8px 10px;
+      font-size:12px;
+      color:rgba(34,30,22,.98);
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(0,0,0,.14);
+      border-radius:12px;
+      backdrop-filter:blur(6px);
+      z-index:8;                  /* immer im Vordergrund */
+      max-width: calc(100% - 24px);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .help{
+      position:absolute;right:12px;bottom:12px;
+      padding:8px 10px;
+      font-size:12px;
+      color:rgba(15,23,42,.72);
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(0,0,0,.14);
+      border-radius:12px;
+      backdrop-filter:blur(6px);
+      text-align:right;
+      line-height:1.25;
+      z-index:8;
+    }
+    .imgnum{
+      position:absolute;left:12px;bottom:12px;
+      padding:6px 10px;
+      font-size:12px;
+      color:rgba(15,23,42,.75);
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(0,0,0,.14);
+      border-radius:12px;
+      backdrop-filter:blur(6px);
+      z-index:8;
+    }
+    .overlay{position:absolute;inset:0;pointer-events:none}
+    canvas.annot{
+      position:absolute;inset:0;
+      pointer-events:none;
+      touch-action:none;
+    }
+    canvas.annot.active{pointer-events:auto;cursor:crosshair}
+
+    .compare{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0}
+
+    /* Vergleich: Scopes wirklich über die ganze Hälfte strecken (verhindert helle Restspalte rechts) */
+    .compare{
+      height:420px;
+    }
+    .compare .scope{
+      width:100%;
+      height:100%;
+      min-height:0;
+      aspect-ratio:auto;
+    }
+
+    .compare::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:10px;
+      bottom:10px;
+      width:2px;
+      transform:translateX(-1px);
+      background:rgba(15,23,42,.25);
+      box-shadow:0 0 0 1px rgba(255,255,255,.45);
+      pointer-events:none;
+      z-index:9;
+    }
+    .compare #scopeA{border-top-right-radius:0;border-bottom-right-radius:0;border-right:0}
+    .compare #scopeB{border-top-left-radius:0;border-bottom-left-radius:0;border-left:0}
+    @media (max-width:1180px){.compare{grid-template-columns:1fr}.compare::after{display:none}}
+
+
+    /* compare okular: zwei Halbmasken, strikt an der Mittellinie getrennt */
+    .compareOcular{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6; /* über Bild/Canvas, unter Badge */
+    }
+    .compareOcular .half{
+      position:absolute;
+      top:0; bottom:0;
+      width:50%;
+    }
+    .compareOcular .half.left{left:0}
+    .compareOcular .half.right{right:0}
+
+    .compareOcular .half.left{
+      background:
+        radial-gradient(circle closest-side at 47% 50%,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) 68%,
+          rgba(0,0,0,1) 72%,
+          rgba(0,0,0,1) 100%),
+        radial-gradient(circle closest-side at 47% 50%,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) 55%,
+          rgba(0,0,0,.30) 70%,
+          rgba(0,0,0,1) 100%);
+    }
+    .compareOcular .half.right{
+      background:
+        radial-gradient(circle closest-side at 53% 50%,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) 68%,
+          rgba(0,0,0,1) 72%,
+          rgba(0,0,0,1) 100%),
+        radial-gradient(circle closest-side at 53% 50%,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) 55%,
+          rgba(0,0,0,.30) 70%,
+          rgba(0,0,0,1) 100%);
+    }
+
+    /* Im Vergleich nur die Halbmasken verwenden */
+    .compare .scope::before,
+    .compare .scope::after{opacity:0}
+
+    @media (max-width:1180px){
+      .compareOcular{display:none}
+      .compare .scope::before,
+      .compare .scope::after{opacity:1}
+    }
+
+    /* dunkle Scrollbar im mittleren Panel (sonst bleibt rechts ein heller Streifen sichtbar) */
+.infobox{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      background:var(--panel);
+      color:rgba(255,255,255,.94);
+    }
+
+    .surprisebox{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      background:var(--panel);
+    }
+    .surprisecontent{
+      border:1px dashed rgba(255,255,255,.16);
+      border-radius:12px;
+      padding:10px;
+      background:rgba(0,0,0,.18);
+      min-height:260px;
+      overflow:auto;
+    }
+    .muted{ color:var(--muted); }
+    .surprisecontent blockquote.instagram-media{
+      max-width:100% !important;
+      min-width:0 !important;
+      width:100% !important;
+      margin:0 auto !important;
+      background:#fff;
+    }
+
+    
+    .instaGrid{
+      /* Sichtbarer Bereich pro Embed (Clip unterhalb "View more on Instagram") */
+      --instaCutY: 560px;
+
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+      align-items:start;
+    }
+    @media (max-width:900px){
+      .instaGrid{ 
+        grid-template-columns: 1fr; 
+        --instaCutY: 620px;
+      }
+    }
+
+    /* Kachel: Instagram-Embed */
+    .instaItem{
+      position:relative;
+      max-height:var(--instaCutY);   /* clippt alles unterhalb der Schnittlinie; schrumpft bei kleineren Embeds */
+      height:auto;
+      overflow:hidden;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 0 0 1px rgba(0,0,0,.10);
+    }
+
+    /* Instagram /embed iframe */
+    .instaFrame{
+      width:100%;
+      border:0;
+      display:block;
+      background:#fff;
+      height:1000px;                /* bewusst größer – wird durch .instaItem geclippt */
+    }
+
+/* Unterer UI-Teil (Likes/Kommentare) wird verdeckt – direkt unter "View more on Instagram" */
+    .instaTrim{ display:none; }
+.infoboxhd{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .infobox .infotext{
+      font-size:12pt;
+      line-height:1.5;
+      text-align:justify;
+      hyphens:auto;
+      color:rgba(255,255,255,.92);
+    }
+    .infobox .infotext em{ opacity:.98 }
+    .compare .help{display:none}
+
+    /* tools */
+    .tools{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--panel);
+    }
+    .tools .g{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .tag{color:var(--muted);font-size:12px}
+    .smallbtn{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:750;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .smallbtn:hover{border-color:rgba(125,211,252,.55)}
+    .smallbtn.active{border-color:rgba(125,211,252,.75);background:rgba(125,211,252,.12)}
+    .smallbtn[aria-disabled="true"]{opacity:.55;pointer-events:none}
+
+    /* right column */
+    .rightgrid{display:grid;grid-template-rows:auto auto auto;gap:14px}
+    @media (max-width:1180px){
+      .rightgrid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+      .video{grid-column:1/-1}
+    }
+    @media (max-width:760px){
+      .rightgrid{grid-template-columns:1fr}
+      .video{grid-column:auto}
+    }
+    .figure{display:flex;flex-direction:column;gap:10px}
+    .frame{
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      background:rgba(0,0,0,.20);
+      aspect-ratio:16/11;
+      display:flex;align-items:center;justify-content:center;
+      position:relative;
+    }
+    .frame img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;display:block;background:rgba(0,0,0,.12)}
+    .frame video{width:100%;height:100%;object-fit:contain;display:block;background:rgba(0,0,0,.12)}
+
+    /* detail (Bild 3) view layer so zoom/pan from Großansicht can be mirrored */
+    #detailFrame{position:relative}
+    .detaillayer{
+      position:absolute;left:50%;top:50%;
+      transform:translate(-50%,-50%) scale(1);
+      transform-origin:center;
+      width:98%;height:98%;
+      display:flex;align-items:center;justify-content:center;
+      will-change:transform;
+      pointer-events:none;
+    }
+    .detaillayer img{
+      max-width:100%;max-height:100%;
+      width:auto;height:auto;
+      object-fit:contain;
+      background:rgba(0,0,0,.12);
+      border-radius:10px;
+      display:block;
+      pointer-events:none;
+    }
+
+    /* allow portrait schemata (e.g. Fangbein) to render correctly */
+    #schemaFrame{aspect-ratio:auto;height:clamp(240px,42vh,520px)}
+    #detailFrame{aspect-ratio:auto;height:clamp(220px,34vh,460px)}
+    .ph{
+      width:100%;height:100%;
+      display:flex;align-items:center;justify-content:center;
+      text-align:center;
+      padding:16px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+      background:rgba(0,0,0,.10);
+    }
+    .cap{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.25;
+    }
+    .selector{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      cursor:pointer;
+      font-weight:750;
+    }
+    .chip.active{border-color:rgba(125,211,252,.75);background:rgba(125,211,252,.12)}
+    .link{color:var(--accent);font-weight:750;cursor:pointer;text-decoration:none;white-space:nowrap}
+    .link[aria-disabled="true"]{opacity:.45;pointer-events:none}
+
+    .iconbtn{
+      width:28px;height:28px;
+      display:inline-flex;align-items:center;justify-content:center;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      flex:0 0 auto;
+    }
+    .iconbtn:hover{border-color:rgba(125,211,252,.55)}
+    .iconbtn svg{width:16px;height:16px;opacity:.95}
+
+    .status{font-size:12px;color:rgba(229,231,235,.88);line-height:1.35;margin-top:6px}
+    .status.good{color:rgba(34,197,94,.92)}
+    .status.bad{color:rgba(239,68,68,.92)}
+
+    /* labeling */
+    .labels{position:absolute;inset:0;pointer-events:none}
+    .labels.active{pointer-events:auto}
+    .labelpill{
+      position:absolute;
+      pointer-events:auto;
+      touch-action:none;
+      user-select:none;
+      cursor:grab;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      color:rgba(34,30,22,.98);
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(0,0,0,.18);
+      box-shadow:0 6px 14px rgba(0,0,0,.25);
+    
+      z-index:12;
+    }
+    .labelpill.correct{border-color:rgba(34,197,94,.95)}
+    .labelpill.wrong{border-color:rgba(239,68,68,.95)}
+    .hotspot{
+  position:absolute;
+  border:2px dashed rgba(255,214,0,.95);
+  border-radius:10px;
+  background:rgba(255,214,0,.18);
+  opacity:0;
+  transition:opacity .2s ease;
+  pointer-events:none;
+  box-shadow:0 0 0 2px rgba(0,0,0,.22) inset;
+}
+.hotspot.show{opacity:1}
+    /* labeling tray (labels start below the image) */
+    .labeltray{
+      margin-top:10px;
+      padding:10px;
+      border:1px dashed rgba(255,255,255,.14);
+      border-radius:14px;
+      background:rgba(36,33,24,.55);
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      min-height:54px;
+    }
+    .labeltray .trayhint{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.25;
+    }
+    .labelpill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .labelpill .grip{
+      width:12px;height:12px;
+      border-radius:50%;
+      background:rgba(125,211,252,.95);
+      box-shadow:0 0 0 3px rgba(125,211,252,.18);
+      flex:0 0 auto;
+    }
+    .labelpill.intray{
+      position:relative;
+      cursor:grab;
+    }
+    .labelpill.placed{
+      position:absolute;
+      cursor:grab;
+      z-index:6;
+    }
+
+    /* stronger targets in labeling mode */
+    .hotspot{border-width:2px}
+    .hotspot.show{opacity:1}
+    .hotspot::after{
+      content:"";
+      position:absolute;
+      left:50%;top:50%;
+      width:10px;height:10px;
+      border-radius:50%;
+      background:rgba(0,0,0,.75);
+      transform:translate(-50%,-50%);
+    }
+
+    /* export section */
+    .exportline{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .sep{opacity:.55;margin:0 2px}
+
+
+    /* modals */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.65);
+      z-index:999;
+      padding:18px;
+    }
+    .modal.open{display:flex}
+    .modalcard{
+      width:min(1100px,100%);
+      background:rgba(17,28,51,.92);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .modalhd{
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .modalhd .t{font-weight:750;font-size:13px}
+    .modalhd .x{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:750;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .modalbd{padding:14px}
+    .modalscope{
+      position:relative;
+      border:1px solid var(--border);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      aspect-ratio:16/10;
+      user-select:none;
+      cursor:grab;
+      touch-action:none;
+    }
+    
+/* Mikroskop-Okular auch in der Detail-Großansicht */
+.modalscope::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:6;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0) 46%,
+      rgba(0,0,0,1) 48%,
+      rgba(0,0,0,1) 100%);
+}
+.modalscope::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:7;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0) 30%,
+      rgba(0,0,0,.20) 55%,
+      rgba(0,0,0,1) 100%);
+}
+.modalscope.draw{cursor:crosshair}
+    .modalimglayer{
+      position:absolute;left:50%;top:50%;
+      transform:translate(-50%,-50%) scale(1);
+      transform-origin:center;
+      width:98%;height:98%;
+      display:flex;align-items:center;justify-content:center;
+      will-change:transform;
+    }
+    .modalscope img{
+      max-width:100%;max-height:100%;
+      object-fit:contain;
+      background:#fff;
+      border-radius:10px;
+      pointer-events:none;
+    }
+    .modalcontrols{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:1fr 1fr auto auto;
+      gap:10px;
+      align-items:center;
+    }
+    .small{font-size:12px;color:var(--muted)}
+    .cite{
+      color:rgba(229,231,235,.92);
+      line-height:1.45;
+      font-size:13px;
+      white-space:pre-wrap;
+    }
+    .cite a{color:var(--accent)}
+  
+    /* ================================
+       Natur-/Forscher-Theme (wärmer, weniger futuristisch)
+       ================================ */
+    :root{
+      --bg:#2a2a22;
+      --panel: rgba(36,33,24,.78);
+      --border: rgba(255,255,255,.14);
+      --text:#f3f0e6;
+      --muted:#d1c7b2;
+      --accent:#8faa63;      /* olivgrün */
+      --accent2:#c2a26a;     /* messing */
+    }
+
+    body{
+      font-family: Georgia, "Times New Roman", Times, serif;
+      background-image:
+        linear-gradient(180deg, rgba(28,25,18,.72) 0%, rgba(28,25,18,.86) 70%),
+        url('Insektenbilder/Hintergrund.png');
+    }
+
+    header{
+      backdrop-filter:none;
+      background:linear-gradient(180deg, rgba(255,248,232,.10), rgba(255,248,232,0));
+      border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    header h1{
+      letter-spacing:.15px;
+    }
+
+    .panel{
+      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+    }
+
+    .hd{
+      background:linear-gradient(180deg, rgba(255,248,232,.06), rgba(0,0,0,0));
+    }
+
+    .item{
+      background: rgba(54,50,38,.55);
+      border-color: rgba(255,255,255,.12);
+    }
+    .item:hover{border-color: rgba(143,170,99,.45)}
+    .item.active{
+      border-color: rgba(194,162,106,.70);
+      background: rgba(194,162,106,.12);
+    }
+
+    .seg button{
+      background: rgba(255,248,232,.08);
+      border-color: rgba(255,255,255,.14);
+    }
+    .seg button.active{
+      border-color: rgba(194,162,106,.80);
+      background: rgba(194,162,106,.14);
+    }
+
+    .controls{
+      background: rgba(54,50,38,.55);
+    }
+
+    input[type="range"]{
+      background: rgba(143,170,99,.22);
+      box-shadow: inset 0 0 0 1px rgba(143,170,99,.35), 0 4px 14px rgba(0,0,0,.25);
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      background: rgba(194,162,106,.95);
+      border: 2px solid rgba(34,30,22,.90);
+    }
+    input[type="range"]::-moz-range-thumb{
+      background: rgba(194,162,106,.95);
+      border: 2px solid rgba(34,30,22,.90);
+    }
+
+    .btn{
+      background: rgba(143,170,99,.16);
+      border-color: rgba(255,255,255,.14);
+    }
+    .btn:hover{border-color: rgba(194,162,106,.60)}
+    .btn.ghost{background: rgba(255,248,232,.08)}
+
+    /* kleine „Papier“-Anmutung für Textboxen */
+    .infoBox, .bd .info, .callout, .note{
+      background: rgba(255,248,232,.06);
+      border-color: rgba(255,255,255,.14);
+    }
+
+    /* Entfernt verbleibende blau-futuristische Akzente (Forscher-Look) */
+    .tools{background: rgba(54,50,38,.55)}
+    .smallbtn:hover{border-color: rgba(194,162,106,.60)}
+    .smallbtn.active{border-color: rgba(194,162,106,.80);background: rgba(194,162,106,.14)}
+    .chip.active{border-color: rgba(194,162,106,.80);background: rgba(194,162,106,.14)}
+    .iconbtn:hover{border-color: rgba(194,162,106,.60)}
+    .labeltray{background: rgba(255,248,232,.05);border-color: rgba(194,162,106,.35)}
+    .hotspot{border-color: rgba(255,214,0,.95)}
+    .hotspot::after{background: rgba(0,0,0,.75)}
+    .labelpill{color: rgba(34,30,22,.98)}
+    .labelpill .grip{background: rgba(194,162,106,.95);box-shadow:0 0 0 3px rgba(194,162,106,.22)}
+
+
+  
+  
+
+/* Toast (Clipboard feedback) */
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translateX(-50%) translateY(10px);
+  background:rgba(34,30,22,.92);
+  color:rgba(255,255,255,.96);
+  border:1px solid rgba(220,206,165,.35);
+  box-shadow:0 14px 40px rgba(0,0,0,.35);
+  padding:10px 14px;
+  border-radius:14px;
+  font-size:13px;
+  letter-spacing:.2px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;
+  z-index:9999;
+  max-width:min(560px, calc(100vw - 32px));
+  text-align:center;
+  backdrop-filter: blur(6px);
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+
+/* Instagram Blockquote Embeds (für Überraschungsfenster) */
+.instaEmbed{width:100%; height:100%; display:flex; align-items:stretch; justify-content:center; overflow:hidden;}
+.instaEmbed .instagram-media{margin:0 !important;}
+
+
+    /* ================================
+       Responsive Fix (Buttons sichtbar)
+       Ursache: .controls hat feste Mindestbreiten (240px) + Panel overflow:hidden.
+       Auf schmalen Viewports oder bei großer System-Schrift werden die Action-Buttons sonst abgeschnitten.
+       ================================ */
+
+    @media (max-width: 980px){
+      /* Zwei Spalten für Regler, Actions darunter */
+      .controls{
+        grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+        align-items:stretch;
+      }
+      .actions{
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 760px){
+      /* Einspaltig (Smartphone/Tablet-Portrait) */
+      .controls{
+        grid-template-columns: 1fr;
+      }
+      .actions{
+        justify-content: flex-start;
+      }
+      .actions .btn{
+        flex: 1 1 220px; /* Buttons bleiben groß genug und brechen um */
+      }
+    }
+
+</style></style>
+</head>
+
+<body>
+<header>
+  <h1>Erforschung des Insektenbeines</h1>
+  <p>Betrachte die verschiedenen Insekten und erforsche die unterschiedlichen Anpassungen der Beine an die Lebensumgebung und Lebensweise der Insekten.</p>
+</header>
+
+<main class="app">
+
+  <!-- LEFT -->
+  <section class="panel left">
+    <div class="hd">
+      <div>
+        <div class="title">Insekten (Auswahl)</div>
+</div>
+      <div class="seg">
+        <span class="lbl">Ziel:</span>
+        <button id="pickA" class="active" type="button">A</button>
+        <button id="pickB" type="button">B</button>
+      </div>
+    </div>
+    <div class="bd"><div id="list" class="list"></div></div>
+  </section>
+
+  <!-- MIDDLE -->
+  <section class="panel middle">
+    <div class="hd">
+      <div>
+        <div class="title">Mikroskop</div>
+        <div class="sub" id="info">Aktuell: –</div>
+      </div>
+    </div>
+
+    <div class="bd" style="display:flex;flex-direction:column;gap:12px;">
+      <!-- Insekt-Informationen (immer Insekt A) -->
+      <div class="infobox" id="insectInfoBoxMid">
+        <div class="infoboxhd">
+          <div class="tag">Insekt A – Informationen</div>
+          <div class="small" id="insectInfoTitleMid">–</div>
+        </div>
+        <div class="infotext" id="insectInfoTextMid">–</div>
+      </div>
+
+      
+<div class="controls" id="micControls">
+        <div class="ctrl">
+          <div class="lbl">Objektiv</div>
+          <input id="zoom" type="range" min="0" max="3" step="1" value="0"/>
+          <div id="zoomLabel" class="val">4×</div>
+        </div>
+
+        <div class="ctrl">
+          <div class="lbl">Fokus</div>
+          <input id="focus" type="range" min="-1" max="1" step="0.01" value="0"/>
+          <div class="val empty">.</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" id="btnCompare" type="button">Vergleich: Aus</button>
+          <button class="btn" id="btnReset" type="button">Ansicht zurücksetzen</button>
+        </div>
+      </div>
+
+
+<!-- single microscope -->
+      <div class="scope" id="scopeSingle">
+        <div class="badge" id="badgeSingle">–</div>
+        <div class="imgnum">Bild 1</div>
+        <div class="img-layer" id="layerSingle">
+          <img id="imgSingle" alt="Mikroskopbild (Bild 1)"/>
+        </div>
+        <div class="overlay">
+          <canvas id="cMicSingle" class="annot" width="10" height="10"></canvas>
+        </div>
+        <div class="help">Tipp: Ziehen (Touch/Maus)<br/>Zoom per Regler</div>
+      </div>
+
+      <!-- compare (Bild 1 nur!) -->
+      <div class="compare" id="compareWrap" style="display:none;">
+        <div class="scope" id="scopeA">
+          <div class="badge" id="badgeA">A</div>
+          <div class="imgnum">Bild 1</div>
+          <div class="img-layer" id="layerA">
+            <img id="imgA" alt="Mikroskopbild A (Bild 1)"/>
+          </div>
+          <div class="overlay">
+            <canvas id="cMicA" class="annot" width="10" height="10"></canvas>
+          </div>
+          <div class="help"></div>
+        </div>
+        <div class="scope" id="scopeB">
+          <div class="badge" id="badgeB">B</div>
+          <div class="imgnum">Bild 1</div>
+          <div class="img-layer" id="layerB">
+            <img id="imgB" alt="Mikroskopbild B (Bild 1)"/>
+          </div>
+          <div class="overlay">
+            <canvas id="cMicB" class="annot" width="10" height="10"></canvas>
+          </div>
+          <div class="help"></div>
+        </div>
+
+        <div class="compareOcular" aria-hidden="true">
+          <div class="half left"></div>
+          <div class="half right"></div>
+        </div>
+      </div>
+
+      <!-- Überraschungsfenster (nur für Gottesanbeterin sichtbar) -->
+      <div class="surprisebox" id="surpriseBox" style="display:none;">
+        <div class="infoboxhd" style="margin-bottom:8px;">
+          <div class="tag">Überraschungsfenster</div>
+          <div class="small" id="surpriseMeta">Instagram</div>
+        </div>
+        <div class="surprisecontent" id="surpriseContent"></div>
+        
+        <div id="surpriseFallback" class="small muted" style="margin-top:8px; display:none;">
+          Falls die Inhalte nicht laden (z. B. im Schulnetz / mit Tracking-Blockern), öffne die Beiträge direkt:
+          <ul class="small" style="margin:6px 0 0 16px; padding:0;">
+            <li><a href="https://www.instagram.com/p/DR9vzoWjN2-/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">Reel 1</a></li>
+            <li><a href="https://www.instagram.com/p/DGnD9ObMOwS/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">Reel 2</a></li>
+            <li><a href="https://www.instagram.com/p/DT5EDS_jJ82/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">Post 3</a></li>
+            <li><a href="https://www.instagram.com/p/DQT8uXIjOd1/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener">Post 4</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT -->
+  <section class="panel right">
+    <div class="hd">
+      <div>
+        <div class="title">Bein-Material</div>
+</div>
+
+      <!-- schema source icon -->
+      <button class="iconbtn" id="srcOpen" type="button" title="Quelle der Schema-Abbildungen anzeigen" aria-label="Quelle der Schema-Abbildungen anzeigen">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 10.5v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="bd rightgrid">
+
+      <!-- Markierfunktionen (oben) -->
+      <div class="figure" id="markTop">
+        <div class="cap" style="align-items:center;">
+          <span style="color:rgba(229,231,235,.96);font-weight:800;">Markierfunktionen</span>
+          <span class="small">Stift / Radierer</span>
+        </div>
+<div class="tools">
+          <div class="g">
+            <span class="tag">Markieren:</span>
+            <button class="smallbtn" id="btnDraw" type="button">Markieren: Aus</button>
+            <button class="smallbtn" id="btnPen" type="button" aria-disabled="true">Stift</button>
+            <button class="smallbtn" id="btnEraser" type="button" aria-disabled="true">Radierer</button>
+          </div>
+        </div>
+
+        
+</div>
+
+      <!-- Bild 2: schema -->
+
+<div class="figure">
+        <div class="frame" id="schemaFrame">
+          <div class="imgnum">Bild 2</div>
+          <img id="schemaImg" alt="Bein-Schema (Bild 2)"/>
+          <div id="schemaPh" class="ph" style="display:none;">Kein Schema-Bild vorhanden.</div>
+
+          <div class="overlay">
+            <canvas id="cSchema" class="annot" width="10" height="10"></canvas>
+            <div id="hotspots" class="labels"></div>
+            <div id="labels" class="labels"></div>
+          </div>
+        </div>
+
+        <div class="cap">
+          <span id="schemaCap">Bild 2: Schema –</span>
+          <span class="small">Referenzgrafik</span>
+        </div>
+
+        <div id="labelTray" class="labeltray" style="display:none;">
+          <span class="trayhint">Ziehe die Begriffe am blauen Punkt auf die passenden Bereiche im Schema.</span>
+        </div>
+
+        <!-- Beschriftung unter Schema (wie gewünscht) -->
+        <div class="tools">
+          <div class="g">
+            <span class="tag">Beschriftung (Bild 2):</span>
+            <button class="smallbtn" id="btnLabel" type="button">Beschriftungsmodus</button>
+            <button class="smallbtn" id="btnCheck" type="button" style="display:none;">Korrigieren</button>
+          </div>
+        </div>
+        <div id="labelStatus" class="status" style="display:none;"></div>
+      </div>
+
+      <!-- Bild 3: detail -->
+      <div class="figure">
+        <div class="frame" id="detailFrame">
+          <div class="imgnum">Bild 3</div>
+          <div class="detaillayer" id="detailLayer"><img id="detailImg" alt="Bein-Detail (Bild 3)"/></div>
+          <div id="detailPh" class="ph" style="display:none;">Kein Detailbild vorhanden.</div>
+          <div class="overlay">
+            <canvas id="cDetail" class="annot" width="10" height="10"></canvas>
+          </div>
+        </div>
+
+        <div class="cap" style="align-items:center;">
+          <div style="min-width:0;">
+            <div id="detailCap">Bild 3: Detail –</div>
+            <div id="detailSel" class="selector" style="margin-top:8px;"></div>
+          </div>
+          <a class="link" id="openDetail" href="javascript:void(0)" aria-disabled="true">Groß ansehen</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="figure video">
+        <div class="frame" style="aspect-ratio:16/9;">
+          <video id="video" controls playsinline preload="metadata"></video>
+          <div id="videoPh" class="ph" style="display:none;">Kein Video für dieses Insekt hinterlegt.</div>
+        </div>
+
+        <div class="cap" style="align-items:center;">
+          <span id="videoCap">Video: –</span>
+
+          <!-- video source icon -->
+          <button class="iconbtn" id="vSrcOpen" type="button" title="Quelle des Videos anzeigen" aria-label="Quelle des Videos anzeigen" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 10.5v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    
+      <!-- Exportfunktionen -->
+      <div class="figure" id="exportFigure">
+        <div class="cap" style="align-items:center;">
+          <span style="color:rgba(229,231,235,.96);font-weight:800;">Leer- und Exportfunktionen</span>
+</div>
+
+        <div class="tools">
+          <div class="g exportline">
+            <span class="tag">Leeren:</span>
+            <button class="smallbtn" id="btnClear1" type="button" aria-disabled="false">Bild 1</button><span class="sep">/</span>
+            <button class="smallbtn" id="btnClear2" type="button" aria-disabled="false">Bild 2</button><span class="sep">/</span>
+            <button class="smallbtn" id="btnClear3" type="button" aria-disabled="false">Bild 3</button>
+</div>
+        </div>
+
+        <div class="tools">
+          <div class="g exportline">
+            <span class="tag">Screenshot:</span>
+            <button class="smallbtn" id="btnShot1" type="button" aria-disabled="false">Bild 1</button><span class="sep">/</span>
+            <button class="smallbtn" id="btnShot2" type="button" aria-disabled="false">Bild 2</button><span class="sep">/</span>
+            <button class="smallbtn" id="btnShot3" type="button" aria-disabled="false">Bild 3</button>
+</div>
+        </div>
+      </div>
+
+</div>
+  </section>
+
+</main>
+
+<!-- MODAL: detail large view -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modalcard" role="dialog" aria-modal="true">
+    <div class="modalhd">
+      <div class="t" id="modalTitle">Detailbild</div>
+      <button class="x" id="modalClose" type="button">Schließen</button>
+    </div>
+    <div class="modalbd">
+      <div class="modalscope" id="modalScope">
+        <div class="modalimglayer" id="modalLayer">
+          <img id="modalImg" alt="Detailbild groß"/>
+        </div>
+        <div class="overlay">
+          <canvas id="cModal" class="annot" width="10" height="10"></canvas>
+        </div>
+      </div>
+
+      <div class="modalcontrols">
+        <label class="small">Objektiv (Großansicht)
+          <input id="modalZoom" type="range" min="0" max="3" step="1" value="1"/>
+          <span id="modalZoomLabel" class="small">10×</span>
+        </label>
+        <label class="small">Fokus (Großansicht)
+          <input id="modalFocus" type="range" min="-1" max="1" step="0.01" value="0"/>
+        </label>
+        <button class="btn" id="modalReset" type="button">Zurücksetzen</button>
+        <button class="btn" id="modalFit" type="button">Einpassen</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: schema source -->
+<div class="modal" id="srcModal" aria-hidden="true">
+  <div class="modalcard" role="dialog" aria-modal="true">
+    <div class="modalhd">
+      <div class="t">Quelle der Schema-Abbildungen</div>
+      <button class="x" id="srcClose" type="button">Schließen</button>
+    </div>
+    <div class="modalbd">
+      <div class="cite"><strong>Abbildung aus:</strong>
+Fleischmann, M.; Gritsch, K.; Herrmann, A.; Knapp, M.; Leibmann, S.; Schmidkonz, J.; Schmidkonz, S.; Schmidt, M.; Schuhmann, E.; Steinhofer, H.; Trescher, C. (2021): Biologie – Bayern. Biologie für Gymnasien. Biologie 9. Hrsg. v. Margit Schmidt. Bamberg: C.C. Buchner Verlag.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: video source -->
+<div class="modal" id="vSrcModal" aria-hidden="true">
+  <div class="modalcard" role="dialog" aria-modal="true">
+    <div class="modalhd">
+      <div class="t">Quelle des Videos</div>
+      <button class="x" id="vSrcClose" type="button">Schließen</button>
+    </div>
+    <div class="modalbd">
+      <div class="cite" id="vSrcText"><strong>Quelle des Videos:</strong> –</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Pfade:
+   - HTML-Datei liegt neben den Ordnern "Insektenbilder" und "Videos"
+   - Bilder:  Insektenbilder/<Dateiname>
+   - Videos:  Videos/<Dateiname>
+*/
+const IMG_BASE = "Insektenbilder/";
+const VID_BASE = "Videos/";
+
+/* Datensatz: Hauptbilder + Schema + Detail + Video + Info (5 Sätze) */
+
+
+function ensureInstagramEmbed(){
+  // Für <blockquote class="instagram-media"> benötigt Instagram ein Script + process()
+  if(window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === "function"){
+    window.instgrm.Embeds.process();
+    return;
+  }
+  // Script nur einmal laden (wichtig bei file:// -> daher https absolut)
+  if(document.getElementById("igEmbedScript")) return;
+
+  const s = document.createElement("script");
+  s.id = "igEmbedScript";
+  s.async = true;
+  s.src = "https://www.instagram.com/embed.js";
+  s.onload = ()=> {
+    if(window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === "function"){
+      window.instgrm.Embeds.process();
+    }
+  };
+  document.body.appendChild(s);
+}
+
+const surpriseUnlocked = new Set();
+
+
+
+
+// Konfiguration: welche Insekten bekommen ein Überraschungsfenster?
+const SURPRISE_CFG = {
+  gottesanbeterin: {
+    tplId: "tplSurpriseGottesanbeterin",
+    meta: "Instagram (4 Beiträge)",
+    links: [
+      { label: "Reel 1", url: "https://www.instagram.com/p/DR9vzoWjN2-/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+      { label: "Reel 2", url: "https://www.instagram.com/p/DGnD9ObMOwS/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+      { label: "Post 3", url: "https://www.instagram.com/p/DT5EDS_jJ82/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+      { label: "Post 4", url: "https://www.instagram.com/p/DQT8uXIjOd1/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" }
+    ]
+  },
+  laufkaefer: {
+    tplId: "tplSurpriseLaufkaefer",
+    meta: "Instagram (4 Beiträge)",
+    links: [
+  { label: "Post 1", url: "https://www.instagram.com/p/DTApx5ujIwX/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 2", url: "https://www.instagram.com/p/DJXdXO4zABg/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 3", url: "https://www.instagram.com/p/DOLYUrxjAQ-/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 4", url: "https://www.instagram.com/p/C5Lh0PZMBzB/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" }
+]
+  },
+heuschrecke: {
+  tplId: "tplSurpriseHeuschrecke",
+  meta: "Instagram (4 Beiträge)",
+  links: [
+  { label: "Post 1", url: "https://www.instagram.com/p/DMsU4Xls5nd/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 2", url: "https://www.instagram.com/p/C4Xk-pVMWPW/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 3", url: "https://www.instagram.com/p/DGppr87Mzsa/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 4", url: "https://www.instagram.com/p/DUeuCSHkUgC/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" }
+]
+},
+biene: {
+  tplId: "tplSurpriseBiene",
+  meta: "Instagram (4 Beiträge)",
+  links: [
+  { label: "Post 1", url: "https://www.instagram.com/p/DUIqj8hjFSG/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 2", url: "https://www.instagram.com/p/DOEFSQkjDAV/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 3", url: "https://www.instagram.com/p/DIEiOmBs3Np/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  { label: "Post 4", url: "https://www.instagram.com/p/DHYa1lsMVo0/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" }
+]
+}
+,maulwurfsgrille: {
+  tplId: "tplSurpriseMaulwurfsgrille",
+  meta: "Instagram (4 Beiträge)",
+  links: [
+    { label: "Post 1", url: "https://www.instagram.com/p/DLmOlyZy29V/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" },
+    { label: "Post 2", url: "https://www.instagram.com/p/Ch9Y72nOyzx/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" },
+    { label: "Post 3", url: "https://www.instagram.com/p/DTrZDDRFfSr/" },
+    { label: "Post 4", url: "https://www.instagram.com/p/DIf5Ry_pfAI/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" }
+  ]
+}
+,
+  schwimmkaefer: {
+    tplId: "tplSurpriseSchwimmkaefer",
+    meta: "Instagram (4 Beiträge)",
+    links: [
+      { label: "Post 1", url: "https://www.instagram.com/p/CtZU8qzNRzE/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" },
+      { label: "Post 2", url: "https://www.instagram.com/p/C6b9tQrNV85/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" },
+      { label: "Post 3", url: "https://www.instagram.com/p/CfT_wZOO6fT/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+      { label: "Post 4", url: "https://www.instagram.com/p/CzMbja9tQ6I/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" }
+    ]
+  }
+
+};
+function updateSurprise(insectA){
+  if(!surpriseBox || !surpriseContent) return;
+
+  const cfg = SURPRISE_CFG[insectA?.id || ""] || null;
+  const surpriseFallback = document.getElementById("surpriseFallback");
+  const surpriseMeta = document.getElementById("surpriseMeta");
+
+  // nur für konfigurierte Insekten
+  if(!insectA || !cfg){
+    surpriseBox.style.display = "none";
+    if(surpriseFallback) surpriseFallback.style.display="none";
+    return;
+  }
+
+  surpriseBox.style.display = "block";
+  if(surpriseMeta) surpriseMeta.textContent = cfg.meta || "Instagram";
+  if(surpriseFallback) surpriseFallback.style.display="none";
+
+  // Fallback-Links dynamisch setzen
+  if(surpriseFallback){
+    const ul = surpriseFallback.querySelector("ul");
+    if(ul){
+      ul.innerHTML = (cfg.links || []).map((l,i)=>
+        `<li><a href="${l.url}" target="_blank" rel="noopener">${l.label || ("Link " + (i+1))}</a></li>`
+      ).join("");
+    }
+  }
+
+  // Gating: Inhalte erst nach korrekt gelöster Beschriftungsaufgabe anzeigen
+  if(!surpriseUnlocked.has(insectA.id)){
+    surpriseContent.dataset.loaded = "0";
+    surpriseContent.dataset.loadedFor = "";
+    surpriseContent.innerHTML = `
+      <div class="status" style="display:block;">
+        <strong>🔒 Überraschungsfenster gesperrt</strong><br>
+        Löse zuerst die <strong>Beschriftungsaufgabe (Bild 2)</strong> vollständig korrekt und klicke auf <strong>„Korrigieren“</strong>.
+      </div>`;
+    return;
+  }
+
+  // Inhalt aus Template setzen (je Insekt einmal)
+  if(surpriseContent.dataset.loaded !== "1" || surpriseContent.dataset.loadedFor !== insectA.id){
+    const tpl = document.getElementById(cfg.tplId);
+    surpriseContent.innerHTML = tpl ? tpl.innerHTML : "";
+    surpriseContent.dataset.loaded = "1";
+    surpriseContent.dataset.loadedFor = insectA.id;
+  }
+
+  if(surpriseFallback) surpriseFallback.style.display="block";
+
+  ensureInstagramEmbed();
+}
+
+const INSECTS = [
+  {
+    id:"laufkaefer",
+    name:"Laufkäfer",
+    latin:"Carabus violaceus",
+    hint:"Standardbein / Laufbein",
+    microscope:"Laufkäfer.png",
+    thumb:"Laufkäfer.png",
+    schema:"Schema Standardbein.jpg",
+    schemaLabel:"Schema Standardbein",
+    /* Reihenfolge wie gewünscht: Standardbein zuerst, dann Laufbein */
+    closeups:[
+      { label:"Standardbein", file:"Standardbein.jpg" },
+      { label:"Laufbein",     file:"Laufbein.jpg" }
+    ],
+    video:"Video_Laufkäfer",
+    videoSource:"https://www.youtube.com/watch?v=xEQniBG2x28",
+    videoTitle:"Laufkäfer",
+    info:
+      "Der Laufkäfer (<em>Carabus violaceus</em>) ist in Mitteleuropa weit verbreitet und lebt vor allem in Wäldern, Gärten und an Wegrändern mit Laub- oder Totholzstruktur. " +
+      "Er ist überwiegend dämmerungs- und nachtaktiv und läuft meist am Boden, wo er unter Steinen, Rinde oder Laub Unterschlupf findet. " +
+      "Als Räuber frisst er unter anderem Schnecken, Insektenlarven und andere kleine Bodentiere und ist damit ein wichtiger Nützling im Ökosystem. " +
+      "Die langen, kräftigen Laufbeine ermöglichen schnelles Laufen, Richtungswechsel und das Verfolgen von Beute auf unebenem Untergrund. " +
+      "In der Simulation dient der Laufkäfer als Vergleichsbeispiel für ein „Standardbein“ ohne extreme Spezialisierung." +
+      "<br><br><strong>Allgemeiner Aufbau eines Insektenbeines:</strong><br>" +
+      "Ein Insektenbein ist gliedmaßenartig aufgebaut und besteht aus mehreren hintereinander liegenden Abschnitten, die vom Körper nach außen immer weiter gehen. " +
+      "Direkt am Körper sitzt zunächst die <strong>Hüfte (Coxa)</strong>; sie stellt die Verbindung zwischen Bein und Brustabschnitt her. " +
+      "Daran schließt sich ein kurzes, ringförmiges Gelenkstück, der <strong>Schenkelring (Trochanter)</strong>, an. " +
+      "Danach folgt als kräftiger, meist relativ dicker Abschnitt der <strong>Schenkel (Femur)</strong>, der vor allem der Kraftübertragung dient. " +
+      "Auf den Schenkel folgt die <strong>Schiene (Tibia)</strong>, ein längerer, schlanker Abschnitt, der zusammen mit dem Femur die Bewegung des Beines ermöglicht. " +
+      "Ganz außen befindet sich der <strong>Fuß (Tarsus)</strong>; er ist häufig in mehrere kleine Glieder unterteilt und trägt am Ende oftmals Klauen oder Haftstrukturen, mit denen sich das Insekt festhalten oder laufen kann."
+  },
+
+  {
+    id:"maulwurfsgrille",
+    name:"Maulwurfsgrille",
+    latin:"Gryllotalpa gryllotalpa",
+    hint:"Grabbein",
+    microscope:"Maulwurfsgrille.png",
+    thumb:"Maulwurfsgrille.png",
+    schema:"Schema Grabbein.jpg",
+    schemaLabel:"Schema Grabbein",
+    closeups:[
+      { label:"Grabbein", file:"Grabbein.jpg" }
+    ],
+    video:"Video_Maulwurfsgrille",
+    videoSource:"https://www.youtube.com/watch?v=Ted0q4Iuk1g",
+    videoTitle:"Maulwurfsgrille",
+    info:
+      "Die Maulwurfsgrille (<em>Gryllotalpa gryllotalpa</em>) bevorzugt feuchte, lockere Böden in Wiesen, Gärten, Auen oder an Gewässerrändern. " +
+      "Sie lebt überwiegend unterirdisch in selbst gegrabenen Gängen und kommt meist in der Dämmerung oder nachts an die Oberfläche. " +
+      "Ernährt wird sie sowohl von Wurzeln als auch von kleinen Bodentieren, sodass sie teils pflanzen- und teils fleischfressend ist. " +
+      "Die stark verbreiterten Vorderbeine sind zu Grabbeinen umgebildet und wirken wie Schaufeln, um Erde effizient zu verdrängen. " +
+      "Diese Bein-Anpassung passt ideal zu einem Leben im Boden und erklärt ihr typisches, „maulwurfartiges“ Verhalten."
+  },
+
+  {
+    id:"schwimmkaefer",
+    name:"Schwimmkäfer",
+    latin:"Dytiscus marginalis",
+    hint:"Schwimmbein",
+    microscope:"Schwimmkäfer.png",
+    thumb:"Schwimmkäfer.png",
+    schema:"Schema Schwimmbein.jpg",
+    schemaLabel:"Schema Schwimmbein",
+    closeups:[
+      { label:"Schwimmbein", file:"Schwimmbein.jpg" }
+    ],
+    video:"Video_Schwimmkäfer",
+    videoSource:"https://www.youtube.com/watch?v=Hwqja6FWUzA",
+    videoTitle:"Schwimmkäfer",
+    info:
+      "Der Gelbrandkäfer (<em>Dytiscus marginalis</em>) lebt in stehenden oder langsam fließenden Süßgewässern wie Teichen, Tümpeln oder Gräben. " +
+      "Er ist ein aktiver Räuber und jagt unter Wasser Insektenlarven, Kaulquappen oder andere kleine Wassertiere. " +
+      "Zum Luftholen steigt er regelmäßig an die Oberfläche und speichert Luft unter den Flügeldecken. " +
+      "Die hinteren Beine sind zu Schwimmbeinen umgebildet und besitzen Borsten, die die Ruderfläche vergrößern. " +
+      "So kann der Käfer sehr effizient beschleunigen, wenden und Beute im Wasser verfolgen."
+  },
+
+  {
+    id:"biene",
+    name:"Biene",
+    latin:"Apis mellifera",
+    hint:"Sammelbein",
+    microscope:"Biene.png",
+    thumb:"Biene.png",
+    schema:"Schema Sammelbein.jpg",
+    schemaLabel:"Schema Sammelbein",
+    closeups:[
+      { label:"Sammelbein", file:"Sammelbein.jpg" }
+    ],
+    video:"Video_Biene",
+    videoSource:"https://www.youtube.com/watch?v=ymjZlOkwGVw",
+    videoTitle:"Biene",
+    info:
+      "Die Honigbiene (<em>Apis mellifera</em>) ist in vielen Lebensräumen Mitteleuropas anzutreffen, besonders in blütenreichen Landschaften und Kulturlandschaften. " +
+      "Sie lebt sozial in Staaten und sammelt Nektar und Pollen, die als Energie- bzw. Proteinquelle dienen. " +
+      "Bei der Bestäubung spielt sie eine zentrale Rolle für Wildpflanzen und viele Nutzpflanzen. " +
+      "Die Hinterbeine sind zu Sammelbeinen spezialisiert und tragen Bürsten sowie Pollenkörbchen (Corbicula), um Pollen zu transportieren. " +
+      "Die Bein-Anpassung ist damit direkt an ihre Lebensweise als Blütenbesucherin und Sammlerin gekoppelt."
+  },
+
+  {
+    id:"gottesanbeterin",
+    name:"Gottesanbeterin",
+    latin:"Mantis religiosa",
+    hint:"Fangbein",
+    microscope:"Gottesanbeterin.png",
+    thumb:"Gottesanbeterin.png",
+    schema:"Schema Fangbein.jpg",
+    schemaLabel:"Schema Fangbein",
+    closeups:[
+      { label:"Fangbein", file:"Fangbein.jpg" }
+    ],
+    video:"Video_Gottesanbeterin",
+    videoSource:"https://www.youtube.com/watch?v=WDXufvqJ13I",
+    videoTitle:"Fangbein – Beutefang",
+    info:
+      "Die Gottesanbeterin (<em>Mantis religiosa</em>) kommt in warmen, sonnigen Lebensräumen vor, z. B. auf Trockenrasen, in Hecken oder an Waldrändern. " +
+      "Sie ist eine Lauerjägerin und verharrt oft reglos, bis Beute in Reichweite kommt. " +
+      "Ernährt wird sie vor allem von Insekten, gelegentlich auch von größeren Wirbellosen; sie ist damit klar räuberisch. " +
+      "Die Vorderbeine sind zu Fangbeinen umgebildet und besitzen Dornen, die Beute beim Zugreifen festhalten. " +
+      "Diese Spezialisierung ermöglicht einen sehr schnellen, präzisen Beutefang und passt perfekt zu ihrer Jagdstrategie."
+  },
+
+  {
+    id:"heuschrecke",
+    name:"Heuschrecke",
+    latin:"Chorthippus sp.",
+    hint:"Sprungbein",
+    microscope:"Heuschrecke.png",
+    thumb:"Heuschrecke.png",
+    schema:"Schema Sprungbein.jpg",
+    schemaLabel:"Schema Sprungbein",
+    closeups:[
+      { label:"Sprungbein", file:"Sprungbein.jpg" }
+    ],
+    video:"Video_Heuschrecke",
+    videoSource:"https://www.youtube.com/watch?v=zqfTg6dw6Vs",
+    videoTitle:"Heuschrecke",
+    info:
+      "Viele Feldheuschrecken (z. B. <em>Chorthippus</em>-Arten) leben in Wiesen, Weiden und anderen offenen, grasreichen Lebensräumen. " +
+      "Sie sind überwiegend tagaktiv und ernähren sich hauptsächlich pflanzlich, besonders von Gräsern. " +
+      "Bei Gefahr flüchten sie oft durch Sprünge, die schneller sind als reines Laufen und sie rasch aus dem Gefahrenbereich bringen. " +
+      "Die Hinterbeine sind zu kräftigen Sprungbeinen umgebaut, wobei besonders der verdickte Schenkel (Femur) viel Muskelmasse für den Absprung enthält. " +
+      "Die Sprungbein-Anpassung unterstützt damit direkt ihre Fortbewegung und Fluchtstrategie in offenem Gelände."
+  }
+];
+
+/* Beschriftungsziel (nur Standardbein-Schema). Koordinaten relativ zum Bild (0..1) */
+const LABEL_TARGETS = {
+  "Schema Standardbein.jpg": [
+    { key:"Hüfte",         id:"coxa",       x:0.1404, y:0.0953 },
+    { key:"Schenkelring",  id:"trochanter", x:0.0553, y:0.2147 },
+    { key:"Schenkel",      id:"femur",      x:0.3940, y:0.1813 },
+    { key:"Schiene",       id:"tibia",      x:0.5622, y:0.4299 },
+    { key:"Fuß",           id:"tarsus",     x:0.7022, y:0.7310 }
+  ],
+
+  "Schema Grabbein.jpg": [
+    { key:"Hüfte",         id:"coxa",       x:0.2542, y:0.1077 },
+    { key:"Schenkelring",  id:"trochanter", x:0.1581, y:0.2938 },
+    { key:"Schenkel",      id:"femur",      x:0.5664, y:0.2628 },
+    { key:"Schiene",       id:"tibia",      x:0.6451, y:0.5465 },
+    { key:"Fuß",           id:"tarsus",     x:0.5970, y:0.7395 }
+  ],
+
+  "Schema Schwimmbein.jpg": [
+    { key:"Hüfte",         id:"coxa",       x:0.1587, y:0.0697 },
+    { key:"Schenkelring",  id:"trochanter", x:0.1468, y:0.1874 },
+    { key:"Schenkel",      id:"femur",      x:0.5127, y:0.0988 },
+    { key:"Schiene",       id:"tibia",      x:0.7079, y:0.3049 },
+    { key:"Fuß",           id:"tarsus",     x:0.5656, y:0.6954 }
+  ],
+
+  "Schema Sammelbein.jpg": [
+    { key:"Hüfte",         id:"coxa",       x:0.1282, y:0.2189 },
+    { key:"Schenkelring",  id:"trochanter", x:0.2284, y:0.4006 },
+    { key:"Schenkel",      id:"femur",      x:0.2869, y:0.1052 },
+    { key:"Schiene",       id:"tibia",      x:0.6706, y:0.2855 },
+    { key:"Fuß",           id:"tarsus",     x:0.6190, y:0.7651 }
+  ],
+
+  "Schema Fangbein.jpg": [
+    { key:"Hüfte",         id:"coxa",       x:0.1262, y:0.2105 },
+    { key:"Schenkelring",  id:"trochanter", x:0.1310, y:0.5179 },
+    { key:"Schenkel",      id:"femur",      x:0.4347, y:0.2989 },
+    { key:"Schiene",       id:"tibia",      x:0.7616, y:0.3407 },
+    { key:"Fuß",           id:"tarsus",     x:0.6103, y:0.7320 }
+  ],
+
+  "Schema Sprungbein.jpg": [
+    { key:"Hüfte",         id:"coxa",       x:0.0724, y:0.6215 },
+    { key:"Schenkelring",  id:"trochanter", x:0.1728, y:0.7457 },
+    { key:"Schenkel",      id:"femur",      x:0.1822, y:0.3424 },
+    { key:"Schiene",       id:"tibia",      x:0.6848, y:0.3479 },
+    { key:"Fuß",           id:"tarsus",     x:0.8392, y:0.6062 }
+  ]
+};
+
+let compareOn = false;
+let pickSide = "A";        // assigns clicked insect to A or B in compare mode
+let A = INSECTS[0];
+let B = INSECTS[1] || INSECTS[0];
+let current = INSECTS[0];  // right panel always follows last clicked insect
+const micView = new Map(INSECTS.map(i=>[i.id,{zoomStep:0, focus:0}]));
+let focusModal = 0;        // -1..+1 (0 = scharf) – wird pro Insekt in detailView gespiegelt
+
+const MAG_STEPS = [
+  // scale: visuelle Skalierung im Modal (Layout/Platz)
+  // mult : optischer Zoom-Faktor relativ zu 10× (für Fokus/Unschärfe-Logik)
+  { label:"4×",  scale:1.00, mult:0.4 },
+  { label:"10×", scale:2.20, mult:1.0 },
+  { label:"20×", scale:3.00, mult:2.0 },
+  { label:"40×", scale:4.00, mult:4.0 }
+];
+
+const pan = { single:{x:0,y:0}, A:{x:0,y:0}, B:{x:0,y:0} };
+const drag = {
+  single:{a:false,sx:0,sy:0,bx:0,by:0,pid:null},
+  A:{a:false,sx:0,sy:0,bx:0,by:0,pid:null},
+  B:{a:false,sx:0,sy:0,bx:0,by:0,pid:null},
+};
+
+let drawMode = false;      // per insect (loaded from state)
+let tool = "pen";          // "pen" | "eraser" (per insect)
+
+const penState = new Map(INSECTS.map(i=>[i.id,{draw:false, tool:"pen"}]));
+const detailView = new Map(INSECTS.map(i=>[i.id,{zoom:1.0, pan:{x:0,y:0}, focus:0}])); // mirrors Großansicht (Bild 3)
+
+
+const inkStore = new Map(INSECTS.map(i=>[i.id,{mic:null, schema:null, detail:null}]));
+
+function snapshotCanvas(src){
+  if(!src) return null;
+  const c = document.createElement("canvas");
+  c.width = src.width; c.height = src.height;
+  c.getContext("2d").drawImage(src,0,0);
+  return c;
+}
+function saveInk(insId, key, canvas){
+  if(!insId || !canvas) return;
+  const rec = inkStore.get(insId) || {mic:null, schema:null, detail:null};
+  rec[key] = snapshotCanvas(canvas);
+  inkStore.set(insId, rec);
+}
+function clearInk(insId, key){
+  if(!insId) return;
+  const rec = inkStore.get(insId) || {mic:null, schema:null, detail:null};
+  rec[key] = null;
+  inkStore.set(insId, rec);
+}
+function restoreInk(insId, key, canvas){
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const rec = inkStore.get(insId);
+  const snap = rec ? rec[key] : null;
+  if(snap){
+    ctx.save();
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.drawImage(snap, 0,0, snap.width,snap.height, 0,0, canvas.width,canvas.height);
+    ctx.restore();
+    const dpr = window.devicePixelRatio || 1;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+}
+
+function persistVisibleInk(){
+  // Mikroskop (Bild 1): je nach Modus in verschiedene Canvas gerendert
+  if(compareOn){
+    saveInk(A.id, "mic", cMicA);
+    saveInk(B.id, "mic", cMicB);
+  }else{
+    saveInk(A.id, "mic", cMicSingle);
+  }
+  // Rechte Spalte gehört immer zu "current"
+  saveInk(current.id, "schema", cSchema);
+  saveInk(current.id, "detail", cDetail);
+}
+
+function restoreVisibleInk(){
+  if(compareOn){
+    restoreInk(A.id, "mic", cMicA);
+    restoreInk(B.id, "mic", cMicB);
+  }else{
+    restoreInk(A.id, "mic", cMicSingle);
+  }
+  restoreInk(current.id, "schema", cSchema);
+  restoreInk(current.id, "detail", cDetail);
+}
+
+function activeInsect(){
+  // Markieren gilt für die aktuell „bearbeitete“ Auswahl (Single: A; Vergleich: je nach Ziel A/B)
+  return compareOn ? (pickSide==="A" ? A : B) : A;
+}
+
+
+function micState(ins){
+  if(!ins) return {zoomStep:0, focus:0};
+  let st = micView.get(ins.id);
+  if(!st){
+    st = {zoomStep:0, focus:0};
+    micView.set(ins.id, st);
+  }
+  return st;
+}
+function zoomFor(ins){
+  const st = micState(ins);
+  const i = Math.max(0, Math.min(MAG_STEPS.length-1, st.zoomStep|0));
+  return MAG_STEPS[i].scale;
+}
+
+/* ===========================
+   AUTO-CENTER MOTIF (für Okular)
+   =========================== */
+const subjectCenter = new Map(); // src -> {fx, fy} in [0..1]
+
+function computeSubjectCenter(img){
+  try{
+    const nw = img.naturalWidth, nh = img.naturalHeight;
+    if(!nw || !nh) return {fx:0.5, fy:0.5};
+
+    const w = 256;
+    const h = Math.max(1, Math.round(nh * (w / nw)));
+    const c = document.createElement("canvas");
+    c.width = w; c.height = h;
+    const ctx = c.getContext("2d", {willReadFrequently:true});
+    ctx.drawImage(img, 0, 0, w, h);
+
+    const data = ctx.getImageData(0,0,w,h).data;
+    let minX = w, minY = h, maxX = -1, maxY = -1;
+
+    // Hintergrund: nahezu weiß / transparent
+    const isBg = (r,g,b,a)=>{
+      if(a < 16) return true;
+      return (r > 245 && g > 245 && b > 245);
+    };
+
+    for(let y=0;y<h;y++){
+      let row = y*w*4;
+      for(let x=0;x<w;x++){
+        const i = row + x*4;
+        const r=data[i], g=data[i+1], b=data[i+2], a=data[i+3];
+        if(isBg(r,g,b,a)) continue;
+        if(x < minX) minX = x;
+        if(y < minY) minY = y;
+        if(x > maxX) maxX = x;
+        if(y > maxY) maxY = y;
+      }
+    }
+
+    if(maxX < 0) return {fx:0.5, fy:0.5};
+    const fx = ((minX + maxX) / 2) / w;
+    const fy = ((minY + maxY) / 2) / h;
+    return {fx, fy};
+  }catch(_){
+    return {fx:0.5, fy:0.5};
+  }
+}
+
+function getSubjectCenter(img){
+  const src = img.currentSrc || img.src || "";
+  if(subjectCenter.has(src)) return subjectCenter.get(src);
+  const c = computeSubjectCenter(img);
+  subjectCenter.set(src, c);
+  return c;
+}
+
+function recenterScope(scope, imgEl, layer, panObj, scale){
+  if(!scope || !imgEl || !layer) return;
+  if(!imgEl.complete || !imgEl.naturalWidth) return;
+
+  // aktuelle Transform sicherstellen
+  applyLayer(layer, panObj, scale);
+
+  const sc = getSubjectCenter(imgEl);
+  const srect = scope.getBoundingClientRect();
+  const irect = imgEl.getBoundingClientRect();
+  if(!irect.width || !irect.height) return;
+
+  const targetX = irect.left + sc.fx * irect.width;
+  const targetY = irect.top  + sc.fy * irect.height;
+  const centerX = srect.left + srect.width/2;
+  const centerY = srect.top  + srect.height/2;
+
+  panObj.x += (centerX - targetX);
+  panObj.y += (centerY - targetY);
+
+  applyLayer(layer, panObj, scale);
+}
+
+function recenterVisibleScopes(){
+  if(compareOn){
+    recenterScope(scopeA, imgA, layerA, pan.A, zoomFor(A));
+    recenterScope(scopeB, imgB, layerB, pan.B, zoomFor(B));
+  }else{
+    recenterScope(scopeSingle, imgSingle, layerSingle, pan.single, zoomFor(A));
+  }
+}
+
+function activeMicControlInsect(){
+  return compareOn ? (pickSide==="A" ? A : B) : A;
+}
+function syncMicControls(){
+  const ins = activeMicControlInsect();
+  const st = micState(ins);
+  if(zSlider){
+    zSlider.value = String(st.zoomStep|0);
+    if(zoomLabel) zoomLabel.textContent = MAG_STEPS[st.zoomStep|0]?.label || MAG_STEPS[0].label;
+  }
+  if(fSlider) fSlider.value = String(st.focus ?? 0);
+}
+function applyFocusTo(imgEl, f, z){
+  const b = blurFor(f, z);
+  imgEl.style.filter = (b <= 0.01) ? "none" : `blur(${b.toFixed(2)}px)`;
+}
+
+
+let labeling = false;
+let closeupIndex = 0;
+const placed = new Map();
+
+const $ = (sel)=>document.querySelector(sel);
+
+const elList = $("#list");
+const pickA = $("#pickA"), pickB = $("#pickB");
+const zSlider = $("#zoom");
+const zoomLabel = $("#zoomLabel");
+const fSlider = $("#focus");
+const btnCompare = $("#btnCompare"), btnReset = $("#btnReset");
+const info = $("#info");
+
+const scopeSingle = $("#scopeSingle"), scopeA = $("#scopeA"), scopeB = $("#scopeB");
+const layerSingle = $("#layerSingle"), layerA = $("#layerA"), layerB = $("#layerB");
+const imgSingle = $("#imgSingle"), imgA = $("#imgA"), imgB = $("#imgB");
+const badgeSingle = $("#badgeSingle"), badgeA = $("#badgeA"), badgeB = $("#badgeB");
+const cMicSingle = $("#cMicSingle"), cMicA = $("#cMicA"), cMicB = $("#cMicB");
+
+const btnDraw = $("#btnDraw"), btnPen = $("#btnPen"), btnEraser = $("#btnEraser");
+const btnClear1 = $("#btnClear1"), btnShot1 = $("#btnShot1");
+const insectInfoTitle = $("#insectInfoTitleMid"), insectInfoText = $("#insectInfoTextMid");
+const surpriseBox = $("#surpriseBox"), surpriseContent = $("#surpriseContent");
+
+const schemaImg = $("#schemaImg"), schemaPh = $("#schemaPh"), schemaCap = $("#schemaCap");
+const labelTray = $("#labelTray");
+const cSchema = $("#cSchema"), hs = $("#hotspots"), labels = $("#labels");
+const btnLabel = $("#btnLabel"), btnCheck = $("#btnCheck"), labelStatus = $("#labelStatus");
+const btnClear2 = $("#btnClear2"), btnShot2 = $("#btnShot2");
+
+const detailImg = $("#detailImg"), detailLayer = $("#detailLayer"), detailPh = $("#detailPh"), detailCap = $("#detailCap");
+const detailSel = $("#detailSel"), cDetail = $("#cDetail");
+const btnClear3 = $("#btnClear3"), btnShot3 = $("#btnShot3");
+const openDetail = $("#openDetail");
+
+const video = $("#video"), videoPh = $("#videoPh"), videoCap = $("#videoCap");
+const vSrcOpen = $("#vSrcOpen");
+const srcOpen = $("#srcOpen"), srcModal = $("#srcModal"), srcClose = $("#srcClose");
+const vSrcModal = $("#vSrcModal"), vSrcClose = $("#vSrcClose"), vSrcText = $("#vSrcText");
+
+const modal = $("#modal"), modalTitle = $("#modalTitle"), modalClose = $("#modalClose");
+const modalScope = $("#modalScope"), modalLayer = $("#modalLayer"), modalImg = $("#modalImg");
+const modalZoom = $("#modalZoom"), modalReset = $("#modalReset"), modalFit = $("#modalFit");
+const cModal = $("#cModal");
+
+function setPick(which){
+  pickSide = which;
+  pickA.classList.toggle("active", which==="A");
+  pickB.classList.toggle("active", which==="B");
+  loadPenState();
+
+  syncMicControls();
+}
+
+function enable(btn, on){
+  btn.setAttribute("aria-disabled", on ? "false" : "true");
+}
+
+function applyLayer(layer, p, scale){
+  layer.style.transform = `translate(calc(-50% + ${p.x}px), calc(-50% + ${p.y}px)) scale(${scale})`;
+}
+
+function setCompare(on){
+  // vorherige Markierungen sichern
+  persistVisibleInk();
+  compareOn = on;
+  btnCompare.textContent = on ? "Vergleich: An" : "Vergleich: Aus";
+  $("#compareWrap").style.display = on ? "grid" : "none";
+  scopeSingle.style.display = on ? "none" : "block";
+
+  if(on){
+    // Vergleich startet sauber zentriert (jede Seite für sich)
+    pan.A.x = 0; pan.A.y = 0;
+    pan.B.x = 0; pan.B.y = 0;
+    pickSide = "A";
+  }
+
+  resizeAll();
+  renderMic();
+  // nach Layout: Motiv zentrieren (damit Okular im Vergleich korrekt sitzt)
+  requestAnimationFrame(()=>{ recenterVisibleScopes(); });
+
+  syncMicControls();
+  loadPenState();
+  // passende Markierungen für die sichtbaren Insekten laden
+  restoreVisibleInk();
+}
+
+function safeSetImg(imgEl, phEl, file){
+  if(!file){
+    imgEl.style.display="none";
+    phEl.style.display="flex";
+    imgEl.removeAttribute("src");
+    return false;
+  }
+  imgEl.style.display="block";
+  phEl.style.display="none";
+  imgEl.src = IMG_BASE + file;
+  imgEl.onerror = ()=>{ imgEl.style.display="none"; phEl.style.display="flex"; };
+  return true;
+}
+
+function safeSetVideo(file){
+  // Robust loader: if no extension is given, try common formats first.
+  if(!file){
+    try{ video.pause(); }catch(e){}
+    video.removeAttribute("src"); video.load();
+    video.style.display="none"; videoPh.style.display="flex";
+    return false;
+  }
+
+  const candidates = [];
+  if(typeof file === "string"){
+    if(file.includes(".")) candidates.push(file);
+    else candidates.push(file + ".mp4", file + ".webm", file);
+  }else{
+    candidates.push(String(file));
+  }
+
+  let idx = 0;
+  const tryNext = ()=>{
+    if(idx >= candidates.length){
+      try{ video.pause(); }catch(e){}
+      video.removeAttribute("src"); video.load();
+      video.style.display="none"; videoPh.style.display="flex";
+      return;
+    }
+    const f = candidates[idx++];
+    video.style.display="block"; videoPh.style.display="none";
+    video.src = VID_BASE + f;
+    try{ video.load(); }catch(e){}
+  };
+
+  video.onerror = ()=>{ tryNext(); };
+  tryNext();
+  return true;
+}
+
+
+function buildList(){
+  elList.innerHTML="";
+  INSECTS.forEach(ins=>{
+    const it = document.createElement("div");
+    it.className = "item";
+    it.dataset.id = ins.id;
+    it.innerHTML = `
+      <div class="thumb"><img alt="" src="${IMG_BASE + (ins.thumb || ins.microscope)}"></div>
+      <div class="meta">
+        <div class="name">${ins.name}</div>
+        <div class="hint">${ins.hint || ""}</div>
+      </div>
+    `;
+    it.addEventListener("click", ()=>{
+      persistVisibleInk();
+      if(compareOn){
+        if(pickSide==="A"){
+          A = ins;
+          // neue Probe unter Objektiv: zentriert starten
+          pan.A.x = 0; pan.A.y = 0;
+        }else{
+          B = ins;
+          pan.B.x = 0; pan.B.y = 0;
+        }
+      }else{
+        A = ins;
+        // Single-Ansicht bei Wechsel ebenfalls zentriert starten
+        pan.single.x = 0; pan.single.y = 0;
+      }
+      if(compareOn){
+        if(pickSide==="A"){
+          current = ins; // rechte Seite = Insekt A
+          closeupIndex = 0;
+        }
+      }else{
+        current = ins;
+        closeupIndex = 0;
+      }
+      renderAll();
+      requestAnimationFrame(()=>{ recenterVisibleScopes(); });
+      syncMicControls();
+      loadPenState();
+      markActive();
+    });
+    elList.appendChild(it);
+  });
+  markActive();
+}
+
+function markActive(){
+  elList.querySelectorAll(".item").forEach(it=>{
+    const id = it.dataset.id;
+    const active = (id===A.id) || (compareOn && id===B.id) || (id===current.id);
+    it.classList.toggle("active", active);
+  });
+}
+
+function renderMic(){
+  const parts = [];
+  parts.push(`<strong>${A.name}</strong> (<em>${A.latin || "–"}</em>) – ${A.hint || ""}`);
+  if(compareOn) parts.push(`<strong>${B.name}</strong> (<em>${B.latin || "–"}</em>) – ${B.hint || ""}`);
+
+  info.innerHTML =
+    `Aktuell: ${compareOn ? "A & B (Bild 1)" : "A (Bild 1)"} – ${parts.join(" &nbsp;|&nbsp; ")}`;
+
+  imgSingle.src = IMG_BASE + A.microscope;
+  imgA.src = IMG_BASE + A.microscope;
+  imgB.src = IMG_BASE + B.microscope;
+
+  badgeSingle.textContent = A.name;
+  badgeA.textContent = "A: " + A.name;
+  badgeB.textContent = "B: " + B.name;
+
+  imgSingle.onerror = ()=>{ imgSingle.removeAttribute("src"); };
+  imgA.onerror = ()=>{ imgA.removeAttribute("src"); };
+  imgB.onerror = ()=>{ imgB.removeAttribute("src"); };
+
+  const zA = zoomFor(A);
+  const zB = zoomFor(B);
+  applyLayer(layerSingle, pan.single, zA);
+  applyLayer(layerA, pan.A, zA);
+  applyLayer(layerB, pan.B, zB);
+
+  // Fokus pro Insekt (A/B getrennt)
+  const fA = micState(A).focus ?? 0;
+  const fB = micState(B).focus ?? 0;
+  applyFocusTo(imgSingle, fA, zA);
+  applyFocusTo(imgA, fA, zA);
+  applyFocusTo(imgB, fB, zB);
+}
+
+function selectedCloseup(){
+  const list = current.closeups || [];
+  if(list.length===0) return null;
+  return list[Math.min(closeupIndex, list.length-1)];
+}
+
+function canLabel(){
+  return !!(current.schema && LABEL_TARGETS[current.schema]);
+}
+
+function clearLabeling(){
+  placed.clear();
+  labels.innerHTML="";
+  hs.innerHTML="";
+  if(labelTray) labelTray.style.display="none";
+  if(labelTray) labelTray.querySelectorAll(".labelpill").forEach(p=>p.remove());
+  labelStatus.style.display="none";
+}
+
+function posHotspots(){
+  const targets = LABEL_TARGETS[current.schema] || [];
+  const ir = schemaImg.getBoundingClientRect();
+  const fr = $("#schemaFrame").getBoundingClientRect();
+  hs.querySelectorAll(".hotspot").forEach((h,i)=>{
+    const t = targets[i]; if(!t) return;
+    const cx = ir.left + t.x * ir.width;
+    const cy = ir.top  + t.y * ir.height;
+    const w  = Math.max(44, ir.width  * 0.12);
+    const hh = Math.max(28, ir.height * 0.10);
+    h.style.left = (cx - w/2  - fr.left) + "px";
+    h.style.top  = (cy - hh/2 - fr.top)  + "px";
+    h.style.width  = w + "px";
+    h.style.height = hh + "px";
+  });
+}
+
+function dragPill(pill){
+  let down=false, start={x:0,y:0}, base={x:0,y:0};
+  const id = pill.dataset.id;
+
+  function ensurePlaced(){
+    // Wenn das Label noch im Tray ist: beim ersten Greifen in die Abbildung „überführen“
+    if(pill.classList.contains("intray")){
+      const fr = $("#schemaFrame").getBoundingClientRect();
+      const pr = pill.getBoundingClientRect();
+
+      pill.classList.remove("intray");
+      pill.classList.add("placed");
+      labels.appendChild(pill);
+
+      const x = (pr.left - fr.left);
+      const y = (pr.top  - fr.top);
+
+      pill.style.left = x + "px";
+      pill.style.top  = y + "px";
+      placed.set(id, {x, y});
+    }
+  }
+
+  pill.addEventListener("pointerdown", (e)=>{
+    if(e.pointerType==="mouse" && e.button!==0) return;
+    ensurePlaced();
+    down=true;
+    pill.setPointerCapture(e.pointerId);
+    const pos = placed.get(id) || {x:0,y:0};
+    base = {...pos};
+    start = {x:e.clientX, y:e.clientY};
+    e.preventDefault();
+    e.stopPropagation();
+  });
+
+  pill.addEventListener("pointermove", (e)=>{
+    if(!down) return;
+    const nx = base.x + (e.clientX - start.x);
+    const ny = base.y + (e.clientY - start.y);
+    placed.set(id, {x:nx, y:ny});
+    pill.style.left = nx + "px";
+    pill.style.top  = ny + "px";
+    e.preventDefault();
+    e.stopPropagation();
+  });
+
+  pill.addEventListener("pointerup", ()=>down=false);
+  pill.addEventListener("pointercancel", ()=>down=false);
+}
+
+function initLabeling(){
+  clearLabeling();
+  if(!canLabel()){
+    labelStatus.style.display="block";
+    labelStatus.className="status bad";
+    labelStatus.textContent='Beschriftungsmodus ist für dieses Schema nicht verfügbar.';
+    return;
+  }
+
+  if(labelTray) labelTray.style.display="flex";
+
+  const targets = LABEL_TARGETS[current.schema] || [];
+
+  // Zielbereiche (Hotspots) sichtbar
+  targets.forEach(()=>{
+    const d=document.createElement("div");
+    d.className="hotspot show";
+    hs.appendChild(d);
+  });
+
+  // Begriffe starten unterhalb der Abbildung (Tray)
+  targets.forEach((t)=>{
+    const pill=document.createElement("div");
+    pill.className="labelpill intray";
+    pill.dataset.id=t.id;
+    pill.innerHTML = `<span class="grip" aria-hidden="true"></span><span class="txt">${t.key}</span>`;
+    if(labelTray) labelTray.appendChild(pill);
+    dragPill(pill);
+  });
+
+  posHotspots();
+  labelStatus.style.display="block";
+  labelStatus.className="status";
+  labelStatus.textContent="Ziehe die Begriffe (am blauen Punkt) auf die passenden Bereiche im Schema. Danach „Korrigieren“.";
+}
+
+function checkLabeling(){
+  if(!canLabel()) return;
+
+  const targets = LABEL_TARGETS[current.schema] || [];
+  const ir = schemaImg.getBoundingClientRect();
+  const hotspots = [...hs.querySelectorAll(".hotspot")];
+
+  function rectsIntersect(a,b){
+    return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
+  }
+
+  let ok=0;
+  labels.querySelectorAll(".labelpill").forEach(p=>p.classList.remove("correct","wrong"));
+
+  targets.forEach((t,i)=>{
+    const pill = labels.querySelector(`.labelpill[data-id="${t.id}"]`);
+    if(!pill) return;
+
+    const pr = pill.getBoundingClientRect();
+    const hr = hotspots[i] ? hotspots[i].getBoundingClientRect() : null;
+
+    const cx = pr.left + pr.width/2;
+    const cy = pr.top  + pr.height/2;
+    const onImg = cx>=ir.left && cx<=ir.right && cy>=ir.top && cy<=ir.bottom;
+
+    const good = !!(onImg && hr && rectsIntersect(pr, hr));
+    pill.classList.add(good ? "correct" : "wrong");
+    if(good) ok++;
+  });
+
+  labelStatus.style.display="block";
+  if(ok===targets.length){
+    labelStatus.className="status good";
+    labelStatus.textContent=`Korrektur: ${ok}/${targets.length} richtig. Sehr gut!`;
+
+    // Überraschungsfenster freischalten (pro Insekt)
+    try{
+      surpriseUnlocked.add(current.id);
+      updateSurprise(current);
+    }catch(e){}
+  }else{
+    labelStatus.className="status bad";
+    labelStatus.textContent=`Korrektur: ${ok}/${targets.length} richtig. Korrigiere die rot markierten Begriffe.`;
+  }
+}
+
+function applyDetailView(){
+  // Vorschau (Bild 3) immer "eingepasst" anzeigen.
+  // Zoom/Pan werden weiterhin pro Insekt für die Großansicht gespeichert,
+  // sollen aber die kleine Detailansicht nicht verschieben.
+  if(!detailLayer) return;
+  detailLayer.style.transform = `translate(-50%,-50%) scale(1)`;
+}
+
+function renderRight(){
+  // rechte Seite folgt immer Insekt A (auch im Vergleich)
+  current = A;
+
+  // Insekt-Info (A)
+  if(typeof insectInfoTitle!=="undefined" && insectInfoTitle){
+    insectInfoTitle.textContent = `${A.name} (${A.latin || "–"})`;
+  }
+  if(typeof insectInfoText!=="undefined" && insectInfoText){
+    insectInfoText.innerHTML = A.info || "–";
+  updateSurprise(A);
+  }
+  // Bild 2
+  schemaCap.textContent = `Bild 2: Schema – ${current.schemaLabel || "–"}`;
+  const hasSchema = safeSetImg(schemaImg, schemaPh, current.schema);
+  if(!hasSchema){
+    if(labeling){ labeling=false; btnLabel.classList.remove("active"); btnCheck.style.display="none"; }
+    clearLabeling();
+  }else{
+    if(labeling) initLabeling();
+  }
+
+  // Bild 3
+  const c = selectedCloseup();
+  if(!c){
+    detailCap.textContent = "Bild 3: Detail –";
+    safeSetImg(detailImg, detailPh, null);
+    if(detailLayer) detailLayer.style.transform = `translate(-50%,-50%) scale(1)`;
+    openDetail.setAttribute("aria-disabled","true");
+    detailSel.innerHTML="";
+  }else{
+    detailCap.textContent = `Bild 3: Detail – ${c.label}`;
+    safeSetImg(detailImg, detailPh, c.file);
+    applyDetailView();
+    openDetail.setAttribute("aria-disabled","false");
+    modalImg.src = IMG_BASE + c.file;
+    modalTitle.textContent = `Detailbild (${c.label}) – ${current.name}`;
+
+    const list = current.closeups || [];
+    detailSel.innerHTML="";
+    if(list.length>1){
+      list.forEach((cc,i)=>{
+        const b=document.createElement("button");
+        b.className="chip" + (i===closeupIndex ? " active" : "");
+        b.textContent=cc.label;
+        b.addEventListener("click", ()=>{
+          closeupIndex=i;
+          renderRight();
+          resizeAll();
+        });
+        detailSel.appendChild(b);
+      });
+    }
+  }
+
+  // Video
+  const hasV = safeSetVideo(current.video);
+  videoCap.textContent = `Video: ${current.videoTitle || "Funktion/Aufgabe des Beins"}`;
+  vSrcOpen.style.display = (hasV && current.videoSource) ? "inline-flex" : "none";
+}
+
+function renderAll(){
+  renderMic();
+  renderRight();
+  resizeAll();
+  restoreVisibleInk();
+  updateExportAvailability();
+}
+
+/* ===========================
+   GLOBAL DRAWING (Pen/Eraser)
+   =========================== */
+function updateExportAvailability(){
+  // Screenshot & Leeren sollen unabhängig vom Markiermodus verfügbar sein,
+  // aber nur, wenn das entsprechende Bild tatsächlich vorhanden ist.
+  const has1 = !!(imgSingle.getAttribute("src") || imgA.getAttribute("src"));
+  const has2 = !!schemaImg.getAttribute("src");
+  const has3 = !!detailImg.getAttribute("src");
+
+  enable(btnClear1, has1);
+  enable(btnShot1,  has1);
+
+  enable(btnClear2, has2);
+  enable(btnShot2,  has2);
+
+  enable(btnClear3, has3);
+  enable(btnShot3,  has3);
+}
+
+function applyDrawUI(on){
+  btnDraw.classList.toggle("active", on);
+  btnDraw.textContent = on ? "Markieren: An" : "Markieren: Aus";
+
+  // Stift/Radierer nur im Markiermodus aktiv
+  enable(btnPen, on);
+  enable(btnEraser, on);
+
+  // Screenshot/Leeren immer (falls Bild vorhanden)
+  updateExportAvailability();
+
+  // activate canvases globally
+  [cMicSingle,cMicA,cMicB,cSchema,cDetail,cModal].forEach(c=>c.classList.toggle("active", on));
+  [scopeSingle,scopeA,scopeB, $("#schemaFrame"), $("#detailFrame"), modalScope].forEach(s=>{
+    if(!s) return;
+    s.classList.toggle("draw", on);
+  });
+}
+
+function loadPenState(){
+  const ins = activeInsect();
+  const st = penState.get(ins.id) || {draw:false, tool:"pen"};
+  drawMode = !!st.draw;
+  tool = st.tool || "pen";
+  applyDrawUI(drawMode);
+  btnPen.classList.toggle("active", tool==="pen");
+  btnEraser.classList.toggle("active", tool==="eraser");
+}
+
+function setDraw(on){
+  const ins = activeInsect();
+  const st = penState.get(ins.id) || {draw:false, tool:"pen"};
+  st.draw = !!on;
+  penState.set(ins.id, st);
+  drawMode = st.draw;
+  applyDrawUI(drawMode);
+}
+
+function setTool(t){
+  const ins = activeInsect();
+  const st = penState.get(ins.id) || {draw:false, tool:"pen"};
+  st.tool = t;
+  penState.set(ins.id, st);
+  tool = t;
+  btnPen.classList.toggle("active", t==="pen");
+  btnEraser.classList.toggle("active", t==="eraser");
+}
+
+function toCanvas(canvas, e){
+  const r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+function drawLine(canvas, a, b){
+  const ctx = canvas.getContext("2d");
+  ctx.save();
+  if(tool==="eraser"){
+    ctx.globalCompositeOperation="destination-out";
+    ctx.lineWidth=18;
+  }else{
+    ctx.globalCompositeOperation="source-over";
+    ctx.strokeStyle="rgba(239,68,68,.85)";
+    ctx.lineWidth=5;
+  }
+  ctx.lineCap="round";
+  ctx.lineJoin="round";
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function bindDraw(canvas){
+  let down=false, last=null, pid=null;
+  canvas.addEventListener("pointerdown", (e)=>{
+    if(!drawMode) return;
+    if(e.pointerType==="mouse" && e.button!==0) return;
+    down=true; pid=e.pointerId;
+    canvas.setPointerCapture(pid);
+    last = toCanvas(canvas, e);
+    e.preventDefault(); e.stopPropagation();
+  });
+  canvas.addEventListener("pointermove", (e)=>{
+    if(!drawMode || !down) return;
+    const p = toCanvas(canvas, e);
+    drawLine(canvas, last, p);
+    last = p;
+    e.preventDefault(); e.stopPropagation();
+  });
+  canvas.addEventListener("pointerup", ()=>{ 
+    if(drawMode){
+      const insId = (canvas===cSchema || canvas===cDetail || canvas===cModal) ? current.id : activeInsect().id;
+      const key = (canvas===cSchema) ? "schema" : (canvas===cDetail || canvas===cModal) ? "detail" : "mic";
+      saveInk(insId, key, (canvas===cModal) ? cDetail : canvas);
+    }
+    down=false; last=null; pid=null; 
+  });
+  canvas.addEventListener("pointercancel", ()=>{ down=false; last=null; pid=null; });
+}
+
+/* ===========================
+   PANNING (Touch + Mouse)
+   Disabled when drawMode==true
+   =========================== */
+function bindPan(scope, layer, p, d, getScale){
+  scope.addEventListener("pointerdown", (e)=>{
+    if(drawMode) return;
+    if(e.pointerType==="mouse" && e.button!==0) return;
+    if(compareOn){
+      if(scope===scopeA) pickSide="A";
+      else if(scope===scopeB) pickSide="B";
+      syncMicControls();
+    }
+    d.a=true; d.pid=e.pointerId;
+    scope.setPointerCapture(d.pid);
+    d.sx=e.clientX; d.sy=e.clientY;
+    d.bx=p.x; d.by=p.y;
+    e.preventDefault();
+  });
+  scope.addEventListener("pointermove", (e)=>{
+    if(drawMode || !d.a) return;
+    p.x = d.bx + (e.clientX - d.sx);
+    p.y = d.by + (e.clientY - d.sy);
+    applyLayer(layer, p, getScale ? getScale() : 1);
+    e.preventDefault();
+  });
+  scope.addEventListener("pointerup", ()=>{ d.a=false; d.pid=null; });
+  scope.addEventListener("pointercancel", ()=>{ d.a=false; d.pid=null; });
+}
+
+/* ===========================
+   CANVAS SIZING
+   =========================== */
+function sizeCanvas(canvas, host){
+  if(!canvas || !host) return;
+
+  // preserve existing drawing when resizing (canvas resize clears content)
+  const oldW = canvas.width, oldH = canvas.height;
+  let backup = null;
+  if(oldW > 10 && oldH > 10){
+    backup = document.createElement("canvas");
+    backup.width = oldW; backup.height = oldH;
+    const bctx = backup.getContext("2d");
+    bctx.drawImage(canvas, 0, 0);
+  }
+
+  const r = host.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width  = Math.max(10, Math.floor(r.width  * dpr));
+  canvas.height = Math.max(10, Math.floor(r.height * dpr));
+  canvas.style.width  = r.width  + "px";
+  canvas.style.height = r.height + "px";
+
+  const ctx = canvas.getContext("2d");
+  // default transform: CSS pixels
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+
+  if(backup){
+    // draw in device pixels to preserve fidelity, then continue with CSS-px transform
+    ctx.save();
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.drawImage(backup, 0,0, backup.width,backup.height, 0,0, canvas.width,canvas.height);
+    ctx.restore();
+  }
+}
+
+function resizeAll(){
+  sizeCanvas(cMicSingle, scopeSingle);
+  sizeCanvas(cMicA, scopeA);
+  sizeCanvas(cMicB, scopeB);
+  sizeCanvas(cSchema, $("#schemaFrame"));
+  sizeCanvas(cDetail, $("#detailFrame"));
+  sizeCanvas(cModal, modalScope);
+  if(labeling) posHotspots();
+}
+
+/* ===========================
+   SCREENSHOTS (Bild 1/2/3 + Modal)
+   Includes labels on Bild 2 if placed
+   =========================== */
+function roundRect(ctx,x,y,w,h,r){
+  const rr = Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+rr,y);
+  ctx.arcTo(x+w,y,x+w,y+h,rr);
+  ctx.arcTo(x+w,y+h,x,y+h,rr);
+  ctx.arcTo(x,y+h,x,y,rr);
+  ctx.arcTo(x,y,x+w,y,rr);
+  ctx.closePath();
+}
+
+
+function showToast(msg){
+  const t = $("#toast");
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>t.classList.remove("show"), 1800);
+}
+showToast._t = null;
+
+function canvasToBlob(canvas){
+  return new Promise((resolve)=>canvas.toBlob(resolve, "image/png"));
+}
+
+/**
+ * Erstellt eine echte Momentaufnahme (sichtbarer Bildausschnitt) inkl. Markierungen/Labels
+ * und versucht, sie in die Zwischenablage zu schreiben.
+ * Fallback: Download (wenn Clipboard API z.B. bei file:// blockiert ist).
+ */
+async function exportShot(frameEl, baseImg, overlayCanvas, labelsLayer, prefix){
+  if(!frameEl || !baseImg || !baseImg.src || !overlayCanvas) return;
+
+  const fr = frameEl.getBoundingClientRect();
+  if(fr.width < 2 || fr.height < 2) return;
+
+  const out = document.createElement("canvas");
+  out.width  = overlayCanvas.width  || Math.round(fr.width  * devicePixelRatio);
+  out.height = overlayCanvas.height || Math.round(fr.height * devicePixelRatio);
+  const ctx = out.getContext("2d");
+
+  // Hintergrund (weiß), wie im Frame
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0,0,out.width,out.height);
+
+  // Basisbild so zeichnen, wie es *jetzt* im Frame liegt (inkl. Zoom/Pan via CSS-Transform)
+  const ir = baseImg.getBoundingClientRect();
+  const sx = out.width  / fr.width;
+  const sy = out.height / fr.height;
+  const dx = (ir.left - fr.left) * sx;
+  const dy = (ir.top  - fr.top ) * sy;
+  const dw = ir.width  * sx;
+  const dh = ir.height * sy;
+  try{ ctx.drawImage(baseImg, dx, dy, dw, dh); }catch(e){}
+
+  // Markierungen (Canvas)
+  try{ ctx.drawImage(overlayCanvas, 0,0, out.width, out.height); }catch(e){}
+
+  // Drag-Labels (nur Bild 2)
+  if(labelsLayer){
+    const pills = [...labelsLayer.querySelectorAll(".labelpill")];
+    if(pills.length){
+      const fontSize = Math.max(16, Math.round(24 * (out.width/1000)));
+      const pad = Math.round(fontSize * 0.65);
+      const bh  = Math.round(fontSize * 1.6);
+
+      ctx.font = `600 ${fontSize}px Georgia, serif`;
+      ctx.textBaseline = "middle";
+
+      pills.forEach(p=>{
+        const r = p.getBoundingClientRect();
+        const cx = (r.left + r.width/2 - fr.left) * sx;
+        const cy = (r.top  + r.height/2 - fr.top ) * sy;
+        const text = (p.textContent || "").trim();
+
+        const tw = ctx.measureText(text).width;
+        const bw = tw + pad*2;
+        const x = Math.max(0, Math.min(out.width  - bw, cx - bw/2));
+        const y = Math.max(0, Math.min(out.height - bh, cy - bh/2));
+
+        ctx.fillStyle   = "rgba(255,255,255,.92)";
+        ctx.strokeStyle = "rgba(34,30,22,.28)";
+        ctx.lineWidth   = Math.max(2, Math.round(fontSize/10));
+        roundRect(ctx, x, y, bw, bh, Math.round(bh/2));
+        ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = "#221e16";
+        ctx.fillText(text, x + pad, y + bh/2);
+      });
+    }
+  }
+
+  const name = (current && current.name ? current.name : "Insekt").replaceAll(" ","_");
+  const filename = `${prefix}_${name}.png`;
+
+  try{
+    if(!navigator.clipboard || !window.ClipboardItem){
+      throw new Error("Clipboard API nicht verfügbar");
+    }
+    const blob = await canvasToBlob(out);
+    if(!blob) throw new Error("Konnte PNG nicht erzeugen");
+
+    await navigator.clipboard.write([ new ClipboardItem({"image/png": blob}) ]);
+    showToast("In Zwischenkopie gespeichert");
+  
+}catch(err){
+  // Clipboard ist i.d.R. nur in „secure contexts“ verfügbar (https:// oder http://localhost).
+  console.warn("Clipboard screenshot failed:", err);
+  showToast("Zwischenkopie nicht verfügbar. Bitte über http://localhost oder https:// öffnen.");
+}
+}
+
+/* ===========================
+   DETAIL MODAL (pan disabled when drawing)
+   =========================== */
+
+let mState = { open:false, zoom:1.0, pan:{x:0,y:0}, drag:false, sx:0,sy:0, bx:0,by:0 };
+function mApply(){
+  modalLayer.style.transform = `translate(calc(-50% + ${mState.pan.x}px), calc(-50% + ${mState.pan.y}px)) scale(${mState.zoom})`;
+}
+function syncCanvas(src, dst){
+  if(!src || !dst) return;
+  const dctx = dst.getContext("2d");
+  dctx.clearRect(0,0,dst.width,dst.height);
+  dctx.drawImage(src, 0,0, src.width,src.height, 0,0, dst.width,dst.height);
+}
+
+function mOpen(){
+  if(openDetail.getAttribute("aria-disabled")==="true") return;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden","false");
+  mState.open=true;
+  {
+  const st = detailView.get(current.id) || {zoom:1.0, pan:{x:0,y:0}, focus:0};
+  mState.zoom = st.zoom || 2.2;
+  mState.pan = {x: st.pan?.x || 0, y: st.pan?.y || 0};
+  focusModal = (st.focus ?? 0);
+  // gespeicherten Zoom auf nächste Objektivstufe rasten lassen
+  const zi = nearestZoomStep(mState.zoom);
+  if(modalZoom) modalZoom.value = String(zi);
+  mApplyZoomStep(zi, {defocus:false});
+  if(modalFocus) modalFocus.value = String(focusModal);
+  applyFocusModal();
+}
+  mApply();
+  resizeAll();
+  // bestehende Markierungen aus der Detailansicht in die Großansicht übernehmen
+  syncCanvas(cDetail, cModal);
+}
+function mClose(){
+  // Markierungen aus der Großansicht zurück in die Detailansicht schreiben
+  syncCanvas(cModal, cDetail);
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden","true");
+  mState.open=false;
+  // Großansicht-Zoom/Pan für das aktuelle Insekt merken und in Bild 3 spiegeln
+  const st = detailView.get(current.id) || {zoom:1.0, pan:{x:0,y:0}};
+  st.zoom = mState.zoom;
+  st.pan = {x:mState.pan.x, y:mState.pan.y};
+  st.focus = focusModal;
+  detailView.set(current.id, st);
+  applyDetailView();
+  // Detail-Markierungen für dieses Insekt sichern
+  saveInk(current.id, "detail", cDetail);
+}
+
+/* ===========================
+   WIRE UI
+   =========================== */
+pickA.addEventListener("click", ()=>setPick("A"));
+pickB.addEventListener("click", ()=>setPick("B"));
+
+btnCompare.addEventListener("click", ()=>setCompare(!compareOn));
+
+function blurFor(f, z){
+  // höhere Vergrößerung => geringere Schärfentiefe => stärkerer Effekt
+  const k = 2.2 * z;
+  const px = Math.min(10, Math.abs(f) * k);
+  return px;
+}
+
+function setMicZoom(ins, step, opts={}){
+  const defocus = (opts.defocus !== false);
+  const st = micState(ins);
+  st.zoomStep = Math.max(0, Math.min(MAG_STEPS.length-1, step|0));
+  if(defocus) st.focus = 0.25;
+}
+
+zSlider.addEventListener("input", (e)=>{
+  const ins = activeMicControlInsect();
+  setMicZoom(ins, Number(e.target.value), {defocus:true});
+  if(zoomLabel) zoomLabel.textContent = MAG_STEPS[micState(ins).zoomStep].label;
+  if(fSlider) fSlider.value = String(micState(ins).focus);
+  renderMic();
+});
+
+fSlider.addEventListener("input", (e)=>{
+  const ins = activeMicControlInsect();
+  micState(ins).focus = Number(e.target.value);
+  renderMic();
+});
+
+btnReset.addEventListener("click", ()=>{
+  if(compareOn){
+    setMicZoom(A, 0, {defocus:false});
+    setMicZoom(B, 0, {defocus:false});
+    micState(A).focus = 0;
+    micState(B).focus = 0;
+    pan.A.x=pan.A.y=0;
+    pan.B.x=pan.B.y=0;
+  }else{
+    setMicZoom(A, 0, {defocus:false});
+    micState(A).focus = 0;
+    pan.single.x=pan.single.y=0;
+  }
+  // UI an die aktive Seite anpassen
+  syncMicControls();
+  renderMic();
+});
+/* global draw toggle */
+btnDraw.addEventListener("click", ()=>setDraw(!drawMode));
+btnPen.addEventListener("click", ()=>setTool("pen"));
+btnEraser.addEventListener("click", ()=>setTool("eraser"));
+
+/* Bild 1 export/clear (wir leeren immer die aktive Ansicht: Single oder Compare A/B je nach Pick) */
+btnClear1.addEventListener("click", ()=>{
+  const ins = compareOn ? (pickSide==="A" ? A : B) : A;
+  const c = compareOn ? (pickSide==="A" ? cMicA : cMicB) : cMicSingle;
+  c.getContext("2d").clearRect(0,0,c.width,c.height);
+  clearInk(ins.id, "mic");
+});
+btnShot1.addEventListener("click", ()=>{
+  const t = compareOn
+    ? (pickSide==="A" ? {img:imgA, can:cMicA} : {img:imgB, can:cMicB})
+    : {img:imgSingle, can:cMicSingle};
+  exportShot(compareOn ? (pickSide==="A" ? scopeA : scopeB) : scopeSingle, t.img, t.can, null, "Screenshot_Bild_1");
+});
+
+/* Bild 2 export/clear */
+btnClear2.addEventListener("click", ()=>{ cSchema.getContext("2d").clearRect(0,0,cSchema.width,cSchema.height); clearInk(current.id, "schema"); });
+btnShot2.addEventListener("click", ()=>exportShot(schemaFrame, schemaImg, cSchema, labels, "Screenshot_Bild_2"));
+
+/* Bild 3 export/clear */
+btnClear3.addEventListener("click", ()=>{ cDetail.getContext("2d").clearRect(0,0,cDetail.width,cDetail.height); clearInk(current.id, "detail"); });
+btnShot3.addEventListener("click", ()=>exportShot(detailFrame, detailImg, cDetail, null, "Screenshot_Bild_3"));
+
+/* labeling */
+btnLabel.addEventListener("click", ()=>{
+  labeling = !labeling;
+  btnLabel.classList.toggle("active", labeling);
+  btnCheck.style.display = labeling ? "inline-flex" : "none";
+  if(labeling) initLabeling();
+  else clearLabeling();
+});
+btnCheck.addEventListener("click", checkLabeling);
+
+/* detail modal open */
+openDetail.addEventListener("click", mOpen);
+detailImg.addEventListener("click", mOpen);
+
+modalClose.addEventListener("click", mClose);
+modal.addEventListener("click", (e)=>{ if(e.target===modal) mClose(); });
+
+const modalZoomLabel = $("#modalZoomLabel");
+const modalFocus = $("#modalFocus");
+let mZoomStep = 1;
+
+function nearestZoomStep(scale){
+  let best = 0, bestD = Infinity;
+  for(let i=0;i<MAG_STEPS.length;i++){
+    const d = Math.abs(MAG_STEPS[i].scale - scale);
+    if(d < bestD){ bestD = d; best = i; }
+  }
+  return best;
+}
+
+// Fokus-Regler in der Großansicht: Schärfe/Unschärfe auf das aktuelle Bild anwenden.
+// (Wird von den Event-Listenern unten aufgerufen.)
+function applyFocusModal(){
+  if(!modalImg || !modalFocus) return;
+  const st = MAG_STEPS[mZoomStep] || MAG_STEPS[0];
+  const zmult = (st && (st.mult ?? st.scale)) || 1;
+  // Slider liefert -1..1
+  const f = Number(modalFocus.value||0);
+  applyFocusTo(modalImg, f, zmult);
+}
+
+function mApplyZoomStep(i, opts={}){
+  mZoomStep = Math.max(0, Math.min(MAG_STEPS.length-1, i));
+  mState.zoom = MAG_STEPS[mZoomStep].scale;
+  modalZoom.value = String(mZoomStep);
+  if(modalZoomLabel) modalZoomLabel.textContent = MAG_STEPS[mZoomStep].label;
+
+  const defocus = (opts.defocus !== false);
+  if(defocus){
+    // beim Objektivwechsel leicht nachfokussieren
+    focusModal = 0.35;
+    if(modalFocus) modalFocus.value = String(focusModal);
+    const st = detailView.get(current.id) || {zoom:1.0, pan:{x:0,y:0}, focus:0};
+    st.focus = focusModal;
+    detailView.set(current.id, st);
+  }
+
+  mApply();
+  applyFocusModal();
+}
+
+modalZoom.addEventListener("input", (e)=>{ mApplyZoomStep(Number(e.target.value)); });
+
+if(modalFocus){
+  modalFocus.addEventListener("input", (e)=>{
+    focusModal = Number(e.target.value);
+    const st = detailView.get(current.id) || {zoom:1.0, pan:{x:0,y:0}, focus:0};
+    st.focus = focusModal;
+    detailView.set(current.id, st);
+    applyFocusModal();
+  });
+}
+
+modalReset.addEventListener("click", ()=>{
+  mState.pan = {x:0,y:0};
+  mApplyZoomStep(1); // 10×
+});
+
+modalFit.addEventListener("click", ()=>{
+  mState.pan = {x:0,y:0};
+  mApplyZoomStep(0); // 4×
+});
+
+/* modal pan (only if not drawing) */
+modalScope.addEventListener("pointerdown", (e)=>{
+  if(drawMode) return;
+  if(e.pointerType==="mouse" && e.button!==0) return;
+  mState.drag=true;
+  modalScope.setPointerCapture(e.pointerId);
+  mState.sx=e.clientX; mState.sy=e.clientY;
+  mState.bx=mState.pan.x; mState.by=mState.pan.y;
+});
+modalScope.addEventListener("pointermove", (e)=>{
+  if(drawMode || !mState.drag) return;
+  mState.pan.x = mState.bx + (e.clientX - mState.sx);
+  mState.pan.y = mState.by + (e.clientY - mState.sy);
+  mApply();
+});
+modalScope.addEventListener("pointerup", ()=>mState.drag=false);
+modalScope.addEventListener("pointercancel", ()=>mState.drag=false);
+
+/* source modals */
+srcOpen.addEventListener("click", ()=>{ srcModal.classList.add("open"); srcModal.setAttribute("aria-hidden","false"); });
+srcClose.addEventListener("click", ()=>{ srcModal.classList.remove("open"); srcModal.setAttribute("aria-hidden","true"); });
+srcModal.addEventListener("click", (e)=>{ if(e.target===srcModal) srcClose.click(); });
+
+vSrcOpen.addEventListener("click", ()=>{
+  if(!current.videoSource) return;
+  const url = current.videoSource;
+  vSrcText.innerHTML = `<strong>Quelle des Videos:</strong> <a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+  vSrcModal.classList.add("open");
+  vSrcModal.setAttribute("aria-hidden","false");
+});
+vSrcClose.addEventListener("click", ()=>{ vSrcModal.classList.remove("open"); vSrcModal.setAttribute("aria-hidden","true"); });
+vSrcModal.addEventListener("click", (e)=>{ if(e.target===vSrcModal) vSrcClose.click(); });
+
+/* bind panning + drawing */
+bindPan(scopeSingle, layerSingle, pan.single, drag.single, ()=>zoomFor(A));
+bindPan(scopeA, layerA, pan.A, drag.A, ()=>zoomFor(A));
+bindPan(scopeB, layerB, pan.B, drag.B, ()=>zoomFor(B));
+
+[cMicSingle,cMicA,cMicB,cSchema,cDetail,cModal].forEach(bindDraw);
+
+/* keep hotspots aligned after image load */
+schemaImg.addEventListener("load", ()=>{ if(labeling) posHotspots(); });
+
+window.addEventListener("resize", resizeAll);
+
+/* initialize */
+setPick("A");
+setCompare(false);
+syncMicControls();
+
+/* default: draw off */
+setDraw(false);
+setTool("pen");
+
+/* list + initial render */
+buildList();
+renderAll();
+</script>
+
+
+<script>
+  // Fallback: wenn Ordnername klein geschrieben ist (insektenbilder), setze Hintergrund entsprechend.
+  (function(){
+    var img = new Image();
+    img.onload = function(){ /* ok */ };
+    img.onerror = function(){
+      document.body.style.backgroundImage =
+        "linear-gradient(180deg, rgba(28,25,18,.72) 0%, rgba(28,25,18,.86) 70%), url('insektenbilder/Hintergrund.png')";
+    };
+    img.src = "Insektenbilder/Hintergrund.png";
+  })();
+</script>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- Template: Überraschungsfenster-Inhalte -->
+<template id="tplSurpriseGottesanbeterin">
+  <div class="instaGrid">
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DR9vzoWjN2-/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DGnD9ObMOwS/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <iframe class="instaFrame" src="https://www.instagram.com/p/DT5EDS_jJ82/embed"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <iframe class="instaFrame" src="https://www.instagram.com/p/DQT8uXIjOd1/embed"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+  </div>
+</template>
+
+<template id="tplSurpriseLaufkaefer">
+  <div class="instaGrid">
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DTApx5ujIwX/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DJXdXO4zABg/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DOLYUrxjAQ-/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/C5Lh0PZMBzB/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+  </div>
+</template>
+
+
+<template id="tplSurpriseHeuschrecke">
+  <div class="instaGrid">
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DMsU4Xls5nd/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/C4Xk-pVMWPW/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DGppr87Mzsa/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DUeuCSHkUgC/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+  </div>
+</template>
+
+<template id="tplSurpriseBiene">
+  <div class="instaGrid">
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DUIqj8hjFSG/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DOEFSQkjDAV/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DIEiOmBs3Np/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="instaItem">
+      <div class="instaEmbed">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DHYa1lsMVo0/?utm_source=ig_embed&amp;utm_campaign=loading"
+          data-instgrm-version="14"
+          style="background:#FFF; border:0; border-radius:3px; margin:0; padding:0; width:100%; max-width:540px;">
+        </blockquote>
+      </div>
+      <div class="instaTrim" aria-hidden="true"></div>
+    </div>
+  </div>
+</template>
+
+
+  <template id="tplSurpriseMaulwurfsgrille">
+  <div class="instaGrid">
+    <div class="instaItem">
+      <div class="instaEmbed instaTrim">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DLmOlyZy29V/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+      </div>
+    </div>
+    <div class="instaItem">
+      <div class="instaEmbed instaTrim">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/Ch9Y72nOyzx/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+      </div>
+    </div>
+    <div class="instaItem">
+      <div class="instaEmbed instaTrim">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DTrZDDRFfSr/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+      </div>
+    </div>
+    <div class="instaItem">
+      <div class="instaEmbed instaTrim">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DIf5Ry_pfAI/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+<!-- Schwimmkäfer: Überraschungsfenster (Instagram 4 Beiträge) -->
+<template id="tplSurpriseSchwimmkaefer">
+  <div class="surpriseHeader">
+    <div class="surpriseTitle">Überraschungsfenster</div>
+    <div class="surpriseMeta">Instagram (4 Beiträge)</div>
+  </div>
+
+  <div class="instaGrid">
+    <div class="instaItem">
+      <iframe class="instaFrame" src="https://www.instagram.com/p/CtZU8qzNRzE/embed/" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no" loading="lazy"></iframe>
+    </div>
+    <div class="instaItem">
+      <iframe class="instaFrame" src="https://www.instagram.com/p/C6b9tQrNV85/embed/" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no" loading="lazy"></iframe>
+    </div>
+    <div class="instaItem">
+      <iframe class="instaFrame" src="https://www.instagram.com/p/CfT_wZOO6fT/embed/" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no" loading="lazy"></iframe>
+    </div>
+    <div class="instaItem">
+      <iframe class="instaFrame" src="https://www.instagram.com/p/CzMbja9tQ6I/embed/" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no" loading="lazy"></iframe>
+    </div>
+  </div>
+</template>
+
+</body>
+</html>
