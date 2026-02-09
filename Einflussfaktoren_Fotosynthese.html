@@ -551,9 +551,9 @@
         <div class="field">
           <label>Anzeige <button class="infoBtn" data-tip="psTerms" aria-label="Info: Apparente und reelle Fotosynthese">i</button></label>
           <div class="seg" role="group" aria-label="Anzeige: apparente oder reelle Fotosynthese">
-            <input type="radio" name="viewMode" id="modeApp" value="app" checked>
+            <input type="radio" name="viewMode" id="modeApp" value="app">
             <label for="modeApp">Apparente Fotosynthese</label>
-            <input type="radio" name="viewMode" id="modeReal" value="real">
+            <input type="radio" name="viewMode" id="modeReal" value="real" checked>
             <label for="modeReal">Reelle Fotosynthese</label>
           </div>
 </div>
@@ -755,7 +755,7 @@
   const elTemp = document.getElementById("temp");
   const elCO2 = document.getElementById("co2");
   // Anzeige-Modus (app/real)
-  let viewMode = "app";
+  let viewMode = "real";
   const modeInputs = Array.from(document.querySelectorAll('input[name="viewMode"]'));
   function setViewMode(v){
     viewMode = v;
@@ -1245,7 +1245,7 @@ lightColor: {
 
   function tempStrongShape(T){
     const t = clamp(T, 0, 60);
-    const peak = gauss(t, 37, 10);                 // Optimum ~37°C
+    const peak = gauss(t, 37, 7,5);                 // Optimum ~37°C
     const cold = clamp((t + 2)/6, 0, 1);           // Fade-in unter ~0°C
     // Denaturierung: ab ~45°C zunehmend, ab ~50°C praktisch 0
     const heat = (t <= 45) ? 1 : (t >= 50 ? 0 : clamp((50 - t)/5, 0, 1));
@@ -1893,23 +1893,27 @@ function drawStudentDiagrams(){
         const u=i/(N-1);
         const I=u;
                         const gross = 100 * aCur * tempFactorNorm(Tcur, Icur) * co2FactorNorm(Ccur) * lightFactorNorm(I);
-        vals.push(gross - respirationPct(Tcur));
+        const resp = respirationPct(Tcur);
+        const net = gross - resp;
+        vals.push(yForMode(gross, resp, net));
       }
       plotCurve(d1,A,vals,"rgba(125,211,252,.95)", zL.x0, zL.x1);
 
-      // Kompensationspunkt: Apparente Fotosynthese = 0
-      let uComp=null;
-      for(let i=1;i<vals.length;i++){
-        if(vals[i] >= 0 && vals[i-1] < 0){
-          const u0=(i-1)/(vals.length-1), u1=i/(vals.length-1);
-          const y0=vals[i-1], y1=vals[i];
-          const t=(0 - y0)/(y1 - y0);
-          uComp = u0 + (u1-u0)*t;
-          break;
+      // Kompensationspunkt (nur bei apparenter Fotosynthese sinnvoll): Netto = 0
+      if(viewMode !== "real"){
+        let uComp=null;
+        for(let i=1;i<vals.length;i++){
+          if(vals[i] >= 0 && vals[i-1] < 0){
+            const u0=(i-1)/(vals.length-1), u1=i/(vals.length-1);
+            const y0=vals[i-1], y1=vals[i];
+            const t=(0 - y0)/(y1 - y0);
+            uComp = u0 + (u1-u0)*t;
+            break;
+          }
         }
+        // Kompensationspunkt nur anzeigen, wenn Beleuchtungsstärke-Regler > 0
+        if(uComp!==null && (+elLight.value) > 0) vLine(d1,A,uComp,"rgba(255,255,255,.42)","Komp.", zL.x0, zL.x1);
       }
-      // Kompensationspunkt nur anzeigen, wenn Beleuchtungsstärke-Regler > 0
-      if(uComp!==null && (+elLight.value) > 0) vLine(d1,A,uComp,"rgba(255,255,255,.42)","Komp.", zL.x0, zL.x1);
 
       // Sättigungslinie: nur anzeigen, wenn Beleuchtungsstärke am Maximum steht
       if((+elLight.value) >= 100){
