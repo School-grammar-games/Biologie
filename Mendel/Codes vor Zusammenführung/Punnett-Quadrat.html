@@ -1,0 +1,2273 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mendelsche Regeln – Garten-Simulation (Oberstufe)</title>
+  <style>
+    :root{
+      --bg1:#0b1710;
+      --bg2:#06110b;
+
+      --paper1: rgba(255,250,235,0.10);
+      --paper2: rgba(255,250,235,0.06);
+      --stroke: rgba(255,255,255,0.12);
+
+      --text:#f6f4ee;
+      --muted:#c9c2b2;
+      --muted2:#a59f93;
+
+      --accent:#8ee6a8;
+      --accent2:#c7b7ff;
+
+      --ok:#86efac;
+      --bad:#fca5a5;
+
+      --shadow: 0 18px 60px rgba(0,0,0,0.45);
+      --radius:18px;
+    }
+
+    *{ box-sizing:border-box }
+    html, body{ height:100% }
+    body{
+      margin:0;
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:
+        radial-gradient(1000px 600px at 18% 10%, rgba(123,216,143,0.20) 0%, transparent 60%),
+        radial-gradient(900px 560px at 88% 16%, rgba(199,183,255,0.14) 0%, transparent 62%),
+        radial-gradient(1100px 680px at 50% 100%, rgba(255,223,140,0.09) 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      position:relative;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:0.12;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%23bfe7c9' stroke-opacity='0.55' stroke-width='2'%3E%3Cpath d='M30 180c40-20 45-70 85-90 35-18 62-2 75 20'/%3E%3Cpath d='M40 170c20-10 28-30 35-55'/%3E%3Cpath d='M72 126c10 6 18 16 20 28'/%3E%3Cpath d='M150 70c-10 8-16 18-15 30'/%3E%3Cpath d='M120 95c10-10 22-16 36-16'/%3E%3C/g%3E%3Cg fill='%23bfe7c9' fill-opacity='0.35'%3E%3Cellipse cx='80' cy='120' rx='10' ry='5' transform='rotate(-25 80 120)'/%3E%3Cellipse cx='62' cy='148' rx='10' ry='5' transform='rotate(-35 62 148)'/%3E%3Cellipse cx='150' cy='82' rx='10' ry='5' transform='rotate(35 150 82)'/%3E%3Cellipse cx='165' cy='102' rx='10' ry='5' transform='rotate(25 165 102)'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 220px 220px;
+      filter: blur(0.1px);
+    }
+
+    header{ max-width:1220px; margin:0 auto; padding:26px 18px 12px; }
+    .hero{
+      display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      padding:16px;
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,250,235,0.14), rgba(255,250,235,0.05));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:-1px;
+      background:
+        radial-gradient(520px 260px at 10% 0%, rgba(142,230,168,0.16), transparent 62%),
+        radial-gradient(520px 260px at 90% 10%, rgba(199,183,255,0.12), transparent 60%);
+      pointer-events:none;
+    }
+    .hero > *{ position:relative; }
+
+    h1{
+      margin:0 0 6px;
+      font-size:22px;
+      letter-spacing:0.2px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      font-size:14px;
+      line-height:1.45;
+      max-width: 82ch;
+    }
+
+    .heroRight{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center; }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.20);
+      color: var(--muted);
+      font-size:12px;
+      backdrop-filter: blur(8px);
+    }
+    .badge b{ color: var(--text); font-weight:900 }
+
+    main{ max-width:1220px; margin:0 auto; padding:14px 18px 30px; }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,250,235,0.10), rgba(255,250,235,0.06));
+      box-shadow: var(--shadow);
+      padding:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background:
+        radial-gradient(420px 220px at 12% 0%, rgba(142,230,168,0.10), transparent 60%),
+        radial-gradient(420px 220px at 88% 10%, rgba(255,223,140,0.08), transparent 60%);
+      pointer-events:none;
+      opacity:0.95;
+    }
+    .card > *{ position:relative; }
+
+    .sectionTitle{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size:16px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      letter-spacing:0.2px;
+    }
+    .mini{ font-size:12px; color: var(--muted2) }
+    .sep{ height:1px; background: rgba(255,255,255,0.10); margin:12px 0 }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:end;
+    }
+    label{
+      display:block;
+      font-size:12px;
+      color: var(--muted);
+      margin-bottom:6px;
+    }
+
+    select, input[type="number"], input[type="text"], textarea, button{
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.22);
+      color: var(--text);
+      padding:10px 10px;
+      font-size:14px;
+      outline:none;
+      transition: border-color 0.2s ease, transform 0.05s ease, background 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+    textarea{ width:100%; min-height:70px; resize:vertical; font-size:13px; }
+    select{ min-width: 200px }
+    input[type="number"]{ width: 180px }
+    input[type="text"]{ min-width: 240px; width:min(520px, 100%); }
+    button{ cursor:pointer; user-select:none; }
+    button:hover{ border-color: rgba(142,230,168,0.60) }
+    button:active{ transform: translateY(1px) }
+
+
+    /* Select with inline left label (für dihybrid Gen 1/Gen 2) */
+    .selectWithPrefix{
+      display:flex;
+      align-items:center;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.22);
+      backdrop-filter: blur(8px);
+      overflow:hidden;
+      min-width: 200px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .selectWithPrefix:focus-within{ border-color: rgba(142,230,168,0.60) }
+    .selectWithPrefix .prefix{
+      padding:10px 10px;
+      font-size:12px;
+      color: var(--muted);
+      border-right:1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.10);
+      white-space:nowrap;
+      display:inline-flex;
+      align-items:center;
+      height:100%;
+    }
+    .selectWithPrefix select{
+      border:none;
+      background:transparent;
+      padding:10px 10px;
+      backdrop-filter: none;
+      min-width:0;
+      flex:1;
+    }
+    .selectWithPrefix select:focus{ outline:none }
+
+    /* Parent genotype layout (dihybrid: headline + stacked selects) */
+    .parentGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 760px){ .parentGrid{ grid-template-columns: 1fr; } }
+
+    .parentHead{
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      margin:0 0 8px;
+      font-size:12px;
+      color: var(--muted);
+    }
+    .parentHead b{ color: var(--text); font-weight:900; }
+    .parentHead .parentGeno{ color: var(--text); font-weight:900; }
+
+    .parentStack{ display:grid; gap:10px; }
+
+
+    .btnPrimary{
+      border-color: rgba(142,230,168,0.35);
+      background: linear-gradient(180deg, rgba(142,230,168,0.10), rgba(0,0,0,0.22));
+    }
+    .btnSecondary{
+      border-color: rgba(199,183,255,0.35);
+      background: linear-gradient(180deg, rgba(199,183,255,0.10), rgba(0,0,0,0.22));
+    }
+    .btnQuiet{
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.18);
+      color: var(--muted);
+    }
+
+    /* Phenotype tiles */
+    .phenoGrid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:10px;
+    }
+    .tile{
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.16);
+      border-radius: 16px;
+      padding:10px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .tile:hover{
+      transform: translateY(-1px);
+      border-color: rgba(142,230,168,0.45);
+      background: rgba(0,0,0,0.20);
+    }
+    .tile .tTitle{font-size:13px; font-weight:900; margin:0;}
+    .tile .tSub{font-size:12px; color:var(--muted); margin:3px 0 0;}
+    .iconBox{
+      width:66px; height:66px; flex:0 0 66px;
+      border-radius: 18px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      position:relative;
+      overflow:hidden;
+    }
+    .iconBox svg{ width:56px; height:56px; }
+    .zoomHint{
+      position:absolute;
+      bottom:6px; right:8px;
+      font-size:11px;
+      color: rgba(255,255,255,0.75);
+      background: rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      padding:2px 6px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Punnett */
+    .punnett{
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      overflow:auto;
+      background: rgba(0,0,0,0.20);
+    }
+    .pgrid{ display:grid; gap:1px; background: rgba(255,255,255,0.08); min-width: 560px; }
+    .cell{
+      background: rgba(18,26,43,0.52);
+      min-height:64px;
+      padding:10px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+    .cell.header{
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      font-size:12px;
+      font-weight:900;
+      min-height:52px;
+    }
+    .geno{ font-weight:900; letter-spacing:0.4px; font-size:13px; }
+    .pheno{
+      margin-top:4px;
+      font-size:11px;
+      color: var(--muted);
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      align-items:center;
+    }
+    .phenoBtn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:0;
+      padding:0;
+      background:transparent;
+      color:inherit;
+      cursor:pointer;
+    }
+    .phenoBtn svg{ width:20px; height:20px; opacity:0.98; }
+    .phenoBtn:hover{ text-decoration: underline; text-decoration-color: rgba(142,230,168,0.55); }
+
+    .maskedCell{
+      color: rgba(201,194,178,0.85);
+      font-size:12px;
+      border:1px dashed rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding:8px 10px;
+      background: rgba(0,0,0,0.18);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .maskedCell b{ color: var(--text); font-weight:900; }
+
+    .chips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius: 14px;
+      border:1px dashed rgba(255,255,255,0.20);
+      background: rgba(0,0,0,0.16);
+      color: var(--muted);
+      font-size:12px;
+    }
+    .chip b{ color: var(--text) }
+
+    /* Bars */
+    .bars{display:grid; gap:10px}
+    .barRow{
+      display:grid;
+      grid-template-columns: 1fr 3fr auto;
+      gap:10px;
+      align-items:center;
+    }
+    .k{
+      display:flex; gap:10px; align-items:center;
+      font-size:12px; color: var(--muted);
+      min-width:0;
+    }
+    .k span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .k button{
+      border:0;
+      padding:0;
+      background:transparent;
+      color:inherit;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+    }
+    .k svg{ width:26px; height:26px; flex:0 0 26px; opacity:0.98 }
+    .bar{
+      height:12px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.08);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.10);
+    }
+    .fill{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(142,230,168,0.95), rgba(199,183,255,0.80));
+      transition: width 0.35s ease;
+    }
+    .v{ font-variant-numeric: tabular-nums; font-size:12px; color: var(--text) }
+
+    /* Table */
+    table{
+      width:100%;
+      border-collapse:collapse;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.10);
+    }
+    th, td{
+      padding:9px 10px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      text-align:left;
+      font-size:12px;
+      vertical-align:top;
+    }
+    th{
+      color: var(--muted);
+      font-weight:900;
+      background: rgba(255,255,255,0.05);
+    }
+    tr:last-child td{ border-bottom:none; }
+    .smallBtn{
+      padding:8px 10px;
+      font-size:12px;
+      border-radius:12px;
+    }
+    .monoSpace{ font-variant-numeric: tabular-nums; }
+
+    /* Tasks */
+    .task{
+      border-left:3px solid rgba(142,230,168,0.75);
+      background: rgba(0,0,0,0.16);
+      border-radius: 16px;
+      padding:10px 12px;
+      margin:10px 0;
+      border:1px solid rgba(255,255,255,0.12);
+    }
+    .task h3{
+      margin:0 0 6px;
+      font-size:13px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+    .task p{ margin:0; font-size:13px; color: var(--muted); line-height:1.45; }
+    .hint{ margin-top:8px; font-size:12px; color: var(--muted2); line-height:1.35; }
+
+    details{
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding:10px 12px;
+      background: rgba(0,0,0,0.16);
+    }
+    summary{
+      cursor:pointer;
+      font-weight:900;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+    .teacherNote{ margin-top:8px; color: var(--muted); font-size:12px; line-height:1.5; }
+
+    /* Lightbox modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      place-items:center;
+      background: rgba(0,0,0,0.62);
+      backdrop-filter: blur(8px);
+      z-index:999;
+      padding:18px;
+    }
+    .modal.open{ display:grid; }
+    .modalCard{
+      width: min(560px, 100%);
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,0.16);
+      background: linear-gradient(180deg, rgba(255,250,235,0.18), rgba(0,0,0,0.22));
+      box-shadow: 0 30px 90px rgba(0,0,0,0.6);
+      padding:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .modalCard::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background:
+        radial-gradient(520px 260px at 10% 0%, rgba(142,230,168,0.18), transparent 60%),
+        radial-gradient(520px 260px at 90% 10%, rgba(199,183,255,0.14), transparent 60%);
+      pointer-events:none;
+    }
+    .modalCard > *{ position:relative; }
+    .modalTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .modalTitle{
+      margin:0;
+      font-size:16px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      letter-spacing:0.2px;
+    }
+    .modalClose{
+      border-radius: 999px;
+      padding:8px 10px;
+      border:1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.26);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .modalBody{ display:grid; place-items:center; padding:10px 6px 6px; }
+    .modalBody svg{ width: min(420px, 92vw); height: auto; }
+    .modalHint{ margin:10px 0 0; color: var(--muted); font-size:12px; text-align:center; }
+
+    /* Gamete inputs in headers */
+    .gamInput{
+      width: 92px;
+      padding:8px 10px;
+      font-size:13px;
+      text-align:center;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.22);
+      color: var(--text);
+      outline:none;
+    }
+    .gamInput.good{
+      border-color: rgba(134,239,172,0.75);
+      box-shadow: 0 0 0 2px rgba(134,239,172,0.14);
+    }
+    .gamInput.bad{
+      border-color: rgba(252,165,165,0.80);
+      box-shadow: 0 0 0 2px rgba(252,165,165,0.14);
+    }
+    .gamInput:disabled{
+      opacity:0.80;
+      cursor:not-allowed;
+    }
+    .checkLine{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+    }
+    .checkMsg{
+      font-size:12px;
+      color: var(--muted);
+    }
+    .checkMsg .ok{ color: var(--ok); font-weight:900; }
+    .checkMsg .bad{ color: var(--bad); font-weight:900; }
+
+    /* Challenge box */
+    .callout{
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.14);
+      border-radius: 16px;
+      padding:10px 12px;
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+    .callout b{ color: var(--text); }
+    /* Auf-/Zuklappbarer Infobereich */
+    details.callout > summary{
+      cursor:pointer;
+      list-style:none;
+      outline:none;
+    }
+    details.callout > summary::-webkit-details-marker{ display:none; }
+    details.callout > summary{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color: var(--text);
+      font-size:12px;
+      user-select:none;
+    }
+    details.callout > summary::after{
+      content:"▾";
+      margin-left:auto;
+      color: var(--muted2);
+      transition: transform 0.18s ease;
+    }
+    details.callout[open] > summary::after{ transform: rotate(180deg); }
+
+    /* Deutlicheres Klapp-Icon + größere Trefffläche */
+    details.callout > summary{
+      padding:8px 10px;
+      border-radius:12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    details.callout > summary:hover{
+      background: rgba(255,255,255,0.075);
+      border-color: rgba(255,255,255,0.16);
+    }
+    details.callout > summary:focus-visible{
+      outline: 2px solid rgba(255,255,255,0.22);
+      outline-offset: 2px;
+    }
+    details.callout > summary::after{
+      width:26px;
+      height:26px;
+      display:grid;
+      place-items:center;
+      margin-left:auto;
+      border-radius:999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: var(--text);
+      font-size:16px;
+      line-height:1;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+    details.callout[open] > summary::after{
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .ok{ color: rgba(142,230,168,0.95); font-weight:900; }
+    .no{ color: rgba(255,170,170,0.95); font-weight:900; }
+  
+
+    /* ---------- PDF/Print Export ---------- */
+    .printArea{ display:none; }
+    .printH1{
+      margin:0 0 6px;
+      font-size:18px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+    .printMeta{ font-size:11px; color:#333; margin-bottom:10px; }
+    .printSection{ margin-top:14px; }
+    .printSection h2{
+      margin:0 0 6px;
+      font-size:14px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+    .printSmall{ font-size:11px; color:#333; }
+    .printTable{
+      width:100%;
+      border-collapse:collapse;
+      border:1px solid #bbb;
+      background:#fff;
+    }
+    .printTable th, .printTable td{
+      border:1px solid #bbb;
+      padding:6px 7px;
+      font-size:11px;
+      vertical-align:top;
+    }
+    .printTable th{
+      background:#f3f3f3;
+      font-weight:700;
+      text-align:left;
+    }
+    .printNoteBlock{
+      white-space:pre-wrap;
+      border:1px solid #bbb;
+      border-radius:10px;
+      padding:10px;
+      background:#fff;
+      font-size:11px;
+      line-height:1.35;
+    }
+    .printWarn{
+      margin-top:8px;
+      padding:8px 10px;
+      border-left:4px solid #b45309;
+      background:#fff7ed;
+      border-radius:10px;
+      font-size:11px;
+    }
+
+    @media print{
+      body{ background:#fff !important; color:#000 !important; }
+      body::before{ display:none !important; }
+      header, main, .modal{ display:none !important; }
+      .printArea{ display:block !important; }
+      .printArea *{ color:#000 !important; }
+      @page{ margin:14mm; }
+    }
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="hero">
+      <div>
+        <h1>Mendelsche Regeln – Entdecken im „Gartenlabor“</h1>
+        <p class="sub">
+          Beobachte Phänotypen, prüfe Erwartungswerte im Punnett-Quadrat und vergleiche sie mit Simulationen.
+          Formuliere daraus drei allgemeine Regeln.
+        </p>
+        <details class="callout" id="gameteIntro" open style="margin-top:10px">
+          <summary><b>Bildung der Keimzellen für das Punnett-Quadrat</b></summary>
+          <div class="calloutBody" style="margin-top:6px">
+            <span>
+              Das Punnett-Quadrat ist eine tabellarische Darstellung, mit der aus den <b>Keimzellen (Gameten)</b> beider Eltern
+              alle möglichen <b>Genotyp-Kombinationen</b> der Nachkommen systematisch ermittelt werden. Die Zeilen stehen für die
+              Keimzellen von Elternteil&nbsp;1, die Spalten für die Keimzellen von Elternteil&nbsp;2; in den Feldern werden die jeweiligen
+              Allele kombiniert. Daraus lassen sich <b>Erwartungswerte</b> für Genotyp- und Phänotypverhältnisse ableiten.
+            </span>
+            <!-- Platzhalter: Hier wird im nächsten Schritt zusätzlicher Code eingefügt -->
+            <div id="gameteIntroCode"></div>
+          </div>
+        </details>
+
+      </div>
+</div>
+  </header>
+
+  <main class="grid">
+    <!-- LINKS -->
+    <section class="card">
+      <div class="sectionTitle">
+        <h2>Simulation</h2>
+        <span class="mini" id="statusLine">Kreuzung einstellen → Punnett → Simulation.</span>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="practiceMode">Arbeitsmodus</label>
+          <select id="practiceMode">
+            <option value="free" selected>Frei (Keimzellen werden gezeigt)</option>
+            <option value="gametes">Übung: Keimzellen eingeben (Prüfen + Freischalten)</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="mode">Kreuzungstyp</label>
+          <select id="mode">
+            <option value="mono" selected>Monohybrid (1 Merkmal)</option>
+            <option value="di">Dihybrid (2 Merkmale)</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="traitPreset">Merkmal(e)</label>
+          <select id="traitPreset">
+            <option value="peaColor" selected>Erbsensamenfarbe (Y/y)</option>
+            <option value="peaShape">Erbsensamenform (R/r)</option>
+            <option value="both">Farbe + Form (Y/y & R/r)</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="nOff">Nachkommen (Simulation)</label>
+          <input id="nOff" type="number" min="1" max="20000" value="200" />
+        </div>
+
+        <button class="btnPrimary" id="btnBuild">Punnett erzeugen</button>
+        <button class="btnSecondary" id="btnRun">Simulieren</button>
+        <button class="btnQuiet" id="btnReset">Reset</button>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="parentGrid">
+        <div>
+          <div class="parentHead"><b>Elternteil 1</b><span id="p1LabelGeno" class="parentGeno" style="display:none"></span></div>
+          <div class="parentStack">
+            <div class="selectWithPrefix" id="p1Wrap">
+              <span class="prefix" id="p1Prefix" style="display:none">Gen 1:</span>
+              <select id="p1"></select>
+            </div>
+            <div id="p1bWrap" style="display:none">
+              <div class="selectWithPrefix" id="p1bWrapInner">
+                <span class="prefix" id="p1bPrefix">Gen 2:</span>
+                <select id="p1b"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="parentHead"><b>Elternteil 2</b><span id="p2LabelGeno" class="parentGeno" style="display:none"></span></div>
+          <div class="parentStack">
+            <div class="selectWithPrefix" id="p2Wrap">
+              <span class="prefix" id="p2Prefix" style="display:none">Gen 1:</span>
+              <select id="p2"></select>
+            </div>
+            <div id="p2bWrap" style="display:none">
+              <div class="selectWithPrefix" id="p2bWrapInner">
+                <span class="prefix" id="p2bPrefix">Gen 2:</span>
+                <select id="p2b"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkLine" id="gameteCheckLine" style="display:none">
+        <button class="btnSecondary" id="btnCheckGametes">Keimzellen prüfen</button>
+        <button class="btnQuiet" id="btnClearGametes">Eingaben löschen</button>
+        <span class="checkMsg" id="gameteCheckMsg">Trage alle Keimzellen ein und klicke Keimzellen prüfen.</span>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="sectionTitle">
+        <h2>Punnett-Quadrat (vollständig)</h2>
+        <span class="mini" id="gameteLine">—</span>
+      </div>
+      <div class="punnett" id="punnett"></div>
+
+      <div class="chips">
+        <span class="chip" id="chipExpected" style="display:none">Erwartetes Verhältnis: <b id="expectedRatio">—</b></span>
+        <span class="chip">Beobachtet: <b id="observedRatio">—</b></span>
+        <span class="chip">Versuche: <b id="trialCount">0</b></span>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="sectionTitle">
+        <h2>Phänotyp-Verteilung</h2>
+        <span class="mini">Klick auf Icon → Vergrößerung.</span>
+      </div>
+      <div class="bars" id="bars"></div>
+
+      <div class="sep"></div>
+
+      <div class="sectionTitle">
+        <h2>Genotyp-Häufigkeiten</h2>
+        <span class="mini">Aus Genotyp-/Phänotypverhältnissen Regeln ableiten.</span>
+      </div>
+      <table>
+        <thead><tr><th>Genotyp</th><th>Anzahl</th><th>Anteil</th></tr></thead>
+        <tbody id="genoBody"></tbody>
+      </table>
+    </section>
+
+    <!-- RECHTS -->
+    <aside class="card">
+      <div class="sectionTitle">
+        <h2>Phänotyp-Bildkarten</h2>
+        <span class="mini">anklicken → groß ansehen</span>
+      </div>
+
+      <!-- SVG icons -->
+      <svg width="0" height="0" style="position:absolute; left:-9999px; top:-9999px" aria-hidden="true" focusable="false">
+        <defs>
+          <symbol id="ico-seed-yellow" viewBox="0 0 64 64">
+            <defs>
+              <radialGradient id="grad_seed_y" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#fff3a6"/>
+                <stop offset="1" stop-color="#f4c84a"/>
+              </radialGradient>
+            </defs>
+            <circle cx="32" cy="32" r="22" fill="url(#grad_seed_y)"/>
+            <circle cx="24" cy="24" r="6" fill="rgba(255,255,255,0.50)"/>
+            <path d="M17 38c6 6 18 8 29 1" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="3" stroke-linecap="round"/>
+          </symbol>
+
+          <symbol id="ico-seed-green" viewBox="0 0 64 64">
+            <defs>
+              <radialGradient id="grad_seed_g" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#c9ffb9"/>
+                <stop offset="1" stop-color="#2fc36a"/>
+              </radialGradient>
+            </defs>
+            <circle cx="32" cy="32" r="22" fill="url(#grad_seed_g)"/>
+            <circle cx="24" cy="24" r="6" fill="rgba(255,255,255,0.50)"/>
+            <path d="M17 38c6 6 18 8 29 1" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="3" stroke-linecap="round"/>
+          </symbol>
+
+          <symbol id="ico-round" viewBox="0 0 64 64">
+            <defs>
+              <radialGradient id="grad_round" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#e0f2fe"/>
+                <stop offset="1" stop-color="#60a5fa"/>
+              </radialGradient>
+            </defs>
+            <circle cx="32" cy="32" r="22" fill="url(#grad_round)"/>
+            <circle cx="24" cy="24" r="6" fill="rgba(255,255,255,0.55)"/>
+          </symbol>
+
+          <!-- Wrinkled: purple/gray for contrast -->
+          <symbol id="ico-wrinkled" viewBox="0 0 64 64">
+            <defs>
+              <radialGradient id="grad_wr" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#efe7ff"/>
+                <stop offset="1" stop-color="#7c6ee6"/>
+              </radialGradient>
+            </defs>
+            <path d="M32 10c12 0 22 10 22 22s-10 22-22 22S10 44 10 32 20 10 32 10Z" fill="url(#grad_wr)"/>
+            <path d="M18 30c8-10 20 10 28 0s10 10 0 14-14-6-28 0"
+                  fill="none" stroke="rgba(0,0,0,0.28)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M20 22c6 0 6 6 12 6s6-6 12-6"
+                  fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="5" fill="rgba(255,255,255,0.55)"/>
+          </symbol>
+
+          <symbol id="ico-yr" viewBox="0 0 64 64">
+            <use href="#ico-seed-yellow" x="0" y="0" width="64" height="64"></use>
+            <use href="#ico-round" x="28" y="28" width="30" height="30" opacity="0.98"></use>
+          </symbol>
+
+          <symbol id="ico-yw" viewBox="0 0 64 64">
+            <use href="#ico-seed-yellow" x="0" y="0" width="64" height="64"></use>
+            <use href="#ico-wrinkled" x="28" y="28" width="30" height="30" opacity="0.98"></use>
+          </symbol>
+
+          <symbol id="ico-gr" viewBox="0 0 64 64">
+            <use href="#ico-seed-green" x="0" y="0" width="64" height="64"></use>
+            <use href="#ico-round" x="28" y="28" width="30" height="30" opacity="0.98"></use>
+          </symbol>
+
+          <symbol id="ico-gw" viewBox="0 0 64 64">
+            <use href="#ico-seed-green" x="0" y="0" width="64" height="64"></use>
+            <use href="#ico-wrinkled" x="28" y="28" width="30" height="30" opacity="0.98"></use>
+          </symbol>
+        </defs>
+      </svg>
+
+      <div class="phenoGrid" id="phenoGallery"></div>
+
+      <div class="sep"></div>
+
+
+
+      <div class="sectionTitle">
+        <h2>Arbeitsaufträge</h2>
+        <span class="mini">Hypothesenbildung → Überprüfung</span>
+      </div>
+
+      <div class="task">
+        <h3>1) Uniformität (F1)</h3>
+        <p>Wähle zwei <b>reinerbige</b> Eltern mit unterschiedlicher Ausprägung (z. B. <b>YY × yy</b>). Simuliere zuerst 50, dann 200 Nachkommen.</p>
+        <p class="hint">Bestimme Phänotyp- und Genotyp-Verhältnisse. Formuliere eine Regel.</p>
+      </div>
+
+      <div class="task">
+        <h3>2) Spaltung (F2)</h3>
+        <p>Kreuze F1 untereinander (z. B. <b>Yy × Yy</b>). Simuliere zuerst 50, dann 200 und schließlich 1000 Nachkommen.</p>
+        <p class="hint">Bestimme Phänotyp- und Genotyp-Verhältnisse. Formuliere eine Regel.</p>
+      </div>
+
+      <div class="task">
+        <h3>3) Unabhängigkeit (2 Merkmale)</h3>
+        <p>Wähle dihybrid (<b>YyRr × YyRr</b>) und simuliere zuerst 200, dann 1000 Nachkommen.</p>
+        <p class="hint">Bestimme Phänotyp- und Genotyp-Verhältnisse. Formuliere eine Regel. Wie hängen die beiden Merkmale zusammen?</p>
+      </div><!-- Laborjournal (Export behalten) -->
+      <div class="sectionTitle">
+        <h2>Laborjournal</h2>
+        <span class="mini">Messreihen dokumentieren</span>
+      </div>
+
+      <div class="row">
+        <button class="btnPrimary smallBtn" id="btnLogRun">Messreihe hinzufügen</button>
+<button class="btnSecondary smallBtn" id="btnExportPDF">PDF exportieren</button>
+        <button class="btnQuiet smallBtn" id="btnClearLog">Journal leeren</button>
+      </div>
+      <div class="mini" id="logMsg" style="margin-top:8px"></div>
+
+      <div style="margin-top:10px; overflow:auto; border-radius:16px;">
+        <table id="logTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Kreuzung</th>
+              <th class="monoSpace">n</th>
+              <th>Beobachtet</th>
+              <th>Notiz</th>
+            </tr>
+          </thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="sectionTitle">
+        <h2>Notizen</h2>
+        <span class="mini">für Beobachtungen, Hypothesen, Auswertung</span>
+      </div>
+      <textarea id="globalNotes" placeholder="Notizen (werden im PDF-Export übernommen)"></textarea>
+
+      <div class="sep"></div>
+
+            <!-- Challenge Cards (behalten) -->
+      <div class="sectionTitle">
+        <h2>Challenge-Karten</h2>
+        <span class="mini">Problem lösen → prüfen</span>
+      </div>
+
+      <div class="callout" id="challengeBox">
+        <b id="chTitle">—</b><br>
+        <span id="chDesc">—</span>
+        <div class="row" style="margin-top:10px">
+          <button class="btnSecondary smallBtn" id="btnNewChallenge">Neue Challenge</button>
+          <button class="btnPrimary smallBtn" id="btnCheckChallenge">Prüfen</button>
+          <span class="mini" id="chResult"></span>
+        </div>
+        <div class="mini" style="margin-top:6px" id="chReq"></div>
+      </div>
+
+      <div class="sep"></div>
+
+      
+
+      </aside>
+  </main>
+
+  <!-- Print/PDF area (nur für Export) -->
+  <div id="printArea" class="printArea" aria-hidden="true"></div>
+
+  <!-- Lightbox modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalTop">
+        <h3 class="modalTitle" id="modalTitle">Phänotyp</h3>
+        <button class="modalClose" id="modalClose" aria-label="Schließen">✕</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+      <p class="modalHint">Klick außerhalb oder Taste <b>Esc</b> zum Schließen.</p>
+    </div>
+  </div>
+
+  <script>
+  window.addEventListener('DOMContentLoaded', () => {
+
+    // ---------------- Utils ----------------
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;");
+    }
+    function clampInt(x, a, b){
+      if (!Number.isFinite(x)) return a;
+      return Math.max(a, Math.min(b, x));
+    }
+    function randInt(n){ return Math.floor(Math.random()*n); }
+    function gcd(x,y){ return y ? gcd(y, x%y) : Math.abs(x); }
+    function ratioString(counts){
+      const entries = Object.entries(counts).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+      if (!entries.length) return "—";
+      const vals = entries.map(e=>e[1]);
+      let g = vals[0];
+      for (let i=1;i<vals.length;i++) g = gcd(g, vals[i]);
+      const reduced = vals.map(v=>v/g);
+      return reduced.join(":") + " (" + entries.map(e=>e[0]).join(" / ") + ")";
+    }
+    function reducedRatioArray(counts){
+      const entries = Object.entries(counts).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+      if (!entries.length) return [];
+      const vals = entries.map(e=>e[1]);
+      let g = vals[0];
+      for (let i=1;i<vals.length;i++) g = gcd(g, vals[i]);
+      return vals.map(v=>v/g);
+    }
+
+    // ---------------- Genetik ----------------
+    function normalizePair(pair, dom, rec){
+      const a = pair[0], b = pair[1];
+      if ((a===dom && b===rec) || (a===dom && b===dom) || (a===rec && b===rec)) return a+b;
+      if (a===rec && b===dom) return dom+rec;
+      return a+b;
+    }
+
+    // Keimzellen (ohne Duplikate):
+    // mono: 1 oder 2 Keimzellen, di: 1 / 2 / 4 Keimzellen (je nach Heterozygotie)
+    function gameteSlotsMono(pair, dom, rec){
+      const n = normalizePair(pair, dom, rec);
+      if (n === dom+dom) return [dom];
+      if (n === rec+rec) return [rec];
+      return [dom, rec];
+    }
+    function gameteSlotsDi(pair1, dom1, rec1, pair2, dom2, rec2){
+      const g1 = gameteSlotsMono(pair1, dom1, rec1);
+      const g2 = gameteSlotsMono(pair2, dom2, rec2);
+      const out = [];
+      for (const a of g1){
+        for (const b of g2){
+          out.push(a+b);
+        }
+      }
+      return out;
+    }
+
+    function offspringPair(a, b, dom, rec){ return normalizePair(a+b, dom, rec); }
+    function offspringFromGametesMono(g1, g2, dom, rec){ return offspringPair(g1, g2, dom, rec); }
+    function offspringFromGametesDi(gam1, gam2, dom1, rec1, dom2, rec2){
+      const a1 = gam1[0], b1 = gam2[0];
+      const a2 = gam1[1], b2 = gam2[1];
+      const gA = offspringPair(a1, b1, dom1, rec1);
+      const gB = offspringPair(a2, b2, dom2, rec2);
+      return gA + gB;
+    }
+
+    // ---------------- Trait presets ----------------
+    let trait = {
+      gene1: { dom:"Y", rec:"y", name:"Samenfarbe", domPheno:"Gelb", recPheno:"Grün" },
+      gene2: { dom:"R", rec:"r", name:"Samenform",  domPheno:"Rund", recPheno:"Runzlig" },
+    };
+
+    // ---------------- UI refs ----------------
+    const practiceModeEl = document.getElementById("practiceMode");
+    const modeEl = document.getElementById("mode");
+    const presetEl = document.getElementById("traitPreset");
+    const modeLabelEl = document.getElementById("modeLabel");
+    const statusLineEl = document.getElementById("statusLine");
+    const nOffEl = document.getElementById("nOff");
+
+    const p1El = document.getElementById("p1");
+    const p2El = document.getElementById("p2");
+    const p1bEl = document.getElementById("p1b");
+    const p2bEl = document.getElementById("p2b");
+    const p1bWrap = document.getElementById("p1bWrap");
+    const p2bWrap = document.getElementById("p2bWrap");
+
+    const btnBuild = document.getElementById("btnBuild");
+    const btnRun = document.getElementById("btnRun");
+    const btnReset = document.getElementById("btnReset");
+
+    const gameteCheckLine = document.getElementById("gameteCheckLine");
+    const btnCheckGametes = document.getElementById("btnCheckGametes");
+    const btnClearGametes = document.getElementById("btnClearGametes");
+    const gameteCheckMsg = document.getElementById("gameteCheckMsg");
+
+    const punnettEl = document.getElementById("punnett");
+    const gameteLineEl = document.getElementById("gameteLine");
+    const p1LabelGenoEl = document.getElementById("p1LabelGeno");
+    const p2LabelGenoEl = document.getElementById("p2LabelGeno");
+    const p1PrefixEl = document.getElementById("p1Prefix");
+    const p2PrefixEl = document.getElementById("p2Prefix");
+
+    function updateParentLabelGenotypes(){
+      // Show combined genotype strings only for dihybrid crosses.
+      const isDi = (modeEl.value === "di");
+      if (!p1LabelGenoEl || !p2LabelGenoEl) return;
+
+      if (!isDi){
+        p1LabelGenoEl.style.display = "none";
+        p2LabelGenoEl.style.display = "none";
+        p1LabelGenoEl.textContent = "";
+        p2LabelGenoEl.textContent = "";
+        return;
+      }
+
+      p1LabelGenoEl.style.display = "inline";
+      p2LabelGenoEl.style.display = "inline";
+      p1LabelGenoEl.textContent = ` : ${p1El.value}${p1bEl.value}`;
+      p2LabelGenoEl.textContent = ` : ${p2El.value}${p2bEl.value}`;
+    }
+
+    const expectedRatioEl = document.getElementById("expectedRatio");
+    const observedRatioEl = document.getElementById("observedRatio");
+    const trialCountEl = document.getElementById("trialCount");
+    const barsEl = document.getElementById("bars");
+    const genoBodyEl = document.getElementById("genoBody");
+    const phenoGalleryEl = document.getElementById("phenoGallery");
+
+    // Journal
+    const btnLogRun = document.getElementById("btnLogRun");
+    const btnExportPDF = document.getElementById("btnExportPDF");
+    const globalNotesEl = document.getElementById("globalNotes");
+    const printAreaEl = document.getElementById("printArea");
+    const btnCopyCSV = document.getElementById("btnCopyCSV");
+    const btnClearLog = document.getElementById("btnClearLog");
+    const logBodyEl = document.getElementById("logBody");
+    const logMsgEl = document.getElementById("logMsg");
+
+    // Challenges
+    const chTitleEl = document.getElementById("chTitle");
+    const chDescEl  = document.getElementById("chDesc");
+    const chReqEl   = document.getElementById("chReq");
+    const chResultEl= document.getElementById("chResult");
+    const btnNewChallenge = document.getElementById("btnNewChallenge");
+    const btnCheckChallenge = document.getElementById("btnCheckChallenge");
+
+    // Modal refs
+    const modalEl = document.getElementById("modal");
+    const modalCloseEl = document.getElementById("modalClose");
+    const modalTitleEl = document.getElementById("modalTitle");
+    const modalBodyEl = document.getElementById("modalBody");
+
+    // ---------------- State ----------------
+    let punnettOutcomes = [];
+    let expectedPhenoCounts = {};
+    let simGenoCounts = {};
+    let simPhenoCounts = {};
+    let simTrials = 0;
+
+    // Practice state (FIX: Eingaben bleiben erhalten, kein "Verschwinden")
+    let gametesUnlocked = true;
+    let currentExpectedRowGametes = [];
+    let currentExpectedColGametes = [];
+    let enteredRow = [];
+    let enteredCol = [];
+
+    // Journal state
+    const logEntries = [];
+
+    // Challenge state
+    let currentChallenge = null;
+
+    // ---------------- Icons & phenotypes ----------------
+    function iconIdForPheno(ph){
+      if (ph === trait.gene1.domPheno){
+        if (ph === "Gelb") return "ico-seed-yellow";
+        if (ph === "Rund") return "ico-round";
+        return "ico-seed-yellow";
+      }
+      if (ph === trait.gene1.recPheno){
+        if (ph === "Grün") return "ico-seed-green";
+        if (ph === "Runzlig") return "ico-wrinkled";
+        return "ico-seed-green";
+      }
+      if (ph === "Gelb & Rund") return "ico-yr";
+      if (ph === "Gelb & Runzlig") return "ico-yw";
+      if (ph === "Grün & Rund") return "ico-gr";
+      if (ph === "Grün & Runzlig") return "ico-gw";
+      return "ico-seed-yellow";
+    }
+
+    function phenoInlineButton(ph){
+      const id = iconIdForPheno(ph);
+      const label = escapeHtml(ph);
+      return `
+        <button class="phenoBtn" type="button" data-zoom="1" data-icon="${id}" data-label="${label}">
+          <svg aria-hidden="true"><use href="#${id}"></use></svg>
+          <span>${label}</span>
+        </button>
+      `;
+    }
+
+    function phenotypeMono(geno){
+      return geno.includes(trait.gene1.dom) ? trait.gene1.domPheno : trait.gene1.recPheno;
+    }
+    function phenotypeDi(geno){
+      const g1 = geno.slice(0,2);
+      const g2 = geno.slice(2,4);
+      const p1 = g1.includes(trait.gene1.dom) ? trait.gene1.domPheno : trait.gene1.recPheno;
+      const p2 = g2.includes(trait.gene2.dom) ? trait.gene2.domPheno : trait.gene2.recPheno;
+
+      const set = [p1, p2];
+      const hasGelb = set.includes("Gelb"), hasGruen = set.includes("Grün");
+      const hasRund = set.includes("Rund"), hasRunz = set.includes("Runzlig");
+      if ((hasGelb || hasGruen) && (hasRund || hasRunz)){
+        const c = hasGelb ? "Gelb" : "Grün";
+        const s = hasRund ? "Rund" : "Runzlig";
+        return `${c} & ${s}`;
+      }
+      return `${p1} & ${p2}`;
+    }
+
+    // ---------------- Modal ----------------
+    function openModal(iconId, label){
+      modalTitleEl.textContent = label || "Phänotyp";
+      modalBodyEl.innerHTML = `
+        <svg viewBox="0 0 64 64" aria-label="${escapeHtml(label || "Phänotyp")}" role="img">
+          <use href="#${iconId}"></use>
+        </svg>
+      `;
+      modalEl.classList.add("open");
+      modalEl.setAttribute("aria-hidden","false");
+    }
+    function closeModal(){
+      modalEl.classList.remove("open");
+      modalEl.setAttribute("aria-hidden","true");
+      modalBodyEl.innerHTML = "";
+    }
+    modalCloseEl.addEventListener("click", closeModal);
+    modalEl.addEventListener("click", (e)=>{ if (e.target === modalEl) closeModal(); });
+    window.addEventListener("keydown", (e)=>{ if (e.key === "Escape" && modalEl.classList.contains("open")) closeModal(); });
+    document.addEventListener("click", (e)=>{
+      const t = e.target.closest("[data-zoom='1']");
+      if (!t) return;
+      const iconId = t.getAttribute("data-icon");
+      const label = t.getAttribute("data-label") || "Phänotyp";
+      if (iconId) openModal(iconId, label);
+    });
+
+    // ---------------- Setup selects ----------------
+    function genotypeOptions(dom, rec){
+      return [
+        normalizePair(dom+dom, dom, rec),
+        normalizePair(dom+rec, dom, rec),
+        normalizePair(rec+rec, dom, rec),
+      ];
+    }
+    function fillSelect(selectEl, opts, defaultVal){
+      selectEl.innerHTML = "";
+      for (const o of opts){
+        const op = document.createElement("option");
+        op.value = o; op.textContent = o;
+        selectEl.appendChild(op);
+      }
+      if (defaultVal && opts.includes(defaultVal)) selectEl.value = defaultVal;
+    }
+
+    function setTraitFromPreset(){
+      const v = presetEl.value;
+      if (v === "peaColor"){
+        trait.gene1 = { dom:"Y", rec:"y", name:"Samenfarbe", domPheno:"Gelb", recPheno:"Grün" };
+        trait.gene2 = { dom:"R", rec:"r", name:"Samenform",  domPheno:"Rund", recPheno:"Runzlig" };
+        modeEl.value = "mono";
+      } else if (v === "peaShape"){
+        trait.gene1 = { dom:"R", rec:"r", name:"Samenform",  domPheno:"Rund", recPheno:"Runzlig" };
+        trait.gene2 = { dom:"Y", rec:"y", name:"Samenfarbe", domPheno:"Gelb", recPheno:"Grün" };
+        modeEl.value = "mono";
+      } else if (v === "both"){
+        trait.gene1 = { dom:"Y", rec:"y", name:"Samenfarbe", domPheno:"Gelb", recPheno:"Grün" };
+        trait.gene2 = { dom:"R", rec:"r", name:"Samenform",  domPheno:"Rund", recPheno:"Runzlig" };
+        modeEl.value = "di";
+      }
+    }
+
+    function applyModeUI(){
+      const mode = modeEl.value;
+      if (modeLabelEl) modeLabelEl.textContent = (mode === "mono") ? "Monohybrid" : "Dihybrid";
+      const show2 = (mode === "di");
+      p1bWrap.style.display = show2 ? "" : "none";
+      p2bWrap.style.display = show2 ? "" : "none";
+
+      if (p1PrefixEl) p1PrefixEl.style.display = show2 ? "inline-flex" : "none";
+      if (p2PrefixEl) p2PrefixEl.style.display = show2 ? "inline-flex" : "none";
+
+      if (presetEl.value === "both" && mode !== "di") modeEl.value = "di";
+      updateParentLabelGenotypes();
+    }
+
+    function setupGenotypeSelects(){
+      const g1 = genotypeOptions(trait.gene1.dom, trait.gene1.rec);
+      const g2 = genotypeOptions(trait.gene2.dom, trait.gene2.rec);
+      fillSelect(p1El, g1, g1[1]);
+      fillSelect(p2El, g1, g1[1]);
+      fillSelect(p1bEl, g2, g2[1]);
+      fillSelect(p2bEl, g2, g2[1]);
+      updateParentLabelGenotypes();
+    }
+
+    // ---------------- Gallery ----------------
+    function renderPhenoGallery(){
+      const mode = modeEl.value;
+      const items = [];
+      if (mode === "mono"){
+        items.push({ title: trait.gene1.domPheno, sub: "dominant (mind. ein dominantes Allel)", icon: iconIdForPheno(trait.gene1.domPheno) });
+        items.push({ title: trait.gene1.recPheno, sub: "rezessiv (nur rezessive Allele)", icon: iconIdForPheno(trait.gene1.recPheno) });
+      } else {
+        items.push({ title: "Gelb & Rund", sub:"beide dominant", icon:"ico-yr" });
+        items.push({ title: "Gelb & Runzlig", sub:"Farbe dom., Form rez.", icon:"ico-yw" });
+        items.push({ title: "Grün & Rund", sub:"Farbe rez., Form dom.", icon:"ico-gr" });
+        items.push({ title: "Grün & Runzlig", sub:"beide rezessiv", icon:"ico-gw" });
+      }
+      phenoGalleryEl.innerHTML = "";
+      for (const it of items){
+        const div = document.createElement("div");
+        div.className = "tile";
+        div.innerHTML = `
+          <div class="iconBox">
+            <button type="button" data-zoom="1" data-icon="${it.icon}" data-label="${escapeHtml(it.title)}"
+                    style="border:0;background:transparent;padding:0;cursor:pointer;display:grid;place-items:center">
+              <svg aria-hidden="true"><use href="#${it.icon}"></use></svg>
+            </button>
+            <span class="zoomHint">⤢</span>
+          </div>
+          <div>
+            <p class="tTitle">${escapeHtml(it.title)}</p>
+            <p class="tSub">${escapeHtml(it.sub)}</p>
+          </div>
+        `;
+        phenoGalleryEl.appendChild(div);
+      }
+    }
+
+    // ---------------- Practice: input normalize & check ----------------
+    function isGametePractice(){ return practiceModeEl.value === "gametes"; }
+
+    function normalizeEnteredGameteMono(s){
+      const x = (s||"").trim();
+      if (!x || x.length !== 1) return null;
+      const a = x[0];
+      return (a === trait.gene1.dom || a === trait.gene1.rec) ? a : null;
+    }
+
+    function normalizeEnteredGameteDi(s){
+      const x = (s||"").trim();
+      if (!x || x.length !== 2) return null;
+      const a = x[0], b = x[1];
+      const g1set = new Set([trait.gene1.dom, trait.gene1.rec]);
+      const g2set = new Set([trait.gene2.dom, trait.gene2.rec]);
+
+      // accept either order, normalize to gene1+gene2
+      let g1 = null, g2 = null;
+      if (g1set.has(a) && g2set.has(b)){ g1 = a; g2 = b; }
+      else if (g2set.has(a) && g1set.has(b)){ g1 = b; g2 = a; }
+      else return null;
+
+      return g1 + g2;
+    }
+
+    // multiset membership (duplicates ok), returns per-input correctness
+    function scoreMultiset(expectedArr, enteredNormArr){
+      const counts = new Map();
+      expectedArr.forEach(g => counts.set(g, (counts.get(g)||0)+1));
+      const ok = new Array(enteredNormArr.length).fill(false);
+      for (let i=0;i<enteredNormArr.length;i++){
+        const v = enteredNormArr[i];
+        if (!v) continue;
+        const c = counts.get(v)||0;
+        if (c > 0){
+          ok[i] = true;
+          counts.set(v, c-1);
+        }
+      }
+      return ok;
+    }
+
+    function clearInputMarks(){
+      const inputs = [...document.querySelectorAll("input.gamInput")];
+      inputs.forEach(i=>i.classList.remove("good","bad"));
+    }
+
+    function checkGametes(){
+      if (!isGametePractice()) return;
+
+      clearInputMarks();
+
+      const rowNorm = enteredRow.map(v => (modeEl.value === "mono") ? normalizeEnteredGameteMono(v) : normalizeEnteredGameteDi(v));
+      const colNorm = enteredCol.map(v => (modeEl.value === "mono") ? normalizeEnteredGameteMono(v) : normalizeEnteredGameteDi(v));
+
+      const rowOK = scoreMultiset(currentExpectedRowGametes, rowNorm);
+      const colOK = scoreMultiset(currentExpectedColGametes, colNorm);
+
+      const rowInputs = [...document.querySelectorAll('input.gamInput[data-gam="row"]')].sort((a,b)=>+a.dataset.idx-+b.dataset.idx);
+      const colInputs = [...document.querySelectorAll('input.gamInput[data-gam="col"]')].sort((a,b)=>+a.dataset.idx-+b.dataset.idx);
+
+      let allFilled = true;
+      let allCorrect = true;
+
+      for (let i=0;i<rowInputs.length;i++){
+        if (!rowNorm[i]) allFilled = false;
+        rowInputs[i].classList.add(rowOK[i] ? "good" : "bad");
+        if (!rowOK[i]) allCorrect = false;
+      }
+      for (let i=0;i<colInputs.length;i++){
+        if (!colNorm[i]) allFilled = false;
+        colInputs[i].classList.add(colOK[i] ? "good" : "bad");
+        if (!colOK[i]) allCorrect = false;
+      }
+
+      if (!allFilled){
+        gametesUnlocked = false;
+        gameteCheckMsg.innerHTML = `<span class="bad">Unvollständig:</span> Bitte alle Keimzellen ausfüllen.`;
+        updatePunnettCellsLockedState();
+        return;
+      }
+
+      if (allCorrect){
+        gametesUnlocked = true;
+        gameteCheckMsg.innerHTML = `<span class="ok">✓ korrekt:</span> Nachkommen-Zellen sind freigeschaltet.`;
+        // freeze inputs for this round (optional, but helps classroom flow)
+        setGameteInputsDisabled(true);
+      } else {
+        gametesUnlocked = false;
+        gameteCheckMsg.innerHTML = `<span class="bad">✗ noch nicht:</span> Einige Keimzellen sind falsch.`;
+        setGameteInputsDisabled(false);
+      }
+
+      updatePunnettCellsLockedState();
+    }
+
+    function setGameteInputsDisabled(disabled){
+      const inputs = [...document.querySelectorAll("input.gamInput")];
+      inputs.forEach(i => i.disabled = disabled);
+    }
+
+    function clearGameteInputs(){
+      enteredRow = enteredRow.map(()=> "");
+      enteredCol = enteredCol.map(()=> "");
+      gametesUnlocked = false;
+      setGameteInputsDisabled(false);
+      clearInputMarks();
+
+      // push state to DOM (without rebuilding)
+      const rowInputs = [...document.querySelectorAll('input.gamInput[data-gam="row"]')].sort((a,b)=>+a.dataset.idx-+b.dataset.idx);
+      const colInputs = [...document.querySelectorAll('input.gamInput[data-gam="col"]')].sort((a,b)=>+a.dataset.idx-+b.dataset.idx);
+      rowInputs.forEach((inp,i)=> inp.value = enteredRow[i] || "");
+      colInputs.forEach((inp,i)=> inp.value = enteredCol[i] || "");
+
+      gameteCheckMsg.innerHTML = "Trage alle Keimzellen ein und klicke Keimzellen prüfen.";
+      updatePunnettCellsLockedState();
+      statusLineEl.textContent = "Eingaben gelöscht (Übungsmodus).";
+    }
+
+    // ---------------- Punnett build & update ----------------
+    function cell(text, isHeader=false){
+      const c = document.createElement("div");
+      c.className = "cell" + (isHeader ? " header" : "");
+      c.textContent = text;
+      return c;
+    }
+
+    function expandSlots(arr, targetLen){
+  const a = Array.isArray(arr) ? arr : [];
+  if (a.length === 0) return Array(targetLen).fill("");
+  if (a.length === targetLen) return a.slice();
+  const out = [];
+  for (let i=0;i<targetLen;i++){
+    out.push(a[i % a.length]);
+  }
+  return out;
+}
+
+function currentGameteSlots(){
+  // IMPORTANT: Für die Unterrichtskohärenz werden Punnett-Quadrate immer vollständig angezeigt:
+  // - Monohybrid: 2×2 (Gameten ggf. dupliziert)
+  // - Dihybrid: 4×4 (Gameten ggf. dupliziert)
+  if (modeEl.value === "mono"){
+    const r0 = gameteSlotsMono(p1El.value, trait.gene1.dom, trait.gene1.rec);
+    const c0 = gameteSlotsMono(p2El.value, trait.gene1.dom, trait.gene1.rec);
+    return { row: expandSlots(r0, 2), col: expandSlots(c0, 2) };
+  } else {
+    const r0 = gameteSlotsDi(p1El.value, trait.gene1.dom, trait.gene1.rec, p1bEl.value, trait.gene2.dom, trait.gene2.rec);
+    const c0 = gameteSlotsDi(p2El.value, trait.gene1.dom, trait.gene1.rec, p2bEl.value, trait.gene2.dom, trait.gene2.rec);
+    return { row: expandSlots(r0, 4), col: expandSlots(c0, 4) };
+  }
+}
+
+function expectedFromOutcomes(outcomes, phenoFn){
+      const counts = {};
+      for (const g of outcomes){
+        const p = phenoFn(g);
+        counts[p] = (counts[p]||0) + 1;
+      }
+      return counts;
+    }
+
+    function buildPunnett(){
+      applyModeUI();
+      renderPhenoGallery();
+
+      punnettEl.innerHTML = "";
+      punnettOutcomes = [];
+      expectedPhenoCounts = {};
+
+      // practice mode scaffolding
+      gameteCheckLine.style.display = isGametePractice() ? "" : "none";
+      if (!isGametePractice()){
+        gametesUnlocked = true;
+      } else {
+        gametesUnlocked = false;
+        gameteCheckMsg.innerHTML = "Trage alle Keimzellen ein und klicke Keimzellen prüfen.";
+        setGameteInputsDisabled(false);
+      }
+
+      const { row, col } = currentGameteSlots();
+      currentExpectedRowGametes = row.slice();
+      currentExpectedColGametes = col.slice();
+
+      // ensure entered arrays sized correctly (preserve values where possible)
+      const rowLen = row.length;
+      const colLen = col.length;
+      enteredRow = (enteredRow.length === rowLen) ? enteredRow : Array(rowLen).fill("");
+      enteredCol = (enteredCol.length === colLen) ? enteredCol : Array(colLen).fill("");
+
+      gameteLineEl.textContent = `Keimzellen (E1): ${row.join(", ")} | Keimzellen (E2): ${col.join(", ")}`;
+
+      const cols = 1 + col.length;
+      const pgrid = document.createElement("div");
+      pgrid.className = "pgrid";
+      pgrid.style.gridTemplateColumns = `repeat(${cols}, minmax(0,1fr))`;
+      // top-left
+      pgrid.appendChild(cell(" ", true));
+
+      // column headers
+      for (let j=0;j<col.length;j++){
+        if (isGametePractice()){
+          const h = document.createElement("div");
+          h.className = "cell header";
+          h.innerHTML = `<div>
+            <div class="mini" style="margin-bottom:6px">E2</div>
+            <input class="gamInput" data-gam="col" data-idx="${j}" placeholder="?" maxlength="${modeEl.value==='mono'?1:2}" />
+          </div>`;
+          pgrid.appendChild(h);
+        } else {
+          pgrid.appendChild(cell("E2: " + col[j], true));
+        }
+      }
+
+      // rows + cells
+      for (let i=0;i<row.length;i++){
+        if (isGametePractice()){
+          const h = document.createElement("div");
+          h.className = "cell header";
+          h.innerHTML = `<div>
+            <div class="mini" style="margin-bottom:6px">E1</div>
+            <input class="gamInput" data-gam="row" data-idx="${i}" placeholder="?" maxlength="${modeEl.value==='mono'?1:2}" />
+          </div>`;
+          pgrid.appendChild(h);
+        } else {
+          pgrid.appendChild(cell("E1: " + row[i], true));
+        }
+
+        for (let j=0;j<col.length;j++){
+          let off = "";
+          let ph = "";
+
+          if (modeEl.value === "mono"){
+            off = offspringFromGametesMono(row[i], col[j], trait.gene1.dom, trait.gene1.rec);
+            ph  = phenotypeMono(off);
+          } else {
+            off = offspringFromGametesDi(row[i], col[j], trait.gene1.dom, trait.gene1.rec, trait.gene2.dom, trait.gene2.rec);
+            ph  = phenotypeDi(off);
+          }
+
+          punnettOutcomes.push(off);
+
+          const c = document.createElement("div");
+          c.className = "cell";
+          // store content for later unlock without rebuilding
+          c.dataset.kind = "offspring";
+          c.dataset.geno = off;
+          c.dataset.pheno = ph;
+
+          pgrid.appendChild(c);
+        }
+      }
+
+      punnettEl.appendChild(pgrid);
+
+      // Write back entered values to inputs (FIX: they stay visible)
+      if (isGametePractice()){
+        const rowInputs = [...document.querySelectorAll('input.gamInput[data-gam="row"]')].sort((a,b)=>+a.dataset.idx-+b.dataset.idx);
+        const colInputs = [...document.querySelectorAll('input.gamInput[data-gam="col"]')].sort((a,b)=>+a.dataset.idx-+b.dataset.idx);
+        rowInputs.forEach((inp,i)=> inp.value = enteredRow[i] || "");
+        colInputs.forEach((inp,i)=> inp.value = enteredCol[i] || "");
+
+        // inputs update state
+        rowInputs.forEach((inp,i)=>{
+          inp.addEventListener("input", ()=>{ enteredRow[i] = inp.value; inp.classList.remove("good","bad"); });
+        });
+        colInputs.forEach((inp,i)=>{
+          inp.addEventListener("input", ()=>{ enteredCol[i] = inp.value; inp.classList.remove("good","bad"); });
+        });
+      }
+
+      expectedPhenoCounts = expectedFromOutcomes(
+        punnettOutcomes,
+        modeEl.value === "mono" ? phenotypeMono : phenotypeDi
+      );
+
+      expectedRatioEl.textContent = ratioString(expectedPhenoCounts);
+      observedRatioEl.textContent = ratioString(simPhenoCounts);
+
+      updatePunnettCellsLockedState();
+
+      statusLineEl.textContent = isGametePractice()
+        ? "Übungsmodus aktiv: Keimzellen eintragen → prüfen → Punnett freischalten."
+        : "Punnett-Quadrat aktualisiert. Starte die Simulation.";
+
+      renderBarsAndTable();
+      chResultEl.textContent = "";
+      updateParentLabelGenotypes();
+    }
+
+    function updatePunnettCellsLockedState(){
+      const cells = [...document.querySelectorAll('.cell[data-kind="offspring"]')];
+      const locked = isGametePractice() && !gametesUnlocked;
+
+      for (const c of cells){
+        if (locked){
+          c.innerHTML = `<div class="maskedCell">Nachkomme: <b>gesperrt</b></div>`;
+        } else {
+          const off = c.dataset.geno || "";
+          const ph = c.dataset.pheno || "";
+          c.innerHTML = `<div>
+            <div class="geno">${escapeHtml(off)}</div>
+            <div class="pheno">${phenoInlineButton(ph)}</div>
+          </div>`;
+        }
+      }
+    }
+
+    // ---------------- Simulation ----------------
+    function resetSim(){
+      simGenoCounts = {};
+      simPhenoCounts = {};
+      simTrials = 0;
+      trialCountEl.textContent = "0";
+      observedRatioEl.textContent = ratioString(simPhenoCounts);
+      statusLineEl.textContent = "Zähler zurückgesetzt.";
+      renderBarsAndTable();
+      chResultEl.textContent = "";
+    }
+    function record(geno, pheno){
+      simGenoCounts[geno] = (simGenoCounts[geno]||0) + 1;
+      simPhenoCounts[pheno] = (simPhenoCounts[pheno]||0) + 1;
+    }
+    function runSim(){
+      if (isGametePractice() && !gametesUnlocked){
+        statusLineEl.textContent = "Übungsmodus: Bitte zuerst Keimzellen korrekt eintragen und prüfen.";
+        return;
+      }
+
+      if (!punnettOutcomes.length){
+        statusLineEl.textContent = "Bitte zuerst das Punnett-Quadrat über \"Punnett erzeugen\" erstellen.";
+        return;
+      }
+
+      const n = clampInt(parseInt(nOffEl.value || "0", 10), 1, 20000);
+      nOffEl.value = n;
+
+      const { row, col } = currentGameteSlots();
+
+      if (modeEl.value === "mono"){
+        for (let k=0;k<n;k++){
+          const a = row[randInt(row.length)];
+          const b = col[randInt(col.length)];
+          const off = offspringFromGametesMono(a,b, trait.gene1.dom, trait.gene1.rec);
+          record(off, phenotypeMono(off));
+        }
+      } else {
+        for (let k=0;k<n;k++){
+          const a = row[randInt(row.length)];
+          const b = col[randInt(col.length)];
+          const off = offspringFromGametesDi(a,b, trait.gene1.dom, trait.gene1.rec, trait.gene2.dom, trait.gene2.rec);
+          record(off, phenotypeDi(off));
+        }
+      }
+
+      simTrials += n;
+      trialCountEl.textContent = String(simTrials);
+      observedRatioEl.textContent = ratioString(simPhenoCounts);
+      statusLineEl.textContent = `Simulation gelaufen: +${n} (gesamt ${simTrials}).`;
+      renderBarsAndTable();
+      chResultEl.textContent = "";
+    }
+
+    function renderBarsAndTable(){
+      let phenoKeys = [];
+      if (modeEl.value === "di"){
+        phenoKeys = ["Gelb & Rund", "Gelb & Runzlig", "Grün & Rund", "Grün & Runzlig"]
+          .filter(k => (k in expectedPhenoCounts) || (k in simPhenoCounts));
+      } else {
+        const expectedKeys = Object.keys(expectedPhenoCounts);
+        phenoKeys = expectedKeys.length ? expectedKeys : Object.keys(simPhenoCounts);
+      }
+
+      const total = simTrials || 0;
+      barsEl.innerHTML = "";
+      const maxCount = Math.max(1, ...phenoKeys.map(k => simPhenoCounts[k]||0));
+
+      for (const k of phenoKeys){
+        const count = simPhenoCounts[k]||0;
+        const pct = total ? (100*count/total) : 0;
+        const iconId = iconIdForPheno(k);
+
+        const row = document.createElement("div");
+        row.className = "barRow";
+        row.innerHTML = `
+          <div class="k">
+            <button type="button" data-zoom="1" data-icon="${iconId}" data-label="${escapeHtml(k)}">
+              <svg aria-hidden="true"><use href="#${iconId}"></use></svg>
+              <span>${escapeHtml(k)}</span>
+            </button>
+          </div>
+          <div class="bar"><div class="fill" style="width:${Math.round(100*count/maxCount)}%"></div></div>
+          <div class="v">${count} (${pct.toFixed(1)}%)</div>
+        `;
+        barsEl.appendChild(row);
+      }
+
+      genoBodyEl.innerHTML = "";
+      const entries = Object.entries(simGenoCounts).sort((a,b)=>b[1]-a[1]);
+
+      if (!entries.length){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="3" style="color:rgba(201,194,178,1)">Noch keine simulierten Nachkommen.</td>`;
+        genoBodyEl.appendChild(tr);
+        return;
+      }
+
+      for (const [g,c] of entries){
+        const pct = total ? (100*c/total) : 0;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td><span class="geno">${escapeHtml(g)}</span></td><td>${c}</td><td>${pct.toFixed(1)}%</td>`;
+        genoBodyEl.appendChild(tr);
+      }
+    }
+
+    // ---------------- Journal (Export) ----------------
+    function currentCrossString(){
+      if (modeEl.value === "mono"){
+        return `${p1El.value} × ${p2El.value} (${trait.gene1.name})`;
+      }
+      return `${p1El.value}${p1bEl.value} × ${p2El.value}${p2bEl.value} (${trait.gene1.name} + ${trait.gene2.name})`;
+    }
+
+    function renderLog(){
+      logBodyEl.innerHTML = "";
+      if (!logEntries.length){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="5" style="color:rgba(201,194,178,1)">Noch keine Messreihen im Journal.</td>`;
+        logBodyEl.appendChild(tr);
+        return;
+      }
+      logEntries.forEach((e, idx)=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="monoSpace">${idx+1}</td>
+          <td>${escapeHtml(e.cross)}</td>
+          <td class="monoSpace">${e.n}</td>
+          <td>${escapeHtml(e.ratio)}</td>
+          <td>
+            <textarea data-note-idx="${idx}" placeholder="Kurznotiz (z. B. Hypothese / Auffälligkeit)">${escapeHtml(e.note)}</textarea>
+          </td>
+        `;
+        logBodyEl.appendChild(tr);
+      });
+    }
+
+    function notesToStateFromDOM(){
+      const notes = document.querySelectorAll("textarea[data-note-idx]");
+      notes.forEach(t=>{
+        const i = parseInt(t.getAttribute("data-note-idx"), 10);
+        if (Number.isInteger(i) && logEntries[i]) logEntries[i].note = t.value;
+      });
+    }
+
+    function journalToCSV(){
+      notesToStateFromDOM();
+      const lines = [];
+      lines.push(["#", "Kreuzung", "n", "Beobachtet", "Notiz"].join(";"));
+      logEntries.forEach((e, idx)=>{
+        const row = [
+          String(idx+1),
+          e.cross.replaceAll(";", ","),
+          String(e.n),
+          e.ratio.replaceAll(";", ","),
+          (e.note||"").replaceAll("\n"," ").replaceAll(";", ",")
+        ];
+        lines.push(row.join(";"));
+      });
+      return lines.join("\n");
+    }
+
+    async function copyText(txt){
+      try{
+        await navigator.clipboard.writeText(txt);
+        return true;
+      }catch(e){
+        return false;
+      }
+    }
+
+    function addLogEntry(){
+      if (simTrials <= 0){
+        logMsgEl.textContent = "Keine Simulationsergebnisse vorhanden. Bitte erst simulieren.";
+        return;
+      }
+      logEntries.push({
+        cross: currentCrossString(),
+        n: simTrials,
+        ratio: ratioString(simPhenoCounts),
+        note: ""
+      });
+      renderLog();
+      logMsgEl.textContent = `Messreihe gespeichert (#${logEntries.length}).`;
+    }
+
+    // ---------------- Challenges ----------------
+    const challenges = [
+      {
+        id: "c1",
+        title: "1:1-Phänotyp-Verhältnis finden",
+        desc: "Finde eine monohybride Kreuzung, die in der Beobachtung ein 1:1-Verhältnis der zwei Phänotypen ergibt (bei ausreichendem n).",
+        req: "Modus: Monohybrid. Tipp: Denke an Testkreuzungen. Simulation ≥200 empfohlen.",
+        requiresMode: "mono",
+        check: () => {
+          if (modeEl.value !== "mono" || simTrials < 50) return null;
+          const rr = reducedRatioArray(simPhenoCounts);
+          return rr.length === 2 && rr[0] === 1 && rr[1] === 1;
+        }
+      },
+      {
+        id: "c2",
+        title: "100% dominanter Phänotyp – aber nicht genetisch uniform",
+        desc: "Finde eine monohybride Kreuzung, bei der alle Nachkommen den dominanten Phänotyp zeigen, aber nicht alle denselben Genotyp besitzen.",
+        req: "Modus: Monohybrid. Simulation ≥200 empfohlen.",
+        requiresMode: "mono",
+        check: () => {
+          if (modeEl.value !== "mono" || simTrials < 50) return null;
+          const phKeys = Object.keys(simPhenoCounts).filter(k => simPhenoCounts[k] > 0);
+          if (phKeys.length !== 1) return false;
+          if (phKeys[0] !== trait.gene1.domPheno) return false;
+          const genoKeys = Object.keys(simGenoCounts).filter(k => simGenoCounts[k] > 0);
+          return genoKeys.length >= 2;
+        }
+      },
+      {
+        id: "c3",
+        title: "Vier Phänotyp-Klassen erzeugen",
+        desc: "Finde eine dihybride Kreuzung, bei der in der Beobachtung alle vier Phänotyp-Klassen auftreten.",
+        req: "Modus: Dihybrid. Simulation ≥1000 empfohlen.",
+        requiresMode: "di",
+        check: () => {
+          if (modeEl.value !== "di" || simTrials < 200) return null;
+          const keys = Object.keys(simPhenoCounts).filter(k => simPhenoCounts[k] > 0);
+          return keys.length === 4;
+        }
+      }
+    ];
+
+    function pickNewChallenge(){
+      currentChallenge = challenges[randInt(challenges.length)];
+      chTitleEl.textContent = currentChallenge.title;
+      chDescEl.textContent  = currentChallenge.desc;
+      chReqEl.textContent   = "Anforderung: " + currentChallenge.req;
+      chResultEl.textContent= "";
+    }
+
+    function checkChallenge(){
+      if (!currentChallenge) pickNewChallenge();
+
+      if (currentChallenge.requiresMode && modeEl.value !== currentChallenge.requiresMode){
+        chResultEl.innerHTML = `<span class="no">Nicht passend:</span> Bitte auf <b>${currentChallenge.requiresMode === "mono" ? "Monohybrid" : "Dihybrid"}</b> umstellen.`;
+        return;
+      }
+      const res = currentChallenge.check();
+      if (res === null){
+        chResultEl.innerHTML = `<span class="mini">Noch nicht auswertbar: bitte simulieren (größeres n).</span>`;
+        return;
+      }
+      chResultEl.innerHTML = res ? `<span class="ok">✓ erfüllt</span>` : `<span class="no">✗ noch nicht</span>`;
+    }
+
+    
+    // ---------------- Notizen (global) ----------------
+    const NOTES_KEY = "mendel_globalNotes_v1";
+    if (globalNotesEl){
+      globalNotesEl.value = localStorage.getItem(NOTES_KEY) || "";
+      globalNotesEl.addEventListener("input", ()=>{
+        try{ localStorage.setItem(NOTES_KEY, globalNotesEl.value || ""); }catch(e){}
+      });
+    }
+
+    // ---------------- PDF Export (Druck → Als PDF speichern) ----------------
+    function formatNowDE(){
+      try{
+        return new Date().toLocaleString("de-DE");
+      }catch(e){
+        return String(new Date());
+      }
+    }
+
+    function expectedCellTotal(){
+      // punnettOutcomes wird in buildPunnett gefüllt; fallback aus Gameten
+      if (punnettOutcomes && punnettOutcomes.length) return punnettOutcomes.length;
+      const { row, col } = currentGameteSlots();
+      return (row.length * col.length);
+    }
+
+    function buildPunnettTableHTML(){
+      const { row, col } = currentGameteSlots();
+      let html = '<table class="printTable"><thead><tr><th></th>';
+      for (const g of col){
+        html += `<th>E2: ${escapeHtml(g)}</th>`;
+      }
+      html += '</tr></thead><tbody>';
+      for (const rg of row){
+        html += `<tr><th>E1: ${escapeHtml(rg)}</th>`;
+        for (const cg of col){
+          let off = "";
+          let ph = "";
+          if (modeEl.value === "mono"){
+            off = offspringFromGametesMono(rg, cg, trait.gene1.dom, trait.gene1.rec);
+            ph  = phenotypeMono(off);
+          } else {
+            off = offspringFromGametesDi(rg, cg, trait.gene1.dom, trait.gene1.rec, trait.gene2.dom, trait.gene2.rec);
+            ph  = phenotypeDi(off);
+          }
+          html += `<td><div><b>${escapeHtml(off)}</b><div class="printSmall">${escapeHtml(ph)}</div></div></td>`;
+        }
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function phenotypeDistributionRows(){
+      const keys = new Set([
+        ...Object.keys(expectedPhenoCounts||{}),
+        ...Object.keys(simPhenoCounts||{})
+      ]);
+      const arr = [...keys];
+      // sort: expected desc, then observed desc, then name
+      arr.sort((a,b)=>{
+        const ea = (expectedPhenoCounts[a]||0), eb = (expectedPhenoCounts[b]||0);
+        if (eb !== ea) return eb - ea;
+        const oa = (simPhenoCounts[a]||0), ob = (simPhenoCounts[b]||0);
+        if (ob !== oa) return ob - oa;
+        return String(a).localeCompare(String(b), "de-DE");
+      });
+      return arr;
+    }
+
+    function buildPhenoDistTableHTML(){
+      const totalObs = simTrials || 0;
+      const totalExp = expectedCellTotal();
+      const keys = phenotypeDistributionRows();
+      if (!keys.length){
+        return `<div class="printSmall">Keine Daten vorhanden.</div>`;
+      }
+      let html = '<table class="printTable"><thead><tr><th>Phänotyp</th><th>Erwartet (Punnett)</th><th>Beobachtet</th></tr></thead><tbody>';
+      for (const k of keys){
+        const e = expectedPhenoCounts[k]||0;
+        const ePct = totalExp ? (100*e/totalExp) : 0;
+        const o = simPhenoCounts[k]||0;
+        const oPct = totalObs ? (100*o/totalObs) : 0;
+        html += `<tr>
+          <td>${escapeHtml(k)}</td>
+          <td>${e} (${ePct.toFixed(1)}%)</td>
+          <td>${o} ${totalObs ? `(${oPct.toFixed(1)}%)` : ""}</td>
+        </tr>`;
+      }
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function buildGenoDistTableHTML(){
+      const totalObs = simTrials || 0;
+      const entries = Object.entries(simGenoCounts||{}).sort((a,b)=>b[1]-a[1]);
+      if (!entries.length){
+        return `<div class="printSmall">Noch keine simulierten Nachkommen.</div>`;
+      }
+      let html = '<table class="printTable"><thead><tr><th>Genotyp</th><th>Anzahl</th><th>Anteil</th></tr></thead><tbody>';
+      for (const [g,c] of entries){
+        const pct = totalObs ? (100*c/totalObs) : 0;
+        html += `<tr><td><b>${escapeHtml(g)}</b></td><td>${c}</td><td>${pct.toFixed(1)}%</td></tr>`;
+      }
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function buildJournalTableHTML(){
+      notesToStateFromDOM();
+      if (!logEntries.length){
+        return `<div class="printSmall">Journal ist leer.</div>`;
+      }
+      let html = '<table class="printTable"><thead><tr><th>#</th><th>Kreuzung</th><th>n</th><th>Beobachtet</th><th>Notiz</th></tr></thead><tbody>';
+      logEntries.forEach((e, idx)=>{
+        html += `<tr>
+          <td>${idx+1}</td>
+          <td>${escapeHtml(e.cross)}</td>
+          <td>${escapeHtml(String(e.n))}</td>
+          <td>${escapeHtml(e.ratio)}</td>
+          <td>${escapeHtml(e.note||"")}</td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function exportPDF(){
+      // ensure punnett + expected counts exist
+      if (!punnettOutcomes.length){
+        statusLineEl.textContent = "Bitte zuerst das Punnett-Quadrat über \"Punnett erzeugen\" erstellen.";
+        return;
+      }
+      notesToStateFromDOM();
+
+      const modeName = (modeEl.value === "mono") ? "Monohybrid" : "Dihybrid";
+      const traitName = (modeEl.value === "mono")
+        ? trait.gene1.name
+        : (trait.gene1.name + " + " + trait.gene2.name);
+
+      const cross = currentCrossString();
+      const now = formatNowDE();
+
+      const expRatio = ratioString(expectedPhenoCounts||{});
+      const obsRatio = ratioString(simPhenoCounts||{});
+
+      const warn = (isGametePractice() && !gametesUnlocked)
+        ? `<div class="printWarn"><b>Hinweis:</b> Übungsmodus war nicht freigeschaltet; der Export zeigt das vollständige Punnett-Quadrat (Lehrkraftauswertung).</div>`
+        : "";
+
+      const globalNotes = (globalNotesEl && globalNotesEl.value) ? globalNotesEl.value : "";
+
+      if (!printAreaEl) return;
+
+      printAreaEl.setAttribute("aria-hidden","false");
+      printAreaEl.innerHTML = `
+        <div>
+          <div class="printH1">Mendelsche Regeln – Simulationsergebnis</div>
+          <div class="printMeta">
+            <b>Datum/Zeit:</b> ${escapeHtml(now)} ·
+            <b>Modus:</b> ${escapeHtml(modeName)} ·
+            <b>Merkmal(e):</b> ${escapeHtml(traitName)} ·
+            <b>Kreuzung:</b> ${escapeHtml(cross)}
+          </div>
+
+          ${warn}
+
+          <div class="printSection">
+            <h2>Punnett-Quadrat</h2>
+            ${buildPunnettTableHTML()}
+          </div>
+
+          <div class="printSection">
+            <h2>Verhältnisse</h2>
+            <div class="printSmall"><b>Erwartet (Punnett):</b> ${escapeHtml(expRatio)}</div>
+            <div class="printSmall"><b>Beobachtet (Simulation):</b> ${escapeHtml(obsRatio)} · <b>Versuche:</b> ${escapeHtml(String(simTrials||0))}</div>
+          </div>
+
+          <div class="printSection">
+            <h2>Phänotyp-Verteilung</h2>
+            ${buildPhenoDistTableHTML()}
+          </div>
+
+          <div class="printSection">
+            <h2>Genotyp-Verteilung (Simulation)</h2>
+            ${buildGenoDistTableHTML()}
+          </div>
+
+          <div class="printSection">
+            <h2>Notizen</h2>
+            <div class="printNoteBlock">${escapeHtml(globalNotes || "—")}</div>
+          </div>
+
+          <div class="printSection">
+            <h2>Laborjournal</h2>
+            ${buildJournalTableHTML()}
+          </div>
+
+          <div class="printSmall" style="margin-top:12px">
+            Tipp: Im Druckdialog <b>„Als PDF speichern“</b> wählen.
+          </div>
+        </div>
+      `;
+
+      window.print();
+
+      // keep printArea content for quick re-export; hide from screen
+      printAreaEl.setAttribute("aria-hidden","true");
+    }
+
+// ---------------- Wiring ----------------
+    function clearPunnettView(){
+      punnettEl.innerHTML = "";
+      punnettOutcomes = [];
+      expectedPhenoCounts = {};
+      gameteLineEl.textContent = "—";
+      expectedRatioEl.textContent = "—";
+      // observed ratio comes from simulation; resetSim() is called on changes
+      renderBarsAndTable();
+    }
+
+    function onCrossChanged(message){
+      // any change invalidates the current punnett until the user rebuilds it explicitly
+      enteredRow = [];
+      enteredCol = [];
+      gametesUnlocked = !isGametePractice();
+
+      clearPunnettView();
+      resetSim();
+
+      statusLineEl.textContent = message || 'Kreuzung geändert → "Punnett erzeugen" klicken.';
+      chResultEl.textContent = "";
+    }
+
+    function rebuildAll(){
+      setTraitFromPreset();
+      applyModeUI();
+      setupGenotypeSelects();
+      renderPhenoGallery();
+
+      onCrossChanged('Einstellungen aktualisiert → "Punnett erzeugen" klicken.');
+
+      pickNewChallenge();
+      renderLog();
+    }
+
+    practiceModeEl.addEventListener("change", ()=>{
+      onCrossChanged('Arbeitsmodus geändert → "Punnett erzeugen" klicken.');
+    });
+
+    modeEl.addEventListener("change", ()=>{
+      applyModeUI();
+      renderPhenoGallery();
+      onCrossChanged('Kreuzungstyp geändert → "Punnett erzeugen" klicken.');
+      pickNewChallenge();
+    });
+
+    presetEl.addEventListener("change", rebuildAll);
+
+    [p1El,p2El,p1bEl,p2bEl].forEach(el=>{
+      el.addEventListener("change", ()=>{
+        // keep the combined genotype line in sync immediately
+        updateParentLabelGenotypes();
+        onCrossChanged('Eltern-Genotyp geändert → "Punnett erzeugen" klicken.');
+      });
+    });
+
+    btnBuild.addEventListener("click", ()=>{
+      buildPunnett();
+      // buildPunnett sets statusLine itself
+    });
+    btnRun.addEventListener("click", runSim);
+    btnReset.addEventListener("click", resetSim);
+
+    btnCheckGametes.addEventListener("click", checkGametes);
+    btnClearGametes.addEventListener("click", clearGameteInputs);
+
+    // Journal
+    btnLogRun.addEventListener("click", addLogEntry);
+    btnClearLog.addEventListener("click", ()=>{
+      logEntries.length = 0;
+      renderLog();
+      logMsgEl.textContent = "Journal geleert.";
+    });
+    if (btnCopyCSV) {
+    btnCopyCSV.addEventListener("click", async ()=>{
+      if (!logEntries.length){
+        logMsgEl.textContent = "Journal ist leer.";
+        return;
+      }
+      const csv = journalToCSV();
+      const ok = await copyText(csv);
+      logMsgEl.textContent = ok ? "CSV kopiert (Semikolon-getrennt)." : "Kopieren nicht möglich. Markieren und Strg+C.";
+    });
+
+
+        }
+    // PDF Export
+    if (btnExportPDF){
+      btnExportPDF.addEventListener("click", exportPDF);
+    }
+    document.addEventListener("input", (e)=>{
+      const t = e.target;
+      if (t && t.matches("textarea[data-note-idx]")){
+        const i = parseInt(t.getAttribute("data-note-idx"), 10);
+        if (Number.isInteger(i) && logEntries[i]) logEntries[i].note = t.value;
+      }
+    });
+
+    // Challenges
+    btnNewChallenge.addEventListener("click", pickNewChallenge);
+    btnCheckChallenge.addEventListener("click", checkChallenge);
+
+    // ---------------- Init ----------------
+    (function init(){
+      renderLog();
+      pickNewChallenge();
+      rebuildAll(); // intentionally does NOT build punnett automatically
+    })();
+  });
+</script>
+</body>
+</html>
