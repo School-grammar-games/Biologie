@@ -1,0 +1,1521 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Käfer unter Druck</title>
+  <style>
+    :root{
+      --bg: #e9e2d6;
+      --paper: #f6efe3;
+      --panel: rgba(255,255,255,0.78);
+      --accent2: #0ea5e9;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: rgba(15,23,42,0.10);
+      --accent: #8b5a2b;
+      --shadow: 0 16px 36px rgba(2,6,23,0.14);
+      --danger: #dc2626;
+    }
+    html,    body{
+      /* Foto-Hintergrund (Datei lokal im Ordner "Hintergrundbilder", Name "Background") */
+      background-image:
+        linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.60) 55%, rgba(255,255,255,0.72) 100%),
+        url("./Hintergrundbilder/Background.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
+      overflow:auto;
+    }
+    .shell{ width:min(1200px, calc(100% - 24px)); margin: 18px auto 28px auto; }
+
+    .topbar{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0.00)),
+        repeating-linear-gradient(90deg,
+          rgba(120,72,20,0.09) 0px,
+          rgba(120,72,20,0.09) 2px,
+          rgba(255,255,255,0.00) 9px,
+          rgba(255,255,255,0.00) 16px),
+        linear-gradient(135deg, rgba(246,231,206,0.90) 0%, rgba(232,205,165,0.90) 55%, rgba(244,226,198,0.90) 100%);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 10px 22px rgba(2,6,23,0.06);
+      padding: 14px 16px;
+      display:flex;
+      gap: 10px 14px;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      backdrop-filter: blur(6px);
+    }
+    .title{ margin:0; font-size: 26px; font-weight: 900; letter-spacing: 0.2px; }
+    .subtitle{ margin:0; color: var(--muted); font-size: 13px; font-weight: 600; max-width: 820px; }
+
+    .grid{ margin-top: 14px; display:grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 1.45fr 0.55fr; align-items: start; }
+    }
+
+    .card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.30), rgba(255,255,255,0.00)),
+        repeating-linear-gradient(90deg,
+          rgba(120,72,20,0.10) 0px,
+          rgba(120,72,20,0.10) 2px,
+          rgba(255,255,255,0.00) 8px,
+          rgba(255,255,255,0.00) 14px),
+        linear-gradient(135deg, rgba(244,217,178,0.92) 0%, rgba(231,192,139,0.92) 45%, rgba(242,211,166,0.92) 100%);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .canvas-wrap{
+      position: relative;
+      width: 100%;
+      height: clamp(420px, 70vh, 760px);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #dde3ea;
+    
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+}
+    @media (max-width: 640px){ .canvas-wrap{ height: 56vh; } }
+    canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+
+
+    /* ===== BG pool exhausted overlay ===== */
+    #bgExhaustedOverlay{
+      position:absolute;
+      inset:0;
+      z-index: 8;
+      display:none;               /* toggled to flex when needed */
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: 24px;
+      background:#000;
+      color:#fff;
+      font-weight: 900;
+      font-size: clamp(20px, 3.2vw, 46px);
+      line-height: 1.15;
+      letter-spacing: 0.2px;
+      white-space: pre-line;
+    }
+    .hud{
+      position:absolute;
+      top:10px; left:10px; right:10px;
+      display:flex; gap: 10px; align-items:center; justify-content: space-between;
+      pointer-events:none; user-select:none; z-index: 3;
+      flex-wrap: wrap;
+    }
+    .pill{
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(15,23,42,0.10);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 900;
+      font-size: 13px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 18px rgba(2,6,23,0.10);
+      white-space: nowrap;
+    }
+    .pill.center{ flex:1; text-align:center; max-width: 520px; margin: 0 auto; }
+
+    #chartView{ display:none; margin-top: 12px; }
+    #chartCard{
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(37,99,235,0.05);
+    }
+    #chartTopRow{
+      display:flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    #chartCard h3{ margin: 0; font-size: 15px; font-weight: 900; }
+    .seg{
+      display:flex;
+      border: 1px solid rgba(15,23,42,0.12);
+      border-radius: 12px;
+      overflow:hidden;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 6px 14px rgba(2,6,23,0.08);
+    }
+    .seg button{
+      border:0;
+      background: transparent;
+      padding: 8px 10px;
+      font-weight: 900;
+      cursor:pointer;
+      box-shadow:none;
+      border-radius: 0;
+      color: rgba(15,23,42,0.75);
+    }
+    .seg button.active{
+      background: rgba(37,99,235,0.12);
+      color: rgba(15,23,42,0.92);
+    }
+
+    #chartCanvas{
+      position: relative;
+      width:100%;
+      height:420px;
+      max-height:60vh;
+      display:block;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(15,23,42,0.10);
+      border-radius: 12px;
+    }
+    .legendNote{ margin-top: 8px; font-size: 12px; color: var(--muted); font-weight: 700; }
+
+    .controls{
+      margin-top: 12px;
+      display:flex; gap: 10px; flex-wrap:wrap; align-items:center;
+    }
+    button{
+      appearance:none;
+      border: 1px solid rgba(15,23,42,0.18);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor:pointer;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(2,6,23,0.10);
+    }
+    button.primary{ background: var(--accent); color: #fff; border-color: rgba(60,35,10,0.25); }
+    button.danger{ background: rgba(220,38,38,0.10); border-color: rgba(220,38,38,0.25); color: #7f1d1d; }
+    button:disabled{ opacity: 0.55; cursor:not-allowed; }
+    button:active{ transform: translateY(1px); }
+    .status{ font-size: 12px; color: var(--muted); font-weight: 700; margin-left: 2px; }
+
+    .side h2{ margin: 2px 0 8px 0; font-size: 16px; font-weight: 900; }
+    .side p, .side li{ font-size: 13px; color: var(--muted); line-height: 1.45; }
+    .side ul{ margin: 8px 0 0 18px; padding:0; }
+    .badge{
+      display:inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      color: #0b1220;
+      background: rgba(37,99,235,0.10);
+      border: 1px solid rgba(37,99,235,0.18);
+      border-radius: 999px;
+      padding: 4px 8px;
+      margin-top: 6px;
+    }
+
+
+/* ===== UI refresh (field notebook + dashboard) ===== */
+.topbar{
+  backdrop-filter: blur(8px);
+}
+.brandRow{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+.brandMark{
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display:grid;
+  place-items:center;
+  background: linear-gradient(135deg, rgba(37,99,235,0.16), rgba(14,165,233,0.10));
+  border: 1px solid rgba(37,99,235,0.18);
+  box-shadow: 0 10px 18px rgba(2,6,23,0.08);
+  font-size: 20px;
+}
+.title{
+  letter-spacing: -0.02em;
+}
+.subtitle{
+  max-width: 68ch;
+}
+.topbarRight{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(15,23,42,0.10);
+  color: rgba(15,23,42,0.82);
+  font-size: 12px;
+  font-weight: 800;
+  user-select:none;
+  white-space: nowrap;
+}
+
+.grid{
+  gap: 14px;
+}
+
+.sidecol{
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card h2, .card h3{
+  margin: 0 0 10px 0;
+  letter-spacing: -0.01em;
+}
+
+.taskText{
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 14px;
+  margin: 0;
+}
+
+.stats{
+  display:grid;
+  gap: 8px;
+}
+.statRow{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.70);
+  border: 1px solid rgba(15,23,42,0.10);
+}
+.statLabel{
+  font-size: 12px;
+  color: rgba(15,23,42,0.70);
+  font-weight: 800;
+}
+.statValue{
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(15,23,42,0.90);
+  text-align:right;
+}
+
+details.rules{
+  border-radius: 16px;
+  border: 1px dashed rgba(15,23,42,0.20);
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.55);
+}
+details.rules summary{
+  cursor:pointer;
+  list-style: none;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  padding: 4px 0;
+}
+details.rules summary::-webkit-details-marker{ display:none; }
+details.rules summary:after{
+  content: "▾";
+  float:right;
+  color: rgba(15,23,42,0.55);
+  transition: transform 160ms ease;
+}
+details.rules[open] summary:after{ transform: rotate(180deg); }
+
+.controls{
+  padding: 10px 10px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(15,23,42,0.10);
+}
+button{
+  transition: transform 90ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+button:active{
+  transform: translateY(1px) scale(0.98);
+}
+
+.pill{
+  backdrop-filter: blur(6px);
+}
+
+/* click ripple feedback */
+.clickRipple{
+  position:absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.95);
+  box-shadow: 0 0 0 1px rgba(15,23,42,0.20);
+  transform: translate(-50%,-50%) scale(0.4);
+  opacity: 0.9;
+  pointer-events:none;
+  z-index: 4;
+  animation: ripple 420ms ease-out forwards;
+  mix-blend-mode: soft-light;
+}
+@keyframes ripple{
+  to{
+    transform: translate(-50%,-50%) scale(3.2);
+    opacity: 0;
+  }
+}
+
+    /* Intro overlay */
+    body.noScroll { overflow: hidden; }
+    #introOverlay{
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,.65);
+      z-index: 9999;
+    }
+    #introOverlay .introCard{
+      width: min(720px, 100%);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      padding: 18px 18px 14px 18px;
+    }
+    #introOverlay .introCard h2{
+      margin: 0 0 8px 0;
+      font-size: 1.15rem;
+    }
+    #introOverlay .introCard p{
+      margin: 0 0 14px 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    #introOverlay .introActions{
+      display:flex;
+      justify-content:flex-end;
+      gap: 10px;
+    }
+
+
+/* === Requested simplification: hide duplicate status displays (no layout changes) === */
+#hud{ display: none !important; }               /* remove status overlay inside the game box */
+.topbarRight{ visibility: hidden !important; } /* hide header chips but keep spacing */
+
+</style>
+</head>
+
+<body>
+  
+  <!-- Intro Overlay -->
+  <div id="introOverlay" aria-modal="true" role="dialog">
+    <div class="introCard">
+      <h2>Simulation: Käfer unter Druck</h2>
+      <p>In dieser Simulation beobachtest du eine Käferpopulation über mehrere Generationen unter wechselnden Umweltbedingungen. Durch dein Eingreifen verändert sich, wie viele Käfer verschiedener Typen eine Generation überstehen und wie sich die Zusammensetzung der Population von Runde zu Runde entwickelt. Achte besonders auf die Veränderungen über die Zeit und halte deine Beobachtungen im Diagramm fest.</p>
+      <div class="introActions">
+        <button id="introStart" class="primary">Start</button>
+      </div>
+    </div>
+  </div>
+<div class="shell">
+    <div class="topbar">
+      <div class="brandRow">
+        <div class="brandMark" aria-hidden="true">📓</div>
+        <div>
+          <p class="title">Käfer unter Druck</p>
+          <p class="subtitle">Tippe/Klicke Käfer weg. Beobachte, wie sich die Population über mehrere Generationen verändert.</p>
+        </div>
+      </div>
+      <div class="topbarRight" aria-label="Status">
+        <span class="chip" id="chipGen">🧬 Generation: –</span>
+        <span class="chip" id="chipRemain">🪲 Übrig: –</span>
+        <span class="chip" id="chipTime">⏱ Restzeit: –</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div id="captureArea">
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas id="game"></canvas>
+            <div class="hud" aria-hidden="true" id="hud">
+              <div class="pill" id="hudGen">Generation: –</div>
+              <div class="pill center" id="hudInfo">–</div>
+              <div class="pill" id="hudTime">Restzeit: –</div>
+            </div>
+            <div id="bgExhaustedOverlay" aria-live="polite" role="status"></div>
+          </div>
+
+          <div id="chartView">
+            <div id="chartCard">
+              <div id="chartTopRow">
+                <h3 id="chartTitle">Restbestand je Käfertyp pro Generation</h3>
+                <div class="seg" role="group" aria-label="Diagramm-Modus">
+                  <button id="btnModeAbs" class="active" type="button">Anzahl</button>
+                  <button id="btnModeRel" type="button">Anteil (%)</button>
+                </div>
+              </div>
+              <canvas id="chartCanvas"></canvas>
+              <div class="legendNote" id="legendNote">Weiße Käfer: schwarz gestrichelt (besser sichtbar).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="primary" id="btnStart">Start</button>
+          <button id="btnReset" disabled>Reset</button>
+          <button class="danger" id="btnExport" disabled>Export (Bild + Diagramm)</button>
+          <span class="status" id="exportStatus"></span>
+        </div>
+      </div>
+
+            <div class="sidecol">
+        <div class="card side">
+          <h2>Aufgabe</h2>
+          <p class="taskText">
+            In dieser Simulation beeinflusst du, wie viele Käfer verschiedener Typen eine Generation überstehen.
+            Beobachte über mehrere Generationen, welche Veränderungen auftreten, und vergleiche deine Beobachtungen mit dem Diagramm.
+          </p>
+        </div>
+
+        <div class="card side">
+          <h2>Kontrolle &amp; Daten</h2>
+          <div class="stats" aria-label="Aktueller Status">
+            <div class="statRow">
+              <span class="statLabel">🧬 Generation</span>
+              <span class="statValue" id="sideGen">–</span>
+            </div>
+            <div class="statRow">
+              <span class="statLabel">🪲 Übrig</span>
+              <span class="statValue" id="sideRemain">–</span>
+            </div>
+            <div class="statRow">
+              <span class="statLabel">⏱ Restzeit</span>
+              <span class="statValue" id="sideTime">–</span>
+            </div>
+          </div>
+          <p class="taskText" style="margin-top:10px;">
+            Tipp: Nutze den Export, um Spielbild <i>und</i> Diagramm als PNG zu sichern.
+          </p>
+        </div>
+
+        <div class="card side">
+          <details class="rules">
+            <summary>Spielregeln</summary>
+            <ul>
+          <li><b>4 Generationen</b></li>
+          <li><b>Dauer</b>: G1 15s, G2 20s, G3–G4 25s</li>
+          <li>Start: <b>5</b> Käfer je Farbe</li>
+          <li>Ende Generation:
+            <b>verdoppeln</b> – aber wenn <b>&lt; 20</b> überleben → auf <b>60</b> auffüllen (proportional)</li>
+          <li>Antippen/Klicken entfernt einen Käfer (Touch-freundliche Trefferfläche)</li>
+        </ul>
+        <div class="badge">Nach Spielende: Überlebende werden rot markiert</div>
+        <p style="margin-top:10px;">
+          Export kopiert ein PNG (Spielbild + Diagramm) in die Zwischenablage. Falls nicht erlaubt: Download.
+        </p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ======= Konfiguration =======
+  const ROUNDS_TOTAL = 4;
+  // Variable Rundendauern je Generation
+  const ROUND_SECONDS_BY_GEN = [20, 20, 25, 25];
+
+  const BG_DIR = "Hintergrundbilder";
+  const BG_EXT = "png"; // ggf. "jpg"
+  const BG_COUNT = 14;
+
+  const BUG_DIR = "Käferbilder";
+  const BUG_EXT = "png"; // ggf. "jpg"
+  const BUG_TYPES = [
+    "Käfer_Blau","Käfer_Dunkelblau","Käfer_Dunkelgrün","Käfer_Dunkelrot","Käfer_Gelb",
+    "Käfer_Grau","Käfer_Grün","Käfer_Lila","Käfer_Orange","Käfer_Rot","Käfer_Schwarz",
+    "Käfer_Türkis","Käfer_Weiß"
+  ];
+  const START_PER_TYPE = 6;
+
+  const BUG_COLORS = new Map([
+    ["Käfer_Blau", "#2563eb"],
+    ["Käfer_Dunkelblau", "#1e3a8a"],
+    ["Käfer_Dunkelgrün", "#166534"],
+    ["Käfer_Dunkelrot", "#7f1d1d"],
+    ["Käfer_Gelb", "#facc15"],
+    ["Käfer_Grau", "#6b7280"],
+    ["Käfer_Grün", "#22c55e"],
+    ["Käfer_Lila", "#a855f7"],
+    ["Käfer_Orange", "#f97316"],
+    ["Käfer_Rot", "#ef4444"],
+    ["Käfer_Schwarz", "#111827"],
+    ["Käfer_Türkis", "#06b6d4"],
+    ["Käfer_Weiß", "#f8fafc"]
+  ]);
+
+  // Käfergröße
+  const BUG_DRAW_MIN = 13;
+  const BUG_DRAW_MAX = 20;
+  const BUG_HIT_SIZE = 55;
+
+  // Spawn-Schutz: niemals unter HUD + Randabstand
+  const SPAWN_MARGIN = 10;
+  const HUD_BLOCK_PAD = 8;
+
+  // Anti-Überlappung: minimaler Abstand zwischen Käfern (in px, CSS)
+  const MIN_BUG_GAP = 6;
+
+  // Tragekapazität (Cap): maximale Gesamtzahl Käfer nach Reproduktion
+  const CARRYING_CAPACITY_K = 140;
+
+  // ======= DOM =======
+  const canvasWrap = document.getElementById("canvasWrap");
+  const hudEl = document.getElementById("hud");
+
+  const gameCanvas = document.getElementById("game");
+  const gctx = gameCanvas.getContext("2d", { alpha: false });
+
+  const chartView = document.getElementById("chartView");
+  const chartCanvas = document.getElementById("chartCanvas");
+  const cctx = chartCanvas.getContext("2d");
+
+  const btnStart = document.getElementById("btnStart");
+  const btnReset = document.getElementById("btnReset");
+  const btnExport = document.getElementById("btnExport");
+  const exportStatus = document.getElementById("exportStatus");
+  const bgExhaustedOverlay = document.getElementById("bgExhaustedOverlay");
+
+  const hudGen = document.getElementById("hudGen");
+  const hudInfo = document.getElementById("hudInfo");
+  const hudTime = document.getElementById("hudTime");
+
+  const btnModeAbs = document.getElementById("btnModeAbs");
+  const btnModeRel = document.getElementById("btnModeRel");
+  const chartTitle = document.getElementById("chartTitle");
+
+  // ======= Chart mode =======
+  let chartMode = "abs";
+
+  function setChartMode(mode){
+    chartMode = mode;
+    btnModeAbs.classList.toggle("active", mode === "abs");
+    btnModeRel.classList.toggle("active", mode === "rel");
+    chartTitle.textContent = mode === "abs"
+      ? "Restbestand je Käfertyp pro Generation"
+      : "Relative Häufigkeit je Käfertyp pro Generation (%)";
+    if (chartView.style.display !== "none") drawChart();
+  }
+  btnModeAbs.addEventListener("click", () => setChartMode("abs"));
+  btnModeRel.addEventListener("click", () => setChartMode("rel"));
+
+  // ======= Assets =======
+  const backgrounds = [];
+  const bugImages = new Map();
+
+
+  // Background-Pool: jedes Hintergrundbild nur 1× pro Browser-Session (Reset/Start verbraucht, Reload setzt zurück)
+  const usedBgIndices = new Set();
+  let assetsLoaded = false;
+
+  function img(src){
+    const im = new Image();
+    im.decoding = "async";
+    im.src = src;
+    return im;
+  }
+
+  function buildBackgroundList(){
+    const list = [];
+    for(let i=1;i<=BG_COUNT;i++){
+      list.push({ src:`${BG_DIR}/Hintergrund ${i}.${BG_EXT}`, index:i });
+    }
+    return list;
+  }
+  function buildBugSrc(type){ return `${BUG_DIR}/${type}.${BUG_EXT}`; }
+
+  async function preloadImages(sources){
+    const tasks = sources.map(({key, src, index}) => new Promise((resolve) => {
+      const im = img(src);
+      im.onload = () => resolve({ ok:true, key, im, index });
+      im.onerror = () => resolve({ ok:false, key, im, src, index });
+    }));
+    return Promise.all(tasks);
+  }
+
+  // ======= Spielzustand =======
+  let W=0, H=0, DPR=1;
+  let running=false, gameOver=false;
+  let gen=0, roundEndsAt=0, rafId=0;
+
+  let bgImg=null;
+  let bugs=[];
+  let startOfGenTotal=0;
+
+  const seriesAbs = new Map();
+  const seriesRel = new Map();
+  const HUD_SAFE_TOP = 54;
+
+  function ensureSeriesInitialized(){
+    if (seriesAbs.size === BUG_TYPES.length) return;
+    seriesAbs.clear();
+    seriesRel.clear();
+    for(const t of BUG_TYPES){
+      seriesAbs.set(t, []);
+      seriesRel.set(t, []);
+    }
+  }
+
+  // ======= Spawn-Schutzbereich =======
+  function getHudBlockRect(){
+    const cRect = gameCanvas.getBoundingClientRect();
+    const hRect = hudEl.getBoundingClientRect();
+    const x = Math.max(0, hRect.left - cRect.left) - HUD_BLOCK_PAD;
+    const y = Math.max(0, hRect.top  - cRect.top ) - HUD_BLOCK_PAD;
+    const w = Math.max(0, hRect.width) + HUD_BLOCK_PAD*2;
+    const h = Math.max(0, hRect.height)+ HUD_BLOCK_PAD*2;
+    return { x, y, w, h };
+  }
+  function rectIntersects(ax,ay,aw,ah, bx,by,bw,bh){
+    return ax < bx+bw && ax+aw > bx && ay < by+bh && ay+ah > by;
+  }
+
+  // ======= Resize =======
+  function resizeGameCanvas(){
+    DPR = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+    const rect = canvasWrap.getBoundingClientRect();
+    W = Math.max(1, Math.floor(rect.width));
+    H = Math.max(1, Math.floor(rect.height));
+    gameCanvas.width = Math.floor(W * DPR);
+    gameCanvas.height = Math.floor(H * DPR);
+    gctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  function resizeChartCanvas(){
+    const rect = chartCanvas.getBoundingClientRect();
+    const dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+    const w = Math.max(1, Math.floor(rect.width || chartCanvas.offsetWidth || 800));
+    const h = Math.max(1, Math.floor(rect.height || chartCanvas.offsetHeight || 420));
+    chartCanvas.width = Math.floor(w * dpr);
+    chartCanvas.height = Math.floor(h * dpr);
+    cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { w, h };
+  }
+
+  const ro = new ResizeObserver(() => {
+    resizeGameCanvas();
+    if (!running) drawGame();
+    if (chartView.style.display !== "none") drawChart();
+  });
+  ro.observe(canvasWrap);
+  window.addEventListener("resize", () => { if (chartView.style.display !== "none") drawChart(); });
+
+  // ======= Helper =======
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+  function choose(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  function bugSize(){
+    const base = Math.round(Math.min(W,H)*0.022);
+    return Math.max(BUG_DRAW_MIN, Math.min(BUG_DRAW_MAX, base));
+  }
+
+  function countByType(){
+    const counts = new Map();
+    for(const t of BUG_TYPES) counts.set(t,0);
+    for(const b of bugs) counts.set(b.type,(counts.get(b.type)||0)+1);
+    return counts;
+  }
+
+  function enforceCarryingCapacity(){
+    // Wenn über K: proportional kappen (auf Basis aktueller Typverteilung)
+    const total = bugs.length;
+    if(total <= CARRYING_CAPACITY_K) return;
+
+    const counts = countByType();
+    const keep = new Map();
+    let assigned = 0;
+    const fracs = [];
+
+    for(const t of BUG_TYPES){
+      const c = counts.get(t) || 0;
+      const exact = CARRYING_CAPACITY_K * (c / total);
+      const base = Math.floor(exact);
+      keep.set(t, base);
+      assigned += base;
+      fracs.push({ t, frac: exact - base });
+    }
+
+    // Restplätze verteilen nach größten Nachkommateilen – aber nur an Typen mit c>0
+    let rest = CARRYING_CAPACITY_K - assigned;
+    fracs.sort((a,b)=>b.frac - a.frac);
+    let idx = 0;
+    while(rest > 0 && idx < fracs.length){
+      const t = fracs[idx].t;
+      if((counts.get(t)||0) > 0){
+        keep.set(t, (keep.get(t)||0) + 1);
+        rest--;
+      }
+      idx++;
+      if(idx >= fracs.length) idx = 0;
+    }
+
+    // Konkrete Käferliste auf Zielzahlen reduzieren (zufällig innerhalb jedes Typs)
+    const grouped = new Map();
+    for(const t of BUG_TYPES) grouped.set(t, []);
+    for(const b of bugs) grouped.get(b.type).push(b);
+
+    const newBugs = [];
+    for(const t of BUG_TYPES){
+      const arr = grouped.get(t);
+      const k = Math.min(arr.length, keep.get(t)||0);
+      // Fisher-Yates shuffle teilweise
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        const tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+      }
+      for(let i=0;i<k;i++) newBugs.push(arr[i]);
+    }
+    bugs = newBugs;
+  }
+
+  function spawnBug(type){
+    const s = bugSize();
+    const hudBlock = getHudBlockRect();
+
+    const margin = SPAWN_MARGIN;
+    const minDist = (s + MIN_BUG_GAP);
+
+    function okPos(x,y){
+      // HUD-Zone meiden
+      if(rectIntersects(x,y,s,s, hudBlock.x, hudBlock.y, hudBlock.w, hudBlock.h)) return false;
+      if(y < HUD_SAFE_TOP) return false;
+
+      // Anti-Überlappung: Abstand zwischen Zentren
+      const cx = x + s/2;
+      const cy = y + s/2;
+      for(const b of bugs){
+        const bx = b.x + b.w/2;
+        const by = b.y + b.h/2;
+        const dx = cx - bx;
+        const dy = cy - by;
+        const dist = Math.hypot(dx, dy);
+        const need = (Math.max(s, b.w) / 2) + (Math.max(s, b.w) / 2) + MIN_BUG_GAP;
+        if(dist < need) return false;
+      }
+      return true;
+    }
+
+    for(let attempt=0; attempt<120; attempt++){
+      let x = rand(0, Math.max(0, W - s));
+      let y = rand(0, Math.max(0, H - s));
+
+      x = Math.max(margin, Math.min(W - s - margin, x));
+      y = Math.max(margin, Math.min(H - s - margin, y));
+
+      if(!okPos(x,y)) continue;
+
+      return { type, x, y, w:s, h:s };
+    }
+
+    // Fallback (bei extrem vielen Käfern): Platzierung ohne Abstandsgarantie, aber weiterhin HUD/Rand sicher
+    for(let attempt=0; attempt<80; attempt++){
+      let x = rand(margin, Math.max(margin, W - s - margin));
+      let y = rand(Math.max(HUD_SAFE_TOP, margin), Math.max(Math.max(HUD_SAFE_TOP, margin), H - s - margin));
+      if(rectIntersects(x,y,s,s, hudBlock.x, hudBlock.y, hudBlock.w, hudBlock.h)) continue;
+      if(y < HUD_SAFE_TOP) continue;
+      return { type, x, y, w:s, h:s };
+    }
+
+    const fx = margin;
+    const fy = Math.max(HUD_SAFE_TOP, margin);
+    return { type, x:fx, y:fy, w:s, h:s };
+  }
+
+  // ======= HUD =======
+  function currentRoundSeconds(){
+    // gen ist 1-basiert
+    return ROUND_SECONDS_BY_GEN[Math.max(0, Math.min(ROUNDS_TOTAL-1, gen-1))] || 25;
+  }
+
+  function updateHud(){
+    hudGen.textContent = `Generation: ${gen}/${ROUNDS_TOTAL}`;
+    const remain = bugs.length;
+    hudInfo.textContent = `${startOfGenTotal} Käfer am Start, ${remain} übrig`;
+
+    const msLeft = Math.max(0, roundEndsAt - performance.now());
+    const sLeft = Math.ceil(msLeft/1000);
+    hudTime.textContent = `Restzeit: ${String(sLeft).padStart(2,"0")} s`;
+
+    // Mirror status in header chips and sidebar (if present)
+    const chipGen = document.getElementById("chipGen");
+    const chipRemain = document.getElementById("chipRemain");
+    const chipTime = document.getElementById("chipTime");
+    const sideGen = document.getElementById("sideGen");
+    const sideRemain = document.getElementById("sideRemain");
+    const sideTime = document.getElementById("sideTime");
+    if(chipGen) chipGen.textContent = `🧬 Generation: ${gen}/${ROUNDS_TOTAL}`;
+    if(chipRemain) chipRemain.textContent = `🪲 Übrig: ${remain}`;
+    if(chipTime) chipTime.textContent = `⏱ Restzeit: ${String(sLeft).padStart(2,"0")} s`;
+    if(sideGen) sideGen.textContent = `${gen}/${ROUNDS_TOTAL}`;
+    if(sideRemain) sideRemain.textContent = `${remain}`;
+    if(sideTime) sideTime.textContent = `${String(sLeft).padStart(2,"0")} s`;
+  }
+
+  function updateHudIdle(){
+    hudGen.textContent = "Generation: –";
+    hudInfo.textContent = "–";
+    hudTime.textContent = "Restzeit: –";
+
+    const chipGen = document.getElementById("chipGen");
+    const chipRemain = document.getElementById("chipRemain");
+    const chipTime = document.getElementById("chipTime");
+    const sideGen = document.getElementById("sideGen");
+    const sideRemain = document.getElementById("sideRemain");
+    const sideTime = document.getElementById("sideTime");
+    if(chipGen) chipGen.textContent = "🧬 Generation: –";
+    if(chipRemain) chipRemain.textContent = "🪲 Übrig: –";
+    if(chipTime) chipTime.textContent = "⏱ Restzeit: –";
+    if(sideGen) sideGen.textContent = "–";
+    if(sideRemain) sideRemain.textContent = "–";
+    if(sideTime) sideTime.textContent = "–";
+  }
+
+  // ======= Zeichnen =======
+  function drawBackgroundCover(image){
+    gctx.fillStyle = "#d7dde3";
+    gctx.fillRect(0,0,W,H);
+    if(!image || !image.complete || image.naturalWidth===0) return;
+    const iw=image.naturalWidth, ih=image.naturalHeight;
+    const scale = Math.max(W/iw, H/ih);
+    const dw = iw*scale, dh = ih*scale;
+    const dx = (W-dw)/2, dy=(H-dh)/2;
+    gctx.drawImage(image, dx, dy, dw, dh);
+  }
+
+  function drawEndMarkers(){
+    gctx.save();
+    gctx.lineWidth = 3;
+    gctx.strokeStyle = "rgba(220,38,38,0.95)";
+    gctx.shadowColor = "rgba(0,0,0,0.35)";
+    gctx.shadowBlur = 6;
+    for(const b of bugs){
+      const cx = b.x + b.w/2;
+      const cy = b.y + b.h/2;
+      const r = Math.max(10, (b.w*0.85));
+      gctx.beginPath();
+      gctx.arc(cx, cy, r, 0, Math.PI*2);
+      gctx.stroke();
+    }
+    gctx.restore();
+  }
+
+  function drawGame(){
+    drawBackgroundCover(bgImg);
+    for(const b of bugs){
+      const im = bugImages.get(b.type);
+      if(im && im.complete && im.naturalWidth>0){
+        gctx.drawImage(im, b.x, b.y, b.w, b.h);
+      }
+    }
+    if(gameOver && bugs.length) drawEndMarkers();
+  }
+
+  // ======= Ablauf =======
+  function recordGenCounts(){
+    ensureSeriesInitialized();
+    const counts = countByType();
+    const total = bugs.length;
+
+    for(const t of BUG_TYPES){
+      const v = counts.get(t) || 0;
+      seriesAbs.get(t).push(v);
+      const pct = total > 0 ? (v / total) * 100 : 0;
+      seriesRel.get(t).push(pct);
+    }
+  }
+
+  function applyReproductionRule(){
+    const remain = bugs.length;
+
+    if (remain === 0) { endGame("Keine Überlebenden."); return; }
+
+    // Wenn weniger als 20 überleben: auf 60 auffüllen (proportional)
+    if (remain < 20){
+      const TARGET = 60;
+      const counts = countByType();
+      let need = TARGET - remain;
+      if (need <= 0) { enforceCarryingCapacity(); return; }
+
+      const alive = [];
+      let total = 0;
+      for(const t of BUG_TYPES){
+        const c = counts.get(t) || 0;
+        if(c > 0){ alive.push({t,c}); total += c; }
+      }
+      if(alive.length === 0){ endGame("Keine Überlebenden."); return; }
+
+      // Erstverteilung proportional
+      const add = new Map();
+      let assigned = 0;
+      const fracs = [];
+
+      for(const it of alive){
+        const exact = need * (it.c / total);
+        const base = Math.floor(exact);
+        add.set(it.t, base);
+        assigned += base;
+        fracs.push({ t: it.t, frac: exact - base });
+      }
+
+      // Rest nach Nachkommateilen
+      let rest = need - assigned;
+      fracs.sort((a,b)=>b.frac - a.frac);
+      for(let i=0;i<rest;i++){
+        const pick = fracs[i % fracs.length].t;
+        add.set(pick, (add.get(pick)||0) + 1);
+      }
+
+      for(const [t,k] of add.entries()){
+        for(let i=0;i<k;i++) bugs.push(spawnBug(t));
+      }
+
+      enforceCarryingCapacity();
+      return;
+    }
+
+    // Standard: verdoppeln
+    const clones = bugs.map(b => spawnBug(b.type));
+    bugs = bugs.concat(clones);
+
+    enforceCarryingCapacity();
+  }
+
+  function startGen(){
+    gen++;
+    startOfGenTotal = bugs.length;
+    const sec = ROUND_SECONDS_BY_GEN[Math.max(0, Math.min(ROUNDS_TOTAL-1, gen-1))] || 25;
+    roundEndsAt = performance.now() + sec*1000;
+    updateHud();
+    drawGame();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function endGen(){
+    try { recordGenCounts(); } catch (e) { console.error(e); }
+
+    if(gen >= ROUNDS_TOTAL){ endGame("Zeit."); return; }
+
+    applyReproductionRule();
+    if (!gameOver) startGen();
+  }
+
+  function loop(){
+    if(!running) return;
+    const now = performance.now();
+    if(now >= roundEndsAt){ endGen(); return; }
+    updateHud();
+    drawGame();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function endGame(reason){
+    if(gameOver) return;
+    running=false;
+    gameOver=true;
+    cancelAnimationFrame(rafId);
+
+    updateHud();
+    drawGame();
+
+    chartView.style.display = "block";
+    requestAnimationFrame(() => {
+      drawChart();
+      btnExport.disabled = false;
+      exportStatus.textContent = reason ? `Spielende: ${reason}` : "Spielende.";
+      chartView.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    btnStart.disabled = false;
+  }
+
+  // ======= Input =======
+  function canvasPointFromEvent(ev){
+    const rect = gameCanvas.getBoundingClientRect();
+    return { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
+  }
+
+  function hitTestIndex(x,y){
+    for(let i=bugs.length-1;i>=0;i--){
+      const b = bugs[i];
+      const cx = b.x + b.w/2;
+      const cy = b.y + b.h/2;
+      const hit = Math.max(BUG_HIT_SIZE, b.w);
+      const half = hit/2;
+      const bx = cx - half;
+      const by = cy - half;
+      if(x>=bx && x<=bx+hit && y>=by && y<=by+hit){
+        return i;
+      }
+    }
+    return -1;
+  }
+
+
+
+function spawnClickRipple(x,y){
+  const wrap = document.getElementById("canvasWrap");
+  if(!wrap) return;
+  const r = document.createElement("div");
+  r.className = "clickRipple";
+  r.style.left = x + "px";
+  r.style.top = y + "px";
+  wrap.appendChild(r);
+  window.setTimeout(()=>{ r.remove(); }, 500);
+}
+
+  gameCanvas.addEventListener("pointerdown",(ev)=>{
+    if(!running) return;
+    ev.preventDefault();
+    const p = canvasPointFromEvent(ev);
+    spawnClickRipple(p.x, p.y);
+
+    const idx = hitTestIndex(p.x,p.y);
+    if(idx >= 0){
+      bugs.splice(idx,1);
+      updateHud();
+      drawGame();
+    }
+  }, {passive:false});
+
+  // ======= Touch (Tablet): Double-Tap-Zoom im Simulationsfeld deaktivieren =======
+  // iOS/iPadOS kann trotz meta-viewport bei Doppeltipp hineinzoomen. Das blockieren wir
+  // gezielt nur im Simulationsfeld (canvasWrap), ohne die Seite generell zu beeinflussen.
+  (() => {
+    const el = canvasWrap;
+    if(!el) return;
+
+    let lastTouchEnd = 0;
+    el.addEventListener("touchend", (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault(); // verhindert Double-Tap-Zoom
+      }
+      lastTouchEnd = now;
+    }, { passive: false });
+
+    // zusätzlich: iOS-Gesture-Events innerhalb des Feldes blocken (Pinch/Zoom)
+    ["gesturestart","gesturechange","gestureend"].forEach(type => {
+      el.addEventListener(type, (e) => e.preventDefault(), { passive: false });
+    });
+  })();
+
+
+
+  // ======= Diagramm =======
+  function roundRect(ctx, x, y, w, h, r){
+    const rr = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr, y);
+    ctx.arcTo(x+w, y, x+w, y+h, rr);
+    ctx.arcTo(x+w, y+h, x, y+h, rr);
+    ctx.arcTo(x, y+h, x, y, rr);
+    ctx.arcTo(x, y, x+w, y, rr);
+    ctx.closePath();
+  }
+
+  function drawChart(){
+    const { w, h } = resizeChartCanvas();
+    const labels = Array.from({length:ROUNDS_TOTAL}, (_,i)=>`G${i+1}`);
+    const xCount = labels.length;
+
+    const series = (chartMode === "rel") ? seriesRel : seriesAbs;
+    const yLabel = (chartMode === "rel") ? "%" : "";
+
+    const dataByType = BUG_TYPES.map(t => ({
+      label: t,
+      color: BUG_COLORS.get(t) || "#111827",
+      data: (series.get(t) || []).slice(0, ROUNDS_TOTAL)
+    }));
+
+    let maxY = 0;
+    for(const s of dataByType){
+      for(const v of s.data) if (Number.isFinite(v)) maxY = Math.max(maxY, v);
+    }
+    if (chartMode === "rel") maxY = 100;
+    else maxY = Math.max(1, maxY);
+
+    const padL = 58, padR = 180, padT = 18, padB = 44;
+    const plotW = Math.max(1, w - padL - padR);
+    const plotH = Math.max(1, h - padT - padB);
+
+    cctx.clearRect(0,0,w,h);
+    cctx.fillStyle = "rgba(255,255,255,0.78)";
+    roundRect(cctx, 0, 0, w, h, 12);
+    cctx.fill();
+
+    cctx.strokeStyle = "rgba(15,23,42,0.10)";
+    cctx.lineWidth = 1;
+
+    const yTicks = 5;
+    for(let i=0;i<=yTicks;i++){
+      const y = padT + (plotH * i / yTicks);
+      cctx.beginPath();
+      cctx.moveTo(padL, y);
+      cctx.lineTo(padL + plotW, y);
+      cctx.stroke();
+    }
+    for(let i=0;i<xCount;i++){
+      const x = padL + (plotW * i / Math.max(1, xCount-1));
+      cctx.beginPath();
+      cctx.moveTo(x, padT);
+      cctx.lineTo(x, padT + plotH);
+      cctx.stroke();
+    }
+
+    cctx.fillStyle = "rgba(15,23,42,0.85)";
+    cctx.font = "12px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+
+    cctx.textAlign = "right";
+    cctx.textBaseline = "middle";
+    for(let i=0;i<=yTicks;i++){
+      const val = maxY * (1 - i / yTicks);
+      const txt = (chartMode === "rel") ? `${Math.round(val)}${yLabel}` : `${Math.round(val)}`;
+      const y = padT + (plotH * i / yTicks);
+      cctx.fillText(txt, padL - 8, y);
+    }
+
+    cctx.textAlign = "center";
+    cctx.textBaseline = "top";
+    for(let i=0;i<xCount;i++){
+      const x = padL + (plotW * i / Math.max(1, xCount-1));
+      cctx.fillText(labels[i], x, padT + plotH + 10);
+    }
+
+    for(const s of dataByType){
+      const vals = [];
+      for(let i=0;i<xCount;i++){
+        vals.push(i < s.data.length ? s.data[i] : null);
+      }
+
+      const pts = vals.map((v, i) => {
+        if (v === null) return null;
+        const vv = Number.isFinite(v) ? v : 0;
+        const x = padL + (plotW * i / Math.max(1, xCount-1));
+        const y = padT + plotH * (1 - (vv / maxY));
+        return {x,y,v:vv};
+      });
+
+      if (s.label === "Käfer_Weiß"){
+        cctx.strokeStyle = "#111827";
+        cctx.setLineDash([6,4]);
+      } else {
+        cctx.strokeStyle = s.color;
+        cctx.setLineDash([]);
+      }
+      cctx.lineWidth = 2;
+
+      cctx.beginPath();
+      let started = false;
+      for(const p of pts){
+        if(!p){
+          if(started){ cctx.stroke(); cctx.beginPath(); started=false; }
+          continue;
+        }
+        if(!started){ cctx.moveTo(p.x,p.y); started=true; }
+        else cctx.lineTo(p.x,p.y);
+      }
+      if(started) cctx.stroke();
+
+      cctx.fillStyle = (s.label === "Käfer_Weiß") ? "#111827" : s.color;
+      for(const p of pts){
+        if(!p) continue;
+        cctx.beginPath();
+        cctx.arc(p.x, p.y, 2.4, 0, Math.PI*2);
+        cctx.fill();
+      }
+    }
+    cctx.setLineDash([]);
+
+    const legX0 = padL + plotW + 14;
+    let legY = padT + 10;
+    cctx.textAlign = "left";
+    cctx.textBaseline = "middle";
+    cctx.font = "11px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+
+    for(const s of dataByType){
+      if (s.label === "Käfer_Weiß"){
+        cctx.strokeStyle = "#111827";
+        cctx.setLineDash([4,3]);
+        cctx.lineWidth = 2;
+        cctx.strokeRect(legX0, legY-6, 10, 10);
+        cctx.setLineDash([]);
+      } else {
+        cctx.fillStyle = s.color;
+        cctx.fillRect(legX0, legY-5, 10, 10);
+      }
+      cctx.fillStyle = "rgba(15,23,42,0.88)";
+      cctx.fillText(s.label, legX0 + 14, legY);
+      legY += 14;
+      if (legY > padT + plotH - 10) break;
+    }
+  }
+
+  // ======= Export =======
+  async function exportToClipboardOrDownload(){
+    exportStatus.textContent = "Export…";
+    try{
+      drawGame();
+      if (chartView.style.display !== "none") drawChart();
+
+      const pad = 16, gap = 16;
+      const gameRect = gameCanvas.getBoundingClientRect();
+      const chartRect = chartCanvas.getBoundingClientRect();
+
+      const gw = Math.max(1, Math.round(gameRect.width || gameCanvas.offsetWidth));
+      const gh = Math.max(1, Math.round(gameRect.height || gameCanvas.offsetHeight));
+      const cw = Math.max(1, Math.round(chartRect.width || chartCanvas.offsetWidth));
+      const ch = Math.max(1, Math.round(chartRect.height || chartCanvas.offsetHeight));
+
+      const outW = Math.max(gw, cw) + pad*2;
+      const outH = pad*2 + 38 + gh + gap + ch;
+
+      const out = document.createElement("canvas");
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      out.width = Math.floor(outW * dpr);
+      out.height = Math.floor(outH * dpr);
+      const octx = out.getContext("2d");
+      octx.setTransform(dpr,0,0,dpr,0,0);
+
+      octx.fillStyle = "#ffffff";
+      octx.fillRect(0,0,outW,outH);
+
+      octx.fillStyle = "#0f172a";
+      octx.font = "900 18px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+      octx.textBaseline = "top";
+      octx.fillText("Käfer unter Druck", pad, pad);
+
+      octx.fillStyle = "rgba(71,85,105,0.9)";
+      octx.font = "700 12px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+      octx.fillText(`Spielende: markierte Überlebende + Diagramm (${chartMode === "abs" ? "Anzahl" : "Anteil %"})`, pad, pad + 22);
+
+      const gameY = pad + 38;
+      octx.drawImage(gameCanvas, pad, gameY, gw, gh);
+
+      const chartY = gameY + gh + gap;
+      octx.drawImage(chartCanvas, pad, chartY, cw, ch);
+
+      const blob = await new Promise(resolve => out.toBlob(resolve, "image/png", 1.0));
+      if(!blob) throw new Error("toBlob() lieferte null");
+
+      try{
+        if(navigator.clipboard && window.ClipboardItem){
+          await navigator.clipboard.write([ new ClipboardItem({ "image/png": blob }) ]);
+          exportStatus.textContent = "In Zwischenablage kopiert.";
+          return;
+        }
+      } catch(e){
+        console.warn("clipboard write failed:", e);
+      }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "kaefer-unter-druck.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      exportStatus.textContent = "Clipboard nicht möglich → PNG heruntergeladen.";
+    } catch(e){
+      console.error(e);
+      exportStatus.textContent = "Export fehlgeschlagen (siehe Konsole).";
+    }
+  }
+  btnExport.addEventListener("click", exportToClipboardOrDownload);
+
+  // ======= UI =======
+  async function initAssets(){
+    const bgList = buildBackgroundList();
+    const bugList = BUG_TYPES.map(t => ({ key:t, src: buildBugSrc(t) }));
+
+    const bgRes = await preloadImages(bgList);
+    backgrounds.length = 0;
+    for(const r of bgRes) if(r.ok) backgrounds.push({ im:r.im, index:r.index });
+
+    const bugRes = await preloadImages(bugList);
+    bugImages.clear();
+    for(const r of bugRes) if(r.ok) bugImages.set(r.key, r.im);
+  }
+
+  function pickNextBackground(){
+    if(!backgrounds.length) return null;
+    const available = backgrounds.filter(b => !usedBgIndices.has(b.index));
+    if(!available.length) return null;
+    const pick = choose(available);
+    usedBgIndices.add(pick.index);
+    return pick;
+  }
+
+
+  function isBgPoolExhausted(){
+    if(!backgrounds.length) return false;
+    for(const b of backgrounds){
+      if(!usedBgIndices.has(b.index)) return false;
+    }
+    return true;
+  }
+
+  function showBgPoolExhaustedOverlay(){
+    if(!bgExhaustedOverlay) return;
+    bgExhaustedOverlay.textContent =
+      "Alle Hintergründe wurden bereits verwendet.\nBitte Browser neu laden (F5), um den Hintergrund-Pool zurückzusetzen.";
+    bgExhaustedOverlay.style.display = "flex";
+  }
+
+  function hideBgPoolExhaustedOverlay(){
+    if(!bgExhaustedOverlay) return;
+    bgExhaustedOverlay.style.display = "none";
+    bgExhaustedOverlay.textContent = "";
+  }
+
+
+
+  function setupNewGame(){
+    ensureSeriesInitialized();
+    for(const t of BUG_TYPES){
+      seriesAbs.set(t, []);
+      seriesRel.set(t, []);
+    }
+
+    const pick = pickNextBackground();
+    bgImg = pick ? pick.im : null;
+
+    bugs=[];
+    for(const t of BUG_TYPES){
+      for(let i=0;i<START_PER_TYPE;i++) bugs.push(spawnBug(t));
+    }
+
+    gameOver=false;
+    running=true;
+  }
+
+  function startGame(){
+    // If all backgrounds are used up, show a big in-field notice and do not start/spawn anything.
+    if(assetsLoaded && isBgPoolExhausted()){
+      running = false;
+      gameOver = false;
+      cancelAnimationFrame(rafId);
+      rafId = 0;
+
+      gen = 0;
+      roundEndsAt = 0;
+      bugs = [];
+      startOfGenTotal = 0;
+
+      chartView.style.display = "none";
+      btnExport.disabled = true;
+      btnReset.disabled = false;
+      btnStart.disabled = true;
+      exportStatus.textContent = "";
+
+      updateHudIdle();
+      drawGame();
+      showBgPoolExhaustedOverlay();
+      return;
+    }
+
+    hideBgPoolExhaustedOverlay();
+    setupNewGame();
+    chartView.style.display = "none";
+    exportStatus.textContent = "";
+    btnStart.disabled = true;
+    btnReset.disabled = false;
+    btnExport.disabled = true;
+    setChartMode("abs");
+    startGen();
+  }
+
+  function resetState(){
+    running=false;
+    gameOver=false;
+    cancelAnimationFrame(rafId);
+    rafId=0;
+
+    gen=0;
+    roundEndsAt=0;
+    bugs=[];
+    startOfGenTotal=0;
+
+    ensureSeriesInitialized();
+
+    chartView.style.display = "none";
+    btnReset.disabled = true;
+    btnStart.disabled = false;
+    btnExport.disabled = true;
+    exportStatus.textContent = "";
+    hideBgPoolExhaustedOverlay();
+
+    updateHudIdle();
+    drawGame();
+  }
+
+  btnStart.addEventListener("click", async () => {
+    btnStart.textContent = "Lade…";
+    btnStart.disabled = true;
+    resizeGameCanvas();
+
+    if(!assetsLoaded){
+      await initAssets();
+      assetsLoaded = true;
+    }
+
+    btnStart.textContent = "Start";
+    startGame();
+  });
+  btnReset.addEventListener("click", () => resetState());
+
+  // Boot
+  resizeGameCanvas();
+  resetState();
+})();
+</script>
+
+<script>
+  // Intro overlay logic
+  document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.getElementById("introOverlay");
+    const btn = document.getElementById("introStart");
+    if(!overlay || !btn) return;
+
+    document.body.classList.add("noScroll");
+
+    btn.addEventListener("click", () => {
+      overlay.style.display = "none";
+      document.body.classList.remove("noScroll");
+      // Start the simulation using the existing start button (if present)
+      const mainStart = document.getElementById("btnStart");
+      if (mainStart && !mainStart.disabled) mainStart.click();
+    });
+  });
+</script>
+
+</body>
+</html>
