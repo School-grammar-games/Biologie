@@ -1,0 +1,4672 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Optik-Simulation: Auge</title>
+<style>
+    :root{
+      --bg:#0b1020; --panel:#121a33; --text:#e8ecff; --muted:#a8b3e6;
+      --accent:#6aa6ff; --line:#2b376a; --ok:#62d26f; --warn:#ffcc66;
+      --bad:#ff6a6a;
+    }
+    html,body{height:100%; margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial; overflow-x:hidden; overscroll-behavior-x:none;}
+    body{
+      position:relative;
+      background-color:#070a14;
+      background-image:url("Bilder/Background.png"),linear-gradient(180deg,#070a14,#0b1020);
+      background-size:cover,cover;
+      background-position:center,center;
+      background-repeat:no-repeat,no-repeat;
+      background-attachment:fixed,fixed;
+      color:var(--text);
+      touch-action:pan-y pinch-zoom;
+    }
+    /* Hintergrund abdunkeln/entschärfen (dominant/hell -> ruhiger) */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      background:
+        radial-gradient(60% 50% at 50% 40%, rgba(0,0,0,.40), rgba(0,0,0,.70) 70%),
+        linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.68));
+    }
+    .app{max-width:1100px; margin:0 auto; padding:18px; position:relative; z-index:1;}
+    header{display:flex; align-items:stretch; justify-content:space-between; gap:16px; padding:10px 0 14px;}
+    h1{font-size:20px; margin:0; letter-spacing:.2px;}
+    .sub{color:var(--muted); font-size:13px;}
+    .view{display:none;}
+    .view.active{display:block;}
+    /* Panels sollen gleich hoch sein (Darstellung bündig mit Optionen) */
+    .grid{display:grid; grid-template-columns: 340px 1fr; gap:14px; align-items:stretch;}
+    .panel{
+      background:rgba(18,26,51,.9);
+      border:1px solid rgba(106,166,255,.18);
+      border-radius:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+
+    /* Eigenes Fenster für Titel/Untertitel (besser vom Hintergrund abgesetzt) */
+    .titlePanel{
+      background:rgba(18,26,51,.88);
+      border:1px solid rgba(106,166,255,.22);
+      border-radius:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      padding:12px 14px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .titlePanel.wide{width:100%; flex:1 1 auto;}
+    .titlePanel h1{margin:0;}
+    .titlePanel .sub{margin-top:4px; line-height:1.35;}
+    .panel .hd{padding:12px 14px; border-bottom:1px solid rgba(106,166,255,.14); display:flex; align-items:center; justify-content:space-between;}
+.hdRight{display:flex; align-items:center; gap:12px;}
+.hdRight .toggleInline{font-size:12px; opacity:.95;}
+
+    .panel .hd b{font-size:14px;}
+    .panel .bd{padding:12px 14px;}
+    button, select, input[type="range"], input[type="checkbox"]{accent-color:var(--accent);}
+    button{
+      background:rgba(106,166,255,.12);
+      color:var(--text);
+      border:1px solid rgba(106,166,255,.35);
+      border-radius:10px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    button:hover{background:rgba(106,166,255,.18);}
+    .switch{position:relative; display:inline-block; width:44px; height:24px;}
+    .switch input{opacity:0; width:0; height:0;}
+    .slider{position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:rgba(106,166,255,.18); border:1px solid rgba(106,166,255,.35); transition:.15s; border-radius:999px;}
+    .slider:before{position:absolute; content:""; height:18px; width:18px; left:3px; top:2px; background:rgba(232,236,255,.85); transition:.15s; border-radius:999px;}
+    .switch input:checked + .slider{background:rgba(98,210,111,.22); border-color:rgba(98,210,111,.55);}
+    .switch input:checked + .slider:before{transform:translateX(20px); background:rgba(232,236,255,.95);}
+    /* Modus 3: Korrekturlinse bei Normalsichtigkeit gesperrt */
+    .lockBadge{
+      display:none;
+      width:44px;
+      height:24px;
+      border-radius:999px;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.18);
+      color:rgba(232,236,255,.92);
+      font-size:14px;
+      line-height:1;
+      user-select:none;
+    }
+
+    .btn-primary{background:rgba(106,166,255,.22);}
+    .btn-ghost{background:transparent;}
+    .menuCards{display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:14px;}
+    .card{
+      background:rgba(18,26,51,.9);
+      border:1px solid rgba(106,166,255,.18);
+      border-radius:14px;
+      padding:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    .card h2{margin:0 0 8px; font-size:16px;}
+    .card p{margin:0 0 12px; color:var(--muted); font-size:13px; line-height:1.4;}
+    .control{margin:10px 0 12px;}
+    .control label{display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:13px; color:var(--muted);}
+    .control .val{color:var(--text); font-variant-numeric: tabular-nums; display:flex; align-items:center; gap:8px;}
+    .control input[type="range"]{
+      width:100%;
+      -webkit-appearance:none;
+      appearance:none;
+      height:28px;
+      background:transparent;
+      margin:6px 0 2px;
+      touch-action:none;           /* verhindert seitliches UI-Verschieben beim Slider-Drag */
+      -ms-touch-action:none;
+    }
+    .control input[type="range"]::-webkit-slider-runnable-track{
+      height:8px;
+      background:rgba(106,166,255,.18);
+      border:1px solid rgba(106,166,255,.40);
+      border-radius:999px;
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
+    }
+    .control input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      width:18px; height:18px;
+      border-radius:50%;
+      background:rgba(232,236,255,.95);
+      border:2px solid rgba(106,166,255,.85);
+      box-shadow:0 0 0 4px rgba(106,166,255,.16), 0 6px 14px rgba(0,0,0,.55);
+      margin-top:-6px;
+    }
+    .control input[type="range"]:focus{outline:none;}
+    .control input[type="range"]::-moz-range-track{
+      height:8px;
+      background:rgba(106,166,255,.18);
+      border:1px solid rgba(106,166,255,.40);
+      border-radius:999px;
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
+    }
+    .control input[type="range"]::-moz-range-thumb{
+      width:18px; height:18px;
+      border-radius:50%;
+      background:rgba(232,236,255,.95);
+      border:2px solid rgba(106,166,255,.85);
+      box-shadow:0 0 0 4px rgba(106,166,255,.16), 0 6px 14px rgba(0,0,0,.55);
+    }
+    .control input[type="range"]::-moz-focus-outer{border:0;}
+
+    .rangeWrap{margin-top:6px;}
+    .rangeEnds{display:flex; justify-content:space-between; margin-top:6px; padding:0 2px; font-size:12px; color:var(--muted); user-select:none;}
+    .hint{font-size:12px; color:var(--muted); line-height:1.35;}
+    canvas{width:100%; height:540px; display:block; background:rgba(6,8,18,.75);}
+    .badge{font-size:12px; padding:4px 8px; border-radius:999px; border:1px solid rgba(106,166,255,.25); color:var(--muted);}
+    .badge:empty{display:none;}
+    .legend{display:flex; flex-direction:column; gap:8px; margin-top:6px;}
+    .legendItem{display:flex; align-items:center; gap:10px; color:var(--muted);}
+    .legendIcon{width:18px; height:18px; object-fit:contain; filter:drop-shadow(0 0 2px rgba(0,0,0,.35)); opacity:.95;}
+    .legendLine{display:inline-block; width:26px; height:0; border-top:3px dashed rgba(255,255,255,.85);}
+    .legendLine.red{border-top-color:rgba(255,80,90,.95);}
+    .legendRetina{display:inline-block; width:18px; height:0; border-top:3px solid rgba(106,166,255,.75);} 
+    .legendPupil{display:inline-block; width:18px; height:0; border-top:3px solid rgba(72,255,135,.65);} 
+
+    .status{margin-top:10px; font-size:13px; color:var(--muted);}
+    .status b{color:var(--text);}
+
+/* Modus 1: Infotext unter der Darstellung als Blocksatz */
+#ray-legend{ font-size:12px; text-align:justify; text-justify:inter-word; hyphens:auto; line-height:1.45; }
+
+    .sep{height:1px; background:rgba(106,166,255,.14); margin:12px 0;}
+    .small{font-size:12px;}
+    .visionCanvas{width:100%; height:220px; display:block; background:rgba(6,8,18,.75); border-radius:12px; border:1px solid rgba(106,166,255,.14);}
+        .disabled{opacity:.55; pointer-events:none;}
+
+    /* Zusatzcanvas für Aufsicht (nur Akkommodation) */
+    .panelCanvas .bd{padding:0;}
+    .canvasStack{display:flex; flex-direction:column;}
+    .subhd{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 14px;
+      border-top:1px solid rgba(106,166,255,.14);
+      color:var(--text);
+      font-size:13px;
+      background:rgba(10,14,28,.35);
+    }
+    .subhd .toggleInline{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:12.5px;
+      color:var(--text);
+      user-select:none;
+    }
+    .subhd .toggleInline > span{white-space:nowrap;}
+    .miniCanvas{
+      height:260px;
+      background:rgba(6,8,18,.75);
+    }
+  
+    /* Akkommodation: Legende etwas kompakter + Seheindruck unterhalb */
+    #view-acco .optionsPanel{display:flex; flex-direction:column; height:100%;}
+    #view-acco .optionsPanel .bd{flex:1; overflow:auto;}
+    #view-acco .legend{gap:6px;}
+    #view-acco .legendItem{font-size:12px;}
+    #view-acco .legendIcon{width:16px; height:16px;}
+    #view-acco .visionCanvas{height:190px;}
+
+  
+/* Modus 3: Werteanzeigen ausblenden */
+#refr-objDistVal,#refr-axVal{display:none!important;}
+
+/* --- Startmenü: Vorschaubilder (zusätzlich) --- */
+    /* gleiche Bildhöhe/Startposition in allen 3 Kacheln
+       (Titelzeile bekommt Mindesthöhe für 3 Zeilen, damit die Vorschau-Bilder bündig starten) */
+    
+    /* --- Menü-Kacheln: Blocksatz + Start-Button ausrichten --- */
+    .menuCards .card{
+      display:flex;
+      flex-direction:column;
+    }
+    .menuCards .card p{
+      flex:1;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .menuCards .card .card-btns{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      margin-top:auto;
+      flex-wrap:wrap;
+    }
+    .menuCards .card .btn-primary{
+      flex:1 1 auto;
+    }
+    .btn-worksheet{
+      flex:1 1 auto;
+      background: linear-gradient(180deg, rgba(255,204,102,.18), rgba(255,204,102,.07)) !important;
+      border-color: rgba(255,204,102,.55) !important;
+      color: rgba(255,238,180,.98) !important;
+      box-shadow: 0 0 0 1px rgba(255,204,102,.10) inset;
+    }
+    .btn-worksheet:hover{ filter:brightness(1.10); }
+
+    .menuCards .card h2{ min-height: 3.6em; }
+
+    .card-preview{
+      margin: 10px 0 10px 0;
+      border: 1px solid rgba(231,237,244,.12);
+      border-radius: 12px;
+      overflow: hidden;           /* Bild darf „hinter“ den Rand laufen, wird aber sauber maskiert */
+      background: rgba(0,0,0,.22);/* falls Bild mal nicht komplett füllt */
+      height: 110px;              /* feste Vorschauhöhe */
+    }
+    .card-preview img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      /* Verschiebung ohne „Balken“: Ausschnitt wird über object-position verschoben (kein Freilegen des Hintergrunds) */
+      object-position: calc(50% + var(--ox, 0px)) calc(50% + var(--oy, 0px));
+      transform: scale(1.06);      /* leichter Zoom, damit bei Offsets keine Kanten sichtbar werden */
+      transform-origin: center;
+    }
+
+    
+    /* Manuelles Positionieren der Vorschaubilder (Startmenü)
+       --ox / --oy verschieben den Bildausschnitt in Pixeln (ohne „Balken“).
+       Negative Werte = nach links/oben, positive Werte = nach rechts/unten. */
+    .menuCards .card:nth-child(1) .card-preview img{ --ox: 0px;  --oy: 10px; }  /* Modus 1 */
+    .menuCards .card:nth-child(2) .card-preview img{ --ox: 0px;  --oy: 0px; }   /* Modus 2 */
+    .menuCards .card:nth-child(3) .card-preview img{ --ox: -10px; --oy: -20px; } /* Modus 3 */
+
+
+/* --- Legend helpers (Modus 3) --- */
+.legendInline{flex-direction:row; flex-wrap:wrap; gap:14px; margin-top:0;}
+.legendInline .legendItem{min-width:160px;}
+.legendLineSolid{width:26px; height:0; border-top:3px solid rgba(255,255,255,.85);}
+.legendRetinaGrey{width:16px; height:0; border-top:3px solid rgba(200,210,230,.65);}
+.legendFocus{width:10px; height:10px; border-radius:50%; background:#f6b04f; box-shadow:0 0 8px rgba(246,176,79,.35);}
+
+/* Modus 3: Legende kompakter */
+#refr-legend{ gap:10px; }
+#refr-legend .legendItem{ min-width:120px; font-size:12px; line-height:1.15; }
+#refr-legend .legendIcon{ width:16px; height:16px; }
+#refr-legend img.legendIcon{ border-radius:4px; padding:1px; background:rgba(255,255,255,.06); object-fit:contain; }
+#refr-legend .legendLineSolid,
+#refr-legend .legendLineDashed{ width:18px; border-top-width:2px; }
+#refr-legend .legendRetinaGrey{ width:14px; border-top-width:2px; }
+#refr-legend .legendFocus{ width:8px; height:8px; }
+
+
+/* ===========================
+   UI Polishing: Selects + Modus 3 Legende
+   (v61)
+   =========================== */
+
+/* --- Select (Dropdown) Styling (Modus 1 & 3, and generally) --- */
+select{
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  background-color: rgba(10, 18, 34, 0.85);
+  color: #e8f1ff;
+  border: 1px solid rgba(120, 160, 220, 0.28);
+  border-radius: 10px;
+  padding: 6px 34px 6px 10px;
+  font: inherit;
+  line-height: 1.2;
+  height: 30px;
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.18);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23b9d3ff' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px 12px;
+}
+select:focus{
+  border-color: rgba(150, 205, 255, 0.65);
+  box-shadow: 0 0 0 3px rgba(80, 140, 255, 0.18), inset 0 0 0 1px rgba(0,0,0,0.18);
+}
+select:disabled{
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+select option{
+  background-color: #0b1528;
+  color: #e8f1ff;
+}
+
+/* --- Modus 3: Legende aufräumen (gleichmäßige Abstände + Ausrichtung) --- */
+#refr-legend{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 6px 16px;
+  align-items: center;
+}
+#refr-legend .legendItem{
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  column-gap: 10px;
+  align-items: center;
+  margin: 0;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.2;
+  opacity: 0.92;
+}
+#refr-legend .legendItem > :first-child{
+  justify-self: center;
+  align-self: center;
+}
+#refr-legend .legendLine{ width: 20px; }
+#refr-legend .legendDashed{ width: 20px; }
+#refr-legend .legendRetinaGrey{ width: 20px; }
+#refr-legend .legendFocus{ width: 10px; height: 10px; }
+#refr-legend .legendLensIcon{ width: 18px; height: 18px; object-fit: contain; }
+
+
+/* Export button (Screenshot -> Clipboard) */
+.hd-actions{display:flex; gap:10px; align-items:center;}
+.btn-export{
+  border-color: rgba(0, 255, 200, .55) !important;
+  background: linear-gradient(180deg, rgba(0,255,200,.22), rgba(0,255,200,.08)) !important;
+  color: rgba(220,255,245,.98) !important;
+  box-shadow: 0 0 0 1px rgba(0,255,200,.10) inset, 0 10px 30px rgba(0,255,200,.05);
+}
+.btn-export:hover{filter: brightness(1.08);}
+
+/* Export toast */
+.export-toast{
+  position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
+  padding:10px 14px; border-radius:12px;
+  background: rgba(12,18,32,.92);
+  border: 1px solid rgba(0,255,200,.28);
+  color: rgba(235,245,255,.98);
+  font: 600 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  box-shadow: 0 18px 60px rgba(0,0,0,.45);
+  opacity:0; pointer-events:none; transition: opacity .18s ease, transform .18s ease;
+  z-index: 9999;
+}
+.export-toast.show{opacity:1; transform:translateX(-50%) translateY(-6px);}
+
+/* Header: Titel + Informationstext-Button */
+.hdLeft{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.btn-explain{
+  padding:8px 12px;
+  border-radius:11px;
+  font-size:12px;
+  line-height:1;
+  font-weight:700;
+  border:1px solid rgba(255,204,102,.55);
+  background:linear-gradient(180deg, rgba(255,204,102,.24), rgba(255,204,102,.10));
+  color:rgba(255,244,204,.98);
+  box-shadow:0 0 0 1px rgba(255,204,102,.10) inset, 0 8px 22px rgba(255,204,102,.08);
+}
+.btn-explain:hover{filter:brightness(1.10); background:linear-gradient(180deg, rgba(255,204,102,.30), rgba(255,204,102,.13));}
+
+/* Popup: Informationstext */
+.explainModal{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:9998;
+  padding:16px;
+  overflow:auto;
+}
+.explainModal.open{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.explainBackdrop{position:absolute; inset:0; background:rgba(0,0,0,.58); backdrop-filter: blur(2px);}
+.explainCard{
+  position:relative;
+  z-index:1;
+  width:min(760px, 100%);
+  max-height:calc(100dvh - 32px);
+  overflow:hidden;
+  margin:auto;
+  background: rgba(18,26,51,.98);
+  border:1px solid rgba(106,166,255,.22);
+  border-radius:16px;
+  box-shadow: 0 22px 80px rgba(0,0,0,.55);
+}
+.explainHd{padding:12px 14px; border-bottom:1px solid rgba(106,166,255,.14); display:flex; align-items:center; justify-content:space-between; gap:12px;}
+#explainTitle{font-weight:800;}
+.explainClose{padding:6px 10px; border-radius:10px;}
+.explainBd{
+  padding:14px;
+  color:rgba(232,236,255,.92);
+  line-height:1.5;
+  white-space:pre-wrap;
+  overflow:auto;
+  max-height:calc(100dvh - 170px);
+}
+.explainFt{padding:12px 14px; border-top:1px solid rgba(106,166,255,.14); display:flex; justify-content:flex-end; gap:10px;}
+@media(max-width:700px){
+  .explainModal{padding:10px;}
+  .explainCard{max-height:calc(100dvh - 20px); border-radius:14px;}
+  .explainBd{max-height:calc(100dvh - 155px); font-size:14px;}
+}
+
+/* === INTRO-MODAL === */
+#introModal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.72);z-index:10000;padding:16px}
+#introModal .im-card{width:min(600px,100%);max-height:92vh;overflow:auto;background:#0e1528;border:1px solid rgba(106,166,255,.22);border-radius:18px;padding:18px;box-shadow:0 16px 48px rgba(0,0,0,.6);color:#d4e4ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+#introModal .im-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+#introModal .im-title{margin:0;font-size:1.1rem;font-weight:800;line-height:1.25}
+#introModal .im-close-x{border:1px solid rgba(106,166,255,.3);background:rgba(106,166,255,.1);color:#d4e4ff;min-width:38px;width:38px;height:38px;border-radius:12px;font-size:22px;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;padding:0}
+#introModal .im-grade{font-size:.88rem;color:#7a9acc;margin:0 0 10px 0}
+#introModal .im-desc{border:1px solid rgba(106,166,255,.16);border-radius:14px;background:rgba(106,166,255,.07);padding:12px;line-height:1.55;font-size:.95rem;margin-bottom:14px}
+#introModal .im-btn-row{display:flex;justify-content:flex-end}
+#introModal .im-start-btn{border:none;background:#6aa6ff;color:#0b1020;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:.95rem}
+@media(max-width:600px){#introModal .im-card{padding:14px}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="titlePanel">
+<h1 id="app-title">Simulationen zum Thema Strahlengang und Auge</h1>
+<div class="sub" id="app-subtitle">Erforsche die Wirkung von Linsen auf Lichtstrahlen und wie unser Auge ein scharfes Bild unserer Umwelt erzeugt. Untersuche außerdem, wie Sehhilfen bei Fehlsichtigkeit den Strahlengang verändern, um wieder scharfes Sehen zu ermöglichen.</div>
+</div>
+</header>
+<section class="view active" id="view-menu">
+<div class="menuCards">
+<div class="card">
+<h2>Die Simulation des Strahlengangs</h2>
+      <div class="card-preview"><img src="Bilder/Anzeige_Strahlengang.png" alt="Vorschau Modus 1: Strahlengang" loading="lazy"></div>
+
+<p>Erforsche den Strahlengang unter Veränderung der Anzahl von Linsen und deren Brechkraft. Ändere dargestellte Gegenstände und untersuche die Auswirkung der Entfernung auf die auf dem Schirm abgebildete Darstellung.</p>
+<div class="card-btns">
+  <button class="btn-primary" onclick="App.show('ray')">▶ Start</button>
+  <a class="btn-worksheet" href="Arbeitsblätter/AB_Strahlengang.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+</div>
+</div>
+<div class="card">
+<h2>Betrachtung der Akkommodation und Steuerung des Lichteinfalls</h2>
+      <div class="card-preview"><img src="Bilder/Anzeige_Akkommodation.gif" alt="Vorschau Modus 2: Akkommodation" loading="lazy"></div>
+
+<p>Untersuche, wie sich das Auge an unterschiedlich weit entfernte Objekte anpasst, um dauerhaft ein scharfes Bild darzustellen, und wie es die Menge des einfallenden Lichts steuert.</p>
+<div class="card-btns">
+  <button class="btn-primary" onclick="App.show('acco')">▶ Start</button>
+  <a class="btn-worksheet" href="Arbeitsblätter/AB_Akkommodation.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+</div>
+</div>
+<div class="card">
+<h2>Ursache von Fehlsichtigkeit und deren Korrektur</h2>
+      <div class="card-preview"><img src="Bilder/Anzeige_Fehlsichtigkeit.png" alt="Vorschau Modus 3: Fehlsichtigkeit" loading="lazy"></div>
+
+<p>Untersuche, wie es zu den beiden Arten der Fehlsichtigkeit kommt und wie Sehhilfen wirken, um wieder eine Normalsichtigkeit wiederherzustellen.</p>
+<div class="card-btns">
+  <button class="btn-primary" onclick="App.show('refr')">▶ Start</button>
+  <a class="btn-worksheet" href="Arbeitsblätter/AB_Fehlsichtigkeit.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+</div>
+</div>
+</div>
+<div class="sep"></div>
+<div class="hint">
+      Hinweis: Dünnlinsen-/paraxiales Strahlenmodell (didaktisch). Parameter sind bewusst „greifbar“, nicht physiologisch exakt.
+    </div>
+</section>
+<section class="view" id="view-ray">
+<div class="grid">
+<div class="panel">
+<div class="hd">
+<b>Strahlengang</b>
+      <div class="hd-actions">
+        <button class="btn-ghost btn-export" onclick="Exporter.exportMode('ray', this)">⤓ Exportieren</button>
+        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menü</button>
+      </div>
+    </div>
+<div class="bd">
+<div class="control">
+<label>Linse 1
+              <span class="val">
+<select id="ray-lensType">
+<option value="convex">Konvex (Sammellinse)</option>
+<option value="concave">Konkav (Streulinse)</option>
+</select>
+</span>
+</label>
+</div>
+<div class="control">
+<label>Brechkraft Linse 1 (Dioptrien)
+              <span class="val"><span id="ray-dVal"></span></span>
+</label>
+<input id="ray-d" max="8.00" min="0.50" step="0.001" type="range" value="1.500"/>
+</div>
+<div class="control">
+<label style="gap:12px;">
+<span>Strahlengang animiert</span>
+<span class="val">
+<span class="switch">
+<input checked="" id="toggle-gifrays-ray" type="checkbox"/>
+<span class="slider"></span>
+</span>
+</span>
+</label>
+</div>
+<div class="control">
+<label style="gap:12px;">
+<span>Linse 2 aktiv</span>
+<span class="val">
+<span class="switch" id="rayL2SwitchWrap">
+<input id="ray-l2-enabled" type="checkbox"/>
+<span class="slider"></span>
+</span>
+<span id="ray-l2-lock" class="lockBadge" title="Bei aktiviertem Objekt gesperrt" style="display:none; margin-left:8px;">🔒</span>
+</span>
+</label>
+<div class="disabled" id="ray-l2-controls">
+<div class="control" style="margin-top:8px;">
+<label>Linse 2
+                  <span class="val">
+<select id="ray-l2-type">
+<option value="convex">Konvex (Sammellinse)</option>
+<option value="concave">Konkav (Streulinse)</option>
+</select>
+</span>
+</label>
+</div>
+<div class="control">
+<label>Brechkraft Linse 2 (Dioptrien)
+                  <span class="val"><span id="ray-l2-dVal"></span></span>
+</label>
+<input id="ray-l2-d" max="8.00" min="0.50" step="0.001" type="range" value="1.500"/>
+</div>
+</div>
+</div>
+<div class="control">
+<label>Darstellung
+              <span class="val">
+<select id="ray-mode">
+<option value="rays">3 Lichtstrahlen</option>
+<option value="object">Bild verwenden</option>
+</select>
+</span>
+</label>
+</div>
+<div id="ray-objectControls" style="display:none;">
+<div class="control">
+<label>Entfernung des Objekts</label>
+<div class="rangeWrap">
+<input id="ray-objDist" max="335" min="230" step="1" type="range" value="260"/>
+<div class="rangeEnds"><span>Nah</span><span>Fern</span></div>
+</div>
+</div>
+</div>
+<div id="ray-colorControls">
+<div class="control">
+<label>Farbe Strahl oben
+                <span class="val">
+<select id="ray-colTop">
+<option value="white">weiß</option>
+<option value="red">rot</option>
+</select>
+</span>
+</label>
+</div>
+<div class="control">
+<label>Farbe Strahl Mitte
+                <span class="val">
+<select id="ray-colMid">
+<option value="white">weiß</option>
+<option value="red">rot</option>
+</select>
+</span>
+</label>
+</div>
+<div class="control">
+<label>Farbe Strahl unten
+                <span class="val">
+<select id="ray-colBot">
+<option value="white">weiß</option>
+<option value="red">rot</option>
+</select>
+</span>
+</label>
+</div>
+</div>
+<div class="sep"></div>
+<div class="hint" style="margin-bottom:8px;"><b>Seheindruck</b></div>
+<canvas class="visionCanvas" height="220" id="ray-vision" width="320"></canvas>
+</div>
+</div>
+<div class="panel">
+<div class="hd"><div class="hdLeft"><b>Darstellung</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('ray')">Informationstext</button></div><span class="badge" id="ray-badge"></span></div>
+<canvas height="540" id="ray-canvas" width="1000"></canvas>
+
+</div>
+</div>
+</section>
+<section class="view" id="view-acco">
+<div class="grid">
+<div class="panel optionsPanel">
+<div class="hd">
+<b>Akkommodation</b>
+      <div class="hd-actions">
+        <button class="btn-ghost btn-export" onclick="Exporter.exportMode('acco', this)">⤓ Exportieren</button>
+        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menü</button>
+      </div>
+    </div>
+<div class="bd">
+<div class="control">
+<label>Objektentfernung (m)
+              <span class="val" id="acco-distVal"></span>
+</label>
+<input id="acco-dist" max="6" min="0.25" step="0.05" type="range" value="2"/>
+</div>
+<div class="control">
+<label>Helligkeit
+              <span class="val"><span id="acco-lightVal"></span></span>
+</label>
+<div class="rangeWrap">
+<input id="acco-light" max="100" min="0" step="1" type="range" value="50"/>
+<div class="rangeEnds"><span>Dunkel</span><span>Hell</span></div>
+</div>
+</div>
+<div class="control">
+<label style="gap:12px;">
+<span>Strahlengang animiert</span>
+<span class="val">
+<span class="switch">
+<input checked="" id="toggle-gifrays-acco" type="checkbox"/>
+<span class="slider"></span>
+</span>
+</span>
+</label>
+</div>
+<div class="control">
+<label style="gap:12px;">
+<span>Lichtmenge anzeigen</span>
+<span class="val">
+<span class="switch">
+<input id="toggle-lightamount-acco" type="checkbox"/>
+<span class="slider"></span>
+</span>
+</span>
+</label>
+</div>
+<div class="control">
+<label>Einfallswinkel an der Linse
+              <span class="val"><span id="acco-angleVal"></span>°</span>
+</label>
+</div>
+<div class="control">
+<label>Brechkraft der Linse
+              <span class="val"><span id="acco-powerVal"></span> dpt</span>
+</label>
+</div>
+<div class="control">
+<label>Pupillendurchmesser
+              <span class="val"><span id="acco-pupilVal"></span> mm</span>
+</label>
+</div>
+<div class="control">
+<label>Lichtmenge (rel.)
+              <span class="val"><span id="acco-lightRelVal"></span></span>
+</label>
+</div>
+<div class="sep"></div>
+<div class="hint" style="margin-bottom:6px;"><b>Legende</b></div>
+<div class="legend">
+<div class="legendItem"><img alt="Objekt" class="legendIcon" src="Bilder/Objekt.png"/>Objekt</div>
+<div class="legendItem"><span class="legendLine"></span>Strahlengang</div>
+<div class="legendItem"><img alt="Linse" class="legendIcon" src="Bilder/Linse.png"/>Linse</div>
+<div class="legendItem"><img alt="Iris" class="legendIcon" onerror="this.onerror=null;this.src='Bilder/Iris_Darstellung.png';" src="Bilder/Iris_Legende.png"/>Iris/ Regenbogenhaut</div>
+<div class="legendItem"><span class="legendPupil"></span>Pupillendurchmesser</div>
+<div class="legendItem"><img alt="Ziliarmuskel" class="legendIcon" src="Bilder/Muskel.png"/>Ziliarmuskel</div>
+<div class="legendItem"><img alt="Zonulafasern" class="legendIcon" onerror="this.onerror=null;this.src='Bilder/Zonula_schlaff.png';" src="Bilder/Zonula_straff.png"/>Zonulafasern</div>
+<div class="legendItem"><span class="legendRetina"></span>Netzhaut</div>
+<div class="sep"></div>
+<div class="hint" style="margin-bottom:8px;"><b>Seheindruck</b></div>
+<canvas class="visionCanvas" height="190" id="acco-vision" width="320"></canvas>
+</div>
+</div>
+</div>
+<div class="panel panelCanvas">
+<div class="hd"><div class="hdLeft"><b>Augenquerschnitt</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('acco')">Informationstext</button></div><div class="hdRight">
+<label class="toggleInline" title="Gesicht als Hintergrund ein-/ausblenden">
+<span>Hintergrund anzeigen</span>
+<span class="switch">
+<input id="toggle-bg-acco" type="checkbox"/>
+<span class="slider"></span>
+</span>
+</label>
+<span class="badge" id="acco-badge"></span>
+</div></div>
+<div class="bd canvasStack">
+<canvas height="540" id="acco-canvas" width="1000"></canvas>
+<div class="subhd">
+<b>Aufsicht auf die Linse</b>
+<label class="toggleInline">
+<span>Iris anzeigen</span>
+<span class="switch">
+<input id="acco-topviewShowIris" type="checkbox"/>
+<span class="slider"></span>
+</span>
+</label>
+</div>
+<canvas class="miniCanvas" height="260" id="acco-topview" width="1000"></canvas>
+</div>
+</div>
+</div>
+</section>
+<section class="view" id="view-refr">
+<div class="grid">
+<div class="panel">
+<div class="hd">
+<b>Ursache von Fehlsichtigkeit und deren Korrektur</b>
+      <div class="hd-actions">
+        <button class="btn-ghost btn-export" onclick="Exporter.exportMode('refr', this)">⤓ Exportieren</button>
+        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menü</button>
+      </div>
+    </div>
+<div class="bd">
+<div class="control">
+<label>Sehzustand
+              <span class="val">
+<select id="refr-eyePreset">
+<option value="normal" selected>Normalsichtigkeit</option>
+<option value="myopia">Kurzsichtigkeit</option>
+<option value="hyperopia">Weitsichtigkeit</option>
+<option value="free">Frei regulierbar</option>
+</select>
+</span>
+</label>
+</div>
+<div class="control" id="refr-axControl" style="display:none;">
+<label>Form des Augapfels
+              <span class="val" id="refr-axVal"></span></label>
+
+<div class="rangeWrap"><input id="refr-ax" max="60" min="-60" type="range" value="0" disabled/><div class="rangeEnds"><span>Kurz</span><span>Lang</span></div></div></div>
+
+<div class="control">
+<label>Entfernung des Objekts
+              <span class="val" id="refr-objDistVal"></span>
+</label>
+<div class="rangeWrap">
+<input id="refr-objDist" max="440" min="180" step="1" type="range" value="360"/>
+<div class="rangeEnds"><span>Nah</span><span>Fern</span></div>
+</div>
+</div>
+<div class="control">
+<label style="gap:12px;">
+<span>Strahlengang animiert</span>
+<span class="val">
+<span class="switch">
+<input checked="" id="toggle-gifrays-refr" type="checkbox"/>
+<span class="slider"></span>
+</span>
+</span>
+</label>
+</div>
+<div class="control">
+<label style="gap:12px;">
+<span>Korrekturlinse aktiv</span>
+<span class="val">
+<span class="switch" id="refrCorrSwitchWrap">
+<input id="refr-corrEnabled" type="checkbox"/>
+<span class="slider"></span>
+</span>
+<span id="refrCorrLock" class="lockBadge" title="Bei Normalsichtigkeit gesperrt" aria-label="gesperrt">🔒</span>
+</span>
+</label>
+</div>
+<div class="control">
+<label>Korrekturlinse (Typ)
+              <span class="val">
+<select id="refr-corrType">
+<option value="concave">Konkav (Streulinse)</option>
+<option value="convex">Konvex (Sammellinse)</option>
+</select>
+</span>
+</label>
+</div>
+<div class="control">
+<label>Korrekturlinse (Dioptrien)
+              <span class="val" id="refr-dVal"></span>
+</label>
+<input id="refr-d" max="6" min="0" step="0.25" type="range" value="0"/>
+</div>
+<div class="status" id="refr-status"></div>
+<div class="sep"></div>
+<canvas class="visionCanvas" height="220" id="refr-vision" width="320"></canvas>
+</div>
+</div>
+<div class="panel">
+<div class="hd"><div class="hdLeft"><b>Augenquerschnitt</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('refr')">Informationstext</button></div><span class="badge" id="refr-badge"></span></div>
+<canvas height="540" id="refr-canvas" width="1000"></canvas>
+        <div class="bd">
+  <div class="status small" style="margin-bottom:6px;"><b>Legende</b></div>
+  <div class="legend legendInline" id="refr-legend">
+    <div class="legendItem"><span class="legendLineSolid"></span>Strahlengang</div>
+    <div class="legendItem"><span class="legendLine"></span>Verlängerung (theoretisch)</div>
+    <div class="legendItem"><span class="legendRetinaGrey"></span>Netzhaut</div>
+    <div class="legendItem"><span class="legendFocus"></span>Fokus (Brennpunkt)</div>
+        <div class="legendItem"><img class="legendIcon" src="Bilder/Linse.png" alt="Linse">Linse</div>
+        <div class="legendItem"><img class="legendIcon" src="Bilder/Muskel.png" alt="Ziliarmuskel">Ziliarmuskel</div>
+        <div class="legendItem"><img class="legendIcon" src="Bilder/Zonula_straff.png" alt="Zonulafasern" onerror="this.onerror=null; this.src='Bilder/Zonulafaser.png';">Zonulafasern</div>
+</div>
+  </div>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- Informationstext (Popup) -->
+<div class="explainModal" id="explainModal" aria-hidden="true">
+  <div class="explainBackdrop" data-close="1"></div>
+  <div class="explainCard" role="dialog" aria-modal="true" aria-labelledby="explainTitle">
+    <div class="explainHd">
+      <div id="explainTitle">Informationstext</div>
+      <button type="button" class="btn-ghost explainClose" aria-label="Schließen" data-close="1">✕</button>
+    </div>
+    <div class="explainBd" id="explainBody"></div>
+    <div class="explainFt">
+      <button type="button" class="btn-primary" data-close="1">Schließen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const App = (() => {
+  const views = {
+    menu: document.getElementById('view-menu'),
+    ray:  document.getElementById('view-ray'),
+    acco: document.getElementById('view-acco'),
+    refr: document.getElementById('view-refr'),
+  };
+
+  // Header (titel/untertitel) – je Ansicht unterschiedlich
+  const headerTitle = document.getElementById('app-title');
+  const headerSub   = document.getElementById('app-subtitle');
+    const titlePanel = document.querySelector('.titlePanel');
+
+  const MENU_TITLE = "Simulationen zum Thema Strahlengang und Auge";
+  const MENU_SUB   = "Erforsche die Wirkung von Linsen auf Lichtstrahlen und wie unser Auge ein scharfes Bild unserer Umwelt erzeugt. Untersuche außerdem, wie Sehhilfen bei Fehlsichtigkeit den Strahlengang verändern, um wieder scharfes Sehen zu ermöglichen.";
+
+  const RAY_TITLE  = "Die Simulation des Strahlengangs";
+  const RAY_SUB    = "Erforsche den Strahlengang unter Veränderung der Anzahl von Linsen und deren Brechkraft. Ändere dargestellte Gegenstände und untersuche die Auswirkung der Entfernung auf die auf dem Schirm abgebildete Darstellung.";
+
+  const ACCO_TITLE = "Betrachtung der Akkommodation und Steuerung des Lichteinfalls";
+  const ACCO_SUB   = "Untersuche, wie sich das Auge an unterschiedlich weit entfernte Objekte anpasst, um dauerhaft ein scharfes Bild darzustellen, und wie es die Menge des einfallenden Lichts steuert.";
+
+  const REFR_TITLE = "Ursache von Fehlsichtigkeit und deren Korrektur";
+  const REFR_SUB   = "Untersuche, wie es zu den beiden Arten der Fehlsichtigkeit kommt und wie Sehhilfen wirken, um wieder eine Normalsichtigkeit wiederherzustellen.";
+
+  const VIEW_META = {
+    menu: { title: MENU_TITLE, sub: MENU_SUB },
+    ray:  { title: RAY_TITLE,  sub: RAY_SUB  },
+    acco: { title: ACCO_TITLE, sub: ACCO_SUB },
+    refr: { title: REFR_TITLE, sub: REFR_SUB },
+  };
+
+  function show(which){
+    Object.values(views).forEach(v => v.classList.remove('active'));
+    views[which].classList.add('active');
+
+    // Header-Text je Ansicht setzen
+    if(headerTitle && headerSub){
+      const meta = VIEW_META[which] || VIEW_META.menu;
+      headerTitle.textContent = meta.title;
+      headerSub.textContent   = meta.sub;
+    
+      if(titlePanel){ titlePanel.classList.toggle('wide', which==='acco' || which==='refr'); }
+    }
+
+    if(which === 'ray') Ray.draw();
+    if(which === 'acco') Acco.draw();
+    if(which === 'refr') Refr.draw();
+
+    if(which !== 'menu' && typeof window.openExplain === 'function'){
+      window.openExplain(which, true);
+    }
+  }
+
+  return { show };
+})();
+
+function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
+function lerp(a,b,t){ return a + (b-a)*t; }
+
+// Global: Darstellung der Lichtstrahlen
+let USE_GIF_RAYS = true;
+
+// ---------- Asset loader (optional textures) ----------
+function _loadWithFallback(img, srcs){
+  return new Promise((resolve) => {
+    let i = 0;
+    const trySrc = () => {
+      if(i >= srcs.length) return resolve(false);
+      img.src = srcs[i++];
+    };
+    img.onload = () => resolve(true);
+    img.onerror = () => trySrc();
+    trySrc();
+  });
+}
+
+function drawImageCover(ctx, img, dx, dy, dw, dh, alpha=1){
+  if(!img || !img.complete || img.naturalWidth === 0) return false;
+  const iw = img.naturalWidth, ih = img.naturalHeight;
+  const s = Math.max(dw/iw, dh/ih);
+  const sw = iw*s, sh = ih*s;
+  const sx = dx + (dw - sw)/2;
+  const sy = dy + (dh - sh)/2;
+  ctx.save();
+  ctx.globalAlpha *= alpha;
+  ctx.drawImage(img, sx, sy, sw, sh);
+  ctx.restore();
+  return true;
+}
+
+function drawImageContain(ctx, img, dx, dy, dw, dh, alpha=1){
+  if(!img || !img.complete || img.naturalWidth === 0) return false;
+  const iw = img.naturalWidth, ih = img.naturalHeight;
+  const s = Math.min(dw/iw, dh/ih);
+  const sw = iw*s, sh = ih*s;
+  const sx = dx + (dw - sw)/2;
+  const sy = dy + (dh - sh)/2;
+  ctx.save();
+  ctx.globalAlpha *= alpha;
+  ctx.drawImage(img, sx, sy, sw, sh);
+  ctx.restore();
+  return true;
+}
+
+const Assets = (() => {
+  const lens = new Image();
+  const lensConvex = new Image();
+  const lensConcave = new Image();
+  const muscle = new Image();
+  const zonulaTaut = new Image();
+  const zonulaSlack = new Image();
+  const objekt = new Image();
+  const objektStrahlengang = new Image();
+  const objektSehprobe = new Image();
+  const seheRay = new Image();
+  const seheRefr = new Image();
+  const iris = new Image();
+  const beamWhite = new Image();
+  const beamRed = new Image();
+
+  const ok = { lens:false, lensConvex:false, lensConcave:false, muscle:false, zonulaTaut:false, zonulaSlack:false, objekt:false, objektStrahlengang:false, objektSehprobe:false, seheRay:false, seheRefr:false, iris:false, beamWhite:false, beamRed:false };
+
+  const readyListeners = [];
+  const changeListeners = [];
+  let ready = false;
+
+  function notifyChange(){
+    changeListeners.forEach(fn => { try{ fn(); }catch(e){} });
+  }
+
+  function onChange(fn){
+    changeListeners.push(fn);
+    // Falls bereits etwas geladen ist, sofort einmal ausführen (z.B. bei sehr schnellen Assets)
+    if(Object.values(ok).some(Boolean)) { try{ fn(); }catch(e){} }
+  }
+
+  function onReady(fn){
+    readyListeners.push(fn);
+    if(ready) fn();
+  }
+
+  function load(img, key, srcs){
+    return _loadWithFallback(img, srcs).then(success => {
+      ok[key] = success;
+      notifyChange();
+      return success;
+    });
+  }
+
+  Promise.all([
+    load(lens,              "lens",              ["Bilder/Linse.png","Linse.png"]),
+    load(lensConvex,        "lensConvex",        ["Bilder/Linse_konvex.png","Bilder/Linse_konvex.svg","Linse_konvex.png","Linse_konvex.svg"]),
+    load(lensConcave,       "lensConcave",       ["Bilder/Linse_konkav.png","Bilder/Linse_konkav.svg","Linse_konkav.png","Linse_konkav.svg"]),
+    load(muscle,            "muscle",            ["Bilder/Muskel.png","Muskel.png"]),
+    load(zonulaTaut,        "zonulaTaut",        ["Bilder/Zonula_straff.png","Zonula_straff.png"]),
+    load(zonulaSlack,       "zonulaSlack",       ["Bilder/Zonula_schlaff.png","Zonula_schlaff.png"]),
+    load(objekt,            "objekt",            ["Bilder/Objekt.png","Objekt.png"]),
+    load(objektStrahlengang,"objektStrahlengang",["Bilder/Objekt_Strahlengang.png","Objekt_Strahlengang.png"]),
+    load(objektSehprobe,    "objektSehprobe",    ["Bilder/Objekt_Sehprobe.png","Objekt_Sehprobe.png"]),
+    load(seheRay,           "seheRay",           ["Bilder/Seheindruck_Strahlengang.png","Seheindruck_Strahlengang.png"]),
+    load(seheRefr,          "seheRefr",          ["Bilder/Seheindruck_Fehlsichtigkeit.png","Seheindruck_Fehlsichtigkeit.png"]),
+    load(iris,              "iris",              ["Bilder/Iris_Darstellung.png","Iris_Darstellung.png"]),
+    load(beamWhite,         "beamWhite",         ["Bilder/Licht_weiß.gif","Bilder/Licht_wei%C3%9F.gif","Licht_weiß.gif","Licht_wei%C3%9F.gif"]),
+    load(beamRed,           "beamRed",           ["Bilder/Licht_rot.gif","Licht_rot.gif"]),
+  ]).then(() => {
+    ready = true;
+    readyListeners.forEach(fn => { try{ fn(); }catch(e){} });
+  });
+
+  function any(){
+    return ok.lens || ok.muscle || ok.zonulaTaut || ok.zonulaSlack;
+  }
+
+  return { lens, lensConvex, lensConcave, muscle, zonulaTaut, zonulaSlack, objekt, objektStrahlengang, objektSehprobe, seheRay, seheRefr, iris, beamWhite, beamRed, ok, onReady, onChange, any };
+})();
+
+
+function drawAxis(ctx, y){
+  ctx.save();
+  ctx.strokeStyle = "rgba(106,166,255,.22)";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([6,6]);
+  ctx.beginPath();
+  ctx.moveTo(0,y);
+  ctx.lineTo(ctx.canvas.width,y);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// clear biconvex / biconcave rendering
+function drawLens(ctx, x, yMid, height, type, bulgePx=16){
+  ctx.save();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "rgba(232,236,255,.85)";
+  ctx.fillStyle = "rgba(255,255,255,.08)";
+  const h = height/2;
+
+  const c = clamp(bulgePx, 8, 34);
+  const t = clamp(bulgePx*0.35, 5, 14);
+
+  const xL = x - t;
+  const xR = x + t;
+
+  ctx.beginPath();
+  if(type === 'convex'){
+    ctx.moveTo(xL, yMid-h);
+    ctx.quadraticCurveTo(xR + c, yMid, xL, yMid+h);
+    ctx.lineTo(xR, yMid+h);
+    ctx.quadraticCurveTo(xL - c, yMid, xR, yMid-h);
+    ctx.closePath();
+  } else {
+    ctx.moveTo(xL, yMid-h);
+    ctx.quadraticCurveTo(xR - c, yMid, xL, yMid+h);
+    ctx.lineTo(xR, yMid+h);
+    ctx.quadraticCurveTo(xL + c, yMid, xR, yMid-h);
+    ctx.closePath();
+  }
+
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+}
+
+// Strahlengangmodus: Linsendarstellung per Bild (Bilder/Linse_konvex.png / Bilder/Linse_konkav.png)
+function drawLensRay(ctx, x, yMid, height, type, bulgePx=16){
+  const img = (type === 'convex')
+    ? (Assets && Assets.ok && Assets.ok.lensConvex ? Assets.lensConvex : null)
+    : (Assets && Assets.ok && Assets.ok.lensConcave ? Assets.lensConcave : null);
+
+  const h = height;
+
+  // Modus 1: Linsenform soll mit der Brechkraft „mitwachsen“.
+  // Wir nutzen dafür den bereits übergebenen bulgePx-Wert (aus der Dioptrien-Logik),
+  // und skalieren die Bild-Linse in X-Richtung: mehr Dioptrien => „dicker/krummer“.
+  const t = clamp((bulgePx - 12) / (30 - 12), 0, 1);     // 0..1
+  const scaleX = lerp(0.92, 1.60, t);                     // Breitenfaktor
+
+  if(img && img.complete && img.naturalWidth > 0){
+    // Skaliere so, dass die Linse die gewünschte Höhe ausfüllt.
+    const s = h / img.naturalHeight;
+    let w = img.naturalWidth * s;
+
+    // Brechkraft -> Form (Breite): stärker = breiter (optisch stärker gewölbt)
+    w *= scaleX;
+
+    // Sicherheitsgrenzen: verhindert extreme Breiten bei falschen/anderen Assets.
+    w = clamp(w, 60, 220);
+
+    ctx.save();
+    ctx.globalAlpha *= 0.95;
+
+    // dezentes Highlight bei stärkerer Linse
+    ctx.shadowColor = `rgba(180,210,255,${lerp(0.00, 0.12, t)})`;
+    ctx.shadowBlur  = lerp(0, 16, t);
+
+    ctx.drawImage(img, x - w/2, yMid - h/2, w, h);
+    ctx.restore();
+    return;
+  }
+
+  // Fallback: Vektorlinse (bulgePx wirkt hier direkt)
+  drawLens(ctx, x, yMid, height, type, bulgePx);
+}
+
+function drawScreen(ctx, x, y0, y1){
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,.35)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x, y0);
+  ctx.lineTo(x, y1);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawRaySegment(ctx, x1,y1,x2,y2,color,dashed=false){
+  // "Licht"-Darstellung: Wenn das GIF geladen ist, werden Strahlen als animierte Textur gezeichnet.
+  // Für gestrichelte Segmente (virtuelle Verlängerungen) bleibt die Vektorlinie erhalten.
+  // Farbabhängige Auswahl des Beam-GIFs:
+  // - rot  -> Bilder/Licht_rot.gif
+  // - weiß -> Bilder/Licht_weiß.gif
+  const wantRed = (typeof color === 'string') && (color === 'red' || color.indexOf('255,90,90') !== -1);
+  const img = wantRed
+    ? (Assets && Assets.ok && Assets.ok.beamRed ? Assets.beamRed : null)
+    : (Assets && Assets.ok && Assets.ok.beamWhite ? Assets.beamWhite : null);
+
+  if(USE_GIF_RAYS && !dashed && img && img.complete && img.naturalWidth > 0){
+    const dx = x2 - x1, dy = y2 - y1;
+    const len = Math.hypot(dx, dy);
+    if(len > 0.6){
+      const ang = Math.atan2(dy, dx);
+
+      const baseLW = 2.2;
+      const thickness = baseLW * 4.2; // ~9px, gut sichtbar
+      const s = thickness / img.naturalHeight;
+      const segLen = img.naturalWidth * s;
+      const step = Math.max(6, segLen * 0.65);     // Überlappung für nahtlosen Strahl
+      const t = performance.now() * 0.001;
+      const speed = 70;              // px/s entlang des Strahls
+      const phase = (t * speed) % step;
+
+      ctx.save();
+      ctx.translate(x1, y1);
+      ctx.rotate(ang);
+      ctx.globalAlpha *= 0.95;
+      ctx.globalCompositeOperation = "lighter";
+      // entlang der Strecke kacheln; Länge passt sich automatisch an
+      let tiles = 0;
+      const maxTiles = 220;
+      for(let x = phase - step; x < len; x += step){
+        if(++tiles > maxTiles) break;
+        const drawW = Math.min(segLen, len - x);
+        if(drawW <= 0) continue;
+        const srcW = drawW / s;
+        ctx.drawImage(img, 0, 0, srcW, img.naturalHeight, x, -thickness/2, drawW, thickness);
+      }
+      ctx.restore();
+      return;
+    }
+  }
+
+  // Fallback: klassische Linien
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.2;
+  if(dashed) ctx.setLineDash([8,6]);
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x2,y2);
+  ctx.stroke();
+  ctx.restore();
+}
+
+
+function colorNameToRGBA(name){
+  if(name === 'red') return "rgba(255,90,90,.95)";
+  return "rgba(255,255,255,.90)";
+}
+
+// ---------- Shared "Seheindruck" test chart ----------
+const TestChart = (() => {
+  const off = document.createElement('canvas');
+  off.width = 320; off.height = 200;
+  const c = off.getContext('2d');
+  const tmp = document.createElement('canvas');
+  const tctx = tmp.getContext('2d');
+
+
+  function render(){
+    c.clearRect(0,0,off.width,off.height);
+    c.fillStyle = "rgba(0,0,0,0)";
+    c.fillRect(0,0,off.width,off.height);
+
+    c.fillStyle = "rgba(255,255,255,.92)";
+    c.textAlign = "center";
+    c.textBaseline = "middle";
+    c.font = "bold 72px system-ui";
+    c.fillText("E", off.width*0.5, off.height*0.38);
+    c.font = "bold 44px system-ui";
+    c.fillText("FP", off.width*0.5, off.height*0.68);
+    c.font = "bold 22px system-ui";
+    c.fillText("TOZ", off.width*0.5, off.height*0.88);
+  }
+  render();
+
+  function drawSeheindruck(ctx, boxX, boxY, boxW, boxH, absDefPx, ok){
+    ctx.save();
+    ctx.clearRect(boxX, boxY, boxW, boxH);
+
+    ctx.strokeStyle="rgba(106,166,255,.20)";
+    ctx.fillStyle="rgba(18,26,51,.55)";
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(boxX, boxY, boxW, boxH, 14);
+    else ctx.rect(boxX, boxY, boxW, boxH);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle="rgba(168,179,230,.9)";
+    ctx.font="13px system-ui";
+    ctx.fillText("Seheindruck (modelliert)", boxX+12, boxY+18);
+
+    const imgX = boxX+16, imgY = boxY+32, imgW = boxW-32, imgH = boxH-48;
+
+    const blurPx = clamp(absDefPx/14, 0, 9);
+    const pix = clamp(Math.floor(absDefPx/8), 0, 10);
+
+    if(pix > 0){
+      const s = 1/(pix+1);
+      tmp.width = Math.max(1, Math.floor(imgW*s));
+      tmp.height = Math.max(1, Math.floor(imgH*s));
+      tctx.imageSmoothingEnabled = false;
+      tctx.clearRect(0,0,tmp.width,tmp.height);
+      tctx.drawImage(off, 0,0, off.width,off.height, 0,0, tmp.width,tmp.height);
+
+      ctx.imageSmoothingEnabled = false;
+      ctx.filter = `blur(${blurPx}px)`;
+      ctx.drawImage(tmp, 0,0,tmp.width,tmp.height, imgX,imgY,imgW,imgH);
+      ctx.filter = 'none';
+      ctx.imageSmoothingEnabled = true;
+    } else {
+      ctx.filter = `blur(${blurPx}px)`;
+      ctx.drawImage(off, 0,0, off.width,off.height, imgX,imgY,imgW,imgH);
+      ctx.filter = 'none';
+    }
+
+    const q = clamp(1 - absDefPx/80, 0, 1);
+    const qW = Math.floor((boxW-32)*q);
+    ctx.fillStyle="rgba(255,255,255,.10)";
+    ctx.fillRect(boxX+16, boxY+boxH-18, boxW-32, 6);
+    ctx.fillStyle = ok ? "rgba(98,210,111,.75)" : "rgba(255,204,102,.70)";
+    ctx.fillRect(boxX+16, boxY+boxH-18, qW, 6);
+
+    ctx.restore();
+  }
+
+  return { drawSeheindruck };
+})();
+
+// ---------- Shared "Seheindruck" renderer (image + blur/pixel) ----------
+const Vision = (() => {
+  const tmp = document.createElement('canvas');
+  const tctx = tmp.getContext('2d');
+
+  function drawDisabled(ctx, w, h, msg){
+    ctx.save();
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle="rgba(106,166,255,.20)";
+    ctx.fillStyle="rgba(18,26,51,.55)";
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(0,0,w,h, 14);
+    else ctx.rect(0,0,w,h);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle="rgba(168,179,230,.9)";
+    ctx.font="13px system-ui";
+    ctx.fillText(msg || "Seheindruck deaktiviert", 12, 22);
+    ctx.restore();
+  }
+
+  function draw(ctx, img, boxX, boxY, boxW, boxH, absDefPx, ok){
+    // Fallback: TestChart, falls Bild nicht verfügbar
+    const useImg = img && img.complete && img.naturalWidth > 0;
+
+    // Panel
+    ctx.save();
+    ctx.clearRect(boxX, boxY, boxW, boxH);
+    ctx.strokeStyle="rgba(106,166,255,.20)";
+    ctx.fillStyle="rgba(18,26,51,.55)";
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(boxX, boxY, boxW, boxH, 14);
+    else ctx.rect(boxX, boxY, boxW, boxH);
+    ctx.fill();
+    ctx.stroke();
+
+    if(!useImg){
+      ctx.restore();
+      TestChart.drawSeheindruck(ctx, boxX, boxY, boxW, boxH, absDefPx, ok);
+      return;
+    }
+
+    const imgX = boxX+12, imgY = boxY+12, imgW = boxW-24, imgH = boxH-26;
+
+    const blurPx = clamp(absDefPx/14, 0, 9);
+    const pix = clamp(Math.floor(absDefPx/8), 0, 10);
+
+    if(pix > 0){
+      const s = 1/(pix+1);
+      tmp.width = Math.max(1, Math.floor(imgW*s));
+      tmp.height = Math.max(1, Math.floor(imgH*s));
+      tctx.imageSmoothingEnabled = true;
+      tctx.clearRect(0,0,tmp.width,tmp.height);
+      drawImageContain(tctx, img, 0,0, tmp.width, tmp.height, 1);
+
+      ctx.imageSmoothingEnabled = false;
+      ctx.filter = `blur(${blurPx}px)`;
+      ctx.drawImage(tmp, 0,0,tmp.width,tmp.height, imgX,imgY,imgW,imgH);
+      ctx.filter = 'none';
+      ctx.imageSmoothingEnabled = true;
+    } else {
+      ctx.filter = `blur(${blurPx}px)`;
+      drawImageContain(ctx, img, imgX, imgY, imgW, imgH, 1);
+      ctx.filter = 'none';
+    }
+
+    // Qualitätsbalken
+    const q = clamp(1 - absDefPx/80, 0, 1);
+    const qW = Math.floor((boxW-32)*q);
+    ctx.fillStyle="rgba(255,255,255,.10)";
+    ctx.fillRect(boxX+16, boxY+boxH-12, boxW-32, 6);
+    ctx.fillStyle = ok ? "rgba(98,210,111,.75)" : "rgba(255,204,102,.70)";
+    ctx.fillRect(boxX+16, boxY+boxH-12, qW, 6);
+
+    ctx.restore();
+  }
+
+  return { draw, drawDisabled };
+})();
+
+// ---------- 1) Strahlengang ----------
+const Ray = (() => {
+  const canvas = document.getElementById('ray-canvas');
+  const ctx = canvas.getContext('2d');
+
+  const visionCanvas = document.getElementById('ray-vision');
+  const vctx = visionCanvas.getContext('2d');
+
+  const elLensType = document.getElementById('ray-lensType');
+  const elD = document.getElementById('ray-d');
+  const elDVal = document.getElementById('ray-dVal');
+
+  const elL2Enabled = document.getElementById('ray-l2-enabled');
+    const elL2SwitchWrap = document.getElementById('rayL2SwitchWrap') || (elL2Enabled ? elL2Enabled.closest('.switch') : null);
+const elL2Controls = document.getElementById('ray-l2-controls');
+  const elL2Lock = document.getElementById('ray-l2-lock');
+  const elL2Type = document.getElementById('ray-l2-type');
+  const elL2D = document.getElementById('ray-l2-d');
+  const elL2DVal = document.getElementById('ray-l2-dVal');
+
+  const elMode = document.getElementById('ray-mode');
+  const elColTop = document.getElementById('ray-colTop');
+  const elColMid = document.getElementById('ray-colMid');
+  const elColBot = document.getElementById('ray-colBot');
+  const elColorControls = document.getElementById('ray-colorControls');
+  const elObjControls = document.getElementById('ray-objectControls');
+  const elObjDist = document.getElementById('ray-objDist');
+  const badge = document.getElementById('ray-badge');
+
+  const SCREEN_X = 840;
+  const K = 900; // f_px = K / D
+  const NEAR_POINT_PX = 230; // minimale Objektentfernung im Modus „Bild verwenden“
+
+  function updateL2Availability(){
+    const isObject = (elMode.value === 'object');
+
+    // Wenn "Bild verwenden" aktiv ist, soll Linse 2 nicht genutzt werden können.
+    // Das Schloss ersetzt dann den Toggle (keine doppelte Anzeige).
+    if(isObject){
+      if(elL2Enabled.checked) elL2Enabled.checked = false;
+      elL2Enabled.disabled = true;
+      elL2Controls.classList.add('disabled');
+      if(elL2SwitchWrap) elL2SwitchWrap.style.display = 'none';
+      if(elL2Lock) elL2Lock.style.display = 'inline-flex';
+    } else {
+      elL2Enabled.disabled = false;
+      elL2Controls.classList.toggle('disabled', !elL2Enabled.checked);
+      if(elL2SwitchWrap) elL2SwitchWrap.style.display = '';
+      if(elL2Lock) elL2Lock.style.display = 'none';
+    }
+  }
+
+  function read(){
+    const lensType = elLensType.value;
+    const Dmag = Number(elD.value);
+    const D1 = (lensType === 'convex') ? +Dmag : -Dmag;
+
+    const l2Enabled = elL2Enabled.checked;
+    const l2Type = elL2Type.value;
+    const D2mag = Number(elL2D.value);
+    const D2 = (l2Type === 'convex') ? +D2mag : -D2mag;
+
+    const mode = elMode.value;
+    const colTop = colorNameToRGBA(elColTop.value);
+    const colMid = colorNameToRGBA(elColMid.value);
+    const colBot = colorNameToRGBA(elColBot.value);
+    const objDistPx = Number(elObjDist.value);
+
+    return { lensType, Dmag, D1, l2Enabled, l2Type, D2mag, D2, mode, colTop, colMid, colBot, objDistPx };
+  }
+
+  function bulgeFromDiopters(Dmag){
+    return lerp(12, 30, (Dmag-0.5)/(8-0.5));
+  }
+
+  function focalPxFromDiopters(D){
+    return K / D; // signed
+  }
+
+  function setLens1RangeForMode(){
+    const isObject = (elMode.value === 'object');
+    const l2On = elL2Enabled.checked;
+    let min = (isObject && !l2On) ? 5.000 : 0.500;
+    const max = 8.000;
+
+    // Dynamische Untergrenze im Objektmodus mit Linse 2:
+    // Verhindert numerische Instabilität beim „Brennpunktstrahl“ (f1 ~ Objektabstand bis zur Strahlenquelle)
+    // und damit das scheinbare „Umdrehen“ der äußeren Strahlen.
+    if(isObject && l2On && elLensType.value === 'convex'){
+      const OBJ_HALF = 55;       // 110x110 Box
+      const SAFETY_PX = 30;      // Puffer, damit der Brennpunkt nicht links der Strahlenquelle liegt
+      const objCenterDist = Number(elObjDist.value || NEAR_POINT_PX);
+      const do1_est = Math.max(60, objCenterDist - OBJ_HALF); // Strahlenquelle liegt am objektseitigen Rand
+      const denom = Math.max(40, do1_est - SAFETY_PX);
+      const minGeom = K / denom;
+      min = Math.max(min, Math.min(max, minGeom));
+    }
+
+    // Update slider attributes and clamp current value into the allowed range.
+    const minS = min.toFixed(3);
+    const maxS = max.toFixed(3);
+    if(elD.min !== minS) elD.min = minS;
+    if(elD.max !== maxS) elD.max = maxS;
+
+    const v = Number(elD.value);
+    const vc = clamp(v, min, max);
+    if(Math.abs(vc - v) > 1e-9){
+      elD.value = vc.toFixed(3);
+    }
+  }
+
+
+  function setObjDistRange(xLens1){
+    const isObject = (elMode.value === 'object');
+    if(!isObject) return;
+
+    // Objekt wird als 110x110 Box gezeichnet (siehe drawObject0).
+    // Grenzen: nicht aus dem Darstellungsbereich heraus und nicht über die Linse schieben.
+    const OBJ_BOX = 110;
+    const OBJ_HALF = OBJ_BOX/2;
+    const MARGIN = 10;
+
+    const minXObj = OBJ_HALF + MARGIN;
+    const maxXObj = xLens1 - OBJ_HALF - MARGIN;
+
+    let minDist = xLens1 - maxXObj; // = OBJ_HALF + MARGIN
+    let maxDist = xLens1 - minXObj;
+
+    // Nahpunkt: Objekt darf nicht näher als NEAR_POINT_PX an Linse 1
+    minDist = Math.max(minDist, NEAR_POINT_PX);
+    if(maxDist < minDist) maxDist = minDist;
+
+    const minS = String(Math.round(minDist));
+    const maxS = String(Math.round(maxDist));
+    if(elObjDist.min !== minS) elObjDist.min = minS;
+    if(elObjDist.max !== maxS) elObjDist.max = maxS;
+
+    const v = clamp(Number(elObjDist.value), minDist, maxDist);
+    elObjDist.value = String(Math.round(v));
+  }
+
+  // Paraxial ray transfer: state (y, theta) with y relative to axis, theta = dy/dx
+  function propagate(st, L){ return { y: st.y + st.theta * L, theta: st.theta }; }
+  function lens(st, f){ return { y: st.y, theta: st.theta - (st.y / f) }; }
+  function focusX(xAt, st){
+    if(Math.abs(st.theta) < 1e-6) return Infinity;
+    return xAt + (-st.y / st.theta);
+  }
+  function updateVision(absDef, ok, mode){
+    // In Strahlengang the "Seheindruck" is always shown.
+    // If Objektmodus is active, use the dedicated object image in this view.
+    const useObjImg = (mode === 'object') && Assets.ok.objektStrahlengang;
+    const img = useObjImg ? Assets.objektStrahlengang : Assets.seheRay;
+    Vision.draw(vctx, img, 0, 0, visionCanvas.width, visionCanvas.height, absDef, ok);
+  }
+
+function drawObjectF0(ctx){
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,255,255,.85)";
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(0,-60); ctx.lineTo(0,60);
+    ctx.moveTo(0,-60); ctx.lineTo(45,-60);
+    ctx.moveTo(0,-10); ctx.lineTo(32,-10);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawObject0(ctx){
+    const rayActive = !!document.getElementById('view-ray') && document.getElementById('view-ray').classList.contains('active');
+    const useSG = rayActive && Assets.ok.objektStrahlengang;
+    const hasAny = useSG || Assets.ok.objekt;
+
+    if(hasAny){
+      const img = useSG ? Assets.objektStrahlengang : Assets.objekt;
+      drawImageContain(ctx, img, -55, -55, 110, 110, 1);
+    } else {
+      drawObjectF0(ctx);
+    }
+  }
+
+  function drawObject(ctx, x, y, scale=1){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(scale, scale);
+    drawObject0(ctx);
+    ctx.restore();
+  }
+
+  function draw(){
+    updateL2Availability();
+    setLens1RangeForMode();
+
+    const W = canvas.width, H = canvas.height;
+    const yMid = H*0.52;
+    const xLens1 = W*0.40;
+    setObjDistRange(xLens1);
+
+    const { lensType, Dmag, D1, l2Enabled, l2Type, D2mag, D2, mode, colTop, colMid, colBot, objDistPx } = read();
+    elDVal.textContent = `${D1>=0?"+":""}${D1.toFixed(1)} dpt`;
+    elL2DVal.textContent = `${D2>=0?"+":""}${D2.toFixed(1)} dpt`;
+    badge.textContent = (mode === 'rays') ? "3 Strahlen" : "Objektmodus";
+    elColorControls.style.display = (mode === 'rays') ? "block" : "none";
+    elObjControls.style.display = (mode === 'object') ? "block" : "none";
+    elL2Controls.classList.toggle('disabled', !l2Enabled);
+
+    // (W, H, yMid, xLens1 werden oben gesetzt)
+    const xLens2 = (xLens1 + SCREEN_X)/2;
+    const xStart = 40;
+    const xEnd = W - 30;
+
+    const f1 = focalPxFromDiopters(D1);
+    const f2 = focalPxFromDiopters(D2);
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = "rgba(6,8,18,.75)";
+    ctx.fillRect(0,0,W,H);
+
+    drawAxis(ctx, yMid);
+    drawScreen(ctx, SCREEN_X, 40, H-40);
+
+    drawLensRay(ctx, xLens1, yMid, 330, lensType, bulgeFromDiopters(Dmag));
+    if(l2Enabled) drawLensRay(ctx, xLens2, yMid, 330, l2Type, bulgeFromDiopters(D2mag));
+
+    ctx.save();
+    ctx.fillStyle = "rgba(255,255,255,.95)";
+    ctx.font = "700 14px system-ui";
+    ctx.fillText("Einfallende Strahlen / Objekt", 18, 22);
+    ctx.fillText("Linse 1", xLens1-18, 22);
+    if(l2Enabled) ctx.fillText("Linse 2", xLens2-18, 22);
+    ctx.fillText("Netzhaut", SCREEN_X-36, 22);
+    ctx.restore();
+
+
+    let absDef = 160;
+    let ok = false;
+
+    if(mode === 'rays'){
+      const rayYsAbs = [yMid-110, yMid, yMid+110];
+      const cols = [colTop, colMid, colBot];
+
+      let topAfterLast = null;
+      let lastLensX = xLens1;
+
+      for(let i=0;i<3;i++){
+        const y0Abs = rayYsAbs[i];
+        const col = cols[i];
+
+        // initial (parallel): theta=0, y relative to axis
+        let st0 = { y: y0Abs - yMid, theta: 0 };
+
+        // to lens1
+        const stL1Before = propagate(st0, xLens1 - xStart);
+        drawRaySegment(ctx, xStart, yMid + st0.y, xLens1, yMid + stL1Before.y, col, false);
+
+        // lens1
+        const stL1After = lens(stL1Before, f1);
+
+        if(l2Enabled){
+          // to lens2
+          const stL2Before = propagate(stL1After, xLens2 - xLens1);
+          drawRaySegment(ctx, xLens1, yMid + stL1Before.y, xLens2, yMid + stL2Before.y, col, false);
+
+          // lens2
+          const stL2After = lens(stL2Before, f2);
+
+          // to screen
+          const stScreen = propagate(stL2After, SCREEN_X - xLens2);
+          drawRaySegment(ctx, xLens2, yMid + stL2Before.y, SCREEN_X, yMid + stScreen.y, col, false);
+
+          // after screen (dashed)
+          const stEnd = propagate(stScreen, xEnd - SCREEN_X);
+          drawRaySegment(ctx, SCREEN_X, yMid + stScreen.y, xEnd, yMid + stEnd.y, col, true);
+
+          // dot at screen
+          ctx.save();
+          ctx.fillStyle = col;
+          ctx.beginPath();
+          ctx.arc(SCREEN_X, yMid + stScreen.y, 4, 0, Math.PI*2);
+          ctx.fill();
+          ctx.restore();
+
+          if(i === 0){
+            topAfterLast = stL2After;
+            lastLensX = xLens2;
+          }
+        } else {
+          // to screen
+          const stScreen = propagate(stL1After, SCREEN_X - xLens1);
+          drawRaySegment(ctx, xLens1, yMid + stL1Before.y, SCREEN_X, yMid + stScreen.y, col, false);
+
+          // after screen dashed
+          const stEnd = propagate(stScreen, xEnd - SCREEN_X);
+          drawRaySegment(ctx, SCREEN_X, yMid + stScreen.y, xEnd, yMid + stEnd.y, col, true);
+
+          ctx.save();
+          ctx.fillStyle = col;
+          ctx.beginPath();
+          ctx.arc(SCREEN_X, yMid + stScreen.y, 4, 0, Math.PI*2);
+          ctx.fill();
+          ctx.restore();
+
+          if(i === 0){
+            topAfterLast = stL1After;
+            lastLensX = xLens1;
+          }
+        }
+      }
+
+      // focus estimate using top ray after last lens
+      const fx = focusX(lastLensX, topAfterLast);
+      if(isFinite(fx) && fx > lastLensX){
+        absDef = Math.abs(SCREEN_X - fx);
+        ok = absDef < 2.0;
+      } else {
+        absDef = 160;
+        ok = false;
+      }
+
+      // show focus marker (even if not on screen)
+      if(isFinite(fx)){
+        ctx.save();
+        ctx.fillStyle = "rgba(255,255,255,.55)";
+        ctx.strokeStyle = "rgba(255,255,255,.25)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(fx, yMid, 5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(fx-10,yMid); ctx.lineTo(fx+10,yMid);
+        ctx.moveTo(fx,yMid-10); ctx.lineTo(fx,yMid+10);
+        ctx.stroke();
+        ctx.fillText("F", fx+8, yMid-8);
+        ctx.restore();
+      }
+
+    } else {
+      // object mode: "Bild verwenden" — 3 Strahlen vom oberen UND unteren Ende des Objektbildes
+      // Farbcodierung wie in der Referenz:
+      // - orange Strahlen -> rot (Licht_rot.gif / rote Linie)
+      // - grüne Strahlen  -> weiß (Licht_weiß.gif / weiße Linie)
+      const do1Center = objDistPx; // px Abstand: Objektzentrum -> Linse 1 (Ansicht)
+      const xObj = xLens1 - do1Center;
+
+      // Objekt-Endpunkte (oben/unten) im "Objektbox"-Koordinatensystem
+      const OBJ_BOX = 110;          // entspricht drawObject0: 110x110
+      const OBJ_HALF = OBJ_BOX/2;
+      const yTopAbs = yMid - OBJ_HALF;
+      const yBotAbs = yMid + OBJ_HALF;
+
+      // Strahlen sollen vom objektseitigen Rand (Richtung Linse) ausgehen.
+      // Dafür wird die tatsächliche Bildbreite (contain) grob angenähert:
+      const objImg = (Assets.ok.objektStrahlengang ? Assets.objektStrahlengang : (Assets.ok.objekt ? Assets.objekt : null));
+      let objW = 70;
+      if(objImg && objImg.complete && objImg.naturalWidth > 0 && objImg.naturalHeight > 0){
+        objW = OBJ_BOX * Math.min(1, (objImg.naturalWidth / objImg.naturalHeight));
+      }
+      const xEmit = xObj + objW/2;
+      const do1 = Math.max(1, xLens1 - xEmit); // effektiver Objektabstand für die Strahlenquelle
+
+      // ---------- Bildlage (konsistent zur Strahlenquelle) ----------
+      const di1 = 1 / ((1/f1) - (1/do1));
+      const xImg1 = xLens1 + di1;
+      const m1 = -di1 / do1;
+
+      let xImgFinal = xImg1;
+      let mTotal = m1;
+      let realFinal = (di1 > 0);
+
+      if(l2Enabled){
+        const do2 = xLens2 - xImg1; // can be negative (virtual object)
+        const di2 = 1 / ((1/f2) - (1/do2));
+        xImgFinal = xLens2 + di2;
+        const m2 = -di2 / do2;
+        mTotal = m1 * m2;
+        realFinal = (di2 > 0);
+      }
+
+      if(realFinal){
+        absDef = Math.abs(SCREEN_X - xImgFinal);
+        ok = absDef < 2.0;
+      } else {
+        absDef = 160;
+        ok = false;
+      }
+
+      // Objekt zeichnen
+      drawObject(ctx, xObj, yMid, 1);
+
+      // ---------- Strahlen zeichnen ----------
+      const colTop = "rgba(255,90,90,.95)";     // rot (orange in Referenz)
+      const colBot = "rgba(255,255,255,.90)";   // weiß (grün in Referenz)
+
+      const L = xLens1 - xEmit;
+      const EPS = 1e-6;
+
+      // 1) Parallelstrahl: theta = 0
+      function theta_parallel(){ return 0; }
+
+      // 2) Mittelpunktstrahl: durch Linsenzentrum (y=0 bei xLens1) => theta = -y0/L
+      function theta_throughCenter(yAbs){
+        const y0 = (yAbs - yMid);
+        return (Math.abs(L) < EPS) ? 0 : (-y0 / L);
+      }
+
+      // 3) Brennpunktstrahl (so gewählt, dass er NACH Linse 1 parallel weiterläuft)
+      //    Bedingung: theta_out = 0  =>  theta_in = y_at_lens / f1
+      //    mit y_at_lens = y0 + theta_in * L  =>  theta_in = y0 / (f1 - L)
+      function theta_toParallelAfterLens1(yAbs){
+        const y0 = (yAbs - yMid);
+        const denom = (f1 - L);
+        if(Math.abs(denom) < EPS) return 0;
+        return y0 / denom;
+      }
+
+      // Strahlen werden so konstruiert, dass sie Linse 1 innerhalb der Linsenöffnung treffen
+      // (keine Strahlen "über den Rand hinaus"). Der Eintrittspunkt an Linse 1 (y@Linse)
+      // wird dafür bei Bedarf auf die Apertur begrenzt. Linse 2 wirkt nur, wenn der Strahl
+      // tatsächlich durch ihre Öffnung läuft.
+      function traceRayFrom(yAbs, kind, color){
+        const y0 = (yAbs - yMid);             // Start y (relativ zur Achse) am Emissionspunkt
+        const L1 = (xLens1 - xEmit);          // Weg bis Linse 1
+        if(L1 < 1) return;
+
+        const AP_MARGIN = 6;
+        const A1 = (330/2) - AP_MARGIN;       // Linse 1: Höhe 330 px
+        const A2 = (300/2) - AP_MARGIN;       // Linse 2: Höhe 300 px
+
+        // gewünschter Treffpunkt an Linse 1 (y1) je nach Strahltyp
+        let y1 = 0;
+
+        if(kind === "parallel"){
+          // ursprünglich parallel zur Achse; ggf. auf die Apertur von Linse 1 begrenzt
+          y1 = clamp(y0, -A1, A1);
+        } else if(kind === "center"){
+          // durch Linsenzentrum
+          y1 = 0;
+        } else {
+          // "Brennpunktstrahl": so, dass er NACH Linse 1 parallel wäre (theoretisch).
+          // Bei ungünstiger Geometrie kann y@Linse zu groß werden -> clamp auf Apertur.
+          const denom = (f1 - L1);
+          if(Math.abs(denom) < EPS){
+            y1 = clamp(Math.sign(y0 || 1) * A1, -A1, A1);
+          } else {
+            const y1Theory = y0 * (f1 / denom); // y an Linse 1
+            y1 = clamp(y1Theory, -A1, A1);
+          }
+        }
+
+        // daraus folgt der Einstrahlwinkel (Paraxial)
+        const theta0 = (y1 - y0) / L1;
+
+        let st0 = { y: y0, theta: theta0 };
+
+        // to lens1
+        const stL1Before = propagate(st0, xLens1 - xEmit); // y ~= y1
+        drawRaySegment(ctx, xEmit, yMid + st0.y, xLens1, yMid + stL1Before.y, color, false);
+
+        // lens1
+        const stL1After = lens(stL1Before, f1);
+
+        if(l2Enabled){
+          // to lens2
+          const stL2Before = propagate(stL1After, xLens2 - xLens1);
+          drawRaySegment(ctx, xLens1, yMid + stL1Before.y, xLens2, yMid + stL2Before.y, color, false);
+
+          // lens2 (nur wenn der Strahl die Linsenöffnung trifft)
+          let stL2After = stL2Before;
+          if(Math.abs(stL2Before.y) <= A2){
+            stL2After = lens(stL2Before, f2);
+          }
+
+          // to screen
+          const stScreen = propagate(stL2After, SCREEN_X - xLens2);
+          drawRaySegment(ctx, xLens2, yMid + stL2Before.y, SCREEN_X, yMid + stScreen.y, color, false);
+
+          // after screen (dashed theoretical extension)
+          const stEnd = propagate(stScreen, xEnd - SCREEN_X);
+          drawRaySegment(ctx, SCREEN_X, yMid + stScreen.y, xEnd, yMid + stEnd.y, color, true);
+
+          // marker at screen
+          ctx.save();
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(SCREEN_X, yMid + stScreen.y, 3.5, 0, Math.PI*2);
+          ctx.fill();
+          ctx.restore();
+        } else {
+          // to screen
+          const stScreen = propagate(stL1After, SCREEN_X - xLens1);
+          drawRaySegment(ctx, xLens1, yMid + stL1Before.y, SCREEN_X, yMid + stScreen.y, color, false);
+
+          // after screen dashed
+          const stEnd = propagate(stScreen, xEnd - SCREEN_X);
+          drawRaySegment(ctx, SCREEN_X, yMid + stScreen.y, xEnd, yMid + stEnd.y, color, true);
+
+          // marker at screen
+          ctx.save();
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(SCREEN_X, yMid + stScreen.y, 3.5, 0, Math.PI*2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // 3 Strahlen vom oberen Ende (rot)
+      traceRayFrom(yTopAbs, "parallel", colTop);
+      traceRayFrom(yTopAbs, "center", colTop);
+      traceRayFrom(yTopAbs, "toParallel", colTop);
+
+      // 3 Strahlen vom unteren Ende (weiß)
+      traceRayFrom(yBotAbs, "parallel", colBot);
+      traceRayFrom(yBotAbs, "center", colBot);
+      traceRayFrom(yBotAbs, "toParallel", colBot);
+
+      // ---------- Bild am Schirm (wie bisher) ----------
+      ctx.save();
+      ctx.translate(SCREEN_X, yMid);
+      const scale = clamp(Math.abs(mTotal), 0.2, 2.5);
+      const blurPx = (!realFinal) ? 10 : clamp(Math.abs(SCREEN_X - xImgFinal)/6, 0, 10);
+      ctx.filter = `blur(${blurPx}px)`;
+      ctx.globalAlpha = ok ? 0.95 : 0.8;
+      ctx.scale(-scale, -scale);
+      drawObject0(ctx);
+      ctx.restore();
+
+      // image plane marker
+      ctx.save();
+      ctx.strokeStyle = realFinal ? "rgba(98,210,111,.45)" : "rgba(255,204,102,.45)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8,6]);
+      ctx.beginPath();
+      ctx.moveTo(xImgFinal, 50);
+      ctx.lineTo(xImgFinal, H-50);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = realFinal ? "rgba(98,210,111,.85)" : "rgba(255,204,102,.85)";
+      ctx.fillText("Bildebene", xImgFinal+6, 44);
+      ctx.restore();
+
+      }
+
+
+    // Legende: Gestrichelte Linie stellt den theoretischen Strahlengang ohne Schirm dar. (unten im Simulationfenster)
+    {
+      const legendText = "Legende: Gestrichelte Linie stellt den theoretischen Strahlengang ohne Schirm dar.";
+      const padX = 12;
+      const lineW = 28;
+      const boxH  = 26;
+      const x = 12;
+      const y = H - boxH - 10;
+
+      ctx.save();
+      ctx.font = "12.5px system-ui";
+      ctx.textBaseline = "middle";
+
+      const textW = ctx.measureText(legendText).width;
+      const boxW  = Math.min(W - 24, lineW + 10 + textW + padX*2);
+
+      // Hintergrundbox für bessere Lesbarkeit
+      ctx.fillStyle = "rgba(10,14,28,.65)";
+      ctx.strokeStyle = "rgba(106,166,255,.18)";
+      ctx.lineWidth = 1;
+      if(ctx.roundRect){
+        ctx.beginPath();
+        ctx.roundRect(x, y, boxW, boxH, 10);
+        ctx.fill();
+        ctx.stroke();
+      } else {
+        ctx.fillRect(x, y, boxW, boxH);
+        ctx.strokeRect(x, y, boxW, boxH);
+      }
+
+      const cy = y + boxH/2;
+
+      // gestrichelte Musterlinie
+      ctx.strokeStyle = "rgba(255,255,255,.85)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6,5]);
+      ctx.beginPath();
+      ctx.moveTo(x + padX, cy);
+      ctx.lineTo(x + padX + lineW, cy);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Text
+      ctx.fillStyle = "rgba(232,236,255,.92)";
+      ctx.fillText(legendText, x + padX + lineW + 10, cy);
+      ctx.restore();
+    }
+
+updateVision(absDef, ok, mode);
+  }
+
+  elL2Enabled.addEventListener('change', () => {
+    elL2Controls.classList.toggle('disabled', !elL2Enabled.checked);
+    Ray.draw();
+  });
+
+  [elLensType, elD, elL2Type, elL2D, elMode, elObjDist, elColTop, elColMid, elColBot].forEach(el => {
+    el.addEventListener('input', draw);
+    el.addEventListener('change', draw);
+  });
+
+  return { draw };
+})();
+
+// ---------- 2) Akkommodation ----------
+const Acco = (() => {
+  const canvas = document.getElementById('acco-canvas');
+  const ctx = canvas.getContext('2d');
+  const topCanvas = document.getElementById('acco-topview');
+  const tctx = topCanvas ? topCanvas.getContext('2d') : null;
+
+// Hintergrund (Gesicht) im Augenquerschnitt – Position aus Referenzbild "Position Auge" (normierte Kreisposition)
+  const elShowBg = document.getElementById('toggle-bg-acco');
+  const faceBg = new Image();
+  let faceBgOk = false;
+  faceBg.onload = () => { faceBgOk = true; draw(); };
+  faceBg.onerror = () => { faceBgOk = false; };
+  faceBg.src = "Bilder/Gesicht_Unedited.png";
+
+  // Normierte Koordinaten des Referenz-Kreises aus "Position Auge"
+  const POS_EYE_CX_N = 0.635724339;
+  const POS_EYE_CY_N = 0.431772360;
+  const POS_EYE_R_N  = 0.132266121;
+
+  function drawFaceBackground(ctx, img, W, H, eyeCX, eyeCY, eyeR){
+    if(!img || !img.width || !img.height) return;
+
+    // Skaliere so, dass der Referenz-Kreisradius ungefähr dem Augapfelradius entspricht
+    const refR = POS_EYE_R_N * img.width;
+    const s = (refR > 1e-6) ? (eyeR / refR) : 1;
+
+    // Feintuning: Gesicht minimal nach links verschieben (vertikale Position bleibt unverändert)
+    const FACE_SHIFT_X = -0.18 * eyeR;
+    const dx = eyeCX - (POS_EYE_CX_N * img.width) * s + FACE_SHIFT_X;
+    const dy = eyeCY - (POS_EYE_CY_N * img.height) * s;
+
+    ctx.save();
+
+    // Dunkle Grundfläche (ruhiger Hintergrund)
+    ctx.globalAlpha = 1.0;
+    ctx.fillStyle = "rgba(6,8,18,.80)";
+    ctx.fillRect(0,0,W,H);
+
+    // Gesicht sehr zurückgenommen zeichnen: weniger Deckkraft + Entsättigung + leichte Unschärfe
+    // (damit der Kontext sichtbar ist, aber nicht ablenkt)
+    ctx.globalAlpha = 0.56;
+    try{
+      ctx.filter = "grayscale(1) blur(2.6px) brightness(0.85) contrast(0.90)";
+    }catch(e){
+      // ctx.filter wird in sehr alten Browsern ignoriert – dann nur über Alpha abdämpfen
+    }
+    ctx.drawImage(img, dx, dy, img.width * s, img.height * s);
+    try{ ctx.filter = "none"; }catch(e){}
+
+    // Zusätzlich abdunkeln, damit Strahlen/Strukturen klar dominieren
+    ctx.globalAlpha = 1.0;
+    ctx.fillStyle = "rgba(6,8,18,.60)";
+    ctx.fillRect(0,0,W,H);
+
+    // Vignette: Blickführung zum Auge (reduziert Ablenkung an den Rändern)
+    const r0 = eyeR * 1.15;
+    const r1 = Math.max(W, H) * 0.80;
+    const g = ctx.createRadialGradient(eyeCX, eyeCY, r0, eyeCX, eyeCY, r1);
+    g.addColorStop(0.0, "rgba(0,0,0,0.00)");
+    g.addColorStop(1.0, "rgba(0,0,0,0.55)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+
+    ctx.restore();
+  }
+
+
+
+const visionCanvas = document.getElementById('acco-vision');
+const vctx = visionCanvas ? visionCanvas.getContext('2d') : null;
+
+// Seheindruck (Akkommodation): Taschenlampe (Nah/Mitte/Fern) – Crossfade abhängig von Objektentfernung
+const torchNear = new Image();
+const torchMid = new Image();
+const torchFar = new Image();
+const torchOk = { near:false, mid:false, far:false };
+
+Promise.all([
+  _loadWithFallback(torchNear, ["Bilder/Taschenlampe_Nah.png","Taschenlampe_Nah.png"]),
+  _loadWithFallback(torchMid,  ["Bilder/Taschenlampe_Mitte.png","Taschenlampe_Mitte.png"]),
+  _loadWithFallback(torchFar,  ["Bilder/Taschenlampe_Fern.png","Taschenlampe_Fern.png"])
+]).then(([a,b,c]) => {
+  torchOk.near = a; torchOk.mid = b; torchOk.far = c;
+  try{ draw(); }catch(e){}
+});
+
+  const visionTmp = document.createElement('canvas');
+  const visionTmpCtx = visionTmp.getContext('2d');
+
+function drawVision(distRatio, L, defocusPx=0, pupilMm=PUPIL_MIN_MM){
+  if(!vctx || !visionCanvas) return;
+  const W = visionCanvas.width, H = visionCanvas.height;
+  vctx.clearRect(0,0,W,H);
+  vctx.fillStyle = "rgba(10,14,28,.45)";
+  vctx.fillRect(0,0,W,H);
+
+  const have = torchOk.near || torchOk.mid || torchOk.far;
+  if(!have){
+    vctx.save();
+    vctx.fillStyle = "rgba(232,236,255,.55)";
+    vctx.font = "13px system-ui, -apple-system, Segoe UI, Roboto, Ubuntu";
+    vctx.fillText("Seheindruck (Bilder fehlen)", 12, 22);
+    vctx.restore();
+    return;
+  }
+
+  const r = clamp(distRatio, 0, 1);
+
+  // Stückweise Crossfade: [0..0.5] Nah→Mitte, [0.5..1] Mitte→Fern
+  let aImg, bImg, t;
+  if(r < 0.5){
+    aImg = torchOk.near ? torchNear : (torchOk.mid ? torchMid : torchFar);
+    bImg = torchOk.mid ? torchMid : (torchOk.far ? torchFar : torchNear);
+    t = r / 0.5;
+  } else {
+    aImg = torchOk.mid ? torchMid : (torchOk.near ? torchNear : torchFar);
+    bImg = torchOk.far ? torchFar : (torchOk.mid ? torchMid : torchNear);
+    t = (r - 0.5) / 0.5;
+  }
+
+  vctx.save();
+  vctx.globalAlpha = 1.0;
+  // "cover" verhindert schwarze Ränder (Letterboxing)
+  drawImageCover(vctx, aImg, 0, 0, W, H, 1.0);
+  vctx.globalAlpha = clamp(t, 0, 1);
+  drawImageCover(vctx, bImg, 0, 0, W, H, 1.0);
+  vctx.restore();
+
+  // Helligkeits-Feedback im Seheindruck (Taschenlampe):
+  // - bei niedriger Helligkeit weniger „blendend“ (etwas abdunkeln)
+  // - bei hoher Helligkeit stärkeres Glare/Bloom
+  const l = clamp(Number(L) || 0, 0, 1);
+
+  // bei niedriger Helligkeit etwas abdunkeln (weniger blendend)
+  const darken = 0.30 * Math.pow(1 - l, 1.1);
+  if (darken > 0.001) {
+    vctx.save();
+    vctx.globalCompositeOperation = "source-over";
+    vctx.globalAlpha = clamp(darken, 0, 0.30);
+    vctx.fillStyle = "#000000";
+    vctx.fillRect(0, 0, W, H);
+    vctx.restore();
+  }
+
+  // Blend-Effekt: bei hoher Helligkeit stärker blendend
+  const glare = Math.pow(clamp((l - 0.15) / 0.85, 0, 1), 1.6); // startet erst ab mittlerer Helligkeit
+  if (glare > 0.001) {
+    const minWH = Math.min(W, H);
+    const cx = W * 0.52, cy = H * 0.55;
+
+    vctx.save();
+    vctx.globalCompositeOperation = "screen";
+
+    // leichte Gesamtaufhellung
+    vctx.globalAlpha = 0.10 * glare;
+    vctx.fillStyle = "#ffffff";
+    vctx.fillRect(0, 0, W, H);
+
+    // zentraler Bloom/Glare
+    const r0 = minWH * (0.06 + 0.02 * glare);
+    const r1 = minWH * (0.32 + 0.22 * glare);
+    const g = vctx.createRadialGradient(cx, cy, r0, cx, cy, r1);
+    g.addColorStop(0.0, `rgba(255,255,255,${0.95 * glare})`);
+    g.addColorStop(0.35, `rgba(255,255,255,${0.45 * glare})`);
+    g.addColorStop(1.0, "rgba(255,255,255,0)");
+    vctx.globalAlpha = 0.80;
+    vctx.fillStyle = g;
+    vctx.beginPath();
+    vctx.arc(cx, cy, r1, 0, Math.PI * 2);
+    vctx.fill();
+
+    // Highlight im Zentrum
+    vctx.globalAlpha = 0.55 * glare;
+    vctx.fillStyle = "rgba(255,255,255,1)";
+    vctx.beginPath();
+    vctx.arc(cx, cy, r0 * 0.55, 0, Math.PI * 2);
+    vctx.fill();
+
+    vctx.restore();
+  }
+
+
+
+  // Tiefenschärfe (Didaktik):
+  // - Kleine Pupille (hell) => größere Tiefenschärfe: Defokus wirkt schwächer
+  // - Große Pupille (dunkel) => geringere Tiefenschärfe: Defokus wirkt stärker
+  const absDef = Math.abs(Number(defocusPx) || 0);
+  const pupilN = clamp((Number(pupilMm) - PUPIL_MIN_MM) / (PUPIL_MAX_MM - PUPIL_MIN_MM), 0, 1);
+  const tol = lerp(10, 3, pupilN); // px Defokus-Toleranz
+  let blurPx = 0;
+  if(absDef > tol){
+    const scale = lerp(9, 5, pupilN); // große Pupille => stärkerer Blur pro Defokus
+    blurPx = clamp((absDef - tol) / scale, 0, 12);
+  }
+  if(blurPx > 0.05){
+    if(visionTmp.width !== W || visionTmp.height !== H){ visionTmp.width = W; visionTmp.height = H; }
+    visionTmpCtx.clearRect(0,0,W,H);
+    visionTmpCtx.drawImage(visionCanvas, 0, 0);
+    vctx.clearRect(0,0,W,H);
+    vctx.filter = `blur(${blurPx.toFixed(2)}px)`;
+    vctx.drawImage(visionTmp, 0, 0);
+    vctx.filter = "none";
+  }
+
+  // dezenter Rahmen
+  vctx.save();
+  vctx.strokeStyle = "rgba(106,166,255,.18)";
+  vctx.lineWidth = 2;
+  vctx.strokeRect(1,1,W-2,H-2);
+  vctx.restore();
+}
+
+  // Aufsicht: Iris-Overlay (nur wenn Toggle aktiv)
+  const elTopIris = document.getElementById('acco-topviewShowIris');
+  const irisTopImg = new Image();
+  let irisTopOk = false;
+  const irisLayer = document.createElement('canvas');
+  const irisLayerCtx = irisLayer.getContext('2d');
+
+  _loadWithFallback(irisTopImg, ["Bilder/Iris_Aufsicht.png","Iris_Aufsicht.png"]).then(ok => {
+    irisTopOk = ok;
+    // nach dem Laden einmal neu zeichnen
+    try{ draw(); }catch(e){}
+  });
+
+  const elDist = document.getElementById('acco-dist');
+  const elDistVal = document.getElementById('acco-distVal');
+
+  const elLight = document.getElementById('acco-light');
+  const elLightVal = document.getElementById('acco-lightVal');
+
+  const PUPIL_MIN_MM = 2.0;
+  const PUPIL_MAX_MM = 8.0;
+
+  // Für eine 0..1-Kennzahl: normiere Lichtmenge ~ (Lichtintensität * Pupillenfläche)
+  // Hinweis: selbst bei „0% Helligkeit“ bleibt ein kleiner Restlicht-Anteil,
+  // sonst wäre die Lichtquelle im Seheindruck vollständig unsichtbar.
+  const L_SRC_MIN = 0.01; // 1% Restlicht
+  function lightSourceFactor(L){
+    L = clamp(L, 0, 1);
+    return L_SRC_MIN + (1 - L_SRC_MIN) * L;
+  }
+
+  const MAX_LIGHT_PRODUCT = (() => {
+    let max = 0;
+    for(let i=0;i<=100;i++){
+      const L = i/100;                  // Slider-Normierung (0..1)
+      const Lsrc = lightSourceFactor(L); // Lichtintensität (mit Restlicht)
+      const p = lerp(PUPIL_MAX_MM, PUPIL_MIN_MM, L);
+      const prod = Lsrc * (p*p);
+      if(prod > max) max = prod;
+    }
+    return max || 1;
+  })();
+
+
+  const elAngleVal = document.getElementById('acco-angleVal');
+  const elPowerVal = document.getElementById('acco-powerVal');
+  const elPupilVal = document.getElementById('acco-pupilVal');
+  const elLightRelVal = document.getElementById('acco-lightRelVal');
+  const badge = document.getElementById('acco-badge');
+
+  // Zusatzanzeige: gefüllter Lichtkegel zwischen oberem und unterem Randstrahl
+  const elShowLightAmount = document.getElementById('toggle-lightamount-acco');
+
+  // Didaktisches Modell (paraxial):
+  // Retinaabstand ~17 mm wird auf "axiale Länge" in Pixeln skaliert.
+  const RETINA_M = 0.017;
+  const AMAX_DPT = 8.0;   // max. Akkommodationsbreite (didaktisch)
+  const OK_PX = 2.0;      // Toleranz für "scharf"
+
+  function read(){
+    const distM = Number(elDist.value);
+
+    // Helligkeit: 0 = dunkel, 100 = hell
+    const light = Number(elLight.value);
+    const L = clamp(light/100, 0, 1);
+
+    // Pupille reagiert invers auf Helligkeit: dunkel -> groß, hell -> klein
+    const pupilMm = lerp(PUPIL_MAX_MM, PUPIL_MIN_MM, L);
+
+    const axialPx = 300;   // FIX: axiale Länge (px)
+    return { distM, light, L, pupilMm, axialPx };
+  }
+
+
+  // Akkommodation kann (optional) zeitlich verzögert reagieren – so wird „leicht falscher Fokus“ sichtbar
+  // und die Tiefenschärfe (Pupillengröße) kann didaktisch wirken.
+  let accCurDpt = null;
+  let accLastT = 0;
+  let accRaf = null;
+
+  function accAnimEnabled(){
+    const el = document.getElementById('toggle-gifrays-acco');
+    return !!(el && el.checked);
+  }
+
+  function stepAccTowards(targetDpt){
+    const now = performance.now();
+    // Initialisierung / Reset
+    if(accCurDpt === null || !isFinite(accCurDpt)){
+      accCurDpt = targetDpt;
+      accLastT = now;
+      return accCurDpt;
+    }
+    // Wenn Animation aus: sofort auf Ziel
+    if(!accAnimEnabled()){
+      accCurDpt = targetDpt;
+      accLastT = now;
+      return accCurDpt;
+    }
+    const dt = Math.max(0, Math.min(100, now - (accLastT || now)));
+    accLastT = now;
+
+    // Zeitkonstante der Akkommodation (ms) – bewusst spürbar, aber nicht „zäh“
+    const tau = 220;
+    const a = 1 - Math.exp(-dt / tau);
+    accCurDpt = accCurDpt + (targetDpt - accCurDpt) * a;
+    return accCurDpt;
+  }
+
+  function scheduleAccFrame(){
+    if(accRaf) return;
+    const view = document.getElementById('view-acco');
+    if(!(view && view.classList.contains('active'))) return;
+
+    // Wenn globaler Animator (GIF-Strahlen) läuft, übernimmt er das Redraw.
+    const hasGlobalAnim = (typeof USE_GIF_RAYS !== 'undefined') && USE_GIF_RAYS &&
+      Assets && Assets.ok && (Assets.ok.beamWhite || Assets.ok.beamRed);
+    if(hasGlobalAnim) return;
+
+    accRaf = requestAnimationFrame(() => {
+      accRaf = null;
+      try{ draw(); }catch(e){}
+    });
+  }
+
+
+  function optics(u_m, axialPx, accOverrideDpt=null){
+    const pxPerM = axialPx / RETINA_M;
+
+    const demand_dpt = 1 / u_m;
+    const acc_dpt = (accOverrideDpt === null)
+      ? clamp(demand_dpt, 0, AMAX_DPT)
+      : clamp(accOverrideDpt, 0, AMAX_DPT);
+
+    const D_base = 1 / RETINA_M;
+    const D_total = D_base + acc_dpt;
+
+    const f_m = 1 / D_total;
+    const f_px = f_m * pxPerM;
+
+    // tatsächliche Bildweite (dünne Linse)
+    const v_m = 1 / ((1/f_m) - (1/u_m));
+    const v_px = v_m * pxPerM;
+
+    return { pxPerM, demand_dpt, acc_dpt, D_total, f_m, f_px, v_m, v_px };
+  }
+
+    // Objekt: Bild (Objekt.png). Kein Kreis-Overlay.
+// Strahlen starten an der Objekt-Frontkante (rechts, zum Auge hin).
+function objectMarkerSize(r){
+  return clamp(r*6, 60, 120); // r=14 -> 84px
+}
+function objectEmitX(xCenter, r){
+  return xCenter + objectMarkerSize(r)/2; // Frontkante
+}
+function drawObjectFallbackF(x, y, size){
+  ctx.save();
+  ctx.translate(x, y);
+  const s = size/110;
+  ctx.scale(s, s);
+  ctx.strokeStyle = "rgba(255,255,255,.90)";
+  ctx.lineWidth = 8;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(-25,-45); ctx.lineTo(-25,45);
+  ctx.moveTo(-25,-45); ctx.lineTo(35,-45);
+  ctx.moveTo(-25,-5); ctx.lineTo(20,-5);
+  ctx.stroke();
+  ctx.restore();
+}
+function drawObjectMarker(x, y, r=14){
+  const size = objectMarkerSize(r);
+  const rayActive = !!document.getElementById('view-ray') && document.getElementById('view-ray').classList.contains('active');
+  const useSG = rayActive && Assets.ok.objektStrahlengang;
+  const hasAny = useSG || Assets.ok.objekt;
+
+  if(typeof Assets !== "undefined" && Assets.ok && hasAny){
+    const img = useSG ? Assets.objektStrahlengang : Assets.objekt;
+    drawImageContain(ctx, img, x - size/2, y - size/2, size, size, 1);
+  } else {
+    drawObjectFallbackF(x, y, size);
+  }
+}
+
+
+    function eyeGeometry(xFront, xLens, yMid, axialPx){
+  // Axiallänge (Linse → Retina) steuert die Augapfel-Größe.
+  // Schematisch: Grundform Kreis, vorne zusätzlich Hornhaut-Wölbung.
+  const axMin = 140, axMax = 450;
+  const t = clamp((axialPx - axMin) / (axMax - axMin), 0, 1);
+
+  const xRet = xLens + axialPx;               // Retina = hintere Augengrenze (rechts)
+  const cxEye = (xFront + xRet) / 2;          // Mittelpunkt des Augapfels
+  const R = (xRet - xFront) / 2;              // Radius (Kreis)
+
+  // Hornhaut: leichte Vorwölbung nach vorn (links)
+  // Bei großer axialer Länge (fix 300 px) muss die Wölbung sichtbar mitwachsen.
+  const corneaPx = clamp(R*0.34, 22, 110);
+  const xCornea = xFront - corneaPx;
+
+  const aEye = R;
+  const bEye = R;
+
+  return { xFront, xCornea, corneaPx, xRet, cxEye, aEye, bEye, t };
+}
+
+    function drawEyeSchematic(g){
+  const { xFront, xCornea, corneaPx, xRet, cxEye, aEye, yMid } = g;
+  const R = aEye;
+
+  ctx.save();
+
+  // Geometrie der Hornhaut-Öffnung (damit vorne keine doppelte Kontur entsteht)
+  const th = 0.62;
+  const pU = { x: cxEye + R*Math.cos(Math.PI - th), y: yMid + R*Math.sin(Math.PI - th) };
+  const pL = { x: cxEye + R*Math.cos(Math.PI + th), y: yMid + R*Math.sin(Math.PI + th) };
+
+  // Augapfel (Außen): Sclera ohne vorderes Segment (hintere der zwei Frontlinien entfernt)
+  ctx.strokeStyle = "rgba(255,255,255,.28)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  // großer Bogen um die Rückseite; das vordere Segment wird durch die Hornhaut ersetzt
+  ctx.arc(cxEye, yMid, R, Math.PI - th, Math.PI + th, true);
+  ctx.stroke();
+
+  // Hornhaut (Frontwölbung): Bezier-Kurve zwischen zwei Punkten am Kreisrand
+  ctx.strokeStyle = "rgba(255,255,255,.42)";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(pU.x, pU.y);
+  ctx.quadraticCurveTo(xCornea - corneaPx*0.15, yMid, pL.x, pL.y);
+  ctx.stroke();
+
+  // Retina: Innenbogen am hinteren Pol (rechts)
+  ctx.strokeStyle = "rgba(106,166,255,.50)";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(cxEye, yMid, R-3, -0.95, 0.95);
+  ctx.stroke();
+  ctx.restore();
+}
+
+
+  // Linse (Akkommodationsmodus): Grundform wie in der Referenz (elliptisch/"Kapsel"),
+  // mit deutlich sichtbarer Dickenänderung.
+  
+  // Linse (Akkommodationsmodus): Ellipse + optionale Textur (Linse.png).
+  // Fallback: reine Vektorlinse, falls das Bild nicht lädt.
+  function drawLensAcco(x, yMid, height, thickness){
+    const ry = height/2;
+    const rx = clamp(thickness, 10, 46);
+
+    // Grundform (Vektor)
+    ctx.save();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(232,236,255,.85)";
+    ctx.fillStyle = "rgba(255,255,255,.06)";
+    ctx.beginPath();
+    ctx.ellipse(x, yMid, rx, ry, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Textur (geclippt)
+    if(Assets.ok.lens){
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(x, yMid, rx, ry, 0, 0, Math.PI*2);
+      ctx.clip();
+      // Textur so skalieren, dass sie die Ellipse "füllt" (cover)
+      drawImageCover(ctx, Assets.lens, x-rx, yMid-ry, rx*2, ry*2, 0.92);
+      // leichte Aufhellung für "transparente" Optik
+      ctx.globalCompositeOperation = "screen";
+      ctx.fillStyle = "rgba(255,255,255,.12)";
+      ctx.fillRect(x-rx, yMid-ry, rx*2, ry*2);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.restore();
+    }
+
+    ctx.restore();
+    return { rx, ry };
+  }
+function drawFocusPlane(x, yMid, label, style, labelY){
+    const { fill, alpha } = style;
+    ctx.save();
+    ctx.globalAlpha = (alpha ?? 1);
+    ctx.fillStyle = fill || "rgba(98,210,111,.85)";
+    ctx.beginPath();
+    ctx.arc(x, yMid, 5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawBlurOnRetina(xRet, yMid, blurR, style){
+    const { stroke, dashed, alpha } = style;
+    ctx.save();
+    ctx.globalAlpha = (alpha ?? 1);
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 2;
+    if(dashed) ctx.setLineDash([6,6]);
+    ctx.beginPath();
+    ctx.arc(xRet, yMid, clamp(blurR, 0.5, 42), 0, Math.PI*2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = "rgba(255,255,255,.55)";
+    ctx.beginPath();
+    ctx.arc(xRet, yMid, 2.2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  
+
+
+function drawCiliaryAndZonules(xLens, yMid, accRatio, distRatio, lensRx, lensRy, cxEye, eyeR, scale=1){
+  // Ziliarmuskel + Zonulafasern (Texturen optional):
+  // - Muskel: Muskel.png als Textur (geclippt), zusätzlich rot eingefärbt (multiply)
+  // - Zonula: Cross-Fade zwischen Zonula_straff.png (Alpha = Spannung) und Zonula_schlaff.png (Alpha = 1−Spannung)
+
+  const pad = 2 * scale;
+  const dx = xLens - cxEye;
+  const yRim = Math.sqrt(Math.max(0, eyeR*eyeR - dx*dx));
+
+  // --- Ziliarmuskel als "Arc-Strip" entlang der Innenwand ---
+  const alphaMus = lerp(0.55, 0.88, accRatio);
+
+  // distRatio: 0 = nahe, 1 = fern
+  const musT    = lerp(24, 10, distRatio) * scale;                     // radiale Dicke (dicker bei Nähe)
+  const musSpan = clamp(lerp(0.20, 0.42, distRatio), 0.16, 0.65);       // Winkelspan (länger bei Ferne)
+
+  const rOuter = eyeR - pad;
+  const rInner = Math.max(6, rOuter - musT);
+
+  // Winkel der Punkte, die auf der vertikalen Linie x = xLens liegen
+  const thetaTop = Math.atan2(-yRim, dx);
+  const thetaBot = Math.atan2( yRim, dx);
+
+  const eyeBoxX = cxEye - rOuter, eyeBoxY = yMid - rOuter;
+  const eyeBoxW = 2*rOuter,      eyeBoxH = 2*rOuter;
+
+  function muscleStripPath(thetaC, isTop){
+    const spanFront = Math.max(0.10, musSpan * 0.75); // vorne stärker gekürzt
+    const spanBack  = musSpan;
+    const a0 = isTop ? (thetaC - spanFront) : (thetaC - spanBack);
+    const a1 = isTop ? (thetaC + spanBack)  : (thetaC + spanFront);
+
+    const p = new Path2D();
+    p.arc(cxEye, yMid, rOuter, a0, a1, false);
+    p.arc(cxEye, yMid, rInner, a1, a0, true);
+    p.closePath();
+    return p;
+  }
+
+  function drawMuscle(path){
+    ctx.save();
+
+    if(Assets.ok.muscle){
+      // Textur
+      ctx.save();
+      ctx.clip(path);
+      drawImageCover(ctx, Assets.muscle, eyeBoxX, eyeBoxY, eyeBoxW, eyeBoxH, 0.95);
+      ctx.restore();
+
+      // Einfärbung
+      ctx.globalCompositeOperation = "multiply";
+      ctx.fillStyle = `rgba(255,90,90,${(alphaMus*0.95).toFixed(3)})`;
+      ctx.fill(path);
+      ctx.globalCompositeOperation = "source-over";
+    } else {
+      // Fallback (Vektor)
+      ctx.fillStyle = `rgba(255,90,90,${alphaMus.toFixed(3)})`;
+      ctx.fill(path);
+    }
+
+    // dezente Kontur
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.lineWidth = 1.2;
+    ctx.stroke(path);
+
+    ctx.restore();
+  }
+
+  drawMuscle(muscleStripPath(thetaTop, true));
+  drawMuscle(muscleStripPath(thetaBot, false));
+
+  // --- Zonulafasern: parallele Faserbündel ---
+  const xBase = xLens;
+  const xOffsets = [-6, 0, 6].map(v => v * scale);
+
+  const tension = clamp(distRatio, 0, 1);     // 0 = schlaff (nah), 1 = straff (fern)
+  const sag = lerp(10, 0, tension) * scale;   // Welligkeit bei schlaff (nah)
+  const zonAlpha = lerp(0.55, 0.95, tension);
+  const zonW = lerp(2.0, 2.8, tension) * scale;
+
+  // Linsen-Pole
+  const yLensTop = yMid - lensRy*0.82;
+  const yLensBot = yMid + lensRy*0.82;
+
+  // Anbindepunkte am Muskel (nahe dem inneren Rand)
+  const yMusTopA = yMid + rInner*Math.sin(thetaTop) + musT*0.15;
+  const yMusBotA = yMid + rInner*Math.sin(thetaBot) - musT*0.15;
+
+  // Pattern (optional)
+  let patTaut = null, patSlack = null;
+  if(ctx.createPattern){
+    if(Assets.ok.zonulaTaut)  patTaut  = ctx.createPattern(Assets.zonulaTaut,  "repeat");
+    if(Assets.ok.zonulaSlack) patSlack = ctx.createPattern(Assets.zonulaSlack, "repeat");
+    const s = 0.35 * scale; // grob: Mustergröße anpassen
+    if(patTaut && patTaut.setTransform)   patTaut.setTransform(new DOMMatrix([s,0,0,s,0,0]));
+    if(patSlack && patSlack.setTransform) patSlack.setTransform(new DOMMatrix([s,0,0,s,0,0]));
+  }
+
+  function buildFiberPoints(xC, yA, yB){
+    const pts = [];
+    const n = 18;
+    const amp = sag * 0.55;
+    const waves = 3;
+    for(let i=0;i<=n;i++){
+      const t = i / n;
+      const y = lerp(yA, yB, t);
+      const x = (amp > 0.25) ? (xC + amp * Math.sin(t * waves * Math.PI * 2)) : xC;
+      pts.push([x,y]);
+    }
+    return pts;
+  }
+
+  function strokeFromPoints(pts){
+    ctx.beginPath();
+    for(let i=0;i<pts.length;i++){
+      const [x,y] = pts[i];
+      if(i === 0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+
+  function strokeFiber(pts){
+    ctx.save();
+    ctx.lineWidth = zonW;
+    ctx.lineCap = "round";
+    ctx.setLineDash([]);
+
+    if(patTaut && patSlack){
+      // Cross-Fade der Texturen
+      ctx.globalAlpha = zonAlpha * tension;
+      ctx.strokeStyle = patTaut;
+      strokeFromPoints(pts);
+
+      ctx.globalAlpha = zonAlpha * (1 - tension);
+      ctx.strokeStyle = patSlack;
+      strokeFromPoints(pts);
+
+      // minimaler "Kern" als Fallback-Kontrast
+      ctx.globalAlpha = 0.20;
+      ctx.strokeStyle = "rgb(255,220,90)";
+      strokeFromPoints(pts);
+    } else {
+      // Vektor-Fallback
+      ctx.globalAlpha = zonAlpha;
+      ctx.strokeStyle = "rgb(255,220,90)";
+      strokeFromPoints(pts);
+    }
+    ctx.restore();
+  }
+
+  for(const xo of xOffsets){
+    const xZ = xBase + xo;
+    strokeFiber(buildFiberPoints(xZ, yMusTopA, yLensTop));
+    strokeFiber(buildFiberPoints(xZ, yMusBotA, yLensBot));
+  }
+}
+
+  // Iris/Pupille als Blende: an den Ziliarmuskel "angesetzt" (didaktisch schematisch).
+  // pupilDiamPx: Pupillendurchmesser in Pixeln (bereits skaliert).
+  // Rückgabe: { xIris, pupilR } für Strahlbegrenzung.
+  function drawIrisAtCiliary(xLens, yMid, cxEye, eyeR, lensRx, pupilDiamPx, distRatio, scale=1){
+    const pad = 2 * scale;
+    const dx = xLens - cxEye;
+    const yRim = Math.sqrt(Math.max(0, eyeR*eyeR - dx*dx));
+
+    // gleiche Parameter wie Muskel, damit Ansatzstelle "passt"
+    const musT = lerp(24, 10, distRatio) * scale;
+    const rOuter = eyeR - pad;
+    const rInner = Math.max(6, rOuter - musT);
+
+
+    const rAttach = lerp(rOuter, rInner, 0.50); // mittig in der Muskel-Dicke
+    const thetaTop = Math.atan2(-yRim, dx);
+    const thetaBot = Math.atan2( yRim, dx);
+
+
+    // Ansatz am vorderen Ende des Ziliarmuskels (wie in drawCiliaryAndZonules)
+    const musSpan = clamp(lerp(0.20, 0.42, distRatio), 0.16, 0.65);
+    const spanFront = Math.max(0.10, musSpan * 0.75);
+
+    const aTopAng = thetaTop - spanFront; // vorne (oben)
+    const aBotAng = thetaBot + spanFront; // vorne (unten)
+
+    const aTop = { x: cxEye + rAttach*Math.cos(aTopAng), y: yMid + rAttach*Math.sin(aTopAng) };
+    const aBot = { x: cxEye + rAttach*Math.cos(aBotAng), y: yMid + rAttach*Math.sin(aBotAng) };
+    // Iris-Ebene leicht vor der Linse
+    // Pupillenebene: kleiner Abstand vor der vorderen Linsenkante (nicht anliegend)
+    const irisGap = 10 * scale;
+    const xFrontLens = xLens - lensRx;
+    const xIris = xFrontLens - irisGap;
+// Pupillenöffnung (Radius)
+    const pupilR = clamp(pupilDiamPx/2, 10*scale, 120*scale);
+    const pTop = { x: xIris, y: yMid - pupilR };
+    const pBot = { x: xIris, y: yMid + pupilR };
+
+    // Als zwei "Iris-Lamellen" (oben/unten) dargestellt
+    const fill = "rgba(72,255,135,.22)";
+    const stroke = "rgba(72,255,135,.85)";
+    const thick = 8 * scale;
+
+    function flapPath(g, a, p, dir){
+      const c1 = { x: lerp(a.x, p.x, 0.45), y: lerp(a.y, p.y, 0.30) + dir*10*scale };
+      const c2 = { x: lerp(a.x, p.x, 0.82), y: lerp(a.y, p.y, 0.85) + dir*6*scale };
+
+      g.beginPath();
+      g.moveTo(a.x, a.y);
+      g.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
+    }
+    const hasIrisTex = !!Assets.ok.iris;
+
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    if(!hasIrisTex){
+      // Fallback: Iris als grüne Lamellen (wenn keine Textur verfügbar ist)
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = thick;
+      flapPath(ctx, aTop, pTop, -1); ctx.stroke();
+      flapPath(ctx, aBot, pBot, +1); ctx.stroke();
+
+      // zusätzliche, zartere Linie (optional)
+      ctx.strokeStyle = "rgba(72,255,135,.35)";
+      ctx.lineWidth = thick*0.55;
+      flapPath(ctx, aTop, {x:pTop.x+6*scale, y:pTop.y}, -1); ctx.stroke();
+      flapPath(ctx, aBot, {x:pBot.x+6*scale, y:pBot.y}, +1); ctx.stroke();
+    }
+
+    // Iris-Overlay (Textur optional): Iris_Darstellung.png als Pattern-Stroke auf die Iris-Lamellen
+    // (robust: keine Offscreen-Maske, damit die Textur sicher sichtbar ist)
+    if(hasIrisTex){
+      let pat = null;
+      try{ pat = ctx.createPattern(Assets.iris, 'repeat'); }catch(e){ pat = null; }
+
+      // Pattern skalieren (damit die Struktur nicht "zu groß" wirkt)
+      if(pat && pat.setTransform){
+        const s = 0.22 * scale; // empirisch passend für die Iris-Lamellen
+        pat.setTransform(new DOMMatrix([s,0,0,s,0,0]));
+      }
+
+      ctx.save();
+      ctx.globalAlpha = 0.95;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      // Hauptlamellen
+      ctx.lineWidth = thick * 1.05;
+      ctx.strokeStyle = pat || "rgba(180,210,255,.55)";
+      flapPath(ctx, aTop, pTop, -1); ctx.stroke();
+      flapPath(ctx, aBot, pBot, +1); ctx.stroke();
+
+      // zarte zweite Linie (wie zuvor) — ebenfalls texturiert
+      ctx.globalAlpha = 0.70;
+      ctx.lineWidth = thick * 0.65;
+      flapPath(ctx, aTop, {x:pTop.x+6*scale, y:pTop.y}, -1); ctx.stroke();
+      flapPath(ctx, aBot, {x:pBot.x+6*scale, y:pBot.y}, +1); ctx.stroke();
+
+      ctx.restore();
+
+      // sehr dezente Kontur (ohne "Anstrich")
+      ctx.save();
+      ctx.strokeStyle = "rgba(230,245,255,.28)";
+      ctx.lineWidth = thick * 0.10;
+      flapPath(ctx, aTop, pTop, -1); ctx.stroke();
+      flapPath(ctx, aBot, pBot, +1); ctx.stroke();
+      ctx.restore();
+    }
+// Pupillenöffnung als kurze senkrechte Markierung an der Iris-Ebene
+    ctx.strokeStyle = "rgba(72,255,135,.55)";
+    ctx.lineWidth = 2.2*scale;
+    ctx.setLineDash([6*scale, 5*scale]);
+    ctx.beginPath();
+    ctx.moveTo(xIris, yMid - pupilR);
+    ctx.lineTo(xIris, yMid + pupilR);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.restore();
+
+    return { xIris, pupilR };
+  }
+
+
+function traceRaysAndBlur(xLens, xRet, xFocus, xObj, yObj, yMid, lensRy, xIris=null, pupilR=null, dashed=false, intensity=null, showLightAmount=false){
+    // Rays originate from one object point. A pupil/iris acts as an aperture stop and limits
+    // the marginal rays (→ smaller pupil reduces blur).
+    const h0 = clamp(lensRy*0.60, 34, 92);
+
+    const xAper = (typeof xIris === "number") ? xIris : (xLens - 18);
+    const hAper = (typeof pupilR === "number") ? Math.min(h0, pupilR) : h0;
+
+    const lensYs = [yMid-hAper, yMid, yMid+hAper];
+    const yAtRet = [];
+
+    const aSolid = (intensity && typeof intensity.rayA === "number") ? intensity.rayA : 0.85;
+    const aDash  = (intensity && typeof intensity.dashA === "number") ? intensity.dashA : 0.45;
+    const aMark  = (intensity && typeof intensity.markA === "number") ? intensity.markA : 0.55;
+    const aMarkDash = (intensity && typeof intensity.markDashA === "number") ? intensity.markDashA : aMark;
+
+    function drawRay(x1,y1,x2,y2,isDashed){
+      ctx.save();
+      ctx.globalAlpha *= (isDashed ? aDash : aSolid);
+      drawRaySegment(ctx, x1,y1,x2,y2, "white", isDashed);
+      ctx.restore();
+    }
+
+    // Optional: Lichtkegel/Fläche zwischen oberem und unterem Randstrahl visualisieren
+    // (Helligkeit über intensity.rayA gekoppelt)
+    if(showLightAmount){
+      const yTop = lensYs[0];
+      const yBot = lensYs[lensYs.length-1];
+
+      const denom = Math.max(1e-6, (xFocus - xLens));
+      const mTop = (yMid - yTop) / denom;
+      const mBot = (yMid - yBot) / denom;
+      const yRTop = yTop + mTop * (xRet - xLens);
+      const yRBot = yBot + mBot * (xRet - xLens);
+
+      function lightConePath(){
+        ctx.beginPath();
+        // obere Begrenzung
+        ctx.moveTo(xObj, yObj);
+        ctx.lineTo(xAper, yTop);
+        ctx.lineTo(xLens, yTop);
+        ctx.lineTo(xFocus, yMid);
+        ctx.lineTo(xRet, yRTop);
+        // untere Begrenzung zurück
+        ctx.lineTo(xRet, yRBot);
+        ctx.lineTo(xFocus, yMid);
+        ctx.lineTo(xLens, yBot);
+        ctx.lineTo(xAper, yBot);
+        ctx.closePath();
+      }
+
+      ctx.save();
+      // "screen" wirkt wie Licht (hellt nur auf, statt zu "übermalen")
+      ctx.globalCompositeOperation = "screen";
+
+      // Stärke an eingestellte Helligkeit gekoppelt (rayA/dashA) – aber mit Mindestbetonung,
+      // damit die Fläche deutlich sichtbar bleibt.
+      const baseA = (dashed ? aDash : aSolid);
+      const strength = clamp(0.25 + 0.90*baseA, 0.25, 1.00);
+
+      // Verlauf entlang der optischen Achse: nahe der Linse heller, zur Netzhaut auslaufend.
+      const g = ctx.createLinearGradient(xAper, 0, xRet, 0);
+      g.addColorStop(0.00, "rgba(255,255,255,0.00)");
+      g.addColorStop(0.20, "rgba(255,255,255,1.00)");
+      g.addColorStop(0.60, "rgba(255,255,255,0.65)");
+      g.addColorStop(1.00, "rgba(255,255,255,0.00)");
+
+      // 1) Glow-Pass (deutlich)
+      const glowA = clamp(0.26 * strength, 0.12, 0.55);
+      ctx.filter = "blur(12px)";
+      ctx.globalAlpha *= glowA;
+      ctx.fillStyle = g;
+      lightConePath();
+      ctx.fill();
+
+      // 2) Core-Pass (klarer Kern)
+      const coreA = clamp(0.42 * strength, 0.18, 0.85);
+      ctx.filter = "none";
+      ctx.globalAlpha *= (coreA / Math.max(1e-6, glowA));
+      ctx.fillStyle = g;
+      lightConePath();
+      ctx.fill();
+
+      // 3) Kantenbetonung (hilft beim Ablesen)
+      const edgeA = clamp(0.28 * strength, 0.12, 0.75);
+      ctx.globalAlpha *= (edgeA / Math.max(1e-6, coreA));
+      ctx.strokeStyle = "rgba(255,255,255,0.55)";
+      ctx.lineWidth = 1.6;
+      lightConePath();
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+
+
+    for(let i=0;i<lensYs.length;i++){
+      const yL = lensYs[i];
+
+      // incoming (object -> iris -> lens)
+      drawRay(xObj, yObj, xAper, yL, dashed);
+      drawRay(xAper, yL, xLens, yL, dashed);
+
+      // refracted (through computed focus point)
+      drawRay(xLens, yL, xFocus, yMid, dashed);
+
+      // theoretische Fortsetzung (gestrichelt) — kurz halten, damit sie nicht den ganzen Raum einnimmt
+      const m = (yMid - yL) / (xFocus - xLens);
+      if(i === 1){ // nur den mittleren Strahl verlängern → weniger visuelle Dominanz
+        const xEnd = Math.min(ctx.canvas.width - 60, xRet + 140);
+        if(xEnd > xFocus + 2){
+          const yEnd = yMid + m * (xEnd - xFocus);
+          drawRay(xFocus, yMid, xEnd, yEnd, true);
+        }
+      }
+
+      // intersection with retina
+      const yR = yL + m * (xRet - xLens);
+      yAtRet.push(yR);
+
+      // marker
+      ctx.save();
+      ctx.fillStyle = dashed ? `rgba(255,204,102,${aMarkDash})` : `rgba(255,255,255,${aMark})`;
+      ctx.beginPath();
+      ctx.arc(xRet, yR, 2.6, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    const spread = Math.max(...yAtRet) - Math.min(...yAtRet);
+    return spread/2;
+  }
+
+  function distToScreenX(distM, xObjMin, xObjMax){
+    // Log-Skalierung: Objekt bleibt IMMER im sichtbaren Bereich
+    const dMin = Number(elDist.min), dMax = Number(elDist.max);
+    const t = (Math.log(distM) - Math.log(dMin)) / (Math.log(dMax) - Math.log(dMin));
+    return lerp(xObjMax, xObjMin, clamp(t, 0, 1));
+  }
+  function drawTopView(params){
+    if(!tctx || !topCanvas) return;
+    const { accRatio, distRatio, scale, pupilMm } = params;
+
+    const W = topCanvas.width, H = topCanvas.height;
+    tctx.clearRect(0,0,W,H);
+    tctx.fillStyle = "rgba(6,8,18,.78)";
+    tctx.fillRect(0,0,W,H);
+
+    const cx = W*0.5, cy = H*0.5;
+    const baseR = Math.min(W,H) * 0.46;
+    const s = clamp(scale, 0.85, 1.25);
+
+    // Für die Aufsicht sollen Linse + Ziliarmuskel bei der Entfernungseinstellung
+    // sichtbarer linear reagieren (nah = 1, fern = 0), unabhängig von der physikalisch
+    // inversen 1/dist-Kennlinie der Akkommodation.
+    const nearT = 1 - clamp(distRatio, 0, 1);
+
+    // ---- Ziliarmuskel (Ring) ----
+    // Deutlichere Kontraktion bei Akkommodation (nah): Ring wird kleiner, dicker und kontrastreicher.
+    const rOuter = baseR * lerp(1.02, 0.88, nearT);
+    const musT  = lerp(14, 34, nearT) * s;
+    const rInner = Math.max(10, rOuter - musT);
+
+    const ring = new Path2D();
+    ring.arc(cx, cy, rOuter, 0, Math.PI*2);
+    ring.arc(cx, cy, rInner, 0, Math.PI*2, true);
+    ring.closePath();
+
+    tctx.save();
+    // Grundfarbe/Texture
+    if(typeof Assets !== "undefined" && Assets.ok && Assets.ok.muscle){
+      tctx.save();
+      tctx.clip(ring);
+      drawImageCover(tctx, Assets.muscle, cx-rOuter, cy-rOuter, rOuter*2, rOuter*2, 0.95);
+      tctx.restore();
+
+      tctx.globalCompositeOperation = "multiply";
+      tctx.fillStyle = `rgba(255,90,90,${lerp(0.42,0.88,nearT).toFixed(3)})`;
+      tctx.fill(ring);
+      tctx.globalCompositeOperation = "source-over";
+    } else {
+      const gM = tctx.createRadialGradient(cx, cy, rInner, cx, cy, rOuter);
+      gM.addColorStop(0, `rgba(255,110,110,${lerp(0.18,0.42,nearT).toFixed(3)})`);
+      gM.addColorStop(1, `rgba(255,70,70,${lerp(0.35,0.78,nearT).toFixed(3)})`);
+      tctx.fillStyle = gM;
+      tctx.fill(ring);
+    }
+
+    // Kontraktions-"Fasern" (visuell klarer): kurze Striche im Ring – stärker bei Kontraktion
+    const ticks = 28;
+    tctx.lineCap = "round";
+    tctx.lineWidth = lerp(1.1, 2.4, nearT);
+    tctx.strokeStyle = `rgba(255,215,160,${lerp(0.08,0.34,nearT).toFixed(3)})`;
+    for(let i=0;i<ticks;i++){
+      const a = (i/ticks)*Math.PI*2;
+      const rA = rInner + musT*0.25;
+      const rB = rOuter - musT*0.18;
+      const x1 = cx + rA*Math.cos(a), y1 = cy + rA*Math.sin(a);
+      const x2 = cx + rB*Math.cos(a), y2 = cy + rB*Math.sin(a);
+      tctx.beginPath();
+      tctx.moveTo(x1,y1);
+      tctx.lineTo(x2,y2);
+      tctx.stroke();
+    }
+
+    // Kontur/Glanz
+    tctx.shadowColor = "rgba(0,0,0,.55)";
+    tctx.shadowBlur = 10;
+    tctx.strokeStyle = `rgba(232,236,255,${lerp(0.12,0.22,nearT).toFixed(3)})`;
+    tctx.lineWidth = 2.2;
+    tctx.stroke(ring);
+
+    tctx.shadowBlur = 0;
+    tctx.strokeStyle = `rgba(255,255,255,${lerp(0.05,0.14,nearT).toFixed(3)})`;
+    tctx.lineWidth = 1.2;
+    tctx.stroke(ring);
+    tctx.restore();
+    // ---- Linse (Top-View) ----
+    // Wichtig: In der Aufsicht bleibt die Linse grundsätzlich rund.
+    // Didaktische Abbildung der Formänderung:
+    //   - Fern (accRatio≈0): Linse abgeflacht → größerer Radius (mehr Durchmesser)
+    //   - Nah  (accRatio≈1): Linse kugeliger  → kleinerer Radius
+    // Zusätzlich: Fern leicht oval (minimal), Nah nahezu kreisförmig.
+
+    const lensR_far  = baseR * 0.40; // fern: etwas abgeflacht/größer, aber moderater
+    const lensR_near = baseR * 0.29;
+    const lensR = lerp(lensR_far, lensR_near, nearT);
+    const oval = lerp(0.94, 0.99, nearT); // fern leicht oval, nah fast rund (linear, aber moderater)
+    const lensRx = lensR;
+    const lensRy = lensR * oval;
+
+    const lensPath = new Path2D();
+    lensPath.ellipse(cx, cy, lensRx, lensRy, 0, 0, Math.PI*2);
+
+    tctx.save();
+    // Clip auf Form und Textur/Gradient
+    tctx.save();
+    tctx.clip(lensPath);
+
+    if(typeof Assets !== "undefined" && Assets.ok && Assets.ok.lens){
+      drawImageCover(tctx, Assets.lens, cx-lensRx*1.05, cy-lensRy*1.05, lensRx*2.10, lensRy*2.10, 0.92);
+    } else {
+      const gL = tctx.createRadialGradient(cx-lensRx*0.25, cy-lensRy*0.25, Math.max(2, lensR*0.18), cx, cy, lensR);
+      gL.addColorStop(0, "rgba(210,250,255,.88)");
+      gL.addColorStop(1, "rgba(60,165,255,.52)");
+      tctx.fillStyle = gL;
+      tctx.fillRect(cx-lensRx*1.2, cy-lensRy*1.2, lensRx*2.4, lensRy*2.4);
+    }
+
+    // Highlight: bei Nah stärker (kugeliger)
+    const gH = tctx.createRadialGradient(cx-lensRx*0.18, cy-lensRy*0.18, Math.max(2, lensR*0.10), cx, cy, lensR);
+    gH.addColorStop(0, `rgba(255,255,255,${lerp(0.05,0.24,nearT).toFixed(3)})`);
+    gH.addColorStop(1, "rgba(255,255,255,0)");
+    tctx.fillStyle = gH;
+    tctx.fillRect(cx-lensRx*1.2, cy-lensRy*1.2, lensRx*2.4, lensRy*2.4);
+
+    tctx.restore(); // clip
+
+    // Kontur: bei Nah etwas kräftiger
+    tctx.shadowColor = "rgba(0,0,0,.55)";
+    tctx.shadowBlur = 12;
+    tctx.strokeStyle = `rgba(232,236,255,${lerp(0.45,0.85,nearT).toFixed(3)})`;
+    tctx.lineWidth = lerp(2.0, 3.6, nearT);
+    tctx.stroke(lensPath);
+
+    tctx.shadowBlur = 0;
+    tctx.strokeStyle = `rgba(255,255,255,${lerp(0.08,0.22,nearT).toFixed(3)})`;
+    tctx.lineWidth = 1.2;
+    tctx.stroke(lensPath);
+    tctx.restore();
+
+    // ---- Zonulafasern ----
+    // Straff (fern) -> gerade, schlaff (nah) -> deutlich welliger.
+    const tension = clamp(distRatio, 0, 1);
+    const sag = lerp(30, 0, tension) * s;
+    const N = 44;
+
+    tctx.save();
+    tctx.lineCap = "round";
+    tctx.lineWidth = lerp(1.4, 2.6, tension);
+    tctx.globalAlpha = lerp(0.50, 0.98, tension);
+    tctx.strokeStyle = "rgb(255,220,90)";
+
+    for(let i=0;i<N;i++){
+      const ang = (i / N) * Math.PI*2;
+
+      const ax = cx + rInner * Math.cos(ang);
+      const ay = cy + rInner * Math.sin(ang);
+      // Punkt auf Linsenrand (Ellipse)
+      const bx = cx + lensRx * Math.cos(ang);
+      const by = cy + lensRy * Math.sin(ang);
+
+      tctx.beginPath();
+      tctx.moveTo(ax, ay);
+
+      if(sag > 1.0){
+        const px = -Math.sin(ang), py = Math.cos(ang);
+        const amp = sag * (0.55 + 0.45*Math.sin(i*1.7));
+        // Bezier mit zwei Wellenknoten – klarer als einfache Quadratic
+        tctx.bezierCurveTo(
+          ax + (bx-ax)*0.33 + px*amp, ay + (by-ay)*0.33 + py*amp,
+          ax + (bx-ax)*0.66 - px*amp, ay + (by-ay)*0.66 - py*amp,
+          bx, by
+        );
+      } else {
+        tctx.lineTo(bx, by);
+      }
+      tctx.stroke();
+    }
+    tctx.restore();
+
+    // dezente Außenkontur (Augenwand als Kreis – Orientierung)
+    tctx.save();
+    tctx.strokeStyle = "rgba(255,255,255,.08)";
+    tctx.lineWidth = 2;
+    tctx.beginPath();
+    tctx.arc(cx, cy, rOuter + 8, 0, Math.PI*2);
+    tctx.stroke();
+    tctx.restore();
+
+    // ---- Optional: Iris-Overlay (mit dynamischer Pupille) ----
+    const showIris = !!(elTopIris && elTopIris.checked);
+    if(showIris){
+      // Pupillenradius (mm -> px): gleiche Skalierung wie im Querschnitt (didaktisch)
+      const pupilR = ((Number(pupilMm)||0) * 8 * scale) * 0.5;
+
+      // Iris-Größe: bewusst etwas größer als der Ziliarmuskel-Ring,
+      // damit bei aktiviertem Overlay keine Muskelreste sichtbar bleiben.
+      const irisR = Math.min(Math.min(W,H) * 0.49, rOuter + Math.max(18, musT*0.45) + 18);
+      const irisImgR = irisR * 1.06; // leichter Overscan gegen transparente Bildränder
+
+      // Offscreen-Layer, damit Overlay unabhängig vom restlichen Rendering ist
+      if(irisLayer.width !== W) irisLayer.width = W;
+      if(irisLayer.height !== H) irisLayer.height = H;
+      irisLayerCtx.clearRect(0,0,W,H);
+
+      // Opaker Basis-Disc + Clip: verhindert, dass transparente Pixel des Iris-Bildes
+      // den Ziliarmuskel darunter durchscheinen lassen.
+      irisLayerCtx.save();
+      irisLayerCtx.beginPath();
+      irisLayerCtx.arc(cx, cy, irisImgR, 0, Math.PI*2);
+      irisLayerCtx.closePath();
+      irisLayerCtx.clip();
+
+      irisLayerCtx.globalAlpha = 1.0;
+      irisLayerCtx.fillStyle = "rgba(6,8,18,1)";
+      irisLayerCtx.fillRect(0,0,W,H);
+
+      // Iris-Bild (falls vorhanden)
+      if(irisTopOk && irisTopImg && irisTopImg.complete && irisTopImg.naturalWidth > 0){
+        irisLayerCtx.drawImage(irisTopImg, cx-irisImgR, cy-irisImgR, irisImgR*2, irisImgR*2);
+      } else {
+        // Fallback: einfache Iris-Ringdarstellung
+        const gI = irisLayerCtx.createRadialGradient(cx, cy, irisR*0.22, cx, cy, irisR);
+        gI.addColorStop(0, "rgba(30,120,255,.25)");
+        gI.addColorStop(1, "rgba(30,120,255,.62)");
+        irisLayerCtx.fillStyle = gI;
+        irisLayerCtx.beginPath();
+        irisLayerCtx.arc(cx, cy, irisR, 0, Math.PI*2);
+        irisLayerCtx.fill();
+      }
+      irisLayerCtx.restore(); // clip
+
+      // Pupille (dunkel -> groß, hell -> klein) als schwarze Öffnung
+      const pr = clamp(pupilR, 6, irisR*0.62);
+      irisLayerCtx.save();
+      irisLayerCtx.globalAlpha = 1.0;
+      irisLayerCtx.fillStyle = "rgba(0,0,0,1)";
+      irisLayerCtx.beginPath();
+      irisLayerCtx.arc(cx, cy, pr, 0, Math.PI*2);
+      irisLayerCtx.fill();
+
+      // Pupillenrand (optische Kante)
+      irisLayerCtx.strokeStyle = "rgba(0,0,0,.75)";
+      irisLayerCtx.lineWidth = 3.0;
+      irisLayerCtx.stroke();
+
+      irisLayerCtx.strokeStyle = "rgba(255,255,255,.10)";
+      irisLayerCtx.lineWidth = 1.2;
+      irisLayerCtx.beginPath();
+      irisLayerCtx.arc(cx, cy, pr+1.6, 0, Math.PI*2);
+      irisLayerCtx.stroke();
+      irisLayerCtx.restore();
+
+      // leichte Rand-Vignette (deckt ggf. transparente Pixel am Irisrand)
+      irisLayerCtx.save();
+      const gV = irisLayerCtx.createRadialGradient(cx, cy, irisR*0.65, cx, cy, irisR);
+      gV.addColorStop(0, "rgba(0,0,0,0)");
+      gV.addColorStop(1, "rgba(0,0,0,0.35)");
+      irisLayerCtx.fillStyle = gV;
+      irisLayerCtx.beginPath();
+      irisLayerCtx.arc(cx, cy, irisR, 0, Math.PI*2);
+      irisLayerCtx.fill();
+      irisLayerCtx.restore();
+
+      // Layer auf Hauptcanvas
+      tctx.drawImage(irisLayer, 0, 0);
+
+    }
+  }
+
+  function draw(){
+    const { distM, light, L, pupilMm, axialPx } = read();
+    elLightVal.textContent = `${Math.round(light)}%`;
+    elDistVal.textContent = distM.toFixed(2);
+    const intensity = {
+      rayA: lerp(0.25, 0.95, L),
+      dashA: lerp(0.10, 0.55, L),
+      markA: lerp(0.18, 0.60, L),
+      markDashA: lerp(0.18, 0.60, L)
+    };
+const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    const yMid = H*0.52;
+
+    // Auge nach rechts verschoben (Platz links fürs Objekt)
+    const rightPad = 110; // Layout: Retina/Fokus-Linie weiter rechts
+    const xRetTarget = W - rightPad;
+    // Linse als Referenzebene (Linse + Ziliarmuskel + Zonulafasern auf einer vertikalen Linie)
+    const xLens = xRetTarget - axialPx;
+    const xFrontAnchor = xLens - 70;
+
+    const g = eyeGeometry(xFrontAnchor, xLens, yMid, axialPx);
+    g.yMid = yMid;
+
+    // optionaler Hintergrund: Gesicht-Unedited (Positionierung nach Referenz-Kreis)
+    if(elShowBg && elShowBg.checked && faceBgOk){
+      drawFaceBackground(ctx, faceBg, W, H, g.cxEye, yMid, g.aEye);
+    } else {
+      ctx.fillStyle = "rgba(6,8,18,.75)";
+      ctx.fillRect(0,0,W,H);
+    }
+
+    const xRet = g.xRet;
+    // Ziel-Akkommodation (Dioptrien) für die aktuelle Objektdistanz
+    const targetAccDpt = clamp(1 / Math.max(distM, 0.0001), 0, AMAX_DPT);
+    const accDpt = stepAccTowards(targetAccDpt);
+
+    // optics: mit Akkommodation (ggf. dynamisch angenähert)
+    const oAcc = optics(distM, axialPx, accDpt);
+    elPowerVal.textContent = oAcc.D_total.toFixed(2);
+    if (elPupilVal) elPupilVal.textContent = pupilMm.toFixed(1);
+
+    // Kennzahl: relative Lichtmenge (0..1) ~ Helligkeit * Pupillenfläche, normiert
+    if (elLightRelVal) {
+      const lightRel = clamp((lightSourceFactor(L) * (pupilMm * pupilMm)) / MAX_LIGHT_PRODUCT, 0, 1);
+      elLightRelVal.textContent = lightRel.toFixed(2);
+    }
+
+    const xFocusAcc = xLens + oAcc.v_px;
+    const defAcc = xFocusAcc - xRet;
+    const okAcc = Math.abs(defAcc) <= OK_PX;
+
+
+    // optics: ohne Akkommodation (acc = 0) → zeigt den „Problempunkt“ im Nahbereich
+    const oNo = optics(distM, axialPx, 0);
+    const xFocusNo = xLens + oNo.v_px;
+    const defNo = xFocusNo - xRet;
+
+    const accRatio = (AMAX_DPT <= 0) ? 0 : clamp(oAcc.acc_dpt / AMAX_DPT, 0, 1);
+
+    // lineare Normierung der Slider-Position (Objektentfernung) für Formen (z.B. Ziliarmuskel)
+    const distMin = Number(elDist.min);
+    const distMax = Number(elDist.max);
+    const distRatio = (distMax > distMin) ? clamp((distM - distMin) / (distMax - distMin), 0, 1) : 0;
+
+    // Skalierung der vorderen Strukturen mit der axialen Länge
+    // (damit Hornhaut, Ziliarmuskel und Zonulafasern bei 450 px nicht "zu klein" wirken)
+    const scale = clamp(Math.sqrt(axialPx / 220), 0.80, 1.45);
+
+    // Pupille: Slider in mm -> Pixel (didaktisch skaliert)
+    const pupilDiamPx = (pupilMm * 8) * scale;
+
+
+    // Linsenhöhe so wählen, dass sie NICHT in die Ziliarmuskeln überlappt.
+    // Ober-/Unterkante der Linse muss deutlich unter/über den Muskel-Ellipsen bleiben.
+    const dxL = xLens - g.cxEye;
+    const yRimL = Math.sqrt(Math.max(0, g.aEye*g.aEye - dxL*dxL));
+    const musH_pred = lerp(10, 14, accRatio) * scale;
+    const pad_pred = 2 * scale;
+    const gap_pred = 8 * scale;
+    const lensRyMax = Math.max(54*scale, yRimL - 2*musH_pred - pad_pred - gap_pred);
+    let lensRy = Math.min(g.bEye*0.62, lensRyMax);
+    lensRy = clamp(lensRy, 54*scale, lensRyMax);
+    lensRy *= 0.75; // reduce lens vertical size by 25% (keep center)
+    const lensHeight = lensRy * 2;
+
+    // Deutlichere Dickenänderung der Linse (didaktisch überhöht):
+    // In Modus 2 soll die Linsenform deutlich und (für den Slider) quasi linear zwischen „nah“ und „fern“
+    // wechseln. Gleichzeitig koppeln wir die Visualisierung an den aktuellen Akkommodationszustand (accDpt),
+    // damit sie bei aktivierter Animation zeitlich mit dem Fokus „mitläuft“.
+    const distMVis = (accDpt > 1e-6) ? (1 / accDpt) : distMax;           // ≈ Distanz, auf die gerade fokussiert wird
+    const distMVisClamped = clamp(distMVis, distMin, distMax);
+    const distRatioVis = (distMax > distMin) ? clamp((distMVisClamped - distMin) / (distMax - distMin), 0, 1) : distRatio;
+
+    // lensBulge: 46 (nah) → 12 (fern), linear über distRatioVis
+    const lensBulge = lerp(46, 12, distRatioVis);
+// badge: entfernt (UI aufgeräumt)
+    badge.textContent = "";
+drawEyeSchematic(g);
+    const lensGeo = drawLensAcco(xLens, yMid, lensHeight, lensBulge);
+    drawCiliaryAndZonules(xLens, yMid, accRatio, distRatio, lensGeo.rx, lensGeo.ry, g.cxEye, g.aEye, scale);
+    const iris = drawIrisAtCiliary(xLens, yMid, g.cxEye, g.aEye, lensGeo.rx, pupilDiamPx, distRatio, scale);
+
+    drawAxis(ctx, yMid);
+
+    // Objektposition (immer sichtbar, didaktisch skaliert)
+    const xObjMin = 45;
+    const xObjMax = g.xCornea - 70;
+    const xObj = distToScreenX(distM, xObjMin, xObjMax);
+    const yObj = yMid; // Objektpunkt auf der optischen Achse
+    const objR = 14;
+    drawObjectMarker(xObj, yObj, objR);
+    const xEmit = objectEmitX(xObj, objR);
+
+    // Messwert: Einfallswinkel (Randstrahl) an der Linse
+    const h0 = clamp(lensGeo.ry*0.60, 34, 92);
+    const h = Math.min(h0, iris.pupilR);
+    const dxInc = Math.max(1e-6, xLens - xEmit);
+    const angleDeg = Math.atan2(h, dxInc) * 180/Math.PI;
+    elAngleVal.textContent = angleDeg.toFixed(1);
+
+    // 2) with accommodation (solid)
+    const blurAcc = traceRaysAndBlur(
+      xLens, xRet, xFocusAcc, xEmit, yObj, yMid,
+      lensGeo.ry, iris.xIris, iris.pupilR,
+      false, intensity,
+      !!(elShowLightAmount && elShowLightAmount.checked)
+    );
+    drawFocusPlane(xFocusAcc, yMid, "mit Akkommodation", { stroke: okAcc ? "rgba(98,210,111,.45)" : "rgba(255,204,102,.45)", fill: okAcc ? "rgba(98,210,111,.80)" : "rgba(255,204,102,.80)", dashed:false, alpha:1 }, 72);
+    drawBlurOnRetina(xRet, yMid, blurAcc, { stroke: okAcc ? "rgba(98,210,111,.60)" : "rgba(255,204,102,.65)", dashed:false, alpha:1 });
+    // Aufsicht (Top-View) aktualisieren
+    drawTopView({ accRatio, distRatio, scale, pupilMm });
+    drawVision(distRatio, L, defAcc, pupilMm);
+
+    // Wenn Akkommodation noch nachläuft, weiterzeichnen (für sichtbare Tiefenschärfe / Defokus)
+    if(accAnimEnabled() && (accCurDpt !== null) && Math.abs(targetAccDpt - accCurDpt) > 0.01){
+      scheduleAccFrame();
+    }
+}
+
+
+  [elDist, elLight, elTopIris, elShowLightAmount].filter(Boolean).forEach(el => {
+    el.addEventListener('input', draw);
+    el.addEventListener('change', draw);
+  });
+
+    if(elShowBg){ elShowBg.addEventListener('change', draw); }
+return { draw };
+})();
+
+
+// ---------- 3) Fehlsichtigkeit + Korrektur ----------
+const Refr = (() => {
+  const canvas = document.getElementById('refr-canvas');
+  const ctx = canvas.getContext('2d');
+
+  const visionCanvas = document.getElementById('refr-vision');
+  const vctx = visionCanvas ? visionCanvas.getContext('2d') : null;
+
+  function updateVision(absDef, ok){
+    if(!vctx || !visionCanvas) return;
+    Vision.draw(vctx, Assets.seheRefr, 0, 0, visionCanvas.width, visionCanvas.height, absDef, ok);
+  }
+
+const elAx = document.getElementById('refr-ax');
+  const elAxVal = document.getElementById('refr-axVal');
+  const elEyePreset = document.getElementById('refr-eyePreset');
+  const elAxControl = document.getElementById('refr-axControl');
+  let lastFreeAx = elAx ? Number(elAx.value) : 0;
+
+  function axFromPct(pct){
+    if(!elAx) return 0;
+    const mn = Number(elAx.min);
+    const mx = Number(elAx.max);
+    return mn + (mx - mn) * pct;
+  }
+
+  function applyEyePreset(doDraw=true){
+    if(!elEyePreset || !elAx || !elAxControl) return;
+    const mode = elEyePreset.value;
+
+    if(mode === 'free'){
+      elAxControl.style.display = '';
+      elAx.disabled = false;
+      elAx.value = String(lastFreeAx);
+    } else {
+      if(!elAx.disabled) lastFreeAx = Number(elAx.value);
+
+      let target = axFromPct(0.5); // normal
+      if(mode === 'myopia') target = axFromPct(0.92); // Kurzsichtigkeit: deutlich längeres Auge (Fernfokus klar vor Retina)
+      if(mode === 'hyperopia') target = axFromPct(0.08); // Weitsichtigkeit: deutlich kürzeres Auge (Nahfokus klar hinter Retina)
+
+      elAx.value = String(target);
+      elAx.disabled = true;
+      elAxControl.style.display = 'none';
+    }
+    syncCorrLock();
+    if(doDraw) { draw(false); kickLensSmooth(); }
+  }
+
+
+  const elObjDist = document.getElementById('refr-objDist');
+  const elObjDistVal = document.getElementById('refr-objDistVal');
+
+  const elCorrEnabled = document.getElementById('refr-corrEnabled');
+  const elCorrSwitchWrap = document.getElementById('refrCorrSwitchWrap');
+  const elCorrLock = document.getElementById('refrCorrLock');
+  const elCorrType = document.getElementById('refr-corrType');
+  const elD = document.getElementById('refr-d');
+  const elDVal = document.getElementById('refr-dVal');
+
+  function syncCorrLock(){
+    const isNormal = (elEyePreset && elEyePreset.value === 'normal');
+    if(isNormal){
+      if(elCorrEnabled){ elCorrEnabled.checked = false; elCorrEnabled.disabled = true; }
+      if(elCorrSwitchWrap) elCorrSwitchWrap.style.display = 'none';
+      if(elCorrLock) elCorrLock.style.display = 'inline-flex';
+    } else {
+      if(elCorrEnabled) elCorrEnabled.disabled = false;
+      if(elCorrSwitchWrap) elCorrSwitchWrap.style.display = '';
+      if(elCorrLock) elCorrLock.style.display = 'none';
+    }
+  }
+
+
+  const badge = document.getElementById('refr-badge');
+  const status = document.getElementById('refr-status');
+
+  // --- Lens-Visualisierung: Zielwert (linear) + sanfte Glättung (Variante B) ---
+  // accVis wird als "sichtbarer" Akkommodationsgrad (0..1) geführt:
+  // 0 = vollständig entspannt (fern/abgeflacht), 1 = vollständig akkommodiert (nah/abgerundet)
+  let accVis = null;
+  let accTarget = 0;
+  let smoothRunning = false;
+  const SMOOTH_ALPHA = 0.14;   // pro Frame (0..1), höher = schneller
+  const SMOOTH_EPS   = 1e-3;   // Abbruchschwelle
+
+  function smoothstep(edge0, edge1, x){
+    if(edge0 === edge1) return x >= edge1 ? 1 : 0;
+    const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
+    return t * t * (3 - 2 * t);
+  }
+
+  function kickLensSmooth(){
+    if(smoothRunning) return;
+    smoothRunning = true;
+
+    const step = () => {
+      // nur laufen lassen, wenn Modus 3 aktiv sichtbar ist
+      const v = document.getElementById('view-refr');
+      if(!v || !v.classList.contains('active')){
+        smoothRunning = false;
+        return;
+      }
+
+      draw(false);
+
+      if(accVis !== null && Math.abs(accTarget - accVis) > SMOOTH_EPS){
+        requestAnimationFrame(step);
+      } else {
+        smoothRunning = false;
+      }
+    };
+
+    requestAnimationFrame(step);
+  }
+
+
+  function read(){
+    const ax = Number(elAx.value);
+    const objDistPx = elObjDist ? Number(elObjDist.value) : 360;
+    const isNormal = (elEyePreset && elEyePreset.value === 'normal');
+    const corrEnabled = isNormal ? false : !!(elCorrEnabled && elCorrEnabled.checked);
+    const corrType = (elCorrType && elCorrType.value) ? elCorrType.value : 'concave';
+    const Dmag = Number(elD.value);
+    return { ax, objDistPx, corrEnabled, corrType, Dmag };
+  }
+
+  function eyeGeometry(xFront, xLens, yMid, axialPx){
+    // Retina liegt auf der hinteren Augengrenze; Axiallänge verschiebt primär den hinteren Pol.
+    const xRet = xLens + axialPx;
+    const cxEye = (xFront + xRet) / 2;
+    const aEye = (xRet - xFront) / 2;
+
+    // Elliptische Anpassung: lang -> schlanker (b kleiner), kurz -> runder (b größer)
+    const baseAxial = 170;
+    const baseA = (baseAxial + 70) / 2; // 70 = Abstand Front->Linse (schematisch)
+    const baseB = baseA;
+
+    const deltaA = aEye - baseA;
+    let bEye = baseB - deltaA * 0.55;
+    bEye = clamp(bEye, baseB*0.78, baseB*1.08);
+
+    // Hornhaut: leichte Vorwölbung nach vorn (links)
+    const corneaPx = clamp(aEye*0.34, 22, 110);
+    const xCornea = xFront - corneaPx;
+
+    return { xFront, xCornea, corneaPx, xRet, cxEye, aEye, bEye, yMid };
+  }
+
+  function drawEyeSchematic(g, _ctx=ctx){
+    const { xCornea, corneaPx, cxEye, aEye, bEye, yMid } = g;
+
+    _ctx.save();
+
+    // Geometrie der Hornhaut-Öffnung (damit vorne keine doppelte Kontur entsteht)
+    const th = 0.62;
+    const pU = { x: cxEye + aEye*Math.cos(Math.PI - th), y: yMid + bEye*Math.sin(Math.PI - th) };
+    const pL = { x: cxEye + aEye*Math.cos(Math.PI + th), y: yMid + bEye*Math.sin(Math.PI + th) };
+
+    // Augapfel (Außen): Sclera ohne vorderes Segment
+    _ctx.strokeStyle = "rgba(255,255,255,.28)";
+    _ctx.lineWidth = 2;
+    _ctx.beginPath();
+    _ctx.ellipse(cxEye, yMid, aEye, bEye, 0, Math.PI - th, Math.PI + th, true);
+    _ctx.stroke();
+
+    // Hornhaut (Frontwölbung)
+    _ctx.strokeStyle = "rgba(255,255,255,.42)";
+    _ctx.lineWidth = 3;
+    _ctx.beginPath();
+    _ctx.moveTo(pU.x, pU.y);
+    _ctx.quadraticCurveTo(xCornea - corneaPx*0.15, yMid, pL.x, pL.y);
+    _ctx.stroke();
+
+    // Retina
+    _ctx.strokeStyle = "rgba(106,166,255,.50)";
+    _ctx.lineWidth = 3;
+    _ctx.beginPath();
+    _ctx.ellipse(cxEye, yMid, Math.max(4, aEye-3), Math.max(4, bEye-3), 0, -0.95, 0.95);
+    _ctx.stroke();
+
+    _ctx.restore();
+  }
+
+  function drawLensAcco(x, yMid, height, thickness, _ctx=ctx){
+    const ry = height/2;
+    const rx = clamp(thickness, 10, 46);
+
+    _ctx.save();
+    _ctx.lineWidth = 2;
+    _ctx.strokeStyle = "rgba(232,236,255,.85)";
+    _ctx.fillStyle = "rgba(255,255,255,.06)";
+    _ctx.beginPath();
+    _ctx.ellipse(x, yMid, rx, ry, 0, 0, Math.PI*2);
+    _ctx.fill();
+    _ctx.stroke();
+
+    if(Assets.ok.lens){
+      _ctx.save();
+      _ctx.beginPath();
+      _ctx.ellipse(x, yMid, rx, ry, 0, 0, Math.PI*2);
+      _ctx.clip();
+      drawImageCover(_ctx, Assets.lens, x-rx, yMid-ry, rx*2, ry*2, 0.92);
+      _ctx.globalCompositeOperation = "screen";
+      _ctx.fillStyle = "rgba(255,255,255,.12)";
+      _ctx.fillRect(x-rx, yMid-ry, rx*2, ry*2);
+      _ctx.globalCompositeOperation = "source-over";
+      _ctx.restore();
+    }
+
+    _ctx.restore();
+    return { rx, ry };
+  }
+
+  function drawCiliaryAndZonules(xLens, yMid, accRatio, distRatio, lensRx, lensRy, cxEye, aEye, bEye, scale=1, _ctx=ctx){
+    const pad = 2 * scale;
+    const dx = xLens - cxEye;
+
+    const inside = Math.max(0, 1 - (dx*dx)/(aEye*aEye));
+    const yRim = bEye * Math.sqrt(inside);
+
+    // --- Ziliarmuskel als "Arc-Strip" entlang der Innenwand ---
+    const alphaMus = lerp(0.55, 0.88, accRatio);
+
+    // distRatio: 0 = nahe, 1 = fern
+    const musT    = lerp(24, 10, distRatio) * scale;                     // radiale Dicke (dicker bei Nähe)
+    const musSpan = clamp(lerp(0.20, 0.42, distRatio), 0.16, 0.65);       // Winkelspan (länger bei Ferne)
+
+    const rxOuter = Math.max(8, aEye - pad);
+    const ryOuter = Math.max(8, bEye - pad);
+    const rxInner = Math.max(6, rxOuter - musT);
+    const ryInner = Math.max(6, ryOuter - musT);
+
+    // Winkelparametrisierung der Ellipse
+    const cosT = clamp(dx / Math.max(1e-6, aEye), -1, 1);
+    const thetaTop = Math.atan2(clamp((-yRim)/Math.max(1e-6, bEye), -1, 1), cosT);
+    const thetaBot = Math.atan2(clamp(( yRim)/Math.max(1e-6, bEye), -1, 1), cosT);
+
+    const eyeBoxX = cxEye - rxOuter, eyeBoxY = yMid - ryOuter;
+    const eyeBoxW = 2*rxOuter,      eyeBoxH = 2*ryOuter;
+
+    function muscleStripPath(thetaC, isTop){
+      const spanFront = Math.max(0.10, musSpan * 0.75); // vorne stärker gekürzt
+      const spanBack  = musSpan;
+      const a0 = isTop ? (thetaC - spanFront) : (thetaC - spanBack);
+      const a1 = isTop ? (thetaC + spanBack)  : (thetaC + spanFront);
+
+      const p = new Path2D();
+      p.ellipse(cxEye, yMid, rxOuter, ryOuter, 0, a0, a1, false);
+      p.ellipse(cxEye, yMid, rxInner, ryInner, 0, a1, a0, true);
+      p.closePath();
+      return p;
+    }
+
+    function drawMuscle(path){
+      _ctx.save();
+
+      if(Assets.ok.muscle){
+        _ctx.save();
+        _ctx.clip(path);
+        drawImageCover(_ctx, Assets.muscle, eyeBoxX, eyeBoxY, eyeBoxW, eyeBoxH, 0.95);
+        _ctx.restore();
+
+        _ctx.globalCompositeOperation = "multiply";
+        _ctx.fillStyle = `rgba(255,90,90,${(alphaMus*0.95).toFixed(3)})`;
+        _ctx.fill(path);
+        _ctx.globalCompositeOperation = "source-over";
+      } else {
+        _ctx.fillStyle = `rgba(255,90,90,${alphaMus.toFixed(3)})`;
+        _ctx.fill(path);
+      }
+
+      _ctx.strokeStyle = "rgba(255,255,255,.08)";
+      _ctx.lineWidth = 1.2;
+      _ctx.stroke(path);
+
+      _ctx.restore();
+    }
+
+    drawMuscle(muscleStripPath(thetaTop, true));
+    drawMuscle(muscleStripPath(thetaBot, false));
+
+    // --- Zonulafasern: parallele Faserbündel ---
+    const xBase = xLens;
+    const xOffsets = [-6, 0, 6].map(v => v * scale);
+
+    const tension = clamp(distRatio, 0, 1);     // 0 = schlaff (nah), 1 = straff (fern)
+    const sag = lerp(10, 0, tension) * scale;   // Welligkeit bei schlaff (nah)
+    const zonAlpha = lerp(0.55, 0.95, tension);
+    const zonW = lerp(2.0, 2.8, tension) * scale;
+
+    // Linsen-Pole
+    const yLensTop = yMid - lensRy*0.82;
+    const yLensBot = yMid + lensRy*0.82;
+
+    // Anbindepunkte am Muskel (nahe dem inneren Rand)
+    const yMusTopA = yMid + ryInner*Math.sin(thetaTop) + musT*0.15;
+    const yMusBotA = yMid + ryInner*Math.sin(thetaBot) - musT*0.15;
+
+    // Pattern (optional)
+    let patTaut = null, patSlack = null;
+    if(_ctx.createPattern){
+      if(Assets.ok.zonulaTaut)  patTaut  = _ctx.createPattern(Assets.zonulaTaut,  "repeat");
+      if(Assets.ok.zonulaSlack) patSlack = _ctx.createPattern(Assets.zonulaSlack, "repeat");
+      const s = 0.35 * scale; // grob: Mustergröße anpassen
+      if(patTaut && patTaut.setTransform)   patTaut.setTransform(new DOMMatrix([s,0,0,s,0,0]));
+      if(patSlack && patSlack.setTransform) patSlack.setTransform(new DOMMatrix([s,0,0,s,0,0]));
+    }
+
+    function buildFiberPoints(xC, yA, yB){
+      const pts = [];
+      const n = 18;
+      const amp = sag * 0.55;
+      const waves = 3;
+      for(let i=0;i<=n;i++){
+        const t = i / n;
+        const y = lerp(yA, yB, t);
+        const x = (amp > 0.25) ? (xC + amp * Math.sin(t * waves * Math.PI * 2)) : xC;
+        pts.push([x,y]);
+      }
+      return pts;
+    }
+
+    function strokeFromPoints(pts){
+      _ctx.beginPath();
+      for(let i=0;i<pts.length;i++){
+        const [x,y] = pts[i];
+        if(i === 0) _ctx.moveTo(x,y);
+        else _ctx.lineTo(x,y);
+      }
+      _ctx.stroke();
+    }
+
+    function strokeFiber(pts){
+      _ctx.save();
+      _ctx.lineWidth = zonW;
+      _ctx.lineCap = "round";
+      _ctx.setLineDash([]);
+
+      if(patTaut && patSlack){
+        // Cross-Fade der Texturen
+        _ctx.globalAlpha = zonAlpha * tension;
+        _ctx.strokeStyle = patTaut;
+        strokeFromPoints(pts);
+
+        _ctx.globalAlpha = zonAlpha * (1 - tension);
+        _ctx.strokeStyle = patSlack;
+        strokeFromPoints(pts);
+
+        // minimaler "Kern" als Fallback-Kontrast
+        _ctx.globalAlpha = 0.20;
+        _ctx.strokeStyle = "rgb(255,220,90)";
+        strokeFromPoints(pts);
+      } else {
+        // Vektor-Fallback
+        _ctx.globalAlpha = zonAlpha;
+        _ctx.strokeStyle = "rgb(255,220,90)";
+        strokeFromPoints(pts);
+      }
+      _ctx.restore();
+    }
+
+    for(const xo of xOffsets){
+      const xZ = xBase + xo;
+      strokeFiber(buildFiberPoints(xZ, yMusTopA, yLensTop));
+      strokeFiber(buildFiberPoints(xZ, yMusBotA, yLensBot));
+    }
+  }
+
+  function drawFocusPlane(x, yMid, style, _ctx=ctx){
+    _ctx.save();
+    _ctx.fillStyle = style.fill || "rgba(98,210,111,.85)";
+    _ctx.beginPath();
+    _ctx.arc(x, yMid, 5, 0, Math.PI*2);
+    _ctx.fill();
+    _ctx.restore();
+  }
+
+  function drawBlurOnRetina(xRet, yMid, blurR, style, _ctx=ctx){
+    _ctx.save();
+    _ctx.strokeStyle = style.stroke;
+    _ctx.lineWidth = 2;
+    _ctx.beginPath();
+    _ctx.arc(xRet, yMid, clamp(blurR, 0.5, 42), 0, Math.PI*2);
+    _ctx.stroke();
+
+    _ctx.fillStyle = "rgba(255,255,255,.55)";
+    _ctx.beginPath();
+    _ctx.arc(xRet, yMid, 2.2, 0, Math.PI*2);
+    _ctx.fill();
+    _ctx.restore();
+  }
+
+  // Objekt (Mode 3): Sehprobentafel (Objekt_Sehprobe.png)
+  function drawSehprobeObject(x, y, size=110, _ctx=ctx){
+    if(Assets && Assets.ok && Assets.ok.objektSehprobe){
+      drawImageContain(_ctx, Assets.objektSehprobe, x - size/2, y - size/2, size, size, 1);
+      return;
+    }
+    // Fallback: kleines "E"
+    _ctx.save();
+    _ctx.fillStyle = "rgba(255,255,255,.92)";
+    _ctx.font = "800 54px system-ui";
+    _ctx.textAlign = "center";
+    _ctx.textBaseline = "middle";
+    _ctx.fillText("E", x, y);
+    _ctx.restore();
+  }
+  function sehprobeEmitX(xCenter, size=110){ return xCenter + size/2; }
+
+  // Offscreen-Basislayer für animierte Strahlen
+  const base = document.createElement('canvas');
+  base.width = canvas.width; base.height = canvas.height;
+  const bctx = base.getContext('2d');
+  let cached = null; // { key, state }
+  function invalidate(){
+    cached = null;
+    if(base.width !== canvas.width || base.height !== canvas.height){
+      base.width = canvas.width; base.height = canvas.height;
+    }
+  }
+
+  function buildState(){
+    syncCorrLock();
+    const { ax, objDistPx: objDistPxRaw, corrEnabled, corrType, Dmag } = read();
+    const D = (corrType === 'convex') ? Math.abs(Dmag) : -Math.abs(Dmag);
+
+    // UI-Labels (werden in Modus 3 ausgeblendet, aber bleiben intern konsistent)
+    if(elAxVal) elAxVal.textContent = `${ax.toFixed(0)} px`;
+    if(elObjDistVal) elObjDistVal.textContent = `${objDistPxRaw.toFixed(0)} px`;
+    if(elDVal)  elDVal.textContent  = `${D>=0?'+':''}${D.toFixed(2)} dpt`;
+
+    // Slider deaktivieren, wenn Linse aus
+    if(elD) elD.disabled = !corrEnabled;
+    if(elCorrType) elCorrType.disabled = !corrEnabled;
+
+    const W = canvas.width, H = canvas.height;
+    const yMid = H*0.52;
+
+    // Axiallänge: verändert primär die Retinaposition (hinterer Pol)
+    const baseAxial = 170;
+    const axialPx = clamp(baseAxial + ax, 110, 230);
+
+    // Linse bleibt weitgehend an Ort und Stelle; Axiallänge verschiebt primär die Retina.
+    const xLensEye = W*0.69; // ~690 bei W=1000
+    const xFront = xLensEye - 70;
+
+    let g = eyeGeometry(xFront, xLensEye, yMid, axialPx);
+
+    // Retina im Bild halten (rechts)
+    g.xRet = clamp(g.xRet, xLensEye + 90, W - 80);
+
+    // Geometrie neu konsistent setzen (nach Clamp)
+    g.cxEye = (g.xFront + g.xRet) / 2;
+    g.aEye = (g.xRet - g.xFront) / 2;
+    const baseA = (baseAxial + 70) / 2;
+    const baseB = baseA;
+    const deltaA = g.aEye - baseA;
+    g.bEye = clamp(baseB - deltaA * 0.55, baseB*0.78, baseB*1.08);
+    g.corneaPx = clamp(g.aEye*0.34, 22, 110);
+    g.xCornea = g.xFront - g.corneaPx;
+
+    const xRet = g.xRet;
+
+    // Korrekturlinse kurz vor der Hornhaut
+    const xCorr = g.xCornea - 70;
+
+    // Objektentfernung (Mode 3): Pixel-Abstand Objektzentrum → Korrekturlinse (wie Modus 1)
+    const yObj = yMid;
+    const objSize = 110;
+    const OBJ_HALF = objSize/2;
+    const MARGIN = 10;
+    const NEAR_POINT_PX = 180; // verhindert extrem steile Einfallswinkel / „Daneben“-Strahlen
+
+    const minXObj = OBJ_HALF + MARGIN;
+    const maxXObj = xCorr - OBJ_HALF - MARGIN;
+    let minDist = xCorr - maxXObj;
+    let maxDist = xCorr - minXObj;
+    minDist = Math.max(minDist, NEAR_POINT_PX);
+    if(maxDist < minDist) maxDist = minDist;
+
+    if(elObjDist){
+      const minS = String(Math.round(minDist));
+      const maxS = String(Math.round(maxDist));
+      if(elObjDist.min !== minS) elObjDist.min = minS;
+      if(elObjDist.max !== maxS) elObjDist.max = maxS;
+    }
+
+    let objDistPx = clamp(objDistPxRaw, minDist, maxDist);
+    if(elObjDist){
+      const v = String(Math.round(objDistPx));
+      if(elObjDist.value !== v) elObjDist.value = v;
+    }
+    if(elObjDistVal) elObjDistVal.textContent = `${Math.round(objDistPx)} px`;
+
+    const xObj = xCorr - objDistPx;
+    const xEmit = sehprobeEmitX(xObj, objSize);
+
+    const scale = clamp(Math.sqrt(axialPx / 220), 0.80, 1.45);
+
+    // Linsenhöhe so wählen, dass sie nicht in den Ziliarmuskel überlappt
+    const dxL = xLensEye - g.cxEye;
+    const inside = Math.max(0, 1 - (dxL*dxL)/(g.aEye*g.aEye));
+    const yRimL = g.bEye * Math.sqrt(inside);
+
+    const musH_pred = 10 * scale;
+    const pad_pred = 2 * scale;
+    const gap_pred = 8 * scale;
+    const lensRyMax = Math.max(54*scale, yRimL - 2*musH_pred - pad_pred - gap_pred);
+    let lensRy = Math.min(g.bEye*0.62, lensRyMax);
+    lensRy = clamp(lensRy, 54*scale, lensRyMax);
+    lensRy *= 0.75;
+
+    const lensHeight = lensRy * 2;
+
+    // --- Optik + Strahlen: paraxiales Modell mit automatischer Akkommodation ---
+    const K = 900; // f_px = K / D
+    const L0_draw = Math.max(40, xCorr - xEmit);     // Objektpunkt (gezeichnet) → Korrekturlinse
+    const distRange = Math.max(1, (maxDist - minDist));
+    const distT = clamp((objDistPx - minDist) / distRange, 0, 1); // 0=nah, 1=fern
+
+    // Variante A: glatte, monotone Mapping-Funktion für den effektiven Objektabstand
+    const FAC_NEAR = 2.20;   // nahe: Strahlen bleiben visuell getrennt
+    const FAC_FAR  = 22.00;  // fern: große effektive Distanz ohne „Knick“
+    const L0_fac = FAC_NEAR * Math.exp(Math.log(FAC_FAR / FAC_NEAR) * distT);
+
+    const L0_eff = L0_draw * L0_fac;                 // Effektiver Objektabstand (nur für Winkel/Optik)
+    const L1 = Math.max(40, xLensEye - xCorr);        // Korrekturlinse → Augenlinse
+    const L2 = Math.max(40, xRet - xLensEye);         // Augenlinse → Retina
+
+    // Akkommodationsgrenzen (didaktisch, Modus 3):
+    // Die Spanne ist ABSOLUT (an Normauge gekoppelt), damit Axiallänge echte Fehlsichtigkeit erzeugt.
+    const L2_MIN = 90;
+    const L2_MAX = Math.max(100, (W - 80) - xLensEye);
+    const L2_NORM = clamp(baseAxial, L2_MIN, L2_MAX); // Norm: Axiallänge ~ baseAxial
+    const ACC_RANGE = 55; // Akkommodationsspanne (px) – bewusst begrenzt für didaktische Darstellung
+    const F_EYE_MAX = clamp(L2_NORM, 80, 240);          // flache Linse (Fern)
+    const F_EYE_MIN = clamp(F_EYE_MAX - ACC_RANGE, 55, F_EYE_MAX - 5); // runde Linse (Nah)
+
+    function fCorrFromD(DuseLocal){
+      return (Math.abs(DuseLocal) < 1e-6) ? Infinity : (K / DuseLocal); // signed
+    }
+
+    function reqEyeF(DuseLocal){
+      // Bestimme die benötigte Brennweite der Augenlinse, um die Retina (L2) zu treffen.
+      // Schritte: Objekt -> (optional) Korrekturlinse -> Augenlinse -> Retina.
+      const fCorr = fCorrFromD(DuseLocal);
+
+      let uEye; // signierte Objektweite an der Augenlinse
+      if(!isFinite(fCorr)){
+        // keine Korrekturlinse / D=0
+        uEye = L0_eff + L1;
+      } else {
+        // Bildlage nach Korrekturlinse (s' = 1 / (1/f - 1/s)), s = L0_eff
+        const s = L0_eff;
+        const denom = (1/fCorr) - (1/s);
+        const sImg = (Math.abs(denom) < 1e-9) ? (1e9 * Math.sign(denom || 1)) : (1/denom); // signed
+        uEye = L1 - sImg; // kann negativ sein (konvergierendes Bündel → virtuelles Objekt)
+      }
+
+      const denomEye = (1/uEye) + (1/L2);
+      if(!isFinite(denomEye) || Math.abs(denomEye) < 1e-9) return 1e9;
+      const fEye = 1/denomEye;
+      if(!isFinite(fEye) || fEye <= 0) return 1e9;
+      return fEye;
+    }
+
+    // Automatische Akkommodation (mit/ohne Korrekturlinse jeweils separat)
+    const Duse = corrEnabled ? D : 0;
+
+    const fEyeNeedMain   = reqEyeF(Duse);
+    const fEyeNeedUncorr = reqEyeF(0);
+
+    // distRatio: 0 = nahe, 1 = fern (aus Slider, nicht aus Akkommodation abgeleitet)
+    const objMin = elObjDist ? Number(elObjDist.min) : 180;
+    const objMax = elObjDist ? Number(elObjDist.max) : 440;
+    const distRatioUI = clamp((objDistPx - objMin) / Math.max(1, (objMax - objMin)), 0, 1);
+
+    // Hinweis: KEIN Entspannen erzwingen.
+    // Bei Weitsichtigkeit braucht das Auge auch für "fern" häufig Akkommodation.
+    // Daher wird der Strahlengang immer mit der physikalisch benötigten (gekammerten) Brennweite gerechnet.
+    const fEyeMainRaw   = clamp(fEyeNeedMain,   F_EYE_MIN, F_EYE_MAX);
+    const fEyeUncorrRaw = clamp(fEyeNeedUncorr, F_EYE_MIN, F_EYE_MAX);
+
+    const fEyeMain   = fEyeMainRaw;
+    const fEyeUncorr = fEyeUncorrRaw;
+
+    // Visualisierung (Variante B):
+    // - ohne Korrekturlinse: linear vom Slider (nah=1 ... fern=0)
+    // - mit Korrekturlinse: an fEyeMain gekoppelt
+    const accRatioCalc   = clamp((F_EYE_MAX - fEyeMain) / Math.max(1e-6, (F_EYE_MAX - F_EYE_MIN)), 0, 1);
+    const accRatioTarget = corrEnabled ? accRatioCalc : clamp(1 - distRatioUI, 0, 1);
+    accTarget = accRatioTarget;
+
+    if(accVis === null) accVis = accRatioTarget;
+    accVis = accVis + (accRatioTarget - accVis) * SMOOTH_ALPHA;
+    if(Math.abs(accRatioTarget - accVis) < SMOOTH_EPS) accVis = accRatioTarget;
+
+    // Visualisierung: Bulge + Zonula/Ziliarmuskel
+    const accRatio  = accVis;
+    const distRatio = distRatioUI;
+    const lensBulge = lerp(12, 46, Math.sqrt(accRatio));
+
+function traceRays(DuseLocal, fEyeLocal){
+      const fCorr = fCorrFromD(DuseLocal);
+
+      // Ziel: Strahlen sollen die Augenlinse sicher treffen → h adaptiv begrenzen
+      const corrH_model = clamp(lensHeight*0.70, 90*scale, 180*scale);
+      let h0 = clamp(lensRy*0.42, 12*scale, 90*scale);
+      h0 = Math.min(h0, corrH_model*0.50);
+
+      function yRelEyeForH(hTarget){
+        // hTarget = Höhe an der Korrekturlinse (gezeichnet).
+        // Bei „Fern“ wird der effektive Objektabstand größer -> kleinere Einfallswinkel.
+        const theta0 = hTarget / L0_eff;
+        const theta1 = isFinite(fCorr) ? (theta0 - (hTarget / fCorr)) : theta0;
+        return hTarget + theta1 * L1;
+      }
+
+      // h so skalieren, dass an der Augenlinse innerhalb der Linse
+      const yRelEyeTest = yRelEyeForH(h0);
+      const yRelEyeMax = lensRy * 0.78;
+      if(Math.abs(yRelEyeTest) > yRelEyeMax && Math.abs(yRelEyeTest) > 1e-6){
+        h0 *= (yRelEyeMax / Math.abs(yRelEyeTest));
+      }
+      const h = clamp(h0, 6*scale, 70*scale);
+
+      const rays = [];
+      const yAtRet = [];
+      const focusXs = [];
+
+      for(const yRelCorrTarget of [-h, 0, +h]){
+        // Winkelwahl über effektiven Objektabstand (Fern -> kleiner Winkel)
+        const yRelCorr = yRelCorrTarget;           // Höhe an der Korrekturlinse (gezeichnet)
+        const theta0   = yRelCorr / L0_eff;
+        const yRelEmit = yRelCorr - theta0 * L0_draw; // Start-Höhe am Objekt (gezeichnet)
+
+        // an der Korrekturlinse
+        let theta1 = theta0;
+        if(isFinite(fCorr)) theta1 = theta0 - (yRelCorr / fCorr);
+
+        // zur Augenlinse
+        const yRelEye = yRelCorr + theta1 * L1;
+
+        // Augenlinse: automatische Akkommodation (Brennweite wird geklemmt)
+        const fEye = clamp(fEyeLocal, 55, 260);
+        const theta2 = theta1 - (yRelEye / fEye);
+
+        // zur Retina
+        const yRelRet = yRelEye + theta2 * L2;
+
+        // Fokus-Ebene (Schnitt mit optischer Achse)
+        if(Math.abs(theta2) > 1e-6){
+          const xF = xLensEye + (-yRelEye / theta2);
+          if(isFinite(xF)) focusXs.push(xF);
+        }
+
+        const yCorrAbs = yMid + yRelCorr;
+        const yEyeAbs  = yMid + yRelEye;
+        const yRetAbs  = yMid + yRelRet;
+
+        rays.push({ yObj: (yMid + yRelEmit), yCorr: yCorrAbs, yAtEye: yEyeAbs, yR: yRetAbs });
+        yAtRet.push(yRetAbs);
+      }
+
+      // Fokus: Mittel aus äußeren Strahlen (falls verfügbar), sonst aus allen
+      let xFocus = Infinity;
+      if(focusXs.length >= 2){
+        xFocus = (focusXs[0] + focusXs[focusXs.length-1]) / 2;
+      } else if(focusXs.length === 1){
+        xFocus = focusXs[0];
+      } else {
+        xFocus = xLensEye + 1e6;
+      }
+
+      const defocus = xFocus - xRet;
+      const absDef = Math.abs(defocus);
+
+      const blurR = Math.max(0, (Math.max(...yAtRet) - Math.min(...yAtRet)) / 2);
+      const ok = absDef < 10;
+
+      return { rays, xFocus, defocus, absDef, blurR, ok };
+    }
+
+    // Hauptzustand (ggf. mit Korrekturlinse)
+    const traced = traceRays(Duse, fEyeMain);
+
+    // Unkorrigierter Zustand (für Diagnose-Logik)
+    const tracedUncorr = traceRays(0, fEyeUncorr);
+
+    const { rays, xFocus, defocus, absDef, blurR, ok } = traced;
+
+    // Diagnose-/Korrekturlogik (Modus 3, didaktisch):
+    // - Normalsichtig: Fokus für alle Entfernungen erreichbar (hier: solange Axiallänge ~0 und innerhalb Akkommodationsspanne).
+    // - Kurzsichtig: Fernbereich nicht erreichbar (zu lange Axiallänge → Fokus vor Retina).
+    // - Fernsichtig: Nahbereich nicht erreichbar (zu kurze Axiallänge → Fokus hinter Retina).
+    const needsCorrection = !tracedUncorr.ok;
+
+    let diagnosis = "Normalsichtigkeit";
+    const preset = elEyePreset ? elEyePreset.value : 'normal';
+    if(preset === 'free'){
+      diagnosis = "Frei regulierbar";
+    } else if(ax > 2){
+      diagnosis = "Kurzsichtigkeit";
+    } else if(ax < -2){
+      diagnosis = "Weitsichtigkeit";
+    } else {
+      diagnosis = "Normalsichtigkeit";
+    }
+
+    return {
+      key: JSON.stringify({ ax, objDistPx, corrEnabled, corrType, Dmag, axialPx, fEyeMain, fEyeUncorr }),
+      ax, corrEnabled, corrType, Dmag, D, accRatio, distRatio,
+      W, H, yMid, scale,
+      axialPx, xLensEye, xFront, g, xCorr,
+      xObj, yObj, objSize, xEmit,
+      lensHeight, lensBulge, lensRy,
+      xFocus, xRet, defocus, absDef, blurR, ok,
+      diagnosis, needsCorrection, rays
+    };
+  }
+
+
+  function drawBase(s){
+    const { W, H, yMid, g, xCorr, xObj, yObj, objSize, xLensEye, lensHeight, lensBulge, D, corrEnabled, corrType, accRatio, distRatio, xRet, xFocus, blurR, ok, defocus, scale } = s;
+
+    bctx.clearRect(0,0,W,H);
+    bctx.fillStyle = "rgba(6,8,18,.75)";
+    bctx.fillRect(0,0,W,H);
+
+    // Auge
+    drawEyeSchematic(g, bctx);
+    const lensGeo = drawLensAcco(xLensEye, yMid, lensHeight, lensBulge, bctx);
+    drawCiliaryAndZonules(xLensEye, yMid, accRatio, distRatio, lensGeo.rx, lensGeo.ry, g.cxEye, g.aEye, g.bEye, scale, bctx);
+
+    drawAxis(bctx, yMid);
+    drawScreen(bctx, xRet, 60, H-60);
+
+    // Korrekturlinse (kleiner, damit sie nicht dominiert)
+    if(corrEnabled){
+      const corrH = clamp(lensHeight*0.95, 110*scale, 220*scale);
+      drawLensRay(bctx, xCorr, yMid, corrH, (corrType === 'convex' ? 'convex' : 'concave'), 16);
+    }
+// Objekt
+    drawSehprobeObject(xObj, yObj, objSize, bctx);
+
+    // Fokus/Blur
+    drawFocusPlane(xFocus, yMid, { fill: ok ? "rgba(98,210,111,.85)" : "rgba(255,204,102,.85)" }, bctx);
+    drawBlurOnRetina(xRet, yMid, blurR, { stroke: ok ? "rgba(98,210,111,.60)" : "rgba(255,204,102,.65)" }, bctx);
+
+    // Text unten
+    bctx.save();
+    bctx.fillStyle = "rgba(168,179,230,.9)";
+    bctx.font = "13px system-ui";
+    // (Messwertanzeige im Darstellungsfenster ausgeblendet)
+bctx.restore();
+  }
+
+  function drawRaysOverlay(s){
+    const { rays, xEmit, xCorr, xLensEye, xRet } = s;
+
+    for(const r of rays){
+      drawRaySegment(ctx, xEmit, r.yObj, xCorr, r.yCorr, "rgba(255,255,255,.80)");
+      drawRaySegment(ctx, xCorr, r.yCorr, xLensEye, r.yAtEye, "rgba(255,255,255,.80)");
+      drawRaySegment(ctx, xLensEye, r.yAtEye, xRet, r.yR, "rgba(255,255,255,.80)");
+
+
+      // Strahlen hinter der Retina weiterzeichnen (virtuelle Verlängerung)
+      const xTail = Math.min(canvas.width - 18, xRet + 230);
+      if(xTail > xRet + 2){
+        const slope = (r.yR - r.yAtEye) / Math.max(1e-6, (xRet - xLensEye));
+        const yTail = r.yR + slope * (xTail - xRet);
+        drawRaySegment(ctx, xRet, r.yR, xTail, yTail, "rgba(255,255,255,.55)", true);
+      }
+      // Marker auf Retina
+      ctx.save();
+      ctx.fillStyle = "rgba(255,255,255,.70)";
+      ctx.beginPath();
+      ctx.arc(xRet, r.yR, 2.6, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function draw(animOnly=false){
+    // Animationspfad: nur Canvas neu zeichnen (Basislayer + Strahlen), keine DOM-/Vision-Updates
+    if(animOnly && cached){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(base, 0, 0);
+      drawRaysOverlay(cached.state);
+      return;
+    }
+
+    const s = buildState();
+
+    // Badge/Status
+    if(badge) badge.textContent = s.diagnosis;
+    if(status){
+      if(s.needsCorrection){
+        if(!s.corrEnabled) status.textContent = `${s.diagnosis} · Korrekturlinse benötigt`;
+        else status.textContent = `${s.diagnosis}${s.ok ? " · korrigiert" : " · noch unscharf"}`.trim();
+      } else {
+        status.textContent = s.diagnosis;
+      }
+    }
+
+    // Basislayer nur neu bauen, wenn Parameter geändert
+    if(!cached || cached.key !== s.key){
+      drawBase(s);
+      cached = { key: s.key, state: s };
+    } else {
+      cached.state = s;
+    }
+
+    ctx.clearRect(0,0,s.W,s.H);
+    ctx.drawImage(base, 0, 0);
+    drawRaysOverlay(s);
+
+    // Seheindruck nur bei vollem Draw
+    updateVision(s.absDef, s.ok);
+  }
+
+    if(elEyePreset){
+    elEyePreset.addEventListener('change', () => applyEyePreset(true));
+  }
+
+  // Initial preset: hide/lock eye-shape slider unless "Frei regulierbar" is selected
+  applyEyePreset(false);
+
+[elAx, elObjDist, elCorrEnabled, elCorrType, elD].filter(Boolean).forEach(el => {
+    el.addEventListener('input', () => draw(false));
+    el.addEventListener('change', () => { draw(false); kickLensSmooth(); });
+  });
+
+  return { draw, invalidate };
+})();
+
+
+Ray.draw();
+Acco.draw();
+Refr.draw();
+
+// Animation loop so animated GIFs drawn on canvas actually animate (only active view)
+const BeamAnimator = (() => {
+  let raf = null;
+  let running = false;
+  let last = 0;
+  const FPS = 30;
+  const FRAME_MS = 1000 / FPS;
+
+  function activeDraw(){
+    const active = document.querySelector('.view.active');
+    if(!active) return;
+    const id = active.id;
+    if(id === 'view-ray') Ray.draw();
+    else if(id === 'view-acco') Acco.draw();
+    else if(id === 'view-refr') Refr.draw(true);
+  }
+
+  function tick(now){
+    if(!running) return;
+    if(now - last >= FRAME_MS){
+      last = now;
+      activeDraw();
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function start(){
+    if(running) return;
+    running = true;
+    last = 0;
+    raf = requestAnimationFrame(tick);
+  }
+
+  function stop(){
+    running = false;
+    if(raf) cancelAnimationFrame(raf);
+    raf = null;
+  }
+
+  return { start, stop };
+})();
+
+// Toggle: GIF-Strahlen vs. Linien (global, in allen Modi synchron)
+(function bindGifRayToggles(){
+  const ids = ['toggle-gifrays-ray','toggle-gifrays-acco','toggle-gifrays-refr'];
+  const els = ids.map(id => document.getElementById(id)).filter(Boolean);
+
+  function syncTo(on){
+    USE_GIF_RAYS = !!on;
+    els.forEach(el => { if(el.checked !== USE_GIF_RAYS) el.checked = USE_GIF_RAYS; });
+    // Animation nur bei aktivem GIF-Modus
+    if(USE_GIF_RAYS && Assets && Assets.ok && (Assets.ok.beamWhite || Assets.ok.beamRed)) BeamAnimator.start();
+    else BeamAnimator.stop();
+    try{ Ray.draw(); }catch(e){}
+    try{ Acco.draw(); }catch(e){}
+    try{ Refr.draw(); }catch(e){}
+  }
+
+  els.forEach(el => {
+    el.addEventListener('change', () => syncTo(el.checked));
+  });
+
+  // Initial: aktiv, falls GIF vorhanden (ansonsten bleibt Linien-Fallback)
+  syncTo(true);
+})();
+
+// Redraw when any asset arrives (so textures appear without touching sliders)
+(function bindAssetChangeRedraw(){
+  let scheduled = false;
+  function run(){
+    scheduled = false;
+    try{ Ray.draw(); }catch(e){}
+    try{ Acco.draw(); }catch(e){}
+    try{ if(Refr.invalidate) Refr.invalidate(); }catch(e){}
+    try{ Refr.draw(); }catch(e){}
+  }
+  if(typeof Assets !== "undefined" && Assets && Assets.onChange){
+    Assets.onChange(() => {
+      if(scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(run);
+    });
+  }
+})();
+
+
+// Redraw once textures are ready (so the user doesn't need to move a slider)
+Assets.onReady(() => {
+  try{ Ray.draw(); }catch(e){}
+  try{ Acco.draw(); }catch(e){}
+  try{ if(Refr.invalidate) Refr.invalidate(); }catch(e){}
+  try{ Refr.draw(); }catch(e){}
+  // Start animated beam rendering if GIF is available and enabled
+  if((Assets.ok.beamWhite || Assets.ok.beamRed) && USE_GIF_RAYS) BeamAnimator.start();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) BeamAnimator.stop();
+  else if((Assets.ok.beamWhite || Assets.ok.beamRed) && USE_GIF_RAYS) BeamAnimator.start();
+});
+
+
+
+/* ==============================
+   Export (Screenshot -> Clipboard)
+   ============================== */
+(function(){
+  function $(id){ return document.getElementById(id); }
+  function txt(id){ const el=$(id); return el ? (el.textContent || "").trim() : ""; }
+  function val(id){ const el=$(id); return el ? (el.value ?? "").toString() : ""; }
+  function isChecked(id){ const el=$(id); return !!(el && el.checked); }
+  function selText(id){
+    const el=$(id);
+    if(!el || !el.options) return "";
+    const opt=el.options[el.selectedIndex];
+    return (opt ? opt.textContent : "").trim();
+  }
+
+  function toast(msg){
+    let t=document.querySelector(".export-toast");
+    if(!t){
+      t=document.createElement("div");
+      t.className="export-toast";
+      document.body.appendChild(t);
+    }
+    t.textContent=msg;
+    t.classList.add("show");
+    clearTimeout(toast._tm);
+    toast._tm=setTimeout(()=>t.classList.remove("show"), 1800);
+  }
+
+  function dataURLToBlob(dataURL){
+    const [head, b64]=dataURL.split(",");
+    const mime=(head.match(/data:([^;]+)/)||[])[1] || "image/png";
+    const bin=atob(b64);
+    const len=bin.length;
+    const arr=new Uint8Array(len);
+    for(let i=0;i<len;i++) arr[i]=bin.charCodeAt(i);
+    return new Blob([arr], {type:mime});
+  }
+
+  async function canvasToImage(canvas){
+    if(!canvas) throw new Error("Canvas nicht gefunden.");
+    // Prefer blob -> ImageBitmap where possible; fall back to Image decode
+    if(canvas.toBlob){
+      const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
+      if(blob){
+        const bmp = await createImageBitmap(blob);
+        return {img:bmp, w:bmp.width, h:bmp.height};
+      }
+    }
+    const url = canvas.toDataURL("image/png");
+    const img = new Image();
+    img.src = url;
+    if(img.decode) await img.decode(); else await new Promise((res, rej)=>{ img.onload=res; img.onerror=rej; });
+    return {img, w:img.naturalWidth, h:img.naturalHeight};
+  }
+
+  async function exportCanvasOnly(canvas, targetW){
+    const src = await canvasToImage(canvas);
+    const tw = targetW || src.w;
+    const s = Math.min(1, tw / src.w);
+    const w = Math.round(src.w * s);
+    const h = Math.round(src.h * s);
+
+    // Hintergrundfarbe des Simulationsfensters übernehmen (typisch: .panel)
+    let bg = null;
+    try{
+      const host = canvas.closest(".panel") || canvas.parentElement;
+      if(host){
+        const cs = getComputedStyle(host);
+        bg = cs && cs.backgroundColor ? cs.backgroundColor : null;
+      }
+      if(!bg || bg==="transparent" || bg==="rgba(0, 0, 0, 0)"){
+        const csb = getComputedStyle(document.body);
+        bg = csb && csb.backgroundColor ? csb.backgroundColor : "#ffffff";
+      }
+    }catch(_e){
+      bg = "#ffffff";
+    }
+
+    const out = document.createElement("canvas");
+    out.width = w; out.height = h;
+    const ctx = out.getContext("2d");
+
+    // Erst Hintergrund füllen, dann Canvas-Inhalt zeichnen (sonst transparent)
+    ctx.save();
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,w,h);
+    ctx.restore();
+
+    ctx.drawImage(src.img, 0, 0, w, h);
+    return out;
+  }
+
+
+
+  function wrapLines(ctx, text, maxW){
+    const words = (text||"").split(/\s+/).filter(Boolean);
+    const lines=[];
+    let line="";
+    for(const w of words){
+      const test = line ? (line+" "+w) : w;
+      if(ctx.measureText(test).width <= maxW || !line){
+        line=test;
+      }else{
+        lines.push(line);
+        line=w;
+      }
+    }
+    if(line) lines.push(line);
+    return lines.length ? lines : [""];
+  }
+
+  function drawTextBlock(ctx, lines, x, y, maxW, lineH){
+    let yy=y;
+    for(const ln of lines){
+      const wrapped = wrapLines(ctx, ln, maxW);
+      for(const w of wrapped){
+        ctx.fillText(w, x, yy);
+        yy += lineH;
+      }
+    }
+    return yy;
+  }
+
+  function sliderBar(rangeId, leftLabel, rightLabel, steps=16){
+    const el=$(rangeId);
+    if(!el) return "";
+    const mn = Number(el.min ?? 0);
+    const mx = Number(el.max ?? 1);
+    const v  = Number(el.value ?? mn);
+    const n  = Math.max(6, Number(steps) || 16);
+    const t  = (mx !== mn) ? (v - mn) / (mx - mn) : 0;
+    const pos = Math.max(0, Math.min(n, Math.round(t * n)));
+    let bar = "";
+    for(let i=0;i<=n;i++){
+      bar += (i === pos) ? "●" : "—";
+    }
+    return `${leftLabel} ${bar} ${rightLabel}`;
+  }
+
+    function getRaySettings(){
+    const lines=[];
+    lines.push("Darstellung: " + selText("ray-mode"));
+    lines.push("Linse 1: " + selText("ray-lensType") + " (" + txt("ray-dVal") + ")");
+    const l2=isChecked("ray-l2-enabled");
+    lines.push("Linse 2 aktiv: " + (l2 ? "ja" : "nein"));
+    if(l2){
+      lines.push("Linse 2: " + selText("ray-l2-type") + " (" + txt("ray-l2-dVal") + ")");
+    }
+    const mode = val("ray-mode");
+    if(mode==="object"){
+      const bar = sliderBar("ray-objDist", "Nah", "Fern");
+      if(bar) lines.push("Entfernung des Objekts: " + bar);
+    }
+    return lines;
+  }
+
+    function getRefrSettings(){
+    const lines=[];
+    lines.push("Sehzustand: " + selText("refr-eyePreset"));
+    const bar = sliderBar("refr-objDist", "Nah", "Fern");
+    if(bar) lines.push("Entfernung des Objekts: " + bar);
+    const corr=isChecked("refr-corrEnabled");
+    lines.push("Korrekturlinse: " + (corr ? "aktiv" : "inaktiv"));
+    if(corr){
+      lines.push("Korrekturlinse (Typ): " + selText("refr-corrType"));
+      const dpt = (txt("refr-dVal") || (val("refr-d")+"")).trim();
+      if(dpt) lines.push("Korrekturlinse (Dioptrien): " + dpt);
+    }
+    return lines;
+  }
+
+    function getAccoSettings(){
+    const lines=[];
+    const dist = (txt("acco-distVal") || (val("acco-dist")+"")).trim();
+    if(dist){
+      lines.push("Objektentfernung: " + (/(\bm\b|meter)/i.test(dist) ? dist : (dist + " m")));
+    }
+    const bright = (txt("acco-lightVal") || (val("acco-light")+"")).trim();
+    if(bright){
+      lines.push("Helligkeit: " + (/%/.test(bright) ? bright : (bright + "%")));
+    }
+    const angle = txt("acco-angleVal"); if(angle) lines.push("Einfallswinkel an der Linse: " + angle + "°");
+    const power = txt("acco-powerVal"); if(power) lines.push("Brechkraft der Linse: " + power + " dpt");
+    const pupil = txt("acco-pupilVal"); if(pupil) lines.push("Pupillendurchmesser: " + pupil + " mm");
+    const light = (txt("acco-lightRelVal") || txt("acco-lightVal") || "").trim();
+    if(light) lines.push("Lichtmenge (rel.): " + light);
+    return lines;
+  }
+
+  function drawCardBg(ctx, x, y, w, h){
+    const r=18;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+    ctx.fillStyle="rgba(18,28,50,.92)";
+    ctx.fill();
+    ctx.strokeStyle="rgba(106,166,255,.22)";
+    ctx.lineWidth=2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  async function buildExportRay(){
+    // Exportiert ausschließlich das Simulationsfenster (ohne Einstellungen/Seheindruck)
+    return await exportCanvasOnly($("ray-canvas"), 1600);
+
+  }
+
+  async function buildExportRefr(){
+    // Exportiert ausschließlich das Simulationsfenster (ohne Einstellungen/Seheindruck)
+    return await exportCanvasOnly($("refr-canvas"), 1600);
+
+  }
+
+    async function buildExportAcco(){
+    // Exportiert ausschließlich das Simulationsfenster (ohne Einstellungen/Seheindruck)
+    // In Option 2 ist dies die Seitenansicht (acco-canvas). Die Aufsicht wird NICHT exportiert.
+    return await exportCanvasOnly($("acco-canvas"), 1600);
+  }
+
+  async function canvasToBlob(canvas){
+    if(canvas.toBlob){
+      const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
+      if(blob) return blob;
+    }
+    return dataURLToBlob(canvas.toDataURL("image/png"));
+  }
+
+  async function copyOrDownload(outCanvas, filename){
+    const blob = await canvasToBlob(outCanvas);
+    if(navigator.clipboard && window.ClipboardItem){
+      try{
+        await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
+        toast("Exportiert (in Zwischenablage).");
+        return;
+      }catch(e){
+        // fall through to download
+        console.warn("Clipboard write failed:", e);
+      }
+    }
+    // fallback: download
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download=filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 8000);
+    toast("Exportiert (Download).");
+  }
+
+  async function exportMode(mode, btn){
+    const b = btn || null;
+    const oldTxt = b ? b.textContent : "";
+    if(b){ b.disabled=true; b.textContent="Export…"; }
+    try{
+      let out;
+      if(mode==="ray") out = await buildExportRay();
+      else if(mode==="acco") out = await buildExportAcco();
+      else if(mode==="refr") out = await buildExportRefr();
+      else throw new Error("Unbekannter Modus: "+mode);
+
+      const stamp = new Date();
+      const fn = "Export_" + mode + "_" + stamp.toISOString().slice(0,19).replace(/[:T]/g,"-") + ".png";
+      await copyOrDownload(out, fn);
+    }catch(e){
+      console.error(e);
+      alert("Export fehlgeschlagen.\n\n" + (e && e.message ? e.message : e));
+    }finally{
+      if(b){ b.disabled=false; b.textContent=oldTxt || "⤓ Exportieren"; }
+    }
+  }
+
+  window.Exporter = { exportMode };
+})();
+
+/* === Informationstext: Popup-Logik === */
+(function(){
+  const EXPLAIN_TEXT = {
+    ray: `Wenn Licht von einem transparenten Medium in ein anderes übergeht (z. B. von Luft in Glas/Wasser), ändert es seine Ausbreitungsgeschwindigkeit. Dadurch wird der Lichtstrahl an der Grenzfläche „gebrochen“, d. h. seine Richtung ändert sich. Eine Sammellinse (konvex) lenkt Lichtstrahlen nach innen und bündelt sie. Eine Streulinse (konkav) lenkt Lichtstrahlen nach außen und zerstreut sie.`,
+    acco: `Akkommodation bezeichnet die Anpassung der Brechkraft der Augenlinse, damit Objekte in unterschiedlicher Entfernung auf der Netzhaut scharf abgebildet werden. Dies geschieht über das Zusammenspiel von Ziliarmuskel und Zonulafasern: Je nachdem, ob der Ziliarmuskel angespannt oder entspannt ist, verändern die Zonulafasern ihren Zug und die Linse verändert dadurch ihre Form und Brechkraft (= Maß dafür, wie stark sie die Richtung von Lichtstrahlen ändert).`,
+    refr: `Bei Kurzsichtigkeit ist der Augapfel zu lang oder die Brechkraft von Hornhaut und Linse ist zu groß. Personen können nur nahe Gegenstände scharf sehen, während entfernte Gegenstände unscharf dargestellt werden. Bei Weitsichtigkeit ist der Augapfel zu kurz oder die Brechkraft zu klein. In diesem Fall können Personen entfernte Gegenstände scharf sehen, nahe Gegenstände werden jedoch unscharf dargestellt.`,
+  };
+
+  function openExplain(which, autoOpen){
+    const modal = document.getElementById("explainModal");
+    const body  = document.getElementById("explainBody");
+    const title = document.getElementById("explainTitle");
+    if(!modal || !body || !title) return;
+
+    const nextText = EXPLAIN_TEXT[which] || "";
+    if(autoOpen && modal.classList.contains("open") && modal.dataset.which === which){
+      return;
+    }
+
+    title.textContent = "Informationstext";
+    body.textContent  = nextText;
+    modal.dataset.which = which || "";
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden","false");
+  }
+
+  function closeExplain(){
+    const modal = document.getElementById("explainModal");
+    if(!modal) return;
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden","true");
+    modal.dataset.which = "";
+  }
+
+  // Delegiertes Schließen (Backdrop, X, Button)
+  document.addEventListener("click", (e)=>{
+    const t = e.target;
+    if(t && t.dataset && t.dataset.close){
+      closeExplain();
+    }
+  });
+
+  // ESC schließt
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape"){
+      closeExplain();
+    }
+  });
+
+  window.openExplain = openExplain;
+})();
+
+// === INTRO-MODAL ===
+(function(){
+  document.addEventListener('DOMContentLoaded',function(){
+    var el=document.getElementById('introModal');
+    if(!el)return;
+    document.body.style.overflow='hidden';
+    function closeIntroModal(){el.style.display='none';document.body.style.overflow='';}
+    document.getElementById('introModalCloseX').addEventListener('click',closeIntroModal);
+    document.getElementById('introModalStartBtn').addEventListener('click',closeIntroModal);
+    el.addEventListener('click',function(e){if(e.target===el)closeIntroModal();});
+  });
+})();
+
+</script>
+
+<!-- === INTRO-MODAL === -->
+<div id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle">
+  <div class="im-card">
+    <div class="im-head">
+      <h2 id="introModalTitle" class="im-title">Strahlengang und Akkommodation – Optik-Simulation</h2>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+    </div>
+    <p class="im-grade">Jahrgangsstufe: 8</p>
+    <div class="im-desc">
+      In dieser Simulation untersuchst du wie sich der Strahlengang bei verschiedenen Linsen verhält und wie ein scharfer Seheindruck entsteht. Du beobachtest wie sich das menschliche Auge durch Akkommodation auf unterschiedliche Entfernungen einstellt und wie sich die Linsenform beim Sehen naher und ferner Objekte verändert. Schließlich untersuchst du noch die Entstehung von Fehlsichtigkeiten und wie diese durch unterschiedliche Hilfslinsen ausgeglichen werden können.
+    </div>
+    <div class="im-btn-row">
+      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
+    </div>
+  </div>
+</div>
+<script data-goatcounter="https://biologie-simulationen.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
