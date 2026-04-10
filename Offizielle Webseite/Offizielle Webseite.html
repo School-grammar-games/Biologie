@@ -3,14 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduBioSim: Interaktive Biologie-Simulationen für den digitalen Unterricht</title>
-  <meta name="description" content="EduBioSim bietet interaktive Biologie-Simulationen für den digitalen Unterricht. Entdecke browserbasierte Lernumgebungen zu Genetik, Evolution, Neurobiologie, Fotosynthese und weiteren Themen." />
+  <title>Offizielle Webseite für interaktive Biologie-Simulationen | EduBioSim</title>
+  <meta name="description" content="Offizielle Webseite von EduBioSim mit interaktiven Biologie-Simulationen für den digitalen Unterricht. Browserbasierte Lernumgebungen zu Genetik, Evolution, Neurobiologie, Fotosynthese und weiteren Themen." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html">
-  <meta property="og:title" content="EduBioSim: Interaktive Biologie-Simulationen für den digitalen Unterricht">
-  <meta property="og:description" content="Von einer Lehrkraft entwickelte, browserbasierte Biologie-Simulationen für Schule und Unterricht." />
+  <meta property="og:title" content="Offizielle Webseite für interaktive Biologie-Simulationen | EduBioSim">
+  <meta property="og:description" content="Die offizielle Webseite von EduBioSim mit browserbasierten Biologie-Simulationen für Schule und Unterricht." />
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Offizielle Webseite für interaktive Biologie-Simulationen | EduBioSim",
+    "url": "https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html",
+    "description": "Offizielle Webseite von EduBioSim mit interaktiven Biologie-Simulationen für den digitalen Unterricht.",
+    "inLanguage": "de",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "EduBioSim",
+      "url": "https://school-grammar-games.github.io/Biologie/"
+    }
+  }
+  </script>
   <style>
     /* === CSS VARIABLEN === */
     :root {
@@ -66,6 +81,11 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       display: flex; align-items: center; justify-content: center;
       color: white; font-size: 1rem; flex-shrink: 0;
+    }
+    .nav-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 0.75rem;
     }
 
     /* === BUTTONS === */
@@ -131,6 +151,17 @@
     .hero-sub {
       font-size: 1.0625rem; color: var(--text-mid);
       max-width: 520px; margin: 0 0 2.5rem; line-height: 1.7;
+    }
+    .hero-meta {
+      font-size: 0.98rem;
+      color: var(--text-mid);
+      max-width: 62ch;
+      line-height: 1.7;
+      margin: -0.9rem 0 1.7rem;
+    }
+    .hero-meta a {
+      color: var(--primary-dark);
+      font-weight: 600;
     }
     .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
     /* Rechte Seite: Carousel */
@@ -709,6 +740,10 @@
     <div class="brand-icon">&#127807;</div>
     EduBioSim
   </div>
+  <div class="nav-actions">
+    <a class="btn btn-secondary btn-sm" href="../index.html">Startseite</a>
+    <a class="btn btn-secondary btn-sm" href="../Website.html">Simulationsportal</a>
+  </div>
 </nav>
 
 
@@ -723,6 +758,7 @@
       <div class="hero-text">
         <h1>Interaktive Biologie-<br><span class="highlight">Simulationen</span><br>f&#252;r den digitalen Unterricht</h1>
         <p class="hero-sub">Von einer Lehrkraft entwickelte, browserbasierte Simulationen, die komplexe biologische Prozesse anschaulich und interaktiv erlebbar machen &#8211; auf jedem Ger&#228;t, ohne Installation.</p>
+        <p class="hero-meta">Diese Seite ist die offizielle Webseite von EduBioSim. Hier findest du den zentralen Einstieg in interaktive Biologie-Simulationen f&#252;r Schule, Unterricht und selbstst&#228;ndiges Lernen sowie den direkten Zugang zum <a href="../Website.html">Simulationsportal</a>.</p>
         <div class="hero-actions">
           <button class="btn btn-primary btn-lg" onclick="scrollToSimulations()">&#128269; Simulationen entdecken</button>
         </div>
@@ -878,6 +914,7 @@
   <!-- FOOTER -->
   <footer class="footer">
     <p>&#169; 2026 EduBioSim &middot; Educational Biology Simulations</p>
+    <p><a href="../index.html">Startseite</a> &middot; <a href="../Website.html">Simulationsportal</a> &middot; <a href="Offizielle%20Webseite.html">Offizielle Webseite</a></p>
     <p>Die Website und sämtliche Inhalte dürfen nicht zu kommerziellen Zwecken genutzt und nicht auf anderen Websites eingebettet werden. Ausnahmen stellen die unter CC BY und CC BY-SA stehenden Abbildungen dar. Hinweise, Anmerkungen oder Vorschläge können gerne an biologie-simulationen@web.de geschickt werden.</p>
   </footer>
 </div><!-- /view-landing -->
