@@ -12,48 +12,11 @@
     html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font:21px/1.35 system-ui,Segoe UI,Roboto,Arial;}
     .wrap{max-width:1650px; margin:0 auto; padding:27px;}
     
-    
-    /* Mode chooser (Meiose/Mitose) */
-    .modeChooser{
-      position:fixed; inset:0;
-      display:flex; align-items:center; justify-content:center;
-      background:rgba(7,10,15,.92);
-      backdrop-filter: blur(6px);
-      z-index:9999;
-      padding:24px;
-    }
-    .choicePanel{
-      max-width:1100px; width:100%;
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:24px;
-      box-shadow:0 12px 36px rgba(0,0,0,.45);
-    }
-    .choiceTitle{font-size:22px; font-weight:700; margin:0 0 14px;}
-    .choiceSubtitle{margin:0 0 18px; color:var(--muted); font-size:18px;}
-    .choiceGrid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
-    .choiceCard{
-      cursor:pointer;
-      border:1px solid var(--line);
-      border-radius:18px;
-      overflow:hidden;
-      background:#0b1020;
-      transition:transform .12s ease, border-color .12s ease;
-      outline:none;
-    }
-    .choiceCard:hover{border-color:#2f4366; transform:translateY(-2px);}
-    .choiceCard:focus-visible{border-color:#2f4366; box-shadow:0 0 0 3px rgba(124,192,255,.25);}
-    .choiceCard img{width:100%; height:auto; display:block;}
-    .choiceCaption{padding:12px 14px; font-size:18px; color:var(--muted); text-align:center;}
-    @media (max-width: 900px){
-      .choiceGrid{grid-template-columns:1fr;}
-    }
-/* Responsive UI scaling (set via --uiScale in JS) */
-    #scaleRoot{transform:scale(var(--uiScale,1)); transform-origin: top center; width:calc(100%/var(--uiScale,1)); margin:0; margin-left:calc(50% - 50%/var(--uiScale,1));}
-    html,body{overflow:hidden;}
+    /* Responsive UI scaling (set via --uiScale in JS) */
+    #scaleRoot{transform:scale(var(--uiScale,1)); transform-origin: top center; width:calc(100%/var(--uiScale,1)); margin:0 auto;}
+    body{overflow-x:hidden;}
 h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
-    .row{display:grid; grid-template-columns: 1fr minmax(320px, 420px); gap:21px; align-items:stretch;}
+    .row{display:grid; grid-template-columns: 1fr 480px; gap:21px; align-items:start;}
     .card{background:var(--panel); border:1px solid var(--line); border-radius:21px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.35);}
     .canvasWrap{padding:15px;}
     canvas{width:100%; height:auto; display:block; border-radius:12px; background:radial-gradient(1200px 600px at 50% 55%, rgba(255,255,255,.05), rgba(255,255,255,.00) 60%);}
@@ -65,78 +28,6 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
       background:#0b1020; color:var(--text); border:1px solid var(--line); border-radius:15px;
       padding:12px 15px; font:inherit;
     }
-    /* Hervorgehobener Geschwindigkeitsregler */
-    #speed{
-      -webkit-appearance:none;
-      appearance:none;
-      width:100%;
-      height:34px;
-      padding:0;
-      border-radius:14px;
-      border:1px solid rgba(124,192,255,0.38);
-      background:
-        linear-gradient(180deg, rgba(124,192,255,0.12), rgba(255,154,213,0.08)),
-        #101829;
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.04),
-        0 0 0 1px rgba(124,192,255,0.10),
-        0 6px 18px rgba(0,0,0,0.22);
-      cursor:pointer;
-    }
-    #speed:hover{
-      border-color: rgba(124,192,255,0.55);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.05),
-        0 0 0 1px rgba(124,192,255,0.16),
-        0 8px 20px rgba(0,0,0,0.26);
-    }
-    #speed:focus-visible{
-      outline:none;
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.05),
-        0 0 0 3px rgba(124,192,255,0.25),
-        0 8px 20px rgba(0,0,0,0.26);
-    }
-    #speed::-webkit-slider-runnable-track{
-      height:8px;
-      border-radius:999px;
-      margin:0 10px;
-      background:linear-gradient(90deg, rgba(124,192,255,0.95), rgba(255,154,213,0.95));
-      border:1px solid rgba(255,255,255,0.14);
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.28);
-    }
-    #speed::-webkit-slider-thumb{
-      -webkit-appearance:none;
-      appearance:none;
-      width:18px;
-      height:18px;
-      border-radius:50%;
-      margin-top:-6px;
-      background:#eef5ff;
-      border:2px solid rgba(124,192,255,0.85);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0 0 4px rgba(124,192,255,0.12);
-    }
-    #speed::-moz-range-track{
-      height:8px;
-      border-radius:999px;
-      background:linear-gradient(90deg, rgba(124,192,255,0.95), rgba(255,154,213,0.95));
-      border:1px solid rgba(255,255,255,0.14);
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.28);
-    }
-    #speed::-moz-range-thumb{
-      width:18px;
-      height:18px;
-      border-radius:50%;
-      background:#eef5ff;
-      border:2px solid rgba(124,192,255,0.85);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0 0 4px rgba(124,192,255,0.12);
-    }
-    #speed::-moz-range-progress{
-      height:8px;
-      border-radius:999px;
-      background:linear-gradient(90deg, rgba(124,192,255,0.95), rgba(255,154,213,0.95));
-    }
-
     button{cursor:pointer;}
     button:hover{border-color:#2f4366;}
     button:active{transform:translateY(1px);}
@@ -200,15 +91,11 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
 
 
     /* --- Ergebnisse: zwei Durchläufe (Genommutation) --- */
-    .runResults{margin-top:0; padding:18px; max-width:1200px; margin-left:auto; margin-right:auto; border:1px solid rgba(255,255,255,0.10); border-radius:16px; background:rgba(11,16,32,0.35); position:relative; z-index:1;}
+    .runResults{margin-top:18px; padding:14px; border:1px solid rgba(255,255,255,0.10); border-radius:16px; background:rgba(11,16,32,0.35);}
     .runResults .rowImgs{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; align-items:start;}
-    @media (max-width: 767px){
+    @media (max-width: 1100px){
       .row{grid-template-columns: 1fr;}
       .runResults .rowImgs{grid-template-columns:1fr;}
-    }
-    /* Desktop: Ergebnisbilder breiter darstellen */
-    @media (min-width: 1200px){
-      .runResults{ max-width: 1600px; }
     }
     .runResults figure{margin:0; padding:12px; border:1px solid rgba(255,255,255,0.10); border-radius:14px; background:rgba(8,12,24,0.35);}
     .runResults figcaption{font-size:14px; color:rgba(255,255,255,0.80); margin:0 0 10px 0; font-weight:650;}
@@ -284,9 +171,6 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
   box-shadow: 0 18px 60px rgba(0,0,0,0.55);
   color: rgba(235,244,255,0.92);
 }
-@media (max-height: 800px) {
-  .modalCard { max-height: min(62vh, 480px); }
-}
 .modalHeader{
   display:flex;
   align-items:flex-start;
@@ -344,78 +228,10 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
 }
 .modalPrimary:hover{ background: rgba(120,140,255,0.28); }
 
-/* ---- Combined Info Modal (Genommutation + Oogenese) ---- */
-.modalCard.wide{
-  width: min(1040px, calc(100vw - 48px));
-  max-width: 1040px;
-}
-.combinedGrid{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-@media (max-width: 980px){
-  .combinedGrid{ grid-template-columns: 1fr; }
-}
-.combinedSection{
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 14px;
-  background: rgba(0,0,0,0.12);
-  padding: 12px 14px;
-}
-.combinedSection .modalKicker{ margin-bottom: 4px; }
-.combinedTitle{
-  margin: 0 0 10px 0;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-}
-
-/* === TABLET-SKALIERUNG: rechtes Panel (900–1100px) === */
-    @media (min-width: 900px) and (max-width: 1100px){
-      .side{ font-size:17px; padding:16px; }
-      .side button, .side select{ padding:9px 12px; font-size:17px; }
-      .side .label{ font-size:15px; }
-      .side .tiny{ font-size:15px; }
-    }
-
-/* === INTRO-MODAL === */
-#introModal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.70);z-index:10000;padding:16px}
-#introModal .im-card{width:min(600px,100%);max-height:92vh;overflow:auto;background:#0a0f18;border:1px solid rgba(124,192,255,.22);border-radius:18px;padding:18px;box-shadow:0 16px 48px rgba(0,0,0,.6);color:#d0e8ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-#introModal .im-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
-#introModal .im-title{margin:0;font-size:1.1rem;font-weight:800;line-height:1.25}
-#introModal .im-close-x{border:1px solid rgba(124,192,255,.3);background:rgba(124,192,255,.1);color:#d0e8ff;min-width:38px;width:38px;height:38px;border-radius:12px;font-size:22px;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;padding:0}
-#introModal .im-grade{font-size:.88rem;color:#7a9cc0;margin:0 0 10px 0}
-#introModal .im-desc{border:1px solid rgba(124,192,255,.16);border-radius:14px;background:rgba(124,192,255,.07);padding:12px;line-height:1.55;font-size:.95rem;margin-bottom:14px}
-#introModal .im-btn-row{display:flex;justify-content:flex-end}
-#introModal .im-start-btn{border:none;background:#7cc0ff;color:#070a0f;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:.95rem}
-@media(max-width:600px){#introModal .im-card{padding:14px}}
-
-
 </style>
 </head>
-
 <body>
-  <div id="modeChooser" class="modeChooser" aria-label="Modus wählen">
-    <div class="choicePanel">
-      <div class="choiceTitle">Simulation auswählen</div>
-      <div class="choiceSubtitle">Klicke auf ein Bild, um den gewünschten Modus zu starten.</div>
-      <div class="choiceGrid">
-        <div id="chooseMeiose" class="choiceCard" role="button" tabindex="0" aria-label="Meiose auswählen">
-          <img src="./Bilder%20Chromosome/Wahl_Meiose.jpg" alt="Meiose auswählen">
-          <div class="choiceCaption">Meiose</div>
-        </div>
-        <div id="chooseMitose" class="choiceCard" role="button" tabindex="0" aria-label="Mitose auswählen">
-          <img src="./Bilder%20Chromosome/Wahl_Mitose.jpg" alt="Mitose auswählen">
-          <div class="choiceCaption">Mitose</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="app" style="display:none;">
   <div id="scaleRoot">
-
   <div class="wrap">
     <h1>Ablauf der Meiose</h1>
 
@@ -452,7 +268,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
         </div>
 
         <div class="row2">
-          <div class="chk" id="coBlock">
+          <div class="chk">
             <label class="toggle" title="Crossing-over">
               <input id="toggleCO" type="checkbox" checked>
               <span class="slider"></span>
@@ -475,7 +291,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
         </div>
 
         
-        <div class="lock-note" id="genomeLockNote" style="display:none;"><strong>Hinweis:</strong> Bei aktivierter <strong>Genommutation</strong> werden <strong>Autosomenpaare</strong> automatisch auf <strong>n=1</strong> gesetzt und <strong>Gonosomen</strong> deaktiviert.</div>
+        <div class="lock-note" id="genomeLockNote" style="display:none;"><strong>Hinweis:</strong> Bei aktivierter <strong>Genommutation</strong> werden <strong>Autosomenpaare</strong> automatisch auf <strong>n=1</strong> gesetzt und <strong>Gonosomen</strong> deaktiviert. Diese Optionen sind dann bewusst gesperrt.</div>
 <div class="row2" style="margin-top:10px;">
                   <div class="chk">
                     <label class="toggle" title="Gonosomen">
@@ -492,7 +308,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
                     </select>
                   </div>
                 </div>
-        <div class="row2" id="genomeRow" style="margin-top:10px;">
+        <div class="row2" style="margin-top:10px;">
           <div class="chk">
             <label class="toggle" title="Genommutation">
               <input id="toggleGenome" type="checkbox">
@@ -501,39 +317,27 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
             <span class="tiny">Genommutation</span>
           </div>
 
-          <div class="select" style="min-width:0; width:100%;">
+          <div class="select" style="min-width:230px;">
             <div class="label">Typ</div>
-            <select id="genomeSelect" disabled style="width:100%;">
+            <select id="genomeSelect" disabled>
               <option value="mono">Monosomie</option>
               <option value="tri">Trisomie</option>
             </select>
           </div>
         </div>
 
-        <div class="row2" id="oogenesisRow" style="margin-top:10px; display:none; grid-template-columns: 1fr;">
-          <div class="chk">
-            <label class="toggle" title="Darstellung der Oogenese (1 Eizelle + 3 Polkörperchen)">
-              <input id="toggleOogenese" type="checkbox">
-              <span class="slider"></span>
-            </label>
-            <span class="tiny">Darstellung der Oogenese</span>
-          </div>
-        </div>
-</div>
-        </div>
-
 
         
 
     </div>
-
   </div>
 
-</div>
 
-<!-- Ergebnisse (außerhalb scaleRoot, normaler Flow) -->
-<div class="card resultsPanel runResults" id="runResults" style="display:none">
-  <div class="countdown" id="countdown" style="display:none"></div>
+    <!-- Ergebnisse (automatische 2 Durchläufe bei aktivierter Genommutation) -->
+    <div class="card resultsPanel runResults" id="runResults" style="display:none">
+      <div class="countdown" id="countdown" style="display:none"></div>
+    </div>
+
 </div>
 
 <script>
@@ -541,7 +345,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
   const canvas = document.getElementById('c');
   
   // --- Responsive UI scaling to the current viewport ---
-  const UI_SCALE_MIN = 0.5;
+  const UI_SCALE_MIN = 0.75;
   const UI_SCALE_MAX = 1.25;
 
   function debounce(fn, ms){
@@ -561,38 +365,16 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
 
     // Natural (unscaled) content size
     const naturalW = wrap.scrollWidth;
+    const naturalH = wrap.scrollHeight;
 
     const margin = 24; // small breathing room around the layout
     const vw = Math.max(320, window.innerWidth - margin);
+    const vh = Math.max(320, window.innerHeight - margin);
 
-    // Breiten-basierter Scale
-    let s = vw / naturalW;
-
-    // Höhen-Beschränkung: nur .row messen (nicht Hinweis-Blöcke, die naturalH aufblähen).
-    // Verhindert vertikalen Überlauf auf breiten Desktops, wenn s > 1 werden würde.
-    const rowEl = wrap.querySelector('.row');
-    const h1El = wrap.querySelector('h1');
-    if (rowEl) {
-      const h1H = h1El ? h1El.offsetHeight + (parseInt(getComputedStyle(h1El).marginBottom) || 10) : 60;
-      const estimatedH = rowEl.offsetHeight + h1H + 54; // 54 = wrap padding top+bottom
-      const vhFit = Math.max(300, window.innerHeight - 50);
-      const sH = vhFit / estimatedH;
-      s = Math.min(s, sH);
-    }
-
+    let s = Math.min(vw / naturalW, vh / naturalH);
     s = Math.min(UI_SCALE_MAX, Math.max(UI_SCALE_MIN, s));
 
     document.documentElement.style.setProperty('--uiScale', s.toFixed(3));
-
-    // Überschüssigen Layout-Space des skalierten scaleRoot kollabieren,
-    // damit kein "Black Hole" zwischen Simulation und Ergebnisbereich entsteht.
-    // Layout-Höhe = naturalScaleH, visuelle Höhe = naturalScaleH * s → Differenz negativ als margin-bottom
-    const scaleRootEl = document.getElementById('scaleRoot');
-    if (scaleRootEl) {
-      const naturalScaleH = scaleRootEl.offsetHeight; // bei scale=1 gemessen
-      const excess = naturalScaleH * (s - 1); // negativ wenn s < 1
-      scaleRootEl.style.marginBottom = excess.toFixed(1) + 'px';
-    }
   }
 
   const computeUIScaleDebounced = debounce(computeUIScale, 60);
@@ -600,8 +382,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
   window.addEventListener('orientationchange', computeUIScaleDebounced);
 
   // Initial scale after first layout
-  // UI scale is computed after mode selection
-
+  requestAnimationFrame(() => computeUIScale());
 const ctx = canvas.getContext('2d');
   // Simple error surface (shows JS errors in the UI instead of failing silently)
   window.addEventListener('error', (ev) => {
@@ -720,125 +501,9 @@ const ctx = canvas.getContext('2d');
     if (e.key === 'Escape') hideTrisomyPopup();
   });
 
-
-
-
-  // --- Combined Info Popup (Genommutation + Oogenese) ---
-  let combinedInfoModal = null;
-  let combinedInfoCloseBtn = null;
-  let combinedInfoOkBtn = null;
-  let combinedInfoPopupShown = false;
-  let combinedInfoModalBound = false;
-
-  function ensureCombinedInfoModal(){
-    if (combinedInfoModalBound) return;
-    combinedInfoModal = document.getElementById('combinedInfoModal');
-    combinedInfoCloseBtn = document.getElementById('combinedInfoCloseBtn');
-    combinedInfoOkBtn = document.getElementById('combinedInfoOkBtn');
-    if (!combinedInfoModal) return;
-
-    const hide = hideCombinedInfoPopup;
-    if (combinedInfoCloseBtn) combinedInfoCloseBtn.addEventListener('click', hide);
-    if (combinedInfoOkBtn) combinedInfoOkBtn.addEventListener('click', hide);
-    combinedInfoModal.addEventListener('click', (e)=>{ if (e.target === combinedInfoModal) hide(); });
-    window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') hide(); });
-
-    combinedInfoModalBound = true;
-  }
-
-  function showCombinedInfoPopup(kind /* 'mono' | 'tri' */){
-    ensureCombinedInfoModal();
-    if (!combinedInfoModal || combinedInfoPopupShown) return;
-
-    // Source bodies as templates
-    const leftSrcModal = (kind === 'tri') ? document.getElementById('trisomyModal') : document.getElementById('monosomyModal');
-    const rightSrcModal = document.getElementById('oogenesisModal');
-
-    const leftTitleEl = document.getElementById('combinedLeftTitle');
-    const leftKickerEl = document.getElementById('combinedLeftKicker');
-    const leftBodyEl = document.getElementById('combinedLeftBody');
-    const rightBodyEl = document.getElementById('combinedRightBody');
-
-    if (leftSrcModal && leftBodyEl){
-      const srcTitle = leftSrcModal.querySelector('.modalTitle');
-      const srcKicker = leftSrcModal.querySelector('.modalKicker, .modalBadge');
-      const srcBody = leftSrcModal.querySelector('.modalBody');
-      if (leftTitleEl && srcTitle) leftTitleEl.textContent = srcTitle.textContent;
-      if (leftKickerEl && srcKicker) leftKickerEl.textContent = srcKicker.textContent;
-      if (srcBody) leftBodyEl.innerHTML = srcBody.innerHTML;
-    }
-
-    if (rightSrcModal && rightBodyEl){
-      const srcBody = rightSrcModal.querySelector('.modalBody');
-      if (srcBody) rightBodyEl.innerHTML = srcBody.innerHTML;
-    }
-
-    combinedInfoPopupShown = true;
-    combinedInfoModal.classList.add('show');
-    combinedInfoModal.setAttribute('aria-hidden','false');
-  }
-
-  function hideCombinedInfoPopup(){
-    ensureCombinedInfoModal();
-    if (!combinedInfoModal) return;
-    combinedInfoModal.classList.remove('show');
-    combinedInfoModal.setAttribute('aria-hidden','true');
-  }
-
-  function resetCombinedInfoPopup(){
-    combinedInfoPopupShown = false;
-    hideCombinedInfoPopup();
-  }
-
-
-  // --- Oogenese Popup ---
-  let oogenesisModal = null;
-  let oogenesisCloseBtn = null;
-  let oogenesisOkBtn = null;
-  let oogenesisPopupShown = false;
-  let oogenesisModalBound = false;
-
-  function ensureOogenesisModal(){
-    if (oogenesisModalBound) return;
-    oogenesisModal = document.getElementById('oogenesisModal');
-    oogenesisCloseBtn = document.getElementById('oogenesisCloseBtn');
-    oogenesisOkBtn = document.getElementById('oogenesisOkBtn');
-    if (!oogenesisModal) return;
-
-    if (oogenesisCloseBtn) oogenesisCloseBtn.addEventListener('click', hideOogenesisPopup);
-    if (oogenesisOkBtn) oogenesisOkBtn.addEventListener('click', hideOogenesisPopup);
-    oogenesisModal.addEventListener('click', (e)=>{ if (e.target === oogenesisModal) hideOogenesisPopup(); });
-    window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') hideOogenesisPopup(); });
-
-    oogenesisModalBound = true;
-  }
-
-  function showOogenesisPopup(){
-    ensureOogenesisModal();
-    if (!oogenesisModal || oogenesisPopupShown) return;
-    oogenesisPopupShown = true;
-    oogenesisModal.classList.add('show');
-    oogenesisModal.setAttribute('aria-hidden','false');
-  }
-
-  function hideOogenesisPopup(){
-    if (!oogenesisModal) return;
-    oogenesisModal.classList.remove('show');
-    oogenesisModal.setAttribute('aria-hidden','true');
-  }
-
-  function resetOogenesisPopup(){
-    oogenesisPopupShown = false;
-    hideOogenesisPopup();
-  }
-
 function showResultsPanel(show){
     if (!resultsEl) return;
     resultsEl.style.display = show ? '' : 'none';
-    // Vertikales Scrollen erlauben wenn Ergebnisse sichtbar, sonst overflow:hidden aus CSS
-    document.documentElement.style.overflowY = show ? 'auto' : '';
-    document.body.style.overflowY = show ? 'visible' : '';
-    document.body.style.height = show ? 'auto' : '';
   }
 
   function clearRunResults(){
@@ -872,10 +537,46 @@ function showResultsPanel(show){
 
     const sctx = snap.getContext('2d');
     sctx.drawImage(canvas, 0, 0);
-    // Ergebnis-Markierung (Monosomie):
-    // Die roten Markierungsringe werden bereits im Haupt-Canvas während der Befruchtungs-Animation
-    // gezeichnet und sind daher im Snapshot enthalten. Ein zusätzliches Overlay würde als
-    // "doppelter Ring" erscheinen. Deshalb hier bewusst kein extra Ring-Overlay.
+    // Highlight der befruchteten Zellen in den Ergebnis-Abbildungen (rote Kreise)
+    if (genomeMutationOn && genomeMutationMode === 'mono'){
+      const W = snap.width, H = snap.height;
+      const cx = W*0.5, cy = H*0.56;
+      const R = Math.min(W*0.33, H*0.25);
+
+      // Telophase II Layout (Endzustand: tt ~ 1)
+      const offY = R*0.80;
+      const topP = {x: cx, y: cy - offY};
+
+      const r4 = R*0.52;
+      const dxSplit = r4*1.35;
+
+      const TL = {x: topP.x - dxSplit, y: topP.y};
+      const TR = {x: topP.x + dxSplit, y: topP.y};
+
+      const ringR = r4 * 1.08;
+      const lw = Math.max(4, ringR * 0.08);
+
+      function drawRing(p){
+        sctx.save();
+        sctx.beginPath();
+        sctx.strokeStyle = 'rgba(255, 0, 0, 0.92)';
+        sctx.lineWidth = lw;
+        sctx.shadowColor = 'rgba(255, 0, 0, 0.35)';
+        sctx.shadowBlur = lw * 1.25;
+        sctx.arc(p.x, p.y, ringR, 0, Math.PI*2);
+        sctx.stroke();
+        sctx.restore();
+      }
+
+      if (runNo === 1){
+        // Durchlauf 1: oben links + oben rechts
+        drawRing(TL);
+        drawRing(TR);
+      } else if (runNo === 2){
+        // Durchlauf 2: oben links
+        drawRing(TL);
+      }
+    }
 
 
     fig.appendChild(cap);
@@ -904,7 +605,7 @@ function showResultsPanel(show){
 
 
   // --- Asset loading (images from folder "Bilder Chromosome") ---
-  const ASSET_DIR = "./Bilder%20Chromosome/";
+  const ASSET_DIR = "./Bilder_Chromosome/";
   const ASSET_EXTS = ["png","svg","webp","jpg","jpeg"];
 
   function assetUrl(name, ext){
@@ -1063,120 +764,10 @@ if (crossingOverOn){
   const toggleGenome = document.getElementById('toggleGenome');
   const genomeSelect = document.getElementById('genomeSelect');
 
+
   
-  const toggleOogenese = document.getElementById('toggleOogenese');
-  const oogenesisResultEl = document.getElementById('oogenesisResult');
-  const oogenesisRow = document.getElementById('oogenesisRow');
-// --- Modus-Wahl (Meiose vs Mitose) ---
-const appRoot = document.getElementById('app');
-const chooser = document.getElementById('modeChooser');
-const chooseMeiose = document.getElementById('chooseMeiose');
-const chooseMitose = document.getElementById('chooseMitose');
-
-
-let SIM_MODE = 'meiosis';
-function setSimTitle(txt){
-  try{ document.title = txt; }catch(e){}
-  const h1 = document.querySelector('.wrap h1');
-  if (h1) h1.textContent = txt;
-}
-
-function activateMode(mode){
-  // App anzeigen, Overlay ausblenden
-  SIM_MODE = mode;
-  if (mode === 'mitosis') setSimTitle('Ablauf Mitose');
-  else setSimTitle('Ablauf der Meiose');
-
-  if (chooser) chooser.style.display = 'none';
-  if (appRoot) appRoot.style.display = 'block';
-
-  if (mode === 'mitosis'){
-    // UI-Elemente ausblenden (wie gewünscht)
-    const coBlock = document.getElementById('coBlock');
-    const genomeRow = document.getElementById('genomeRow');
-    const lockNote = document.getElementById('genomeLockNote');
-    if (coBlock) coBlock.style.display = 'none';
-    if (genomeRow) genomeRow.style.display = 'none';
-    if (lockNote) lockNote.style.display = 'none';
-    if (oogenesisRow) oogenesisRow.style.display = 'none';
-
-    // Optionen deaktivieren/neutralisieren (damit der interne Zustand konsistent bleibt)
-    if (toggleCO){
-      toggleCO.checked = false;
-      toggleCO.disabled = true;
-    }
-    if (toggleGenome){
-      toggleGenome.checked = false;
-      toggleGenome.disabled = true;
-    }
-    if (genomeSelect) genomeSelect.disabled = true;
-    if (toggleOogenese){
-      toggleOogenese.checked = false;
-      toggleOogenese.disabled = true;
-    }
-    oogenesisOn = false;
-    if (toggleGono) toggleGono.disabled = false;
-    if (sexSelect) sexSelect.disabled = !gonosomesOn;
-  }
-
-  // Oogenese-Option nur in Meiose sichtbar/aktiv
-  if (mode !== 'mitosis'){
-    if (oogenesisRow) oogenesisRow.style.display = 'grid';
-    if (toggleOogenese) toggleOogenese.disabled = false;
-  }
-
-
-  // Modus-spezifische Phasen/Timeline/UI neu aufbauen
-  phases = computePhasesForMode(SIM_MODE);
-  populatePhaseSelect();
-
-  // Interne Zustände konsistent setzen
-  crossingOverOn = (toggleCO ? !!toggleCO.checked : false);
-  genomeMutationOn = false;
-
-  // Playback zurücksetzen (damit keine "alten" cum/Phase-Indizes weiterlaufen)
-  playing = false;
-  t = 0;
-  if (phaseSelect) phaseSelect.value = '0';
-
-  // Timeline & Modell neu berechnen
-  if (typeof rebuildTimeline === 'function') rebuildTimeline();
-  if (typeof buildModel === 'function') buildModel();
-  if (typeof render === 'function') render();
-
-  // Layout ist erst nach dem Umschalten korrekt messbar
-  requestAnimationFrame(() => computeUIScale());
-}
-
-// Warten, bis der Nutzer ein Bild anklickt (sonst startet die Simulation "hinter" dem Overlay)
-if (chooser && appRoot && chooseMeiose && chooseMitose){
-  new Promise((resolve) => {
-    let resolved = false;
-    const pick = (m) => {
-      if (resolved) return;
-      resolved = true;
-      resolve(m);
-    };
-
-    const bind = (el, m) => {
-      el.addEventListener('click', () => pick(m));
-      el.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(m); }
-      });
-    };
-
-    bind(chooseMeiose, 'meiosis');
-    bind(chooseMitose, 'mitosis');
-  }).then((mode) => {
-    activateMode(mode);
-  });
-} else {
-  // Fallback: App direkt anzeigen
-  if (appRoot) appRoot.style.display = 'block';
-  requestAnimationFrame(() => computeUIScale());
-}
-
-function applyGenomeLockState(on){
+  
+  function applyGenomeLockState(on){
     // Wenn Genommutation aktiv: n=1 erzwingen und Gonosomen deaktivieren
     const nBox = (nSelect && nSelect.closest) ? nSelect.closest('.select') : null;
     const gonoRow = (toggleGono && toggleGono.closest) ? toggleGono.closest('.row2') : null;
@@ -1228,18 +819,6 @@ function applyGenomeLockState(on){
   let genomeMutationMode = 'mono';
   let gonosomesOn = false;
   let sexMode = 'female';
-
-  let oogenesisOn = false;
-
-  function applyOogenesisSexBlock(){
-    if (!sexSelect) return;
-    const maleOpt = sexSelect.querySelector("option[value='male']");
-    if (maleOpt) maleOpt.disabled = !!(oogenesisOn && gonosomesOn);
-    if (oogenesisOn && gonosomesOn && sexMode === 'male'){
-      sexMode = 'female';
-      sexSelect.value = 'female';
-    }
-  }
 // Helpers
   const lerp = (a,b,t)=>a+(b-a)*t;
   const clamp = (x,a,b)=>Math.max(a, Math.min(b,x));
@@ -1324,7 +903,7 @@ function applyGenomeLockState(on){
   const ANAPHASE_Y_STOP = 0.45; // 1.00 would fully converge y onto the pole
 
   // Phases
-  const phasesAll = [
+  const phases = [
     { key:'MI_P',  title:'Meiose I – Prophase I (Kondensation, Synapsis/Paarung homologer Chromosomen, Kernhülle löst sich)', dur: 10.0 },
     { key:'MI_M',  title:'Meiose I – Metaphase I (Tetraden an der Äquatorialebene)', dur: 5.0 },
     { key:'MI_A',  title:'Meiose I – Anaphase I (Trennung homologer Chromosomen)', dur: 5.0 },
@@ -1335,47 +914,20 @@ function applyGenomeLockState(on){
     { key:'MII_T', title:'Meiose II – Telophase II & Cytokinese (4 haploide Zellen, 1 Chromatid)', dur: 6.5 },
   ];
 
-  const nameByKeyMitosis = {
-    'MII_P': 'Prophase',
-    'MII_M': 'Metaphase',
-    'MII_A': 'Anaphase',
-    'MII_T': 'Telophase & Cytokinese'
-  };
-
-  function computePhasesForMode(mode){
-    if (mode === 'mitosis'){
-      // Für die Mitose verwenden wir intern die Meiose-II-Keys (MII_*),
-      // benennen sie aber neutral ohne "II".
-      return phasesAll
-        .filter(p => String(p.key || '').startsWith('MII_'))
-        .map(p => ({...p, title: (nameByKeyMitosis[p.key] || String(p.title || '').replace(/^Meiose\s*II\s*–\s*/,''))}));
-    }
-    return phasesAll;
-  }
-
-  let phases = computePhasesForMode(SIM_MODE);
-
-  function populatePhaseSelect(){
-    if (!phaseSelect) return;
-    phaseSelect.innerHTML = '';
-    phases.forEach((p, i) => {
-      const opt = document.createElement('option');
-      // Anzeige: "1/4 Prophase" bzw. "1/8 Meiose I – Prophase I"
-      opt.value = String(i);
-      opt.textContent = `${i+1}/${phases.length} ${stripParens(p.title)}`;
-      phaseSelect.appendChild(opt);
-    });
-    phaseSelect.value = '0';
-  }
-
   function stripParens(s){
     // entfernt " ( ... )" inkl. davorstehendem Leerzeichen
     return s.replace(/\s*\([^)]*\)\s*/g, ' ').replace(/\s{2,}/g, ' ').trim();
   }
 
-    populatePhaseSelect();
+  phases.forEach((p, i) => {
+    const opt = document.createElement('option');
+    opt.value = String(i);
+    opt.textContent = `${i+1}/8  ${stripParens(p.title)}`;
+    phaseSelect.appendChild(opt);
+  });
 
-// Timeline
+
+  // Timeline
   
   // Timeline (dynamisch: Telophase II kann in Genommutation/Monosomie/Durchlauf 1 verlängert werden)
   let cum = [];
@@ -1404,12 +956,11 @@ function applyGenomeLockState(on){
 
   // Playback
   let playing = false;
-  let rafStarted = false;
   let runCycle = 1; // 1=Non-Disjunction Meiose I, 2=Non-Disjunction Meiose II
   rebuildTimeline();
   let runCompletedHandled = false;
   let t = 0;
-  let last = null;
+  let last = performance.now();
   let speedMul = parseFloat(speed.value);
 
   // Seamless phase transitions (interpolate chromosome positions briefly after a phase switch)
@@ -1676,12 +1227,7 @@ function applyGenomeLockState(on){
 }
 
   function drawSpindleDouble(cellCenters, rSmall, alpha){
-    // rSmall can be a number or an array of radii matching cellCenters
-    for (let i=0;i<cellCenters.length;i++){
-      const c = cellCenters[i];
-      const r = Array.isArray(rSmall) ? (rSmall[i] ?? rSmall[0] ?? 0) : rSmall;
-      drawSpindleSingle(c.x, c.y, r, alpha);
-    }
+    for (const c of cellCenters) drawSpindleSingle(c.x, c.y, rSmall, alpha);
   }
 
   function drawMetaphasePlateSingle(cx, cy, r, alpha){
@@ -1706,12 +1252,7 @@ function applyGenomeLockState(on){
   }
 
   function drawMetaphasePlateDouble(cellCenters, rSmall, alpha){
-    // rSmall can be a number or an array of radii matching cellCenters
-    for (let i=0;i<cellCenters.length;i++){
-      const c = cellCenters[i];
-      const r = Array.isArray(rSmall) ? (rSmall[i] ?? rSmall[0] ?? 0) : rSmall;
-      drawMetaphasePlateSingle(c.x, c.y, r, alpha);
-    }
+    for (const c of cellCenters) drawMetaphasePlateSingle(c.x, c.y, rSmall, alpha);
   }
 
   // Bezier chromatid stroke
@@ -1978,12 +1519,10 @@ function applyGenomeLockState(on){
   function render(){
     clear();
 
-    const { idx: uiIdx, local } = getPhaseAtTime(t);
-    let idx = uiIdx;
-    if (SIM_MODE === 'mitosis') idx = uiIdx + 4; // map 0..3 -> 4..7 so render-logic stays consistent
-    const p = phases[uiIdx];
+    const { idx, local } = getPhaseAtTime(t);
+    const p = phases[idx];
     if (phaseTitleEl) phaseTitleEl.textContent = p.title;
-    phaseSelect.value = String(uiIdx);
+    phaseSelect.value = String(idx);
 
 
     // Spindelfasern sollen erst erscheinen, wenn die Zentrosomen ihre Endposition der jeweiligen Phase erreicht haben
@@ -2026,15 +1565,14 @@ function applyGenomeLockState(on){
     ctx.fillRect(0,0,W,H);
     ctx.restore();
 
-    const meiosisLabel = (SIM_MODE === 'mitosis') ? '' : ((idx<=3) ? 'Reduktionsteilung (Meiose I)' : 'Äquationsteilung (Meiose II)');
+    const meiosisLabel = (idx<=3) ? 'Reduktionsteilung (Meiose I)' : 'Äquationsteilung (Meiose II)';
     drawTextTop(p.title, meiosisLabel);
 
     // --- Cells layout to match reference (2 cells stacked for Meiose II; 4 cells as 2x2) ---
-    const oneCell = (SIM_MODE === 'mitosis') ? (idx >= 4 && idx <= 6) : (idx <= 2);
-    const twoCells = (SIM_MODE === 'mitosis') ? false : (idx >= 4 && idx <= 6);
+    const oneCell = idx <= 2;
+    const twoCells = idx >= 4 && idx <= 6;
 
     let cellCenters = [{x:cx, y:cy}];
-    let cellRadii = [R];
     let tel1 = null;
     let tel2 = null;
 
@@ -2042,174 +1580,69 @@ function applyGenomeLockState(on){
       drawCell(cx, cy, R, {alpha:1});
     }
 
-
     if (idx === 3){
+      // Telophase I: two daughter cells (stacked vertically for readability, like reference)
       const tt = easeInOut(local);
+      const off = lerp(0, R*0.80, tt);
+      const r2  = lerp(R*0.90, R*0.74, tt);
+      // Fade the original (mother) cell out quickly during Telophase I
+      // so the focus shifts to the two daughter cells.
+      const aOld = clamp(1 - tt*3.2, 0, 1)*0.35;
 
-      if (oogenesisOn && SIM_MODE !== 'mitosis'){
-        // Oogenese: asymmetrische Teilung -> große Oozyte + kleines Polkörperchen (oben rechts)
-        const aOld = clamp(1 - tt*3.2, 0, 1)*0.35;
-        drawCell(cx, cy, R, {alpha:aOld});
-
-        const bigR   = lerp(R*0.92, R*0.80, tt);
-        const smallR = bigR*0.45;
-
-        const botC = {x: cx - lerp(0, R*0.10, tt), y: cy + lerp(0, R*0.10, tt)}; // große Oozyte
-        const topC = {x: cx + lerp(0, R*0.80, tt), y: cy - lerp(0, R*0.55, tt)}; // Polkörperchen
-
-        drawCell(topC.x, topC.y, smallR, {alpha:1});
-        drawCell(botC.x, botC.y, bigR, {alpha:1});
-
-        // Semantik beibehalten: "top" erbt LEFT-Set, "bottom" erbt RIGHT-Set.
-        tel1 = { topC, botC, r: [smallR, bigR], tt, oogenesis:true };
-        cellCenters = [topC, botC];
-        cellRadii   = [smallR, bigR];
-      } else {
-        // Telophase I: two daughter cells (stacked vertically for readability, like reference)
-        const off = lerp(0, R*0.80, tt);
-        const r2  = lerp(R*0.90, R*0.74, tt);
-        // Fade the original (mother) cell out quickly during Telophase I
-        // so the focus shifts to the two daughter cells.
-        const aOld = clamp(1 - tt*3.2, 0, 1)*0.35;
-
-        drawCell(cx, cy, R, {alpha:aOld});
-        const topC = {x: cx, y: cy - off};
-        const botC = {x: cx, y: cy + off};
-        drawCell(topC.x, topC.y, r2, {alpha:1});
-        drawCell(botC.x, botC.y, r2, {alpha:1});
-        tel1 = { topC, botC, r: r2, tt };
-        cellCenters = [topC, botC];
-        cellRadii   = [r2, r2];
-      }
+      drawCell(cx, cy, R, {alpha:aOld});
+      const topC = {x: cx, y: cy - off};
+      const botC = {x: cx, y: cy + off};
+      drawCell(topC.x, topC.y, r2, {alpha:1});
+      drawCell(botC.x, botC.y, r2, {alpha:1});
+      tel1 = { topC, botC, r: r2, tt };
+      cellCenters = [topC, botC];
     }
 
-    
-if (twoCells){
-	      if (oogenesisOn && SIM_MODE !== 'mitosis'){
-        const bigR   = R*0.80;
-        const smallR = bigR*0.45;
-
-	        // Oogenese (Meiose II): keep the polar body clearly separated from the oocyte.
-	        // Otherwise poles/fibers appear "inside" the overlap region.
-	        const botC = {x: cx - R*0.14, y: cy + R*0.12}; // große Oozyte
-	        const topC = {x: cx + R*0.98, y: cy - R*0.72}; // Polkörperchen (weiter rechts/oben)
-
-        drawCell(topC.x, topC.y, smallR, {alpha:1});
-        drawCell(botC.x, botC.y, bigR, {alpha:1});
-
-        cellCenters = [topC, botC];
-        cellRadii   = [smallR, bigR];
-      } else {
-        const off = R*0.80;
-        const r2  = R*0.74;
-        const topC = {x: cx, y: cy - off};
-        const botC = {x: cx, y: cy + off};
-        drawCell(topC.x, topC.y, r2, {alpha:1});
-        drawCell(botC.x, botC.y, r2, {alpha:1});
-        cellCenters = [topC, botC];
-        cellRadii   = [r2, r2];
-      }
+    if (twoCells){
+      const off = R*0.80;
+      const r2  = R*0.74;
+      const topC = {x: cx, y: cy - off};
+      const botC = {x: cx, y: cy + off};
+      drawCell(topC.x, topC.y, r2, {alpha:1});
+      drawCell(botC.x, botC.y, r2, {alpha:1});
+      cellCenters = [topC, botC];
     }
+
     if (idx === 7){
-
       // Bei verlängerter Telophase II (Spermien-Animation): alle Bewegungen bis zur Basisdauer abschließen
       let tel2Local = local;
       if (genomeMutationOn && genomeMutationMode === 'mono' && (runCycle === 1 || runCycle === 2)){
-        const baseDurTel2 = phases[uiIdx].dur;
-        const secNowTel2 = local * phaseDuration(uiIdx);
+        const baseDurTel2 = phases[idx].dur;
+        const secNowTel2 = local * phaseDuration(idx);
         tel2Local = clamp(secNowTel2 / baseDurTel2, 0, 1);
       }
 
+
+      // Telophase II & Cytokinese: aus 2 Zellen werden 4 (jede der beiden Zellen teilt sich wie in Telophase I)
       const tt = easeInOut(tel2Local);
 
-      if (SIM_MODE === 'mitosis'){
-        // Mitose: aus 1 Zelle werden 2 Tochterzellen (links/rechts)
-        const parentR = R*0.74;
+      const offY = R*0.80;
+      const parentR = R*0.74;
 
-        const aParent = clamp(1 - tt*1.25, 0, 1) * 0.22;
-        drawCell(cx, cy, parentR, {alpha:aParent});
+      const topP = {x: cx, y: cy - offY};
+      const botP = {x: cx, y: cy + offY};
 
-        const r2 = lerp(parentR*0.92, R*0.52, tt);
-        const dxSplit = lerp(0, r2*1.35, tt);
-        const a = clamp((tel2Local - 0.15)/0.85, 0, 1);
+      const aParent = clamp(1 - tt*1.25, 0, 1) * 0.22;
+      drawCell(topP.x, topP.y, parentR, {alpha:aParent});
+      drawCell(botP.x, botP.y, parentR, {alpha:aParent});
 
-        const centers = [
-          {x: cx - dxSplit, y: cy}, // left daughter
-          {x: cx + dxSplit, y: cy}, // right daughter
-        ];
-        for (const c of centers) drawCell(c.x, c.y, r2, {alpha:a});
-        tel2 = { centers, r: r2, alpha: a, mitosis:true };
-      } else {
-        // Telophase II & Cytokinese
-	        if (oogenesisOn){
-          // Oogenese: 1 große Eizelle + 3 Polkörperchen (rechts vertikal)
-          const parentBigR = R*0.80;
-          const parentPbR  = parentBigR*0.45;
+      const r4 = lerp(parentR*0.92, R*0.52, tt);
+      const dxSplit = lerp(0, r4*1.35, tt);
+      const a = clamp((tel2Local - 0.15)/0.85, 0, 1);
 
-	          // Parent cell positions match the two-cell layout used in Prophase/Metaphase/Anaphase II.
-	          const parentBig = {x: cx - R*0.14, y: cy + R*0.12};
-	          const parentPb  = {x: cx + R*0.98, y: cy - R*0.72};
-
-          const aParent = clamp(1 - tt*1.25, 0, 1) * 0.22;
-          drawCell(parentPb.x,  parentPb.y,  parentPbR,  {alpha:aParent});
-          drawCell(parentBig.x, parentBig.y, parentBigR, {alpha:aParent});
-
-          const eggR = lerp(parentBigR*0.92, R*0.82, tt);
-          const pbR  = eggR*0.42;
-
-	          // Daughter targets (as in the reference image): egg left; three polar bodies on the right (vertical).
-	          const eggT  = {x: cx - R*0.22, y: cy + R*0.10};
-	          const pbTopT = {x: cx + R*0.78, y: cy - R*0.60};
-	          const pbMidT = {x: cx + R*0.96, y: cy + 0.00};
-	          const pbBotT = {x: cx + R*0.78, y: cy + R*0.60};
-
-	          // Animate lineage (wie in der Oogenese):
-	          //  - das *1. Polkörperchen* teilt sich in: oberes + mittleres Polkörperchen
-	          //  - die *Oozyte* teilt sich in: Eizelle + unteres Polkörperchen
-	          const eggC  = {x: lerp(parentBig.x, eggT.x, tt),  y: lerp(parentBig.y, eggT.y, tt)};
-	          const pbBot = {x: lerp(parentBig.x, pbBotT.x, tt), y: lerp(parentBig.y, pbBotT.y, tt)};
-	          const pbTop = {x: lerp(parentPb.x,  pbTopT.x, tt), y: lerp(parentPb.y,  pbTopT.y, tt)};
-	          const pbMid = {x: lerp(parentPb.x,  pbMidT.x, tt), y: lerp(parentPb.y,  pbMidT.y, tt)};
-
-          const a = clamp((tel2Local - 0.15)/0.85, 0, 1);
-
-          // Reihenfolge TL,TR,BL,BR beibehalten (für Chromosomen-Logik):
-          // TL=oberes PB, TR=mittleres PB, BL=Eizelle, BR=unteres PB
-          const centers = [pbTop, pbMid, eggC, pbBot];
-          const radii   = [pbR,   pbR,   eggR, pbR];
-
-          drawCell(pbTop.x, pbTop.y, pbR, {alpha:a});
-          drawCell(pbMid.x, pbMid.y, pbR, {alpha:a});
-          drawCell(eggC.x,  eggC.y,  eggR,{alpha:a});
-          drawCell(pbBot.x, pbBot.y, pbR, {alpha:a});
-
-          tel2 = { centers, r: eggR, alpha: a, radii, oogenesis:true };
-        } else {
-          // Standard-Meiose: aus 2 Zellen werden 4 (jede der beiden Zellen teilt sich wie in Telophase I)
-          const offY = R*0.80;
-          const parentR = R*0.74;
-
-          const topP = {x: cx, y: cy - offY};
-          const botP = {x: cx, y: cy + offY};
-
-          const aParent = clamp(1 - tt*1.25, 0, 1) * 0.22;
-          drawCell(topP.x, topP.y, parentR, {alpha:aParent});
-          drawCell(botP.x, botP.y, parentR, {alpha:aParent});
-
-          const r4 = lerp(parentR*0.92, R*0.52, tt);
-          const dx = lerp(0, r4*1.20, tt);
-          const a = clamp((tel2Local - 0.15)/0.85, 0, 1);
-
-          const centers = [
-            {x: topP.x - dx, y: topP.y}, // TL
-            {x: topP.x + dx, y: topP.y}, // TR
-            {x: botP.x - dx, y: botP.y}, // BL
-            {x: botP.x + dx, y: botP.y}, // BR
-          ];
-          for (const c of centers) drawCell(c.x, c.y, r4, {alpha:a});
-          tel2 = { centers, r: r4, alpha: a };
-        }
-      }
+      const centers = [
+        {x: topP.x - dxSplit, y: topP.y}, // top-left
+        {x: topP.x + dxSplit, y: topP.y}, // top-right
+        {x: botP.x - dxSplit, y: botP.y}, // bottom-left
+        {x: botP.x + dxSplit, y: botP.y}, // bottom-right
+      ];
+      for (const c of centers) drawCell(c.x, c.y, r4, {alpha:a});
+      tel2 = { centers, r: r4, alpha: a };
     }
 
     // Nucleus + chromatin in Prophase I (condensation + nuclear envelope breakdown)
@@ -2240,16 +1673,14 @@ if (twoCells){
       drawSpindleSingle(cx, cy, R, 0.85);
     }
     if (idx === 4){
-      // Prophase II: Zentrosomen in beiden Zellen (jeweils an Zellgröße angepasst)
-      for (let i=0;i<cellCenters.length;i++){
-        const c = cellCenters[i];
-        const r = (cellRadii && cellRadii.length) ? (cellRadii[i] ?? cellRadii[0] ?? (R*0.74)) : (R*0.74);
-        drawCentrosomesProphaseI(c.x, c.y, r, local);
-      }
+      // Prophase II: Start with ONE centrosome per cell (lower inner rim),
+      // then duplicate and migrate to opposite poles.
+      const rSmall = R*0.74;
+      for (const c of cellCenters) drawCentrosomesProphaseI(c.x, c.y, rSmall, local);
     }
     if (idx === 5 || idx === 6){
-      const rArg = (cellRadii && cellRadii.length) ? cellRadii : (R*0.74);
-      drawSpindleDouble(cellCenters, rArg, 0.82);
+      const rSmall = R*0.74;
+      drawSpindleDouble(cellCenters, rSmall, 0.82);
     }
 
     // Metaphase plates
@@ -2257,8 +1688,8 @@ if (twoCells){
       drawMetaphasePlateSingle(cx, cy, R, 0.9);
     }
     if (idx === 5){
-      const rArg = (cellRadii && cellRadii.length) ? cellRadii : (R*0.74);
-      drawMetaphasePlateDouble(cellCenters, rArg, 0.9);
+      const rSmall = R*0.74;
+      drawMetaphasePlateDouble(cellCenters, rSmall, 0.9);
     }
 
     // ---------- Chromosomes positioning (match reference) ----------
@@ -2430,43 +1861,23 @@ if (twoCells){
           drawFiberFromPole(cx, cy, R, 'L', pL.x, pL.y, 0.16);
           drawFiberFromPole(cx, cy, R, 'R', pR.x, pR.y, 0.16);
         } else {
-          const oogenMonoMI = (oogenesisOn && genomeMutationMode === 'mono');
+          // Linkes Homolog verliert die Spindelanheftung: Spindelfaser vom linken Pol verblasst,
+          // Chromosom driftet leicht zum rechten Homolog (ohne aktive Zugkraft).
+          const pLnorm = moveAlongSpindle(cx, cy, R, xL0, y0, 'L', tt);
 
-          if (oogenMonoMI){
-            // Oogenese + Monosomie (Möglichkeit 1): Beide Homologe sollen in das 1. Polkörperchen übergehen.
-            // Didaktisch: Das Polkörperchen entsteht rechts; daher werden beide Homologe in der Anaphase I nach RECHTS gezogen.
-            // -> Linkes Homolog verliert die Spindelanheftung und driftet zum rechten (gezogenen) Homolog.
-            const pR = moveAlongSpindle(cx, cy, R, xR0, y0, 'R', tt);
-            const pLnorm = moveAlongSpindle(cx, cy, R, xL0, y0, 'L', tt);
+          const driftT = easeInOut(clamp((local - 0.12)/0.88, 0, 1));
+          let xDrift = lerp(pLnorm.x, pR.x - size*0.60, driftT);
+          let yDrift = lerp(pLnorm.y, pR.y + size*0.08, driftT);
 
-            const driftT = easeInOut(clamp((local - 0.12)/0.88, 0, 1));
-            let xDrift = lerp(xL0, pR.x - size*0.60, driftT*0.5);
-            let yDrift = lerp(y0,  pR.y + size*0.08, driftT*0.5);
-
-            addX(xDrift, yDrift, size, rot, spriteXFor(L), 0.99, `${L.uid}:X`, L.uid);
-            addX(pR.x, pR.y, size, rot, spriteXFor(Rg), 0.99, `${Rg.uid}:X`, Rg.uid);
-
-            // Non-Disjunction (Meiose I): am linken Pol erscheinen keine Spindelfasern (fehlende Anheftung)
-            // Rechtes Homolog wird normal zum rechten Pol gezogen
-            drawFiberFromPole(cx, cy, R, 'R', pR.x, pR.y, 0.16);
-          } else {
-            // Standard (Spermatogenese/sonstiges): Linkes Homolog verliert die Spindelanheftung und driftet zum rechten Homolog.
-            const pLnorm = moveAlongSpindle(cx, cy, R, xL0, y0, 'L', tt);
-
-            const driftT = easeInOut(clamp((local - 0.12)/0.88, 0, 1));
-            let xDrift = lerp(pLnorm.x, pR.x - size*0.60, driftT);
-            let yDrift = lerp(pLnorm.y, pR.y + size*0.08, driftT);
-
-            // Korrektur: Drift in Richtung des gezogenen Homologs (nicht zum eigenen Pol)
-            xDrift = lerp(xL0, pR.x - size*0.60, driftT*0.5);
-            yDrift = lerp(y0,  pR.y + size*0.08, driftT*0.5);
-
-            addX(xDrift, yDrift, size, rot, spriteXFor(L), 0.99, `${L.uid}:X`, L.uid);
-            addX(pR.x, pR.y, size, rot, spriteXFor(Rg), 0.99, `${Rg.uid}:X`, Rg.uid);
-
-            // Rechtes Homolog wird normal zum rechten Pol gezogen
-            drawFiberFromPole(cx, cy, R, 'R', pR.x, pR.y, 0.16);
-          }
+          
+          // Korrektur: Das Chromosom ohne Spindelfaser driftet DIREKT in Richtung des gezogenen Homologs (nicht zum eigenen Pol)
+          xDrift = lerp(xL0, pR.x - size*0.60, driftT*0.5);
+          yDrift = lerp(y0,  pR.y + size*0.08, driftT*0.5);
+addX(xDrift, yDrift, size, rot, spriteXFor(L), 0.99, `${L.uid}:X`, L.uid);
+          addX(pR.x, pR.y, size, rot, spriteXFor(Rg), 0.99, `${Rg.uid}:X`, Rg.uid);
+          // Non-Disjunction (Meiose I): am linken Pol erscheinen keine Spindelfasern (fehlende Anheftung)
+          // Rechtes Homolog wird normal zum rechten Pol gezogen
+          drawFiberFromPole(cx, cy, R, 'R', pR.x, pR.y, 0.16);
         }
       }
     }
@@ -2475,31 +1886,23 @@ if (twoCells){
 // Telophase I: staged movement (hold near end-Anaphase positions -> move into daughter cells -> decondense + nucleus re-forms)
 if (idx === 3 && tel1){
   const { topC, botC, r, tt } = tel1;
-  const rTop = Array.isArray(r) ? r[0] : r;
-  const rBot = Array.isArray(r) ? r[1] : r;
 
   // --- Late Telophase: chromosomes decondense while nuclear envelope + interphase DNA fade in ---
   const decond = easeInOut(clamp((tt - 0.68) / 0.32, 0, 1));
-  const nucRTop = rTop * 0.55;
-  const nucRBot = rBot * 0.55;
+  const nucR = r * 0.55;
 
-    // In Durchlauf 1 (Non-disjunction in Meiose I) ist bei Spermatogenese die obere Tochterzelle leer,
-  // bei Oogenese+Monosomie hingegen die untere (Eizell-Linie).
-  const oogenMonoMI = (oogenesisOn && genomeMutationOn && genomeMutationMode === 'mono' && runCycle === 1);
-  const skipTopNucleus = (genomeMutationOn && runCycle === 1 && !oogenMonoMI);
-  const skipBotNucleus = (genomeMutationOn && runCycle === 1 &&  oogenMonoMI);
+  // In Durchlauf 1 (Non-disjunction in Meiose I) ist die obere Tochterzelle leer -> kein Chromatin/Kernhülle
+  const skipTopNucleus = (genomeMutationOn && runCycle === 1);
 
   // nucleus + chromatin appear around the (cell) center where chromosomes have clustered
   // (drawn behind chromosomes; chromosomes will fade out)
   if (!skipTopNucleus){
-    drawNucleus(topC.x, topC.y, nucRTop, 0.95 * decond, false);
-    drawChromatin(topC.x, topC.y, nucRTop*0.95, 1.0, 0.60 * decond);
+    drawNucleus(topC.x, topC.y, nucR, 0.95 * decond, false);
+    drawChromatin(topC.x, topC.y, nucR*0.95, 1.0, 0.60 * decond);
   }
 
-  if (!skipBotNucleus){
-    drawNucleus(botC.x, botC.y, nucRBot, 0.95 * decond, false);
-    drawChromatin(botC.x, botC.y, nucRBot*0.95, 1.0, 0.60 * decond);
-  }
+  drawNucleus(botC.x, botC.y, nucR, 0.95 * decond, false);
+  drawChromatin(botC.x, botC.y, nucR*0.95, 1.0, 0.60 * decond);
 
 
   // During Telophase I & Cytokinese the chromosomes drift towards the center of each daughter cell
@@ -2515,24 +1918,19 @@ if (idx === 3 && tel1){
   const xR0 = cx + dxA*0.5;
 
   // poles inside daughter cells (conceptual: top inherits LEFT set, bottom inherits RIGHT set)
-  const poleTopL = spindlePole(topC.x, topC.y, rTop, 'L');
-  const poleTopR = spindlePole(topC.x, topC.y, rTop, 'R');
-  const poleBot  = spindlePole(botC.x, botC.y, rBot, 'R');
+  const poleTop = spindlePole(topC.x, topC.y, r, 'L');
+  const poleBot = spindlePole(botC.x, botC.y, r, 'R');
 
   // size scaled to fit comfortably in each daughter cell
-  const spacingTTop = (nPairs<=1) ? (rTop*0.70) : (rTop*0.70)/(nPairs-1);
-  const spacingTBot = (nPairs<=1) ? (rBot*0.70) : (rBot*0.70)/(nPairs-1);
-  const sizeBaseTop = clamp(spacingTTop*0.24, 14, 54);
-  const sizeBaseBot = clamp(spacingTBot*0.24, 14, 54);
-  const sizeBase = Math.min(sizeBaseTop, sizeBaseBot);
+  const spacingT = (nPairs<=1) ? (r*0.70) : (r*0.70)/(nPairs-1);
+  const sizeBase = clamp(spacingT*0.24, 18, 54);
 
   // stage 1: move chromosomes into clear pole-near positions, then briefly hold
   const approach = easeInOut(clamp(tt / 0.15, 0, 1));
   // stage 2: drift from poles to randomized, non-overlapping cluster near each daughter-cell center
   // finish the movement BEFORE decondensation so the cluster stays stable
   const scatterMove = easeInOut(clamp((tt - 0.35) / 0.33, 0, 1));
-  const inwardTop = (ORIENT === 'lr') ? (rTop*0.12) : 0;
-  const inwardBot = (ORIENT === 'lr') ? (rBot*0.12) : 0;
+  const inward = (ORIENT === 'lr') ? (r*0.12) : 0;
 
   // Chromosomes fade out slightly during decondensation (they "turn into" chromatin)
   const chromAlpha = 0.99 * (1 - 0.95*decond);
@@ -2540,8 +1938,8 @@ if (idx === 3 && tel1){
 
   // Stable, deterministic (frame-stable) scatter targets per cell, sorted by y
   // so we can preserve the perceived top/bottom order and avoid diagonal swaps.
-  const topTargets = scatterTargets(nPairs, rTop, sizeBaseTop, `MI_T_top_${nPairs}_${crossingOverOn?1:0}`);
-  const botTargets = scatterTargets(nPairs, rBot, sizeBaseBot, `MI_T_bot_${nPairs}_${crossingOverOn?1:0}`);
+  const topTargets = scatterTargets(nPairs, r, sizeBase, `MI_T_top_${nPairs}_${crossingOverOn?1:0}`);
+  const botTargets = scatterTargets(nPairs, r, sizeBase, `MI_T_bot_${nPairs}_${crossingOverOn?1:0}`);
 
   // IMPORTANT for smooth cross-phase interpolation:
   // keep chromosome list order consistent with Anaphase I: [L0,R0,L1,R1,...]
@@ -2579,53 +1977,23 @@ if (idx === 3 && tel1){
     botStartOfPair[botStarts[k].i] = botStarts[k];
   }
 
-  // Für Oogenese + Monosomie (Möglichkeit 1): In der Anaphase I werden beide Homologe nach RECHTS gezogen,
-  // müssen aber in die TOP-Zelle (1. Polkörperchen) übergehen. Daher: Startpunkte am rechten Pol,
-  // aber in das Koordinatensystem der TOP-Zelle übertragen.
-  const topStartsFromRight = [];
-  for (let i=0;i<nPairs;i++){
-    const pStart = moveAlongSpindle(cx, cy, R, xR0, ysA[i], 'R', 1);
-    topStartsFromRight.push({ i, x: pStart.x, y: pStart.y + dyTop });
-  }
-  topStartsFromRight.sort((a,b)=>a.y-b.y);
-
-  const topSlotFromRight = Array(nPairs).fill(0);
-  const topStartFromRight = Array(nPairs).fill(null);
-  for (let k=0;k<topStartsFromRight.length;k++){
-    topSlotFromRight[topStartsFromRight[k].i] = k;
-    topStartFromRight[topStartsFromRight[k].i] = topStartsFromRight[k];
-  }
-
-
   // Now draw in pair order to prevent any perceived "diagonal swapping" across the phase boundary.
   for (let i=0;i<nPairs;i++){
     const ndMI = genomeMutationOn && (runCycle === 1) && (i === 0);
     if (ndMI){
-      // Non-Disjunction in Meiose I (Möglichkeit 1):
-      // - Spermatogenese: oben leer, unten bekommt beide Homologe
-      // - Oogenese + Monosomie: Eizell-Linie (unten) muss leer sein, 1. Polkörperchen (oben) bekommt beide Homologe
-      const oogenMonoMI = (oogenesisOn && genomeMutationMode === 'mono');
-
+      // Non-Disjunction in Meiose I: beide Homologe verbleiben in derselben Tochterzelle (unten), oben bleibt leer.
       const chA = leftHom(i);
       const chB = rightHom(i);
 
-      const tgtCell   = oogenMonoMI ? topC : botC;
-      const rCell     = oogenMonoMI ? rTop : rBot;
-      const pole      = oogenMonoMI ? poleTopR : poleBot;
-      const inward    = oogenMonoMI ? inwardTop : inwardBot;
-      const starts    = oogenMonoMI ? topStartFromRight : botStartOfPair;
-      const slotOfPair= oogenMonoMI ? topSlotFromRight : botSlotOfPair;
-      const targets   = oogenMonoMI ? topTargets     : botTargets;
+      const sR = botStartOfPair[i];
+      const yPole = clamp(sR.y, botC.y - r*0.60, botC.y + r*0.60);
+      const xPole = poleBot.x - inward;
+      const xHold = lerp(sR.x, xPole, approach);
+      const yHold = lerp(sR.y, yPole, approach);
 
-      const s = starts[i];
-      const yPole = clamp(s.y, tgtCell.y - rCell*0.60, tgtCell.y + rCell*0.60);
-      const xPole = oogenMonoMI ? (pole.x - inward) : (pole.x - inward);
-      const xHold = lerp(s.x, xPole, approach);
-      const yHold = lerp(s.y, yPole, approach);
-
-      const tgt = targets[slotOfPair[i]];
-      const xBase = lerp(xHold, tgtCell.x + tgt.dx, scatterMove);
-      const yBase = lerp(yHold, tgtCell.y + tgt.dy, scatterMove);
+      const tgt = botTargets[botSlotOfPair[i]];
+      const xBase = lerp(xHold, botC.x + tgt.dx, scatterMove);
+      const yBase = lerp(yHold, botC.y + tgt.dy, scatterMove);
       const angBase = lerp(rot, rot + tgt.ang, scatterMove);
 
       addX(xBase, yBase, size, angBase, spriteXFor(chB), chromAlpha, `${chB.uid}:X`, chB.uid);
@@ -2635,8 +2003,8 @@ if (idx === 3 && tel1){
     // left homolog -> top cell
     const chL = leftHom(i);
     const sL = topStartOfPair[i];
-    const yPoleL = clamp(sL.y, topC.y - rTop*0.60, topC.y + rTop*0.60);
-    const xPoleL = poleTopL.x + inwardTop;
+    const yPoleL = clamp(sL.y, topC.y - r*0.60, topC.y + r*0.60);
+    const xPoleL = poleTop.x + inward;
     const xHoldL = lerp(sL.x, xPoleL, approach);
     const yHoldL = lerp(sL.y, yPoleL, approach);
     const tgtL = topTargets[topSlotOfPair[i]];
@@ -2648,8 +2016,8 @@ if (idx === 3 && tel1){
     // right homolog -> bottom cell
     const chR = rightHom(i);
     const sR = botStartOfPair[i];
-    const yPoleR = clamp(sR.y, botC.y - rBot*0.60, botC.y + rBot*0.60);
-    const xPoleR = poleBot.x - inwardBot;
+    const yPoleR = clamp(sR.y, botC.y - r*0.60, botC.y + r*0.60);
+    const xPoleR = poleBot.x - inward;
     const xHoldR = lerp(sR.x, xPoleR, approach);
     const yHoldR = lerp(sR.y, yPoleR, approach);
     const tgtR = botTargets[botSlotOfPair[i]];
@@ -2660,140 +2028,9 @@ if (idx === 3 && tel1){
   }
 }
 
-// Meiose II (two stacked cells) / Mitose (eine Zelle)
+// Meiose II (two stacked cells)
     if (idx >= 4 && idx <= 6){
-      if (SIM_MODE === 'mitosis'){
-        // Mitose: eine Zelle (Prophase/Metaphase/Anaphase), danach Telophase & Cytokinese (idx===7) -> 2 Tochterzellen
-        const rSmall = R;
-        const nucR = rSmall * 0.55;
-
-        if (idx === 4){
-          // Prophase: Kernhülle + DNA verblassen, Chromosomen kondensieren (diploid: pro Paar 2 homologe Chromosomen)
-          const cond = easeInOut(clamp((local - 0.05) / 0.35, 0, 1));
-          const nucFade = 1 - cond;
-
-          drawNucleus(cx, cy, nucR, 0.90 * nucFade, false);
-          drawChromatin(cx, cy, nucR*0.95, 1.0, 0.55 * nucFade);
-
-          const baseSize = rSmall * 0.22;
-          const sizeEnd  = clamp(baseSize / Math.sqrt(Math.max(1, nPairs/2)), rSmall*0.12, baseSize);
-
-          const startT = scatterTargets(nPairs, rSmall*0.78, sizeEnd, `MIT_P_start_${nPairs}_${crossingOverOn?1:0}`);
-          const endT   = scatterTargets(nPairs, nucR*0.92,  sizeEnd, `MIT_P_end_${nPairs}_${crossingOverOn?1:0}`);
-
-          const drift = easeInOut(clamp((local - 0.15) / 0.85, 0, 1));
-          const alphaChrom = 0.18 + 0.82*easeInOut(clamp((local - 0.05) / 0.55, 0, 1));
-
-          
-// In der Mitose paaren sich homologe Chromosomen in der Prophase NICHT.
-// Daher werden beide Homologe unabhängig voneinander (2*nPairs Objekte) verteilt.
-const chroms = [];
-for (let i=0;i<nPairs;i++){
-  chroms.push(leftHom(i));
-  chroms.push(rightHom(i));
-}
-const count = chroms.length;
-
-const startT2 = scatterTargets(count, rSmall*0.78, sizeEnd, `MIT_P_start2_${nPairs}`);
-const endT2   = scatterTargets(count, nucR*0.92,  sizeEnd, `MIT_P_end2_${nPairs}`);
-
-for (let j=0;j<count;j++){
-  const ch = chroms[j];
-
-  const x0 = cx + startT2[j].dx;
-  const y0 = cy + startT2[j].dy;
-
-  const x1 = cx + endT2[j].dx;
-  const y1 = cy + endT2[j].dy;
-
-  const ph = (hashString(ch.uid + ":mitP:" + j) % 1000) / 1000 * Math.PI*2;
-  const amp = (1-drift) * (rSmall*0.012);
-  const jx = Math.sin(local*2*Math.PI + ph) * amp;
-  const jy = Math.cos(local*2*Math.PI + ph) * amp * 0.7;
-
-  const x = lerp(x0, x1, drift) + jx;
-  const y = lerp(y0, y1, drift) + jy;
-
-  const r0 = rot + startT2[j].ang;
-  const r1 = rot + endT2[j].ang;
-  const r  = lerp(r0, r1, drift);
-
-  addX(x, y, sizeEnd, r, spriteXFor(ch), alphaChrom, `${ch.uid}:MIT:X:${j}`, ch.uid);
-  chromList[chromList.length-1].fiberMode = 'both';
-}}
-
-        if (idx === 5){
-          // Metaphase: X-Chromosomen an der Äquatorialebene (x=cx), pro Paar 2 Homologe
-          const spanY = rSmall*1.05;
-          const ysLocal = spaced(0, nPairs, spanY);
-          const spacingY = (nPairs<=1) ? spanY : spanY/(nPairs-1);
-          const size = clamp(spacingY*0.14, 12, 38);
-
-          for (let i=0;i<nPairs;i++){
-            const list = [leftHom(i), rightHom(i)];
-            const offs = [-size*0.90, size*0.90];
-
-            for (let k=0;k<list.length;k++){
-              const ch = list[k];
-              const y = cy + ysLocal[i] + offs[k];
-              addX(cx, y, size, rot, spriteXFor(ch), 0.99, `${ch.uid}:MIT:M:X:${k}`, ch.uid);
-              chromList[chromList.length-1].fiberMode = 'both';
-            }
-          }
-        }
-
-        if (idx === 6){
-          // Anaphase: Schwesterchromatiden trennen sich und wandern zu den Polen
-          const spanY = rSmall*1.05;
-          const ysLocal = spaced(0, nPairs, spanY);
-          const spacingY = (nPairs<=1) ? spanY : spanY/(nPairs-1);
-
-          const sizeX = clamp(spacingY*0.14, 12, 38);
-          const lenI  = clamp(spacingY*0.11, 10, 26);
-
-          const split = easeInOut(clamp((local - 0.10)/0.90, 0, 1));
-
-          // X kurz stehen lassen (nahtloser Übergang Metaphase->Anaphase)
-          if (split < 0.999){
-            for (let i=0;i<nPairs;i++){
-              const list = [leftHom(i), rightHom(i)];
-              const offs = [-sizeX*0.90, sizeX*0.90];
-              for (let k=0;k<list.length;k++){
-                const ch = list[k];
-                const y0 = cy + ysLocal[i] + offs[k];
-                addX(cx, y0, sizeX, rot, spriteXFor(ch), 0.99*(1 - split), `${ch.uid}:MIT:A:X:${k}`, ch.uid);
-              }
-            }
-          }
-
-          for (let i=0;i<nPairs;i++){
-            const list = [leftHom(i), rightHom(i)];
-            const offs = [-lenI*1.20, lenI*1.20];
-
-            for (let k=0;k<list.length;k++){
-              const ch = list[k];
-              const y0 = cy + ysLocal[i] + offs[k];
-
-              const pL = moveAlongSpindle(cx, cy, rSmall, cx, y0, 'L', split);
-              const pR = moveAlongSpindle(cx, cy, rSmall, cx, y0, 'R', split);
-
-              // linke + rechte Schwesterchromatide
-              addI(pL.x, pL.y, lenI, rot, spriteIFor(ch, 'L'), 0.99*split, `${ch.uid}:MIT:I:L:${k}`, ch.uid);
-              chromList[chromList.length-1].fiberSide = 'L';
-
-              addI(pR.x, pR.y, lenI, rot, spriteIFor(ch, 'R'), 0.99*split, `${ch.uid}:MIT:I:R:${k}`, ch.uid);
-              chromList[chromList.length-1].fiberSide = 'R';
-            }
-          }
-        }
-
-      } else {
-        const rDefault = R*0.74;
-        const rForCell = (ci) => (cellRadii && cellRadii.length)
-          ? (cellRadii[ci] ?? cellRadii[0] ?? rDefault)
-          : rDefault;
-        const rSmall = rDefault;
-
+      const rSmall = R*0.74;
 
       // top cell carries left-set, bottom carries right-set
       const homInCell = (pairIndex, topCell) => topCell ? leftHom(pairIndex) : rightHom(pairIndex);
@@ -2801,52 +2038,62 @@ for (let j=0;j<count;j++){
       const homListInCell = (pairIndex, topCell) => {
         const ndMI = genomeMutationOn && (runCycle === 1) && (pairIndex === 0);
         if (ndMI){
-          const oogenMonoMI = (oogenesisOn && genomeMutationMode === 'mono');
-          return oogenMonoMI
-            ? (topCell ? [leftHom(0), rightHom(0)] : [])
-            : (topCell ? [] : [leftHom(0), rightHom(0)]);
+          return topCell ? [] : [leftHom(0), rightHom(0)];
         }
         return [homInCell(pairIndex, topCell)];
       };
 
       
 if (idx === 4){
-  // Prophase II: Chromosomen kondensieren erneut; Kernhülle/DNA verblassen (zellgrößen-abhängig)
+  // Prophase II: chromosomes re-condense from interphase DNA inside the (re-forming) nuclei,
+  // then drift into a compact distribution inside each cell (no cross-cell reassignment).
+
   const tt = local; // 0..1
 
   // Condensation: DNA + nucleus fade out while chromosomes fade in (early segment)
   const cond = easeInOut(clamp((tt - 0.05) / 0.35, 0, 1));
   const nucFade = 1 - cond;
 
-  // In Durchlauf 1 (Non-disjunction in Meiose I) ist bei Spermatogenese die obere Tochterzelle leer,
-  // bei Oogenese+Monosomie hingegen die untere (Eizell-Linie).
-  const oogenMonoMI = (oogenesisOn && genomeMutationOn && genomeMutationMode === 'mono' && runCycle === 1);
-  const skipTopNucleus = genomeMutationOn && runCycle === 1 && !oogenMonoMI;
-  const skipBotNucleus = genomeMutationOn && runCycle === 1 &&  oogenMonoMI;
+  const topCell = cellCenters[0];
+  const botCell = cellCenters[1];
 
-  // Smooth drift towards a compact distribution within each nucleus region
+  // Draw nuclei + interphase DNA at the same loci where chromosomes clustered in Telophase I
+  const nucR = rSmall * 0.55;
+
+  // In Durchlauf 1 (Non-disjunction in Meiose I) the obere Tochterzelle is empty -> no DNA / no nucleus
+  const skipTopNucleus = genomeMutationOn && runCycle === 1;
+
+  if (!skipTopNucleus) {
+    drawNucleus(topCell.x, topCell.y, nucR, 0.90 * nucFade, false);
+    drawChromatin(topCell.x, topCell.y, nucR*0.95, 1.0, 0.55 * nucFade);
+  }
+
+  drawNucleus(botCell.x, botCell.y, nucR, 0.90 * nucFade, false);
+  drawChromatin(botCell.x, botCell.y, nucR*0.95, 1.0, 0.55 * nucFade);
+
+  // Zielpositionen: weiterhin im Bereich der (verschwindenden) Kernhülle.
+  // Keine Verlagerung zu den Spindelpolen; Ausrichtung zur Äquatorialebene erst in Metaphase II.
+  // Chromosom-Größe dynamisch, damit bei höheren n (z.B. n=6) alles in die Kernregion passt
+  const baseSize = rSmall*0.22;
+  const sizeEnd  = clamp(baseSize / Math.sqrt(Math.max(1, nPairs/2)), rSmall*0.12, baseSize);
+
+  // Starttargets (aus Telophase I) – eher "locker" verteilt
+  const topTargets = scatterTargets(nPairs, rSmall*0.78, sizeEnd, `MII_P2_start_top_${nPairs}_${crossingOverOn?1:0}`);
+  const botTargets = scatterTargets(nPairs, rSmall*0.78, sizeEnd, `MII_P2_start_bot_${nPairs}_${crossingOverOn?1:0}`);
+
+  // Endtargets: kompakter innerhalb der Kernregion (zentral, nicht an den Polen)
+  const topTargetsEnd = scatterTargets(nPairs, nucR*0.92, sizeEnd, `MII_P2_end_top_${nPairs}_${crossingOverOn?1:0}`);
+  const botTargetsEnd = scatterTargets(nPairs, nucR*0.92, sizeEnd, `MII_P2_end_bot_${nPairs}_${crossingOverOn?1:0}`);
+
+  // Smooth drift towards the compact nuclear-region distribution
   const drift = easeInOut(clamp((local-0.15)/0.85, 0, 1));
-  const alphaChrom = 0.18 + 0.82*easeInOut(clamp((local-0.05)/0.55, 0, 1));
+  const condense = easeInOut(clamp((local-0.05)/0.55, 0, 1));
 
   for (let ci=0; ci<2; ci++){
     const topCell = (ci===0);
     const cell = cellCenters[ci];
-    const rCell = rForCell(ci);
-
-    const nucR = rCell * 0.55;
-
-    if (!((topCell && skipTopNucleus) || (!topCell && skipBotNucleus))){
-      drawNucleus(cell.x, cell.y, nucR, 0.90 * nucFade, false);
-      drawChromatin(cell.x, cell.y, nucR*0.95, 1.0, 0.55 * nucFade);
-    }
-
-    // Chromosom-Größe dynamisch (passt auch in kleines Polkörperchen)
-    const baseSize = rCell*0.22;
-    const sizeEnd  = clamp(baseSize / Math.sqrt(Math.max(1, nPairs/2)), rCell*0.12, baseSize);
-
-    // Start- und End-Targets pro Zelle (deterministisch)
-    const src = scatterTargets(nPairs, rCell*0.78, sizeEnd, `MII_P2_start_${ci}_${nPairs}_${crossingOverOn?1:0}`);
-    const dst = scatterTargets(nPairs, nucR*0.92,  sizeEnd, `MII_P2_end_${ci}_${nPairs}_${crossingOverOn?1:0}`);
+    const src = topCell ? topTargets : botTargets;
+    const dst = topCell ? topTargetsEnd : botTargetsEnd;
 
     for (let i=0;i<nPairs;i++){
       const list = homListInCell(i, topCell);
@@ -2856,13 +2103,15 @@ if (idx === 4){
         const ch = list[k];
         const off = offs[k] || 0;
 
+        // Position: nur leichte Umordnung innerhalb der Kernregion
         const x0 = cell.x + src[i].dx;
         const y0 = cell.y + src[i].dy + off;
         const x1 = cell.x + dst[i].dx;
         const y1 = cell.y + dst[i].dy + off;
 
-        const ph = (hashString(ch.uid + ":p2:" + k + ":" + ci) % 1000) / 1000 * Math.PI*2;
-        const amp = (1-drift) * (rCell*0.012);
+        // leichte organische Mikrobewegung (nimmt Richtung Ende ab)
+        const ph = (hashString(ch.uid + ":p2:" + k) % 1000) / 1000 * Math.PI*2;
+        const amp = (1-drift) * (rSmall*0.012);
         const jx = Math.sin(local*2*Math.PI + ph) * amp;
         const jy = Math.cos(local*2*Math.PI + ph) * amp * 0.7;
 
@@ -2873,25 +2122,23 @@ if (idx === 4){
         const r1 = rot + dst[i].ang;
         const r  = lerp(r0, r1, drift);
 
-        addX(x, y, sizeEnd, r, spriteXFor(ch), alphaChrom, ch.uid + ":X:" + k + ":" + ci, ch.uid);
+        const alphaChrom = 0.18 + 0.82*condense;
+        addX(x, y, sizeEnd, r, spriteXFor(ch), alphaChrom, ch.uid + ":X:" + k, ch.uid);
         chromList[chromList.length-1].fiberMode = 'both';
-        chromList[chromList.length-1].cellIndex = ci;
       }
     }
   }
 }
 
 if (idx === 5){
-        // Metaphase II: Chromosomen an der Äquatorialebene jeder Zelle (zellgrößen-abhängig)
+        // Metaphase II: chromosomes stacked along y on vertical plate x=cell.x
+        const spanY = rSmall*1.05;
+        const ysLocal = spaced(0, nPairs, spanY);
+        const spacingY = (nPairs<=1) ? spanY : spanY/(nPairs-1);
+        const size = clamp(spacingY*0.14, 12, 38);
+
         for (let ci=0; ci<2; ci++){
           const cell = cellCenters[ci];
-          const rCell = rForCell(ci);
-
-          const spanY = rCell*1.05;
-          const ysLocal = spaced(0, nPairs, spanY);
-          const spacingY = (nPairs<=1) ? spanY : spanY/(nPairs-1);
-          const size = clamp(spacingY*0.14, 10, 38);
-
           const topCell = (ci===0);
 
           for (let i=0;i<nPairs;i++){
@@ -2903,28 +2150,25 @@ if (idx === 5){
               const y = cell.y + ysLocal[i] + offs[k];
               addX(cell.x, y, size, rot, spriteXFor(ch), 0.99, `${ch.uid}:X:${k}`, ch.uid);
               chromList[chromList.length-1].fiberMode = 'both';
-              chromList[chromList.length-1].cellIndex = ci;
             }
           }
         }
       }
 
       if (idx === 6){
-        // Anaphase II: Schwesterchromatiden wandern zu den Polen (zellgrößen-abhängig)
+        // Anaphase II: sister chromatids travel along spindle fibers towards poles (diagonal towards pole)
+        const spanY = rSmall*1.05;
+        const ysLocal = spaced(0, nPairs, spanY);
+        const spacingY = (nPairs<=1) ? spanY : spanY/(nPairs-1);
+
+        const sizeX = clamp(spacingY*0.14, 12, 38);
+        const lenI  = clamp(spacingY*0.11, 10, 26);
+
         // split progress: erst X, dann I
         const split = easeInOut(clamp((local - 0.10)/0.90, 0, 1));
 
         for (let ci=0; ci<2; ci++){
           const cell = cellCenters[ci];
-          const rCell = rForCell(ci);
-
-          const spanY = rCell*1.05;
-          const ysLocal = spaced(0, nPairs, spanY);
-          const spacingY = (nPairs<=1) ? spanY : spanY/(nPairs-1);
-
-          const sizeX = clamp(spacingY*0.14, 10, 38);
-          const lenI  = clamp(spacingY*0.11, 9, 26);
-
           const topCell = (ci===0);
 
           // draw X briefly so Metaphase->Anaphase is seamless
@@ -2949,12 +2193,12 @@ if (idx === 5){
               const ch = list[k];
               const y0 = cell.y + ysLocal[i] + offs[k];
 
-              const pL = moveAlongSpindle(cell.x, cell.y, rCell, cell.x, y0, 'L', split);
-              const pR = moveAlongSpindle(cell.x, cell.y, rCell, cell.x, y0, 'R', split);
+              const pL = moveAlongSpindle(cell.x, cell.y, rSmall, cell.x, y0, 'L', split);
+              const pR = moveAlongSpindle(cell.x, cell.y, rSmall, cell.x, y0, 'R', split);
 
               // Non-Disjunction (Meiose II): Schwesterchromatiden trennen sich nicht (nur in Durchlauf 2).
               // Die "lose" Chromatide hat keine Spindelfaser und driftet in Richtung der gezogenen Chromatide.
-              const isTargetMII = genomeMutationOn && (runCycle === 2) && (oogenesisOn ? !topCell : topCell) && (i === 0) && !ch.isSex;
+              const isTargetMII = genomeMutationOn && (runCycle === 2) && topCell && (i === 0) && !ch.isSex;
               const destPole = (genomeMutationMode === 'mono') ? 'R' : 'L'; // mono: TL fehlt -> beide nach rechts; tri: TL extra -> beide nach links
               const driftF = clamp(split*0.55, 0, 0.55);
 
@@ -2995,45 +2239,46 @@ if (idx === 5){
               }
 
               addI(pA.x, pA.y, lenI, rot, spriteIFor(ch, 'L'), 0.99*split, `${ch.uid}:I:L:${k}`, ch.uid);
-              chromList[chromList.length-1].cellIndex = ci;
               if (fiberA) chromList[chromList.length-1].fiberSide = fiberA;
               addI(pB.x, pB.y, lenI, rot, spriteIFor(ch, 'R'), 0.99*split, `${ch.uid}:I:R:${k}`, ch.uid);
-              chromList[chromList.length-1].cellIndex = ci;
               if (fiberB) chromList[chromList.length-1].fiberSide = fiberB;
             }
           }
         }
-      }
       }
     }
 
 // Telophase II: keep pole-consistent positions (each daughter cell inherits one pole of its parent)
 // At the end of Cytokinesis II, chromatids move towards the center of each daughter cell and are shown larger.
 if (idx === 7 && tel2){
-  const { centers, r, alpha, radii } = tel2;
+  const { centers, r, alpha } = tel2;
 
   // Chromatids must remain visible during the Anaphase II -> Telophase II transition.
   // We therefore decouple chromatid visibility from the daughter-cell fade-in (tel2.alpha),
   // otherwise chromatids "blink" off briefly at the start of Telophase II.
   const chromAlpha = 0.95;
 
-  // start the "to-center + enlarge" motion near the end of Cytokinesis
-  const tMove = easeInOut(clamp((alpha - 0.72) / 0.28, 0, 1));
-
   const spanY = r*0.86;
   const ysPole = spaced(0, nPairs, spanY);
   const spacingY = (nPairs<=1) ? spanY : spanY/(nPairs-1);
 
   const lenBase = clamp(spacingY*0.11, 10, 26);
-  const lenBig  = lenBase * 1.8;
-  const lenNow  = lerp(lenBase, lenBig, tMove);
+  const inward  = (ORIENT === 'lr') ? (r*0.12) : 0;
 
-  if (SIM_MODE === 'mitosis'){
-    // Mitose: 2 Tochterzellen (links/rechts). Jede Tochter erbt die Chromatiden von einem Pol.
-    const cellL = centers[0];
-    const cellR = centers[1];
+  // start the "to-center + enlarge" motion near the end of Cytokinesis II
+  const tMove = easeInOut(clamp((alpha - 0.72) / 0.28, 0, 1));
+  const lenBig = lenBase * 1.8;
 
-    const inward  = (ORIENT === 'lr') ? (r*0.12) : 0;
+  // Order matches Anaphase II: for each parent cell, for each i -> L then R
+  for (let parent=0; parent<2; parent++){
+    const topCell = (parent === 0);
+
+    // target cells: 0/1 belong to top parent, 2/3 to bottom parent
+    const idxL = topCell ? 0 : 2;
+    const idxR = topCell ? 1 : 3;
+
+    const cellL = centers[idxL];
+    const cellR = centers[idxR];
 
     const poleL = spindlePole(cellL.x, cellL.y, r, 'L');
     const poleR = spindlePole(cellR.x, cellR.y, r, 'R');
@@ -3041,122 +2286,22 @@ if (idx === 7 && tel2){
     const xPoleL = poleL.x + inward;
     const xPoleR = poleR.x - inward;
 
-    // Zielpositionen: nebeneinander in einer Reihe; falls zu viele -> maximal 2 Reihen.
-    // Wichtig: bereits am Anfang der Telophase dürfen keine Überlappungen auftreten.
-    const count = nPairs * 2;
-
-    const maxHalfX = r * 0.42;                    // innerhalb der Tochterzelle bleiben
-    const dxMin    = Math.max(lenBig * 1.20, r*0.18);
-    const maxPerRow = Math.max(4, Math.floor((2*maxHalfX)/dxMin) + 1);
-
-    const rows  = (count > maxPerRow) ? 2 : 1;
-    const perRow = Math.ceil(count / rows);
-
-    // dx so wählen, dass die Reihe in die Zelle passt; wenn 1 Element -> dx=0
-    let dx = dxMin;
-    if (perRow <= 1){
-      dx = 0;
-    } else {
-      const dxFit = (2*maxHalfX) / (perRow - 1);
-      dx = Math.min(dx, dxFit);
-    }
-
-    // vertikaler Abstand zwischen zwei Reihen (wenn nötig)
-    const dyRow = r * 0.24;
-
-    for (let i=0; i<nPairs; i++){
-      const homologs = [leftHom(i), rightHom(i)];
-
-      for (let k=0; k<2; k++){
-        const ch = homologs[k];
-        const s  = i*2 + k; // Slot 0..(2*nPairs-1)
-
-        const row = (rows === 2) ? Math.floor(s / perRow) : 0;
-        const col = (rows === 2) ? (s - row*perRow) : s;
-
-        const xOff = (perRow <= 1) ? 0 : ( (col - (perRow - 1)/2) * dx );
-        const yOff = (rows === 1) ? 0 : (row === 0 ? -dyRow*0.5 : +dyRow*0.5);
-
-        const xTargetL = cellL.x + xOff;
-        const yTargetL = cellL.y + yOff;
-
-        const xTargetR = cellR.x + xOff;
-        const yTargetR = cellR.y + yOff;
-
-        // Start an den Polen, aber bereits mit der späteren y-Position (keine Überlappung am Telophase-Anfang)
-// Zusätzlich: leichter x-Spread bereits am Pol (sonst liegen bei einer einzigen Reihe alle Chromatiden exakt übereinander, weil tMove≈0).
-const xStartL = xPoleL + xOff*0.35;
-const xStartR = xPoleR + xOff*0.35;
-
-const xL = lerp(xStartL, xTargetL, tMove);
-const yL = yTargetL;
-
-const xR = lerp(xStartR, xTargetR, tMove);
-const yR = yTargetR;
-
-        // linke Tochter: Pol-L-Chromatide
-        addI(xL, yL, lenNow, rot, spriteIFor(ch, 'L'), chromAlpha, `${ch.uid}:MIT:T:L:${s}`, ch.uid);
-        chromList[chromList.length-1].fiberSide = null;
-
-        // rechte Tochter: Pol-R-Chromatide
-        addI(xR, yR, lenNow, rot, spriteIFor(ch, 'R'), chromAlpha, `${ch.uid}:MIT:T:R:${s}`, ch.uid);
-        chromList[chromList.length-1].fiberSide = null;
-      }
-    }
-
-  } else {
-
-  const inward  = (ORIENT === 'lr') ? (r*0.12) : 0;
-
-  // Order matches Anaphase II: for each parent cell, for each i -> L then R
-  for (let parent=0; parent<2; parent++){
-    const topCell = (parent === 0);
-
-	    // Target cells mapping.
-	    // Standard meiosis: 0/1 belong to top parent, 2/3 to bottom parent.
-	    // Oogenesis (custom layout):
-	    //  - parent "top" (1. Polkörperchen) -> splits into (oberes PB, mittleres PB)
-	    //  - parent "bottom" (Oozyte)        -> splits into (Eizelle, unteres PB)
-	    let idxL, idxR;
-	    if (tel2 && tel2.oogenesis){
-	      if (topCell){ idxL = 0; idxR = 1; }  // PB1 -> PB(top) + PB(middle)
-	      else        { idxL = 2; idxR = 3; }  // Oozyte -> Eizelle + PB(bottom)
-	    } else {
-
-	      idxL = topCell ? 0 : 2;
-	      idxR = topCell ? 1 : 3;
-	    }
-
-    const cellL = centers[idxL];
-    const cellR = centers[idxR];
-
-    const rL = (radii && radii[idxL]) ? radii[idxL] : r;
-    const rR = (radii && radii[idxR]) ? radii[idxR] : r;
-    const rMin = Math.min(rL, rR);
-
-    const poleL = spindlePole(cellL.x, cellL.y, rL, 'L');
-    const poleR = spindlePole(cellR.x, cellR.y, rR, 'R');
-
-    const xPoleL = poleL.x + inward;
-    const xPoleR = poleR.x - inward;
-
-    // offsets around the center so multiple chromatids remain visible (avoid overlap in Telophase II end states)
-    const xsCenter = spaced(0, nPairs, rMin*0.44);
-    const ysCenter = spaced(0, nPairs, rMin*0.22);
+    // small offsets around the center so multiple chromatids remain visible
+    const xsCenter = spaced(0, nPairs, r*0.34);
 
     for (let i=0; i<nPairs; i++){
       const ch = topCell ? leftHom(i) : rightHom(i);
 
-      const ysPoleL = spaced(0, nPairs, rL*0.86);
-      const ysPoleR = spaced(0, nPairs, rR*0.86);
-      const yPoleL = cellL.y + ysPoleL[i];
-      const yPoleR = cellR.y + ysPoleR[i];
+      const yPoleL = cellL.y + ysPole[i];
+      const yPoleR = cellR.y + ysPole[i];
 
       const xL = lerp(xPoleL, cellL.x + xsCenter[i], tMove);
-      const yL = lerp(yPoleL, cellL.y + ysCenter[i], tMove);
+      const yL = lerp(yPoleL, cellL.y, tMove);
 
       const xR = lerp(xPoleR, cellR.x + xsCenter[i], tMove);
-      const yR = lerp(yPoleR, cellR.y + ysCenter[i], tMove);
+      const yR = lerp(yPoleR, cellR.y, tMove);
+
+      const lenNow = lerp(lenBase, lenBig, tMove);
 
       // Genommutation (Non-Disjunction, didaktisch): wirkt auf das 1. Autosomenpaar (i===0),
       // sichtbar in Telophase II. Bei aktivierter Genommutation wird die Simulation 2x durchlaufen:
@@ -3173,48 +2318,25 @@ const yR = yTargetR;
 
       if (isTarget && stage){
         if (stage === 'MI'){
-          // Non-Disjunction in Meiose I:
-          // Standard (Spermatogenese): oben nullisom (omit), unten disom (extra).
-          // Oogenese + Monosomie: Eizell-Linie (unten) muss leer sein -> beide Homologe in das 1. Polkörperchen (oben).
-          const oogenMono = (oogenesisOn && genomeMutationMode === 'mono');
-          if (!oogenMono){
-            if (gL === 'TL') actL = 'omit';
-            if (gR === 'TR') actR = 'omit';
-            if (gL === 'BL') actL = 'extra';
-            if (gR === 'BR') actR = 'extra';
-          } else {
-            if (gL === 'TL') actL = 'extra';
-            if (gR === 'TR') actR = 'extra';
-            if (gL === 'BL') actL = 'omit';
-            if (gR === 'BR') actR = 'omit';
-          }
+          // Non-Disjunction in Meiose I erzeugt immer zwei Gameten mit n+1 (disom) und zwei mit n-1 (nullisom).
+          // In diesem Ablauf: oben bleibt leer, unten enthält beide Homologe -> unten disom, oben nullisom.
+          if (gL === 'TL') actL = 'omit';
+          if (gR === 'TR') actR = 'omit';
+          if (gL === 'BL') actL = 'extra';
+          if (gR === 'BR') actR = 'extra';
         } else if (stage === 'MII'){
-          // Non-Disjunction in Meiose II (Äquationsteilung):
-          // Standard: betrifft die obere Meiose-II-Zelle.
-          // Oogenese + Monosomie: betrifft die Eizell-Linie (untere Zelle) -> Eizelle (BL) erhält keine Chromatide.
-          const affectCell = oogenesisOn ? (!topCell) : topCell;
-
-          if (affectCell){
+          // Non-Disjunction in Meiose II (Äquationsteilung): betrifft nur EINE der beiden Meiose-II-Zellen (hier: obere).
+          // Dadurch entstehen 2 normale Gameten und 2 abweichende (n+1 und n-1) in dieser Zelle.
+          const affectTop = topCell; // obere Meiose-II-Zelle
+          if (affectTop){
             if (genomeMutationMode === 'mono'){
-              if (!oogenesisOn){
-                // TL soll fehlen -> beide Chromatiden nach rechts: TR extra, TL omit
-                if (gL === 'TL') actL = 'omit';
-                if (gR === 'TR') actR = 'extra';
-              } else {
-                // BL soll fehlen -> beide Chromatiden nach rechts: BR extra, BL omit
-                if (gL === 'BL') actL = 'omit';
-                if (gR === 'BR') actR = 'extra';
-              }
-            } else { // 'tri'
-              if (!oogenesisOn){
-                // TL soll extra -> beide Chromatiden nach links: TL extra, TR omit
-                if (gL === 'TL') actL = 'extra';
-                if (gR === 'TR') actR = 'omit';
-              } else {
-                // BL soll extra -> beide Chromatiden nach links: BL extra, BR omit
-                if (gL === 'BL') actL = 'extra';
-                if (gR === 'BR') actR = 'omit';
-              }
+              // TL soll fehlen -> beide Chromatiden nach rechts: TR extra, TL omit
+              if (gL === 'TL') actL = 'omit';
+              if (gR === 'TR') actR = 'extra';
+            } else {
+              // TL soll extra -> beide Chromatiden nach links: TL extra, TR omit
+              if (gL === 'TL') actL = 'extra';
+              if (gR === 'TR') actR = 'omit';
             }
           }
         }
@@ -3222,34 +2344,28 @@ const yR = yTargetR;
 
       // Linke Gamete zeichnen
       if (actL === 'extra'){
-        // Extra-Chromatid klar trennen (sonst liegen beide zu nah beieinander)
-        const ex = Math.max(lenNow*0.38, r*0.12);
-        const ey = Math.max(lenNow*0.16, r*0.06);
-        addI(xL - ex*0.5, yL - ey*0.5, lenNow, rot, spriteIFor(ch,'L'), chromAlpha, `${ch.uid}:I:L:extra`, ch.uid);
-        addI(xL + ex*0.5, yL + ey*0.5, lenNow, rot, spriteIFor(ch,'R'), chromAlpha, `${ch.uid}:I:L:extra2`, ch.uid);
+        addI(xL, yL, lenNow, rot, spriteIFor(ch, 'L'), chromAlpha, `${ch.uid}:I:L`, ch.uid);
+        addI(xL + lenNow*0.55, yL, lenNow, rot, spriteIFor(ch, 'R'), chromAlpha, `${ch.uid}:I:L2`, ch.uid);
       } else if (actL === 'normal'){
-        addI(xL, yL, lenNow, rot, spriteIFor(ch,'L'), chromAlpha, `${ch.uid}:I:L`, ch.uid);
+        addI(xL, yL, lenNow, rot, spriteIFor(ch, 'L'), chromAlpha, `${ch.uid}:I:L`, ch.uid);
       }
+
       // Rechte Gamete zeichnen
       if (actR === 'extra'){
-        // Extra-Chromatid klar trennen
-        const ex = Math.max(lenNow*0.38, r*0.12);
-        const ey = Math.max(lenNow*0.16, r*0.06);
-        addI(xR + ex*0.5, yR - ey*0.5, lenNow, rot, spriteIFor(ch,'R'), chromAlpha, `${ch.uid}:I:R:extra`, ch.uid);
-        addI(xR - ex*0.5, yR + ey*0.5, lenNow, rot, spriteIFor(ch,'L'), chromAlpha, `${ch.uid}:I:R:extra2`, ch.uid);
+        addI(xR, yR, lenNow, rot, spriteIFor(ch, 'R'), chromAlpha, `${ch.uid}:I:R`, ch.uid);
+        addI(xR - lenNow*0.55, yR, lenNow, rot, spriteIFor(ch, 'L'), chromAlpha, `${ch.uid}:I:R2`, ch.uid);
       } else if (actR === 'normal'){
-        addI(xR, yR, lenNow, rot, spriteIFor(ch,'R'), chromAlpha, `${ch.uid}:I:R`, ch.uid);
+        addI(xR, yR, lenNow, rot, spriteIFor(ch, 'R'), chromAlpha, `${ch.uid}:I:R`, ch.uid);
       }
-      // omit: draw nothing
-    }
-  }
+
+}
   }
 }
     // --- Draw chromosomes (with short interpolation after phase changes) ---
     // Short interpolation after phase changes.
     // Metaphase I + II should feel slower/more natural, so we extend the settle-in time there.
     // local is normalized (0..1), so convert to seconds before applying a seconds-based enter duration.
-    const phaseDur = phaseDuration(uiIdx);
+    const phaseDur = phaseDuration(idx);
     const enterSec = (idx === 1 || idx === 5) ? 1.2 : 0.22;
     const enter = easeInOut(clamp((local * phaseDur) / enterSec, 0, 1));
     const useTrans = (transPhase === idx) ? transFrom : null;
@@ -3302,7 +2418,6 @@ const yR = yTargetR;
             img: b.img,
             fiberSide: b.fiberSide,
             fiberMode: b.fiberMode,
-            cellIndex: b.cellIndex,
             x: lerp(a.x, b.x, enter),
             y: lerp(a.y, b.y, enter),
             size: lerp(a.size, b.size, enter),
@@ -3313,7 +2428,7 @@ const yR = yTargetR;
           drawItem(it);
         } else {
           // new item, fade it in
-          const itNew = {...b, cellIndex: b.cellIndex, alpha: (b.alpha ?? 1) * enter};
+          const itNew = {...b, alpha: (b.alpha ?? 1) * enter};
           drawnItems.push(itNew);
           drawItem(itNew);
         }
@@ -3341,40 +2456,35 @@ const yR = yTargetR;
     // Meiose II: Spindelfasern müssen auch während der Übergangs-Interpolation an den Chromosomen "dran bleiben"
     // Prophase II + Metaphase II: bipolare Anheftung (beide Pole -> Chromosom)
     if ((idx === 4 || idx === 5) && centrosomesSettled){
-      // IMPORTANT: in Oogenese the two cells have different radii. Use the radius of the nearest cell,
-      // otherwise spindle fibers appear shifted (especially in the polar body).
+      const rSmall = R*0.74;
       for (const it of drawnItems){
         if (it && it.type === 'X' && it.fiberMode === 'both'){
-          let bestIdx = (typeof it.cellIndex === 'number') ? it.cellIndex : 0;
-          if (typeof it.cellIndex !== 'number' && cellCenters.length > 1){
-            const c0 = cellCenters[0];
+          // nearest cell center (top/bottom)
+          let best = cellCenters[0];
+          if (cellCenters.length > 1){
             const c1 = cellCenters[1];
-            const d0 = (it.x-c0.x)*(it.x-c0.x) + (it.y-c0.y)*(it.y-c0.y);
+            const d0 = (it.x-best.x)*(it.x-best.x) + (it.y-best.y)*(it.y-best.y);
             const d1 = (it.x-c1.x)*(it.x-c1.x) + (it.y-c1.y)*(it.y-c1.y);
-            bestIdx = (d1 < d0) ? 1 : 0;
+            if (d1 < d0) best = c1;
           }
-          const best = cellCenters[bestIdx];
-          const rUse = (cellRadii && cellRadii.length) ? (cellRadii[bestIdx] ?? R*0.74) : (R*0.74);
-          drawFibersToTargetSingle(best.x, best.y, rUse, it.x, it.y, 0.20);
+          drawFibersToTargetSingle(best.x, best.y, rSmall, it.x, it.y, 0.20);
         }
       }
     }
 
     // Anaphase II: jedes Schwesterchromatid ist nur noch mit dem näheren Pol verbunden (zieht zum entsprechenden Zellpol)
     if (idx === 6){
+      const rSmall = R*0.74;
       for (const it of drawnItems){
         if (it && it.type === 'I' && it.fiberSide){
-          let bestIdx = (typeof it.cellIndex === 'number') ? it.cellIndex : 0;
-          if (typeof it.cellIndex !== 'number' && cellCenters.length > 1){
-            const c0 = cellCenters[0];
+          let best = cellCenters[0];
+          if (cellCenters.length > 1){
             const c1 = cellCenters[1];
-            const d0 = (it.x-c0.x)*(it.x-c0.x) + (it.y-c0.y)*(it.y-c0.y);
+            const d0 = (it.x-best.x)*(it.x-best.x) + (it.y-best.y)*(it.y-best.y);
             const d1 = (it.x-c1.x)*(it.x-c1.x) + (it.y-c1.y)*(it.y-c1.y);
-            bestIdx = (d1 < d0) ? 1 : 0;
+            if (d1 < d0) best = c1;
           }
-          const best = cellCenters[bestIdx];
-          const rUse = (cellRadii && cellRadii.length) ? (cellRadii[bestIdx] ?? R*0.74) : (R*0.74);
-          drawFiberFromPole(best.x, best.y, rUse, it.fiberSide, it.x, it.y, 0.16);
+          drawFiberFromPole(best.x, best.y, rSmall, it.fiberSide, it.x, it.y, 0.16);
         }
       }
     }
@@ -3390,7 +2500,7 @@ const yR = yTargetR;
     //  - Durchlauf 1: zwei Spermien -> untere linke und untere rechte Zelle (gelbe Markierungen)
     //  - Durchlauf 2: ein Spermium  -> obere linke Zelle (Gamete mit n+1)
     if (idx === 7 && tel2 && genomeMutationOn && (genomeMutationMode === 'mono' || genomeMutationMode === 'tri') && (runCycle === 1 || runCycle === 2)){
-      const baseDur = phases[uiIdx].dur;       // ursprüngliche Dauer ohne Zusatz
+      const baseDur = phases[idx].dur;       // ursprüngliche Dauer ohne Zusatz
       const extraDur = EXTRA_TEL2_RUN1_MONO; // Zusatzzeit
       const secNow = local * phaseDur;
 
@@ -3427,51 +2537,27 @@ const yR = yTargetR;
         let starts = [];
 
         if (genomeMutationMode === 'mono'){
-          // Monosomie:
-          // Standard (Spermatogenese):
-          //  - Durchlauf 1: zwei Spermien -> obere linke und obere rechte Zelle
-          //  - Durchlauf 2: ein Spermium  -> obere linke Zelle
-          //
-          // Oogenese + Monosomie:
-          //  - in beiden Möglichkeiten befruchtet EIN Spermium die Eizelle (unten links, BL)
-          if (oogenesisOn){
-            targets = [BL];
-            starts = [
-              { x: BL.x - rSmall*2.35, y: BL.y + rSmall*0.25 },
-            ];
-          } else {
-            targets = (runCycle === 1) ? [TL, TR] : [TL];
+          targets = (runCycle === 1) ? [TL, TR] : [TL];
 
-            // Startpositionen außerhalb der Zielzellen (damit Chromatiden gut sichtbar bleiben)
-            starts = (runCycle === 1) ? [
-              { x: TL.x - rSmall*2.25, y: TL.y + rSmall*0.65 },
-              { x: TR.x + rSmall*2.25, y: TR.y + rSmall*0.65 },
-            ] : [
-              { x: TL.x - rSmall*2.25, y: TL.y + rSmall*0.65 },
-            ];
-          }
+          // Startpositionen (wie bisher: links unten außerhalb, rechts oben außerhalb)
+          starts = [
+            { x: TL.x - rSmall*2.25, y: TL.y + rSmall*0.65 },
+            { x: TR.x + rSmall*1.95, y: TR.y - rSmall*1.45 },
+          ];
         } else { // 'tri'
-          if (oogenesisOn){
-            // Oogenese + Trisomie: nur die Eizelle (unten links, BL) wird befruchtet.
-            targets = [BL];
+          targets = (runCycle === 1) ? [BL, BR] : [TL];
+
+          if (runCycle === 1){
+            // Startpositionen wie im Screenshot (gelbe Markierungen)
             starts = [
-              { x: BL.x - rSmall*2.35, y: BL.y - rSmall*0.95 },
+              { x: BL.x - rSmall*2.35, y: BL.y - rSmall*1.05 },
+              { x: BR.x + rSmall*2.15, y: BR.y - rSmall*1.55 },
             ];
           } else {
-            targets = (runCycle === 1) ? [BL, BR] : [TL];
-
-            if (runCycle === 1){
-              // Startpositionen wie im Screenshot (gelbe Markierungen)
-              starts = [
-                { x: BL.x - rSmall*2.35, y: BL.y - rSmall*1.05 },
-                { x: BR.x + rSmall*2.15, y: BR.y - rSmall*1.55 },
-              ];
-            } else {
-              // Durchlauf 2: ein Spermium zur trisomischen Zelle (oben links)
-              starts = [
-                { x: TL.x - rSmall*2.15, y: TL.y - rSmall*0.55 },
-              ];
-            }
+            // Durchlauf 2: ein Spermium zur trisomischen Zelle (oben links)
+            starts = [
+              { x: TL.x - rSmall*2.15, y: TL.y - rSmall*0.55 },
+            ];
           }
         }
 
@@ -3508,7 +2594,7 @@ const yR = yTargetR;
           drawSperm(img, pNow, 0.95*appear, ang);
         }
         // Zusatz (Trisomie, Möglichkeit 2): weitere Spermien in beide unteren Zellen (Screenshot lila Markierungen)
-        if (genomeMutationMode === 'tri' && runCycle === 2 && canDraw2 && !oogenesisOn){
+        if (genomeMutationMode === 'tri' && runCycle === 2 && canDraw2){
           const extraTargets = [BL, BR];
           const extraStarts = [
             { x: BL.x - rSmall*2.55, y: BL.y - rSmall*0.25 },
@@ -3556,61 +2642,46 @@ prevChromList = chromList.map(it => ({...it}));
     if (runCompletedHandled) return;
     runCompletedHandled = true;
 
-    // --- Genommutation (2 Durchläufe + Erklärung) ---
-    if (genomeMutationOn){
-      const caption = (runCycle === 1)
-        ? `Möglichkeit 1 (Non-disjunction während der Reduktionsteilung in der Anaphase I)`
-        : `Möglichkeit 2 (Non-disjunction während der Äquationsteilung in der Anaphase II)`;
+    if (!genomeMutationOn) return;
 
-      appendRunSnapshot(runCycle, caption);
-      if (typeof computeUIScaleDebounced === 'function') computeUIScaleDebounced();
+    const caption = (runCycle === 1)
+      ? `Möglichkeit 1 (Non-disjunction während der Reduktionsteilung in der Anaphase I)`
+      : `Möglichkeit 2 (Non-disjunction während der Äquationsteilung in der Anaphase II)`;
 
-      // Second run (Meiose II) after the first run finished
-      if (runCycle === 1){
-        startSecondRunCountdown(() => {
-          runCycle = 2;
-          rebuildTimeline();
-          runCompletedHandled = false;
-          t = 0;
-          buildModel();
-          render();
-          playing = true;
-          if (typeof computeUIScaleDebounced === 'function') computeUIScaleDebounced();
-        });
-        return;
-      }
-      // Nach Abschluss beider Durchläufe (Genommutation) + ggf. Oogenese-Erklärung anzeigen
-      const shouldShowOogenesisInfo = (SIM_MODE === 'meiosis' && oogenesisOn);
-      const shouldShowGenomeInfo = (runCycle === 2 && (genomeMutationMode === 'mono' || genomeMutationMode === 'tri'));
+    appendRunSnapshot(runCycle, caption);
 
-      // Wenn beides aktiv ist: gemeinsam in EINEM Popup (nebeneinander)
-      if (shouldShowGenomeInfo && shouldShowOogenesisInfo){
-        setTimeout(() => showCombinedInfoPopup(genomeMutationMode), 450);
-      } else {
-        if (shouldShowGenomeInfo && genomeMutationMode === 'mono'){
-          setTimeout(() => showMonosomyPopup(), 450);
-        }
-        if (shouldShowGenomeInfo && genomeMutationMode === 'tri'){
-          setTimeout(() => showTrisomyPopup(), 450);
-        }
-        if (shouldShowOogenesisInfo){
-          setTimeout(() => showOogenesisPopup(), 450);
-        }
-      }
+    // Second run (Meiose II) after the first run finished
+    if (runCycle === 1){
+      startSecondRunCountdown(() => {
+        runCycle = 2;
+        rebuildTimeline();
+        runCompletedHandled = false;
+        t = 0;
+        buildModel();
+        render();
+        playing = true;
+      });
+      return;
+    }
+
+    // Nach Abschluss beider Durchläufe (Genommutation) Erklärung anzeigen
+    if (runCycle === 2 && genomeMutationMode === 'mono'){
+      // leicht verzögert, damit letzte Zeichnung/Highlights sichtbar sind
+      setTimeout(() => showMonosomyPopup(), 450);
+    }
+    if (runCycle === 2 && genomeMutationMode === 'tri'){
+      // leicht verzögert, damit letzte Zeichnung/Highlights sichtbar sind
+      setTimeout(() => showTrisomyPopup(), 450);
     }
 }
 
-// Playback loop
+  // Playback loop
 
   function tick(now){
-    if (last === null) last = now;
-    let dt = (now - last) / 1000;
-    if (!isFinite(dt) || dt < 0) dt = 0;
+    const dt = (now - last) / 1000;
     last = now;
 
     if (playing){
-      // Defensive: falls Timeline ungültig ist (z.B. nach Moduswechsel), neu bauen
-      if (!isFinite(totalDur) || totalDur <= 0){ rebuildTimeline(); }
       t += dt * speedMul;
 
       if (t >= totalDur){
@@ -3627,15 +2698,10 @@ prevChromList = chromList.map(it => ({...it}));
 
   function resetAll(){
     t = 0;
-    last = null;
     runCycle = 1;
         rebuildTimeline();
     runCompletedHandled = false;
     clearRunResults();
-    resetMonosomyPopup();
-    resetTrisomyPopup();
-    resetCombinedInfoPopup();
-    resetOogenesisPopup();
     showResultsPanel(!!genomeMutationOn);
     buildModel();
     render();
@@ -3643,13 +2709,6 @@ prevChromList = chromList.map(it => ({...it}));
 
   // Controls
   btnPlay.addEventListener('click', () => {
-    // Defensive: Timeline kann (z.B. nach Moduswechsel) noch nicht korrekt gebaut sein
-    rebuildTimeline();
-    if (!isFinite(totalDur) || totalDur <= 0){
-      // Notfalls minimaler Fallback, damit Play nicht "sofort fertig" ist
-      totalDur = 0.001;
-    }
-
     if (t >= totalDur){
       t = 0;
       runCycle = 1;
@@ -3658,13 +2717,7 @@ prevChromList = chromList.map(it => ({...it}));
       showResultsPanel(!!genomeMutationOn);
       buildModel();
     }
-    last = null;
     playing = true;
-    // Falls der RAF-Loop aus irgendeinem Grund nicht läuft: neu starten
-    if (!rafStarted){
-      rafStarted = true;
-      requestAnimationFrame(tick);
-    }
   });
   btnPause.addEventListener('click', () => playing = false);
   btnStep.addEventListener('click', () => {
@@ -3725,40 +2778,11 @@ prevChromList = chromList.map(it => ({...it}));
     toggleGenome.addEventListener('change', () => {
       genomeMutationOn = toggleGenome.checked;
       applyGenomeLockState(genomeMutationOn);
-      if (typeof computeUIScaleDebounced === 'function') computeUIScaleDebounced();
       if (genomeSelect) genomeSelect.disabled = !genomeMutationOn;
       playing = false;
       resetAll();
     });
   }
-
-  if (toggleOogenese){
-    toggleOogenese.addEventListener('change', () => {
-      // Schutz: im Mitose-Modus darf Oogenese nicht aktiv sein
-      if (SIM_MODE === 'mitosis'){
-        toggleOogenese.checked = false;
-        oogenesisOn = false;
-        if (oogenesisResultEl) oogenesisResultEl.style.display = 'none';
-        return;
-      }
-
-      resetOogenesisPopup();
-
-      oogenesisOn = !!toggleOogenese.checked;
-
-      // Ergebnistext nur anzeigen, wenn Toggle an ist
-      if (oogenesisResultEl) oogenesisResultEl.style.display = oogenesisOn ? 'block' : 'none';
-
-      // Oogenese: NICHT automatisch Gonosomen aktivieren.
-      // Aber: Wenn Gonosomen aktiv sind, darf XY nicht wählbar sein.
-      applyOogenesisSexBlock();
-      if (typeof computeUIScaleDebounced === 'function') computeUIScaleDebounced();
-
-      playing = false;
-      resetAll();
-    });
-  }
-
 
   if (genomeSelect){
     genomeSelect.addEventListener('change', () => {
@@ -3772,11 +2796,6 @@ prevChromList = chromList.map(it => ({...it}));
   if (sexSelect){
     sexSelect.addEventListener('change', () => {
       sexMode = sexSelect.value || 'female';
-      if (oogenesisOn && gonosomesOn && sexMode === 'male'){
-        sexMode = 'female';
-        sexSelect.value = 'female';
-      }
-
       playing = false;
       resetAll();
     });
@@ -3787,87 +2806,11 @@ prevChromList = chromList.map(it => ({...it}));
   await preloadAssets();
   buildModel();
   render();
-  rafStarted = true;
   requestAnimationFrame(tick);
-})();
-
-// === INTRO-MODAL ===
-(function(){
-  document.addEventListener('DOMContentLoaded',function(){
-    var el=document.getElementById('introModal');
-    if(!el)return;
-    document.body.style.overflow='hidden';
-    function closeIntroModal(){el.style.display='none';document.body.style.overflow='';}
-    document.getElementById('introModalCloseX').addEventListener('click',closeIntroModal);
-    document.getElementById('introModalStartBtn').addEventListener('click',closeIntroModal);
-    el.addEventListener('click',function(e){if(e.target===el)closeIntroModal();});
-  });
 })();
 </script>
 
-  
-
-  <!-- Kombiniertes Informations-Popup (Genommutation + Oogenese) -->
-  <div id="combinedInfoModal" class="modalOverlay" aria-hidden="true">
-    <div class="modalCard wide" role="dialog" aria-modal="true" aria-labelledby="combinedInfoTitle">
-      <div class="modalHeader">
-        <div>
-          <div class="modalKicker">Information</div>
-          <h2 id="combinedInfoTitle" class="modalTitle">Erklärungen – Genommutation &amp; Oogenese</h2>
-        </div>
-        <button id="combinedInfoCloseBtn" class="modalClose" aria-label="Schließen">✕</button>
-      </div>
-
-      <div class="modalBody">
-        <div class="combinedGrid">
-          <section class="combinedSection" aria-labelledby="combinedLeftTitle">
-            <div class="modalKicker" id="combinedLeftKicker">Genommutation</div>
-            <h3 id="combinedLeftTitle" class="combinedTitle">—</h3>
-            <div id="combinedLeftBody"></div>
-          </section>
-
-          <section class="combinedSection" aria-labelledby="combinedRightTitle">
-            <div class="modalKicker">Oogenese</div>
-            <h3 id="combinedRightTitle" class="combinedTitle">Oogenese – 1 Eizelle und 3 Polkörperchen</h3>
-            <div id="combinedRightBody"></div>
-          </section>
-        </div>
-      </div>
-
-      <div class="modalFooter">
-        <button id="combinedInfoOkBtn" class="modalPrimary">Verstanden</button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- Oogenese Erklärung (Popup) -->
-  <div id="oogenesisModal" class="modalOverlay" aria-hidden="true">
-    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="oogenesisTitle">
-      <div class="modalHeader">
-        <div>
-          <div class="modalKicker">Oogenese</div>
-          <h2 id="oogenesisTitle" class="modalTitle">Oogenese – 1 Eizelle und 3 Polkörperchen</h2>
-        </div>
-        <button id="oogenesisCloseBtn" class="modalClose" aria-label="Schließen">✕</button>
-      </div>
-
-      <div class="modalBody">
-        <p><strong>Im Vergleich zur Spermatogenese</strong>, bei der vier gleichwertige Keimzellen entstehen, werden bei der <strong>Oogenese</strong> <strong>eine Eizelle</strong> und <strong>drei Polkörperchen</strong> gebildet.</p>
-        <ul>
-          <li>Die <strong>Reduktionsteilung</strong> und die <strong>Äquationsteilung</strong> verlaufen grundsätzlich wie in der Meiose.</li>
-          <li>Die Cytokinese ist jedoch <strong>asymmetrisch</strong>: Fast das gesamte Cytoplasma bleibt in der Eizelle.</li>
-          <li>Die Polkörperchen dienen dazu, die <strong>Chromosomenzahl</strong> zu reduzieren, ohne viel Cytoplasma zu „verschenken“.</li>
-        </ul>
-      </div>
-
-      <div class="modalFooter">
-        <button id="oogenesisOkBtn" class="btnPrimary">Verstanden</button>
-      </div>
-    </div>
-  </div>
-
-<!-- Monosomie Erklärung (Popup) -->
+  <!-- Monosomie Erklärung (Popup) -->
   <div id="monosomyModal" class="modalOverlay" aria-hidden="true">
     <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="monosomyTitle">
       <div class="modalHeader">
@@ -3939,66 +2882,5 @@ prevChromList = chromList.map(it => ({...it}));
     </div>
   </div>
 
-  </div>
-
-<!-- === INTRO-MODAL === -->
-<div id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle">
-  <div class="im-card">
-    <div class="im-head">
-      <h2 id="introModalTitle" class="im-title">Mitose und Meiose</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
-    </div>
-    <p class="im-grade">Jahrgangsstufe: 9 · 12</p>
-    <div class="im-desc">
-      Diese Simulation zeigt den schrittweisen Ablauf der Meiose und der Mitose. Wähle zu Beginn den Modus, beobachte wie sich Chromosomen verdoppeln, paaren und auf Tochterzellen verteilen, und entdecke die Unterschiede zwischen beiden Zellteilungsarten.
-    </div>
-    <div class="im-btn-row">
-      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
-    </div>
-  </div>
-</div>
-<!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
-  onclick="document.getElementById('quellenModal').style.display='flex'"
-  style="position:fixed; bottom:16px; right:16px; z-index:9998;
-         background:#fff; border:1px solid #aaa; border-radius:50%;
-         width:36px; height:36px; cursor:pointer; color:#555;
-         box-shadow:0 2px 6px rgba(0,0,0,0.25); display:flex;
-         align-items:center; justify-content:center; padding:0;">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
-    <path d="M12 10.5v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <path d="M12 7.5h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-  </svg>
-</button>
-
-<div id="quellenModal"
-  style="display:none; position:fixed; inset:0; z-index:9999;
-         background:rgba(0,0,0,0.5); align-items:center; justify-content:center;"
-  onclick="if(event.target===this) this.style.display='none'">
-  <div style="background:#fff; border-radius:10px; padding:24px 28px;
-              max-width:520px; width:90%; max-height:80vh; overflow-y:auto;
-              position:relative; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
-    <button onclick="document.getElementById('quellenModal').style.display='none'"
-      style="position:absolute; top:10px; right:14px; background:none;
-             border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
-    <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Alle Abbildungen in dieser Simulation sind vollständig KI-generiert.</li>
-    </ul>
-  </div>
-</div>
-
-<script>
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      var m = document.getElementById('quellenModal');
-      if (m) m.style.display = 'none';
-    }
-  });
-</script>
-
-<script data-goatcounter="https://biologie-simulationen.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
