@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduBioSim: Interaktive Biologie-Simulationen für den digitalen Unterricht</title>
-  <meta name="description" content="EduBioSim bietet interaktive Biologie-Simulationen für den digitalen Unterricht. Entdecke browserbasierte Lernumgebungen zu Genetik, Evolution, Neurobiologie, Fotosynthese und weiteren Themen." />
+  <title>EduBioSim: Interactive biology simulations for digital learning</title>
+  <meta name="description" content="EduBioSim offers interactive biology simulations for digital learning. Explore browser-based learning environments for genetics, evolution, neurobiology, photosynthesis, and more." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <link rel="canonical" href="https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html">
-  <meta property="og:title" content="EduBioSim: Interaktive Biologie-Simulationen für den digitalen Unterricht">
-  <meta property="og:description" content="Von einer Lehrkraft entwickelte, browserbasierte Biologie-Simulationen für Schule und Unterricht." />
+  <link rel="canonical" href="https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle_Webseite_EN.html">
+  <meta property="og:title" content="EduBioSim: Interactive biology simulations for digital learning">
+  <meta property="og:description" content="Teacher-created browser-based biology simulations for school and classroom use." />
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html">
+  <meta property="og:url" content="https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle_Webseite_EN.html">
   <style>
-    /* === CSS VARIABLEN === */
+    /* === CSS VARIABLES === */
     :root {
       --primary:        #2e7d32;
       --primary-light:  #43a047;
@@ -133,7 +133,7 @@
       max-width: 520px; margin: 0 0 2.5rem; line-height: 1.7;
     }
     .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-    /* Rechte Seite: Carousel */
+    /* Right side: carousel */
     .hero-preview {
       min-width: 0;
       position: relative;
@@ -363,6 +363,7 @@
       background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
       overflow: hidden; transition: all 0.2s ease; cursor: pointer; display: flex; flex-direction: column;
     }
+    .sim-card-link { color: inherit; text-decoration: none; }
     .sim-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
     .sim-card.locked { opacity: 0.72; }
     .sim-card-header {
@@ -719,53 +720,53 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
-      <!-- LINKS: Text -->
+      <!-- Left: text -->
       <div class="hero-text">
-        <h1>Interaktive Biologie-<br><span class="highlight">Simulationen</span><br>f&#252;r den digitalen Unterricht</h1>
-        <p class="hero-sub">Von einer Lehrkraft entwickelte, browserbasierte Simulationen, die komplexe biologische Prozesse anschaulich und interaktiv erlebbar machen &#8211; auf jedem Ger&#228;t, ohne Installation.</p>
+        <h1>Interactive biology<br><span class="highlight">simulations</span><br>for digital learning</h1>
+        <p class="hero-sub">Teacher-created, browser-based simulations that make complex biological processes visible and interactive on any device, without installation.</p>
         <div class="hero-actions">
-          <button class="btn btn-primary btn-lg" onclick="scrollToSimulations()">&#128269; Simulationen entdecken</button>
+          <button class="btn btn-primary btn-lg" onclick="scrollToSimulations()">&#128269; Explore simulations</button>
         </div>
       </div>
-      <!-- RECHTS: Simulation-Vorschau -->
+      <!-- Right: simulation preview -->
       <div class="hero-preview">
-        <div class="preview-stage-label">Vorschau einzelner Simulationen</div>
+        <div class="preview-stage-label">Preview selected simulations</div>
         <div class="preview-carousel" id="heroCarousel">
-          <div class="preview-slide active" data-sim-id="schall" data-sim-title="Schall und Hörvorgang">
-            <video class="preview-live" title="Video-Vorschau: Schall und Hörvorgang" muted loop playsinline preload="none"></video>
+          <div class="preview-slide active" data-sim-id="schall" data-sim-title="Sound and Hearing">
+            <video class="preview-live" title="Video preview: Sound and Hearing" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live-Vorschau</div>
-            <div class="preview-caption">Schall und Hörvorgang</div>
+            <div class="preview-badge-live">Live preview</div>
+            <div class="preview-caption">Sound and Hearing</div>
           </div>
-          <div class="preview-slide" data-sim-id="mitose" data-sim-title="Mitose und Meiose">
-            <video class="preview-live" title="Video-Vorschau: Mitose und Meiose" muted loop playsinline preload="none"></video>
+          <div class="preview-slide" data-sim-id="mitose" data-sim-title="Mitosis and Meiosis">
+            <video class="preview-live" title="Video preview: Mitosis and Meiosis" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live-Vorschau</div>
-            <div class="preview-caption">Mitose und Meiose</div>
+            <div class="preview-badge-live">Live preview</div>
+            <div class="preview-caption">Mitosis and Meiosis</div>
           </div>
-          <div class="preview-slide" data-sim-id="fotosynthese" data-sim-title="Einflussfaktoren Fotosynthese">
-            <video class="preview-live" title="Video-Vorschau: Einflussfaktoren Fotosynthese" muted loop playsinline preload="none"></video>
+          <div class="preview-slide" data-sim-id="fotosynthese" data-sim-title="Factors Affecting Photosynthesis">
+            <video class="preview-live" title="Video preview: Factors Affecting Photosynthesis" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live-Vorschau</div>
-            <div class="preview-caption">Einflussfaktoren Fotosynthese</div>
+            <div class="preview-badge-live">Live preview</div>
+            <div class="preview-caption">Factors Affecting Photosynthesis</div>
           </div>
-          <div class="preview-slide" data-sim-id="auge" data-sim-title="Strahlengang &amp; Akkommodation">
-            <video class="preview-live" title="Video-Vorschau: Strahlengang und Akkommodation" muted loop playsinline preload="none"></video>
+          <div class="preview-slide" data-sim-id="auge" data-sim-title="Light Paths &amp; Accommodation">
+            <video class="preview-live" title="Video preview: Light Paths and Accommodation" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live-Vorschau</div>
-            <div class="preview-caption">Strahlengang &amp; Akkommodation</div>
+            <div class="preview-badge-live">Live preview</div>
+            <div class="preview-caption">Light Paths &amp; Accommodation</div>
           </div>
-          <div class="preview-slide" data-sim-id="artbildung" data-sim-title="Geografische Artbildung">
-            <video class="preview-live" title="Video-Vorschau: Geografische Artbildung" muted loop playsinline preload="none"></video>
+          <div class="preview-slide" data-sim-id="artbildung" data-sim-title="Geographic Speciation">
+            <video class="preview-live" title="Video preview: Geographic Speciation" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live-Vorschau</div>
-            <div class="preview-caption">Geografische Artbildung</div>
+            <div class="preview-badge-live">Live preview</div>
+            <div class="preview-caption">Geographic Speciation</div>
           </div>
-          <div class="preview-slide" data-sim-id="meselson" data-sim-title="Meselson-Stahl-Versuch">
-            <video class="preview-live" title="Video-Vorschau: Meselson-Stahl-Versuch" muted loop playsinline preload="none"></video>
+          <div class="preview-slide" data-sim-id="meselson" data-sim-title="Meselson-Stahl Experiment">
+            <video class="preview-live" title="Video preview: Meselson-Stahl Experiment" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live-Vorschau</div>
-            <div class="preview-caption">Meselson-Stahl-Versuch</div>
+            <div class="preview-badge-live">Live preview</div>
+            <div class="preview-caption">Meselson-Stahl Experiment</div>
           </div>
         </div>
         <div class="preview-inds" id="heroInds">
@@ -782,80 +783,80 @@
 
   <!-- STATS -->
   <div class="stats-bar">
-    <div class="stat-item"><div class="stat-number">11</div><div class="stat-label">Simulationen</div></div>
-    <div class="stat-item"><div class="stat-number">6+</div><div class="stat-label">Themenbereiche</div></div>
-    <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Browserbasiert</div></div>
-    <div class="stat-item"><div class="stat-number">0</div><div class="stat-label">Installation n&#246;tig</div></div>
+    <div class="stat-item"><div class="stat-number">11</div><div class="stat-label">Simulations</div></div>
+    <div class="stat-item"><div class="stat-number">6+</div><div class="stat-label">Topic areas</div></div>
+    <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Browser-based</div></div>
+    <div class="stat-item"><div class="stat-number">0</div><div class="stat-label">No installation</div></div>
   </div>
 
   <!-- FEATURES -->
   <div class="section">
     <div class="section-header">
-      <div class="section-tag">Funktionen</div>
-      <h2>Alles, was moderner Unterricht braucht</h2>
-      <p class="section-subtitle">Entwickelt für den Einsatz im digitalen Klassenzimmer, um einen echten Mehrwert bei der Nutzung der digitalen Endgeräte zu generieren.</p>
+      <div class="section-tag">Features</div>
+      <h2>Everything modern teaching needs</h2>
+      <p class="section-subtitle">Designed for digital classrooms, so tablets and other student devices create real instructional value instead of just replacing paper.</p>
     </div>
     <div class="features-grid">
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Bilder/feature-export.webp" alt="Export-Funktion" loading="lazy" decoding="async">
+          <img class="feature-img" src="Bilder/feature-export.webp" alt="Export feature" loading="eager" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Export für OneNote &amp; GoodNotes</h3>
-          <p>Ergebnisse und Ansichten lassen sich direkt für die Weiterarbeit im Unterricht sichern und unkompliziert in digitale Notiz- und Arbeitsumgebungen übernehmen.</p>
+          <h3>Export for OneNote &amp; GoodNotes</h3>
+          <p>Results and views can be saved directly for further classroom work and transferred easily into digital note-taking and worksheet environments.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Bilder/feature-parameter.webp" alt="Interaktive Parameter" loading="lazy" decoding="async">
+          <img class="feature-img" src="Bilder/feature-parameter.webp" alt="Interactive parameters" loading="eager" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Interaktive Parameter</h3>
-          <p>Schüler:innen verändern Parameter in Echtzeit und beobachten die Auswirkungen direkt – aktives Lernen durch geführtes Experimentieren.</p>
+          <h3>Interactive parameters</h3>
+          <p>Students change parameters in real time and immediately observe the effects, enabling active learning through guided experimentation.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap" style="height:220px">
-          <img class="feature-img" src="Bilder/feature-tablets.webp" alt="Für Tablets optimiert" loading="lazy" decoding="async">
+          <img class="feature-img" src="Bilder/feature-tablets.webp" alt="Optimized for tablets" loading="eager" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Für Tablets optimiert</h3>
-          <p>Große Bedienelemente, klare Oberflächen und touchfreundliche Interaktionen sorgen dafür, dass die Simulationen auch auf Tablets zuverlässig und angenehm nutzbar bleiben.</p>
+          <h3>Optimized for tablets</h3>
+          <p>Large controls, clear interfaces, and touch-friendly interactions keep the simulations reliable and comfortable to use on tablets.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap feature-video-wrap" style="height:220px">
-          <video class="feature-video" muted autoplay loop playsinline preload="metadata" aria-label="Animierte Abläufe vergrößert anzeigen">
+          <video class="feature-video" muted autoplay loop playsinline preload="metadata" aria-label="Show animated processes enlarged">
             <source src="Videos/Animation.mp4" type="video/mp4">
           </video>
         </div>
         <div class="feature-body">
-          <h3>Animierte Abläufe</h3>
-          <p>Komplexe Prozesse werden nicht nur beschrieben, sondern in klaren, didaktisch reduzierten Animationen sichtbar gemacht und dadurch leichter verständlich.</p>
+          <h3>Animated processes</h3>
+          <p>Complex processes are not only described, but made visible through clear, didactically reduced animations that are easier to understand.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Bilder/feature-lehrplan.webp" alt="An den Lehrplan angepasst" loading="lazy" decoding="async">
+          <img class="feature-img" src="Bilder/feature-lehrplan.webp" alt="Aligned with the curriculum" loading="eager" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>An den Lehrplan angepasst</h3>
-          <p>Alle Inhalte sind auf den <strong>LehrplanPLUS</strong> Biologie abgestimmt. Im Lehrplan genutzte fachsprachliche Begriffe werden konsequent verwendet. Keine Verwirrung durch unterschiedliche Fachbegriffe.</p>
+          <h3>Aligned with the curriculum</h3>
+          <p>All content is aligned with the <strong>LehrplanPLUS</strong> biology curriculum. The technical terms used in the curriculum are applied consistently, avoiding confusion caused by differing terminology.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Bilder/feature-qr-code.webp" alt="Einfach teilen" loading="lazy" decoding="async">
+          <img class="feature-img" src="Bilder/feature-qr-code.webp" alt="Easy to share" loading="eager" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Einfach teilen</h3>
-          <p>Kein Download, kein Plugin – einfach den Link anklicken oder den QR-Code scannen und die Simulation direkt im Browser öffnen.</p>
+          <h3>Easy to share</h3>
+            <p>No download, no plugin: simply click the link or scan the QR code and open the simulation directly in the browser.</p>
         </div>
       </div>
 
@@ -866,18 +867,85 @@
   <div id="simulationen" style="background:var(--white);padding:5rem 0">
     <div class="section" style="padding-top:0;padding-bottom:0">
       <div class="section-header">
-        <div class="section-tag">Simulationen</div>
-        <h2>11 Themenbereiche auf einen Blick</h2>
+        <div class="section-tag">Simulations</div>
+        <h2>11 topic areas at a glance</h2>
         
       </div>
-      <div class="sims-grid" id="landing-sims-grid"></div>
+      <div class="sims-grid" id="landing-sims-grid">
+        <a class="sim-card sim-card-link" href="../Schall_Hoervorgang/Schall_und_Hoervorgang_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/schall-und-hoervorgang-1.webp" alt="Preview screenshot of Sound and Hearing"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Sound and Hearing</h3><div class="sim-grade">Three acoustics modules for exploring, organizing, and understanding &middot; Grade 8</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Explore sound waves, the hearing process, and sound localization in a comprehensive simulation with tasks, extra views, and export options.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Mitose_und_Meiose/Mitose_Meiose_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/mitose-meiose-1.webp" alt="Preview screenshot of Mitosis and Meiosis"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Mitosis and Meiosis</h3><div class="sim-grade">Interactive cell division for comparing, controlling, and understanding &middot; Grade 9 and 12</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Compare mitosis and meiosis in a controllable cell-division simulation with phase selection, crossing-over, and genetic special cases.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Mendel/Simulation_Mendel_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/mendelsche-regeln-1.webp" alt="Preview screenshot of Mendelian Laws"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Mendelian Laws</h3><div class="sim-grade">Interactive genetics for investigating, comparing, and explaining &middot; Grade 9 and 12</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Discover Mendelian laws in the garden lab and compare Punnett square, simulation, and analysis directly with one another.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Meselson-Stahl-Versuch/Meselson_Stahl_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/meselson-stahl-1.webp" alt="Preview screenshot of Meselson-Stahl Experiment"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Meselson-Stahl Experiment</h3><div class="sim-grade">Experimental molecular biology &middot; Grade 9 and 12</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Carry out the Meselson-Stahl experiment step by step and interpret the band patterns that reveal DNA replication.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Artbildung/Artbildung_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/artbildung-1.webp" alt="Preview screenshot of Geographic Speciation"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Geographic Speciation</h3><div class="sim-grade">Evolutionary biology &middot; Grade 9 and 12</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Observe how predators, weather events, and habitat separation change the composition of a lizard population.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/einflussfaktoren-fotosynthese-1.webp" alt="Preview screenshot of Factors Affecting Photosynthesis"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Factors Affecting Photosynthesis</h3><div class="sim-grade">Plant physiology &middot; Grade 13</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Investigate how light, CO2, and temperature affect photosynthesis in an Engelmann-style setup, and evaluate the results using charts.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Evolution_Kaeferspiel/Kaefer_under_Pressure_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/evolution-kaeferspiel-1.webp" alt="Preview screenshot of Evolution: Beetle Game"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Evolution: Beetle Game</h3><div class="sim-grade">Evolutionary biology &middot; Grade 9 and 12</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Remove beetles under changing conditions and observe how a population changes over several generations.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Nervenzelle_und_Synapse/Neurobiologie_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/neurobiologie-1.webp" alt="Preview screenshot of Neural Information Processing"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Neural Information Processing</h3><div class="sim-grade">Neurobiology &middot; Grade 8 and 13</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Choose grade 8 or 13 and work with an extensive simulation on neural information processing, from neuron structure to the synapse.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Attrappenversuche/Attrappenversuche_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/attrappenversuche-1.webp" alt="Preview screenshot of Dummy Experiments"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Dummy Experiments</h3><div class="sim-grade">Behavioral biology &middot; Grade 8</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Design four dummies, test their effect in the experiment, and evaluate the results directly in the chart.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Angepasstheit_Insekten/Insektenforschung_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/angepasstheit-insekten-1.webp" alt="Preview screenshot of Insect Adaptations"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Insect Adaptations</h3><div class="sim-grade">Ecology &amp; Evolution &middot; Grade 9</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Investigate insect legs with the digital microscope and compare different leg types in relation to habitat and way of life.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+        <a class="sim-card sim-card-link" href="../Strahlengang_Akkommodation/Strahlengang_und_Akkommodation_EN.html">
+          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Bilder/strahlengang-und-akkommodation-1.webp" alt="Preview screenshot of Light Paths and Accommodation"></div>
+          <div class="sim-card-header"><div class="sim-meta"><h3>Light Paths &amp; Accommodation</h3><div class="sim-grade">Five modules about the eye, lens, and retina &middot; Grade 8</div></div></div>
+          <div class="sim-card-body"><p class="sim-description">Explore the structure of the eye, light paths, accommodation, refractive errors, and the retina.</p></div>
+          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
+        </a>
+      </div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <footer class="footer">
     <p>&#169; 2026 EduBioSim &middot; Educational Biology Simulations</p>
-    <p>Die Website und sämtliche Inhalte dürfen nicht zu kommerziellen Zwecken genutzt und nicht auf anderen Websites eingebettet werden. Ausnahmen stellen die unter CC BY und CC BY-SA stehenden Abbildungen dar. Hinweise, Anmerkungen oder Vorschläge können gerne an biologie-simulationen@web.de geschickt werden.</p>
+    <p>This website and its contents may not be used for commercial purposes or embedded on other websites. Exceptions apply to images released under CC BY or CC BY-SA. Feedback, comments, and suggestions can be sent to biologie-simulationen@web.de.</p>
   </footer>
 </div><!-- /view-landing -->
 
@@ -890,39 +958,39 @@
       <div class="sidebar-section">
         <div class="sidebar-label">Navigation</div>
         <div class="sidebar-item active" id="sb-sims" onclick="showDashTab('sims',this)">
-          <span class="s-icon">&#128300;</span> Simulationen
+          <span class="s-icon">&#128300;</span> Simulations
         </div>
         <div class="sidebar-item" id="sb-profile" onclick="showDashTab('profile',this)">
-          <span class="s-icon">&#128100;</span> Mein Profil
+          <span class="s-icon">&#128100;</span> My profile
         </div>
       </div>
       <div class="sidebar-section hidden" id="sb-admin-section">
         <div class="sidebar-label">Administration</div>
         <div class="sidebar-item" onclick="showView('admin')">
-          <span class="s-icon">&#9881;&#65039;</span> Admin Panel
+          <span class="s-icon">&#9881;&#65039;</span> Admin panel
         </div>
       </div>
     </aside>
     <main class="main-content">
-      <!-- TAB: SIMULATIONEN -->
+      <!-- TAB: SIMULATIONS -->
       <div id="dash-tab-sims">
         <div id="welcome-banner-wrap"></div>
         <div class="page-header">
-          <h1>Meine Simulationen</h1>
-          <p>Klicke auf eine Simulation, um zuerst die Detailseite und von dort die eigentliche Simulation zu &#246;ffnen.</p>
+          <h1>My simulations</h1>
+        <p>Click a simulation to open its detail page first and then launch the actual simulation from there.</p>
         </div>
         <div class="sims-grid" id="dashboard-sims-grid"></div>
       </div>
-      <!-- TAB: PROFIL -->
+      <!-- TAB: PROFILE -->
       <div id="dash-tab-profile" class="hidden">
         <div class="page-header">
-          <h1>Mein Profil</h1>
-          <p>Deine Kontoinformationen</p>
+          <h1>My profile</h1>
+          <p>Your account information</p>
         </div>
         <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;max-width:480px">
           <div id="profile-info-content"></div>
           <hr style="margin:1.5rem 0;border:none;border-top:1px solid var(--border)">
-          <button class="btn btn-danger" onclick="handleLogout()">Abmelden</button>
+          <button class="btn btn-danger" onclick="handleLogout()">Log out</button>
         </div>
       </div>
     </main>
@@ -933,7 +1001,7 @@
 <!-- ===================== VIEW: DETAIL ===================== -->
 <div id="view-detail" class="hidden">
   <div class="detail-page">
-    <button class="btn btn-ghost btn-sm detail-back-link" onclick="showLanding()">&#8592; Zur&#252;ck zur &#220;bersicht</button>
+    <button class="btn btn-ghost btn-sm detail-back-link" onclick="showLanding()">&#8592; Back to overview</button>
 
     <section class="detail-hero-card">
       <div class="section-tag">Simulation</div>
@@ -941,15 +1009,15 @@
       <p class="detail-subtitle" id="detail-subtitle"></p>
       <div class="detail-meta-row" id="detail-meta-row"></div>
       <div class="detail-actions">
-        <button class="btn btn-primary btn-lg" onclick="startCurrentSimulation()">&#9654; Simulation starten</button>
-        <button class="btn btn-secondary btn-lg" onclick="showLanding()">Zur&#252;ck zur Hauptseite</button>
-        <button class="btn btn-secondary btn-lg" onclick="downloadCurrentQrCode()">Download QR-Code</button>
+        <button class="btn btn-primary btn-lg" onclick="startCurrentSimulation()">&#9654; Start simulation</button>
+        <button class="btn btn-secondary btn-lg" onclick="showLanding()">Back to homepage</button>
+        <button class="btn btn-secondary btn-lg" onclick="downloadCurrentQrCode()">Download QR code</button>
       </div>
 
       <div class="detail-media-grid">
         <section class="detail-media-card">
           <div class="detail-image-frame">
-            <img id="detail-image" class="detail-image hidden" alt="Screenshot-Vorschau der Simulation" tabindex="0" aria-label="Screenshot vergrößert anzeigen">
+            <img id="detail-image" class="detail-image hidden" alt="Simulation screenshot preview" tabindex="0" aria-label="Show enlarged screenshot">
             <div id="detail-image-fallback" class="detail-image-fallback">&#128300;</div>
             <div id="detail-image-indicator" class="detail-image-indicator hidden">1 / 1</div>
           </div>
@@ -971,9 +1039,9 @@
 <!-- ===================== VIEW: VIEWER ===================== -->
 <div id="view-viewer" class="hidden">
   <div class="viewer-header">
-    <button class="btn btn-ghost btn-sm" onclick="goBackFromViewer()" style="padding:0.35rem 0.6rem">&#8592; Zur&#252;ck</button>
+    <button class="btn btn-ghost btn-sm" onclick="goBackFromViewer()" style="padding:0.35rem 0.6rem">&#8592; Back</button>
     <span class="viewer-title" id="viewer-title">Simulation</span>
-    <button class="btn btn-secondary btn-sm" onclick="openInNewTab()" style="margin-left:auto">&#8599; Neues Tab</button>
+    <button class="btn btn-secondary btn-sm" onclick="openInNewTab()" style="margin-left:auto">&#8599; New tab</button>
   </div>
   <iframe id="viewer-frame" class="viewer-frame" src="" allowfullscreen></iframe>
 </div>
@@ -986,25 +1054,25 @@
       <div class="sidebar-section">
         <div class="sidebar-label">Navigation</div>
         <div class="sidebar-item" onclick="showView('dashboard')">
-          <span class="s-icon">&#8592;</span> Zur&#252;ck
+          <span class="s-icon">&#8592;</span> Back
         </div>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-label">Administration</div>
         <div class="sidebar-item active">
-          <span class="s-icon">&#9881;&#65039;</span> Admin Panel
+          <span class="s-icon">&#9881;&#65039;</span> Admin panel
         </div>
       </div>
     </aside>
     <main class="main-content">
       <div class="page-header">
-        <h1>Admin Panel <span class="badge-admin">ADMIN</span></h1>
-        <p>Benutzerverwaltung und Simulationszug&#228;nge</p>
+        <h1>Admin panel <span class="badge-admin">ADMIN</span></h1>
+        <p>User management and simulation access</p>
       </div>
       <div class="admin-tabs">
-        <button class="admin-tab active" onclick="switchAdminTab('users',this)">&#128101; Benutzer</button>
-        <button class="admin-tab" onclick="switchAdminTab('access',this)">&#128274; Zug&#228;nge</button>
-        <button class="admin-tab" onclick="switchAdminTab('overview',this)">&#128202; &#220;bersicht</button>
+        <button class="admin-tab active" onclick="switchAdminTab('users',this)">&#128101; Users</button>
+        <button class="admin-tab" onclick="switchAdminTab('access',this)">&#128274; Access</button>
+        <button class="admin-tab" onclick="switchAdminTab('overview',this)">&#128202; Overview</button>
       </div>
       <div id="admin-tab-users"><div id="admin-users-content"></div></div>
       <div id="admin-tab-access"   class="hidden"><div id="admin-access-content"></div></div>
@@ -1015,211 +1083,240 @@
 
 
 <script>
-// === KONFIGURATION ===
+// === CONFIGURATION ===
 var FEATURED_SIM_ID = 'schall';
 
 var SIMS = [
   {
     id: 'schall',
-    title: 'Schall und H\u00f6rvorgang',
-    subtitle: 'Drei Akustik-Module zum Beobachten, Ordnen und Verstehen',
-    desc: 'Erkunde Schallwellen, H\u00f6rvorgang und Richtungsh\u00f6ren in einer umfangreichen Simulation mit Aufgaben, Zusatzansichten und Export.',
-    detailDesc: `Diese Simulation verbindet physikalische Grundlagen des Schalls mit dem biologischen Vorgang des Hörens und fasst gleich drei Teilbereiche in einer Anwendung zusammen. Dadurch eignet sie sich sowohl für einen ersten motivierenden Einstieg als auch für die gezielte Vertiefung im Unterricht.
+    title: 'Sound and Hearing',
+    subtitle: 'Three acoustics modules for exploring, organizing, and understanding',
+    desc: 'Explore sound waves, the hearing process, and sound localization in a comprehensive simulation with tasks, extra views, and export options.',
+    detailDesc: `This simulation combines the physical foundations of sound with the biological process of hearing and brings together three related modules in one application. It works well both as a motivating introduction and as a tool for deeper classroom study.
 
-Im Modul Schallwellen lassen sich Tonhöhe, Lautstärke und Impulsmodus verändern. Zusätzlich kann zwischen Schallwellen- und Teilchendarstellung umgeschaltet werden, sodass die Ausbreitung von Schall auf zwei verschiedenen Modellebenen sichtbar wird. Ein freischaltbarer Hörtest erweitert den Zugang um einen direkten Bezug zur eigenen Wahrnehmung.
+In the sound waves module, learners can change pitch, volume, and impulse mode. They can also switch between a wave model and a particle model so that sound propagation becomes visible on two different levels of representation. An unlockable hearing test adds a direct connection to personal perception.
 
-Im Modul Hörvorgang wird der Weg eines Schallereignisses durch Außenohr, Mittelohr und Innenohr animiert. Ergänzt wird dies durch eine Reihenfolge-Aufgabe zum Ablauf des Hörvorgangs, eine Beschriftungsaufgabe am Ohr sowie zusätzliche Detailfenster zur Hörschnecke und zur Aktivierung der Hörsinneszellen.
+In the hearing process module, the path of a sound event through the outer ear, middle ear, and inner ear is animated. This is supported by a sequencing task on the hearing process, a labeling task on the ear, and extra detail windows on the cochlea and the activation of sensory hair cells.
 
-Im Modul Richtungshören wird die Position einer Tonquelle rund um den Kopf untersucht. Laufzeitdifferenz und Pegeldifferenz zwischen beiden Ohren lassen sich dabei direkt mit der Position der Schallquelle in Beziehung setzen. Mit Kopfhörern kann die Wanderung der Schallquelle um den Kopf nicht nur beobachtet, sondern auch selbst gehört und unmittelbar erlebt werden.
+In the sound localization module, the position of a sound source around the head can be examined. Interaural time difference and interaural level difference can be related directly to the source position. With headphones, learners can not only observe the movement of the sound source around the head but also hear it themselves.
 
-Der Umfang der Simulation wird zudem durch begleitende Informationstexte, Arbeitsblätter zu allen drei Teilbereichen und Exportfunktionen erweitert. Dadurch eignet sich die Anwendung nicht nur zum Erkunden, sondern auch zur Sicherung und Weiterverarbeitung im Unterricht.`,
-    path: '../Schall_Hoervorgang/Schall_und_Hoervorgang.html',
-    icon: '\ud83d\udc42', grade: 'Jahrgangsstufe 8',
-    topics: ['Schallwellen','Innenohr','H\u00f6rbahn','Akustik'],
-    features: ['Export','Animation','Interaktiv'],
+The simulation is extended by accompanying information texts, worksheets for all three subtopics, and export functions. This makes the application suitable not only for exploration, but also for recording and extending classroom work.`,
+        path: '../Schall_Hoervorgang/Schall_und_Hoervorgang_EN.html',
+    icon: '\ud83d\udc42', grade: 'Grade 8',
+    topics: ['Sound waves','Inner ear','Auditory pathway','Acoustics'],
+    features: ['Export','Animation','Interactive'],
     demo: true
   },
   {
     id: 'mitose',
-    title: 'Mitose und Meiose',
-    subtitle: 'Interaktive Zellteilung zum Vergleichen, Steuern und Verstehen',
-    desc: 'Vergleiche Mitose und Meiose in einer steuerbaren Zellteilungs-Simulation mit Phasenwahl, Crossing-over und genetischen Sonderf\u00e4llen.',
-    detailDesc: `Diese Simulation macht die zentralen Abl\u00e4ufe der Zellteilung als direkt steuerbaren Prozess erfahrbar. Lernende k\u00f6nnen bereits zu Beginn zwischen Mitose und Meiose w\u00e4hlen und die jeweilige Abfolge der Phasen Schritt f\u00fcr Schritt nachvollziehen. Dadurch wird sichtbar, dass beide Prozesse nach klaren Ordnungsprinzipien verlaufen, aber zu sehr unterschiedlichen Ergebnissen f\u00fchren.\n\nIm Zentrum steht eine gro\u00dfe animierte Zellansicht, die durch Play-, Pause-, Step- und Reset-Funktionen sowie durch eine regelbare Geschwindigkeit gezielt gesteuert werden kann. Zus\u00e4tzlich l\u00e4sst sich jede Phase direkt ausw\u00e4hlen, sodass sowohl der kontinuierliche Ablauf als auch einzelne Teilabschnitte gezielt untersucht werden k\u00f6nnen. Damit eignet sich die Simulation gleicherma\u00dfen f\u00fcr das erste Verstehen wie f\u00fcr das wiederholte Vergleichen von Phasen und Bewegungsmustern.\n\nBesonders vielschichtig ist der Meiose-Modus. Hier lassen sich Crossing-over, die Zahl der Autosomenpaare, Gonosomen und das Geschlecht variieren. Zus\u00e4tzlich k\u00f6nnen Genommutationen wie Monosomie oder Trisomie eingeblendet werden, um zu zeigen, wie Fehler bei der Verteilung von Chromosomen entstehen und welche Folgen sie f\u00fcr die entstehenden Zellen haben. Eine zus\u00e4tzliche Darstellung der Oogenese erweitert die Simulation um eine weitere fachlich relevante Perspektive.\n\nDie Anwendung verbindet dabei Modellcharakter und fachliche Tiefe. Mitose und Meiose werden nicht nur als feste Bildfolge gezeigt, sondern als strukturierte Prozesse mit regelhafter Chromosomenbewegung, Trennung homologer Chromosomen oder Schwesterchromatiden und unterschiedlichen Endprodukten. So wird anschaulich, warum Mitose zur Bildung genetisch weitgehend identischer Tochterzellen f\u00fchrt, w\u00e4hrend die Meiose genetische Vielfalt vorbereitet.\n\nGerade bei aktivierter Genommutation geht die Simulation \u00fcber eine reine Ablaufdarstellung hinaus. Zus\u00e4tzliche Durchl\u00e4ufe und Ergebnisansichten machen sichtbar, wie sich Non-Disjunction in unterschiedlichen Teilungsschritten auswirken kann. Dadurch eignet sich die Anwendung nicht nur zur Wiederholung der Phasen, sondern auch zur vertieften Auseinandersetzung mit Rekombination, Fehlverteilungen und der biologischen Bedeutung meiotischer Prozesse.`,
-    path: '../Mitose_und_Meiose/Mitose_Meiose.html',
-    icon: '\ud83e\uddec', grade: 'Jahrgangsstufe 9 und 12',
-    topics: ['Mitose','Meiose','Zellzyklus','Chromosomen'],
-    features: ['Export','Animation','Schrittweise'],
+    title: 'Mitosis and Meiosis',
+    subtitle: 'Interactive cell division for comparing, controlling, and understanding',
+    desc: 'Compare mitosis and meiosis in a controllable cell-division simulation with phase selection, crossing-over, and genetic special cases.',
+    detailDesc: `This simulation turns the core processes of cell division into a directly controllable sequence. Learners can choose between mitosis and meiosis from the start and follow each phase step by step. This makes it clear that both processes follow ordered principles but lead to very different outcomes.
+
+At the center is a large animated cell view that can be controlled precisely with play, pause, step, reset, and an adjustable speed. In addition, each phase can be selected directly, so both the continuous process and individual stages can be studied closely. This makes the simulation useful both for first understanding and for repeated comparison of phases and movement patterns.
+
+The meiosis mode is especially rich. Here, crossing-over, the number of autosome pairs, sex chromosomes, and sex can all be varied. Genome mutations such as monosomy or trisomy can also be shown in order to demonstrate how chromosome distribution errors arise and what consequences they have for the daughter cells. An extra oogenesis view adds another important biological perspective.
+
+The application combines model character with biological depth. Mitosis and meiosis are not shown merely as a fixed sequence of images, but as structured processes involving chromosome movement, the separation of homologous chromosomes or sister chromatids, and different end products. This makes it easier to understand why mitosis produces largely genetically identical daughter cells, whereas meiosis prepares genetic diversity.
+
+When genome mutation is activated, the simulation goes beyond a simple process display. Additional runs and result views make it visible how non-disjunction can affect different stages of division. This makes the application suitable not only for reviewing phases, but also for a deeper exploration of recombination, chromosome missegregation, and the biological significance of meiotic processes.`,
+        path: '../Mitose_und_Meiose/Mitose_Meiose_EN.html',
+    icon: '\ud83e\uddec', grade: 'Grade 9 and 12',
+    topics: ['Mitosis','Meiosis','Cell cycle','Chromosomes'],
+    features: ['Export','Animation','Step by step'],
     demo: false
   },
   {
     id: 'mendel',
-    title: 'Mendelsche Regeln',
-    subtitle: 'Interaktive Genetik zum Untersuchen, Vergleichen und Begründen',
-    desc: 'Entdecke die mendelschen Regeln im Gartenlabor und vergleiche Punnett-Quadrat, Simulation und Auswertung direkt miteinander.',
-    detailDesc: `Diese Simulation macht die mendelschen Regeln in einer interaktiven Laborumgebung erfahrbar. Lernende wählen gezielt zwischen monohybriden und dihybriden Kreuzungen, verändern Elternkombinationen und untersuchen, wie sich daraus typische Genotyp- und Phänotypverhältnisse ergeben. So wird der Weg von der theoretischen Kreuzung bis zur beobachtbaren Verteilung der Nachkommen anschaulich und nachvollziehbar.\n\nIm Zentrum steht die Verbindung von genetischem Modell und Simulation. Das Punnett-Quadrat wird auf Grundlage der gewählten Kreuzung erstellt und mit simulierten Nachkommen verglichen. Erwartete Verhältnisse lassen sich dadurch direkt den tatsächlich erzeugten Ergebnissen gegenüberstellen. Unterstützt wird dies durch die Auswahl unterschiedlicher Merkmale wie Samenfarbe, Samenform oder die Kombination beider Merkmale sowie durch einen eigenen Unterstützungsmodus zur Anzeige der Keimzellen.\n\nEin besonderer didaktischer Mehrwert liegt in der zusätzlichen Einbindung der Keimzellenbildung. Die Simulation erläutert die Bildung von Gameten für das Punnett-Quadrat und ergänzt diesen Bereich durch eine eingebettete Zusatzsimulation zur Meiose. Dadurch wird nicht nur das Ergebnis einer Kreuzung sichtbar, sondern auch der biologische Hintergrund der Verteilung von Allelen verständlich gemacht.\n\nDie Auswertung erfolgt über mehrere Ebenen. Phänotypverteilungen werden grafisch dargestellt, Genotyp-Häufigkeiten tabellarisch aufgeführt und Bildkarten der Phänotypen lassen sich vergrößert betrachten. Ergänzend bietet die Simulation Arbeitsaufträge zu Uniformität, Spaltung und Unabhängigkeit der Merkmale und unterstützt damit sowohl das eigenständige Entdecken als auch die gezielte unterrichtliche Sicherung.\n\nFür eine vertiefte Auseinandersetzung stehen zusätzlich ein Laborjournal, ein Notizbereich, Exportfunktionen und Challenge-Karten zur Verfügung. Damit eignet sich die Anwendung nicht nur zum ersten Verständnis der mendelschen Regeln, sondern auch zur systematischen Auswertung, zur Dokumentation von Beobachtungen und zur forschend-entwickelnden Bearbeitung genetischer Fragestellungen.`,
-    path: '../Mendel/Simulation_Mendel.html',
-    icon: '\ud83fad', grade: 'Jahrgangsstufe 9 und 12',
-    topics: ['Dominanz','Spaltung','Unabh\u00e4ngigkeit','Erbgang'],
-    features: ['Export','Interaktiv','Diagramm'],
+    title: 'Mendelian Laws',
+    subtitle: 'Interactive genetics for investigating, comparing, and explaining',
+    desc: 'Discover Mendelian laws in the garden lab and compare Punnett square, simulation, and analysis directly with one another.',
+    detailDesc: `This simulation makes Mendelian laws tangible in an interactive lab setting. Learners can choose between monohybrid and dihybrid crosses, change the parental combinations, and investigate how typical genotype and phenotype ratios emerge. In this way, the path from a theoretical cross to the observable distribution of offspring becomes clear and understandable.
+
+At the center is the connection between genetic model and simulation. The Punnett square is generated from the chosen cross and then compared with simulated offspring. Expected ratios can therefore be compared directly with the results that are actually produced. This is supported by the choice of different traits such as seed color, seed shape, or both together, as well as by a support mode for displaying gametes.
+
+An important didactic strength lies in the extra integration of gamete formation. The simulation explains how gametes are formed for the Punnett square and extends this section with an additional embedded meiosis simulation. This means that learners see not only the result of a cross, but also the biological background behind allele distribution.
+
+Analysis takes place on several levels. Phenotype distributions are shown graphically, genotype frequencies are listed in tables, and phenotype image cards can be enlarged. The simulation also includes tasks on uniformity, segregation, and independent assortment, supporting both discovery learning and structured classroom consolidation.
+
+For deeper work, learners also have access to a lab journal, a notes area, export functions, and challenge cards. This makes the application suitable not only for a first understanding of Mendelian laws, but also for systematic analysis, documentation of observations, and inquiry-based work on genetics.`,
+        path: '../Mendel/Simulation_Mendel_EN.html',
+    icon: '\ud83fad', grade: 'Grade 9 and 12',
+    topics: ['Dominance','Segregation','Independent assortment','Inheritance'],
+    features: ['Export','Interactive','Chart'],
     demo: false
   },
   {
     id: 'meselson',
-    title: 'Meselson-Stahl-Versuch',
-    subtitle: 'Experimentelle Molekularbiologie',
-    desc: 'Interaktive Nachstellung des klassischen Experiments zur Aufklärung der semikonservativen DNA-Replikation.',
-    cardDesc: 'Führe den Meselson-Stahl-Versuch Schritt für Schritt durch und deute die Bandenmuster zur DNA-Replikation.',
-    detailDesc: `Diese Simulation macht eines der bekanntesten Schlüsselexperimente der Molekularbiologie als interaktiven Laborversuch erfahrbar. Lernende führen den Meselson-Stahl-Versuch selbst durch, arbeiten mit ¹⁵N- und ¹⁴N-Medien und verfolgen, wie sich die Dichte markierter DNA nach mehreren Replikationsrunden verändert. So wird aus einem historischen Belegexperiment ein nachvollziehbarer Arbeitsprozess, in dem Beobachtung, Modellvergleich und fachliche Deutung eng miteinander verbunden sind.
+    title: 'Meselson-Stahl Experiment',
+    subtitle: 'Experimental molecular biology',
+    desc: 'Interactive reconstruction of the classic experiment that demonstrated semiconservative DNA replication.',
+    cardDesc: 'Carry out the Meselson-Stahl experiment step by step and interpret the band patterns that reveal DNA replication.',
+    detailDesc: `This simulation turns one of the best-known key experiments in molecular biology into an interactive lab experience. Learners perform the Meselson-Stahl experiment themselves, work with 15N and 14N media, and follow how the density of labeled DNA changes over several rounds of replication. In this way, a historic proof experiment becomes an understandable working process that connects observation, model comparison, and biological interpretation.
 
-Im Zentrum steht ein klar strukturierter Versuchsablauf mit Drag-and-drop-Elementen. Die Bakterienkultur wird nacheinander in das passende Medium überführt, im Inkubator weitervermehrt und anschließend in der Zentrifuge ausgewertet. Jede Handlung verändert den Zustand der Probe sichtbar, sodass deutlich wird, wie Isotopenmarkierung, Generationsfolge und Probenbehandlung zusammenhängen. Dadurch eignet sich die Simulation sowohl für die erste Erarbeitung als auch für eine gezielte Wiederholung des Versuchsprinzips.
+At the center is a clearly structured experimental procedure with drag-and-drop elements. The bacterial culture is transferred step by step into the correct medium, grown further in the incubator, and then analyzed in the centrifuge. Each action visibly changes the sample, making it clear how isotope labeling, generation sequence, and sample handling are connected.
 
-Die Auswertung erfolgt über zwei Ebenen. In der Hauptanzeige werden die DNA-Banden im Dichtegradienten sichtbar, während verkleinerte Zentrifugierergebnisse mehrere Messpunkte direkt vergleichbar machen. Auf diese Weise lässt sich Schritt für Schritt nachvollziehen, wann schwere, hybride oder leichte DNA auftritt und weshalb die beobachteten Muster mit dem semikonservativen Modell übereinstimmen. Die Simulation fordert damit nicht nur zum Bedienen auf, sondern unterstützt eine echte experimentelle Argumentation.
+The analysis works on two levels. In the main display, the DNA bands become visible in the density gradient, while smaller centrifuge results make several measurement points directly comparable. This makes it possible to follow step by step when heavy, hybrid, or light DNA appears and why the observed patterns fit the semiconservative model. The simulation therefore supports real experimental argumentation, not just interaction.
 
-Besonders wertvoll ist die Verbindung aus historischem Kontext und experimenteller Rekonstruktion. Die konkurrierenden Replikationsmodelle – konservativ, semikonservativ und dispersiv – werden inhaltlich vorbereitet und können anschließend anhand der eigenen Versuchsergebnisse geprüft werden. Unterstützungsmodus, Undo-Funktion, Reset und Screenshot-Export erleichtern dabei den Einsatz im Unterricht und machen die Simulation zu einem gut strukturierten Werkzeug für entdeckendes und auswertendes Lernen.`,
-    path: '../Meselson-Stahl-Versuch/Meselson_Stahl.html',
-    icon: '������', grade: 'Jahrgangsstufe 9 und 12',
-    topics: ['DNA-Replikation','Semikonservativ','Isotopen','Zentrifugation'],
-    features: ['Animation','Schrittweise','Export'],
+Especially valuable is the connection between historical context and experimental reconstruction. The competing replication models, conservative, semiconservative, and dispersive, are introduced conceptually and can then be tested against the learner's own results. Support mode, undo, reset, and screenshot export make the simulation a well-structured tool for exploratory and analytical learning.`,
+        path: '../Meselson-Stahl-Versuch/Meselson_Stahl_EN.html',
+    icon: '\ud83e\uddea', grade: 'Grade 9 and 12',
+    topics: ['DNA replication','Semiconservative','Isotopes','Centrifugation'],
+    features: ['Animation','Step by step','Export'],
     demo: false
   },
   {
     id: 'artbildung',
-    title: 'Geografische Artbildung',
-    subtitle: 'Evolutionsbiologie',
-    desc: 'Beobachte, wie Jäger, Wetterereignisse und die Trennung des Lebensraums die Zusammensetzung einer Echsenpopulation verändern.',
-    cardDesc: 'Beobachte, wie Jäger, Wetterereignisse und die Trennung des Lebensraums die Zusammensetzung einer Echsenpopulation verändern.',
-    detailDesc: `Diese Simulation macht geografische Artbildung als dynamischen Veränderungsprozess erfahrbar. Zu Beginn lebt eine vielfältige Echsenpopulation in einem zusammenhängenden Habitat. Unterschiedliche Jäger wirken zu verschiedenen Tageszeiten auf die Tiere ein, sodass bereits in der Ausgangssituation Selektionsdruck entsteht und Veränderungen in der Population beobachtbar werden.
+    title: 'Geographic Speciation',
+    subtitle: 'Evolutionary biology',
+    desc: 'Observe how predators, weather events, and habitat separation change the composition of a lizard population.',
+    cardDesc: 'Observe how predators, weather events, and habitat separation change the composition of a lizard population.',
+    detailDesc: `This simulation presents geographic speciation as a dynamic process of change. At the start, a diverse lizard population lives in one connected habitat. Different predators act on the animals at different times of day, so selection pressure is already present in the initial situation and population changes can be observed.
 
-Im Verlauf der Simulation greifen zusätzlich Umweltveränderungen ein. Wetterereignisse und dauerhafte Landschaftsveränderungen verändern die Bedingungen schrittweise, bis der ursprünglich gemeinsame Lebensraum in zwei getrennte Habitate aufgeteilt wird. Dadurch lässt sich besonders anschaulich untersuchen, wie Isolation, unterschiedliche Umweltbedingungen und wiederholte Selektionsprozesse zusammenwirken.
+As the simulation continues, environmental changes also come into play. Weather events and permanent landscape changes gradually alter the conditions until the originally shared habitat is split into two separate habitats. This makes it especially easy to investigate how isolation, differing environments, and repeated selection processes work together.
 
-Die Auswertung erfolgt über mehrere Ebenen. Neben der zentralen Simulation stehen Diagramme zur Gesamtpopulation sowie zur Zusammensetzung der Echsentypen in beiden Habitaten zur Verfügung. So kann nicht nur verfolgt werden, wie viele Tiere in den jeweiligen Bereichen leben, sondern auch, wie sich die Verteilung der Typen im Zeitverlauf verändert.
+Analysis takes place on several levels. In addition to the central simulation, charts show the total population as well as the composition of lizard types in both habitats. This makes it possible to follow not only how many animals live in each area, but also how the distribution of types changes over time.
 
-Ergänzt wird die Anwendung durch eine klare Aufgabenorientierung und eine Exportfunktion für die Ergebnisse. Dadurch eignet sich die Simulation sowohl für den motivierenden Einstieg in die Artbildung als auch für die gezielte Analyse und den Vergleich verschiedener Entwicklungsverläufe im Unterricht.`,
-    path: '../Artbildung/Artbildung.html',
-    icon: '\ud83c\udfd9\ufe0f', grade: 'Jahrgangsstufe 9 und 12',
-    topics: ['Isolation','Selektion','Drift','Speziation'],
-    features: ['Simulation','Interaktiv','Export'],
+The application is complemented by a clear task orientation and export functions for the results. This makes the simulation suitable both as a motivating introduction to speciation and as a tool for targeted analysis and comparison of different developmental pathways in class.`,
+        path: '../Artbildung/Artbildung_EN.html',
+    icon: '\ud83c\udfd9\ufe0f', grade: 'Grade 9 and 12',
+    topics: ['Isolation','Selection','Drift','Speciation'],
+    features: ['Simulation','Interactive','Export'],
     demo: false
   },
   {
     id: 'fotosynthese',
-    title: 'Einflussfaktoren Fotosynthese',
-    subtitle: 'Pflanzenphysiologie',
-    cardDesc: 'Untersuche im Engelmann-ähnlichen Versuchsaufbau, wie Licht, CO₂ und Temperatur die Fotosynthese beeinflussen, und werte die Ergebnisse mit Diagrammen und Messfenster aus.',
-    detailDesc: `Diese Simulation greift den Engelmann-Versuch in erweiterter Form auf und macht zentrale Einflussfaktoren der Fotosynthese in einer experimentellen Laborumgebung sichtbar. Eine Fadenalge wird mit Licht unterschiedlicher Qualität und Intensität beleuchtet, während aerobe Bakterien als biologischer Indikator dienen. So wird anschaulich, wie sich Veränderungen der Bedingungen direkt auf die Sauerstoffbildung und damit auf die Fotosyntheseleistung auswirken.
+    title: 'Factors Affecting Photosynthesis',
+    subtitle: 'Plant physiology',
+    cardDesc: 'Investigate how light, CO2, and temperature affect photosynthesis in an Engelmann-style setup, and evaluate the results using charts and the measurement panel.',
+    detailDesc: `This simulation extends the Engelmann experiment and makes key factors affecting photosynthesis visible in an experimental lab setting. A filamentous alga is illuminated with light of different qualities and intensities, while aerobic bacteria serve as a biological indicator. This makes it easy to see how changes in conditions affect oxygen production and therefore photosynthetic performance.
 
-Im Zentrum steht ein variabler Versuchsaufbau, in dem Lichtfarbe, Prisma, Beleuchtungsstärke, Temperatur und CO₂-Zufuhr gezielt verändert werden können. Dadurch lässt sich untersuchen, wie stark einzelne Faktoren die Fotosynthese begrenzen oder fördern und wie sich ihre Wirkung im Zusammenspiel verändert. Die Simulation verbindet damit Modellcharakter und fachliches Experimentieren auf besonders klare Weise.
+At the center is a flexible experimental setup in which light color, prism, light intensity, temperature, and CO2 supply can all be changed deliberately. This makes it possible to investigate how strongly individual factors limit or promote photosynthesis and how their effects change in combination. The simulation therefore combines model character with genuine biological experimentation.
 
-Unterstützt wird die Auswertung durch drei begleitende Diagramme zu Beleuchtungsstärke, Temperatur und CO₂-Gehalt. Ergänzend zeigt ein Messfenster an der Lupe die relative Fotosynthese direkt an der gewählten Position, während ein Protokollbereich Messpunkte, Notizen und Exportmöglichkeiten für die systematische Sicherung der Beobachtungen bereitstellt.
+Three accompanying charts on light intensity, temperature, and CO2 content support the analysis. A measurement window at the magnifier shows relative photosynthesis directly at the chosen position, while a protocol area provides measurement points, notes, and export options for systematic recording of observations.
 
-Damit eignet sich die Anwendung sowohl zur Einführung in limitierende Faktoren der Fotosynthese als auch zur vertieften experimentellen Auswertung. Die Verbindung aus Versuchsanordnung, Diagrammen, Messwerten und Protokoll macht die Simulation zu einem vielseitigen Werkzeug für forschendes und auswertendes Lernen.`,
-    desc: 'Untersuche die Auswirkungen von Lichtintensit\u00e4t, CO\u2082-Konzentration und Temperatur auf die Fotosyntheserate in Echtzeit.',
-    path: '../Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese.html',
-    icon: '\ud83c\udf3f', grade: 'Jahrgangsstufe 13',
-    topics: ['Licht','CO\u2082','Temperatur','Limitierung'],
-    features: ['Diagramm','Interaktiv','Export'],
+The application is suitable both for introducing limiting factors of photosynthesis and for deeper experimental analysis. The combination of setup, charts, measurements, and protocol makes the simulation a versatile tool for inquiry-based and analytical learning.`,
+    desc: 'Investigate the effects of light intensity, CO2 concentration, and temperature on the photosynthesis rate in real time.',
+        path: '../Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese_EN.html',
+    icon: '\ud83c\udf3f', grade: 'Grade 13',
+    topics: ['Light','CO2','Temperature','Limitation'],
+    features: ['Chart','Interactive','Export'],
     demo: false
   },
   {
     id: 'kaeferspiel',
-    title: 'Evolution: K\u00e4ferspiel',
-    subtitle: 'Evolutionsbiologie',
-    desc: 'Spielerische Einf\u00fchrung in Selektion: Entferne K\u00e4fer unter wechselnden Bedingungen und beobachte, wie sich eine Population \u00fcber Generationen ver\u00e4ndert.',
-    cardDesc: 'Entferne K\u00e4fer unter wechselnden Bedingungen und beobachte spielerisch, wie sich eine Population \u00fcber mehrere Generationen ver\u00e4ndert.',
-    detailDesc: `Diese Simulation bietet einen spielerischen Zugang zum Thema Selektion und eignet sich besonders als motivierende Hinf\u00fchrung in evolutionsbiologische Fragestellungen. Lernende greifen direkt in das Geschehen ein, indem sie K\u00e4fer verschiedener Typen antippen oder anklicken und so beeinflussen, welche Tiere eine Generation \u00fcberstehen. Auf diese Weise wird erfahrbar, dass sich Populationen unter Selektionsdruck ver\u00e4ndern und dass bestimmte Merkmale je nach Umweltbedingung h\u00e4ufiger oder seltener werden k\u00f6nnen.\n\nIm Mittelpunkt steht die Beobachtung von Ver\u00e4nderungen \u00fcber mehrere Generationen. Die Simulation arbeitet mit vier aufeinanderfolgenden Generationen, einem begrenzten Zeitfenster und wechselnden Hintergr\u00fcnden. Dadurch entsteht ein variierender Selektionsrahmen, in dem die Zusammensetzung der K\u00e4ferpopulation nicht statisch bleibt, sondern sich sichtbar verschiebt. Gerade diese direkte R\u00fcckmeldung macht das Prinzip der Selektion anschaulich, ohne es sofort \u00fcber eine abstrakte Theorie zu erschlie\u00dfen.\n\nUnterst\u00fctzt wird dies durch eine klare Auswertungsebene. Nach dem Spiel lassen sich die \u00dcberlebenden markiert betrachten und im Diagramm nachverfolgen. Dabei kann zwischen absoluten Best\u00e4nden und relativen Anteilen gewechselt werden. So wird nicht nur sichtbar, wie viele Individuen einer Form \u00fcbrig bleiben, sondern auch, wie sich ihre H\u00e4ufigkeit innerhalb der Gesamtpopulation entwickelt. Die Simulation verbindet damit unmittelbares Handeln mit einer grafischen Auswertung biologischer Ver\u00e4nderungsprozesse.\n\nAuch die Spielmechanik selbst tr\u00e4gt zur didaktischen Funktion bei. Nach jeder Generation wird die Population auf Grundlage der \u00dcberlebenden weitergef\u00fchrt, sodass sich Unterschiede nicht nur kurzfristig, sondern kumulativ zeigen. Dadurch wird deutlich, dass Evolution auf Populationsebene \u00fcber mehrere Generationen hinweg betrachtet werden muss und dass Selektion nicht ein einzelnes Ereignis, sondern ein fortlaufender Prozess ist.\n\nErg\u00e4nzt wird die Anwendung durch Statusanzeigen, klare Spielregeln, eine touchfreundliche Steuerung sowie eine Exportfunktion f\u00fcr Spielbild und Diagramm. Dadurch eignet sich die Simulation sowohl f\u00fcr einen motivierenden Einstieg als auch f\u00fcr eine erste Sicherung von Beobachtungen. Insgesamt schafft sie einen leicht zug\u00e4nglichen, aber fachlich anschlussf\u00e4higen Zugang zu Selektion, Anpassung, Fitness und evolutiver Ver\u00e4nderung.`,
-    path: '../Evolution_Kaeferspiel/Kaefer_under_Pressure.html',
-    icon: '\ud83e\udeb2', grade: 'Jahrgangsstufe 9 und 12',
-    topics: ['Selektion','Population','Fitness','Anpassung'],
-    features: ['Spielformat','Animation','Export'],
+    title: 'Evolution: Beetle Game',
+    subtitle: 'Evolutionary biology',
+    desc: 'A playful introduction to selection: remove beetles under changing conditions and observe how a population changes across generations.',
+    cardDesc: 'Remove beetles under changing conditions and observe playfully how a population changes over several generations.',
+    detailDesc: `This simulation offers a playful approach to the topic of selection and works especially well as a motivating introduction to evolutionary biology. Learners intervene directly by tapping or clicking beetles of different types and thus influence which animals survive a generation. In this way, it becomes clear that populations change under selection pressure and that certain traits can become more or less common depending on the environment.
+
+The focus lies on observing change across several generations. The simulation works with four consecutive generations, a limited time window, and changing backgrounds. This creates a shifting selection context in which the composition of the beetle population does not remain static, but changes visibly. This immediate feedback makes the principle of selection easy to grasp without relying first on abstract theory.
+
+The application is supported by a clear evaluation layer. After the game, the survivors can be viewed as highlighted individuals and followed in a chart. Learners can switch between absolute numbers and relative shares. This shows not only how many individuals of one form remain, but also how their frequency develops within the total population.
+
+The game mechanic itself also contributes to the didactic value. After each generation, the population continues on the basis of the survivors, so differences become visible not only in the short term but cumulatively. This makes it clear that evolution must be viewed at the population level over several generations and that selection is not a single event, but an ongoing process.
+
+Status displays, clear rules, touch-friendly controls, and export functions for the game view and chart make the simulation suitable both for a motivating introduction and for a first recording of observations. Overall, it offers an accessible but scientifically meaningful introduction to selection, adaptation, fitness, and evolutionary change.`,
+        path: '../Evolution_Kaeferspiel/Kaefer_under_Pressure_EN.html',
+    icon: '\ud83e\udeb2', grade: 'Grade 9 and 12',
+    topics: ['Selection','Population','Fitness','Adaptation'],
+    features: ['Game format','Animation','Export'],
     demo: false
   },
   {
     id: 'nerv',
-    title: 'Neuronale Informationsverarbeitung',
-    subtitle: 'Neurobiologie',
-    desc: 'Wähle Jahrgangsstufe 8 oder 13 und arbeite mit einer besonders umfangreichen Simulation zur neuronalen Informationsverarbeitung vom Bau der Nervenzelle bis zur Synapse.',
-    path: '../Nervenzelle_und_Synapse/Neurobiologie.html',
-    icon: '⚡', grade: 'Jahrgangsstufe 8 und 13',
-    topics: ['Nervenzelle','Signalweiterleitung','Aktionspotenzial','Synapse'],
-    features: ['Jgst.-Auswahl','Interaktiv','Export'],
+    title: 'Neural Information Processing',
+    subtitle: 'Neurobiology',
+    desc: 'Choose grade 8 or 13 and work with an especially extensive simulation on neural information processing, from neuron structure to the synapse.',
+        path: '../Nervenzelle_und_Synapse/Neurobiologie_EN.html',
+    icon: '\u26a1', grade: 'Grade 8 and 13',
+    topics: ['Neuron','Signal transmission','Action potential','Synapse'],
+    features: ['Grade selection','Interactive','Export'],
     demo: false,
-    cardDesc: 'Wähle Jahrgangsstufe 8 oder 13 und erkunde eine besonders umfangreiche Simulation zur neuronalen Informationsverarbeitung vom Bau der Nervenzelle bis zur Beeinflussung der Synapse.',
-    detailDesc: `Diese Simulation ist als besonders umfangreiche digitale Lernumgebung zur Neurobiologie aufgebaut. Sie verbindet mehrere Teilthemen in einer gemeinsamen Oberfläche und führt vom Bau der Nervenzelle über Membranpotenziale und Signalweiterleitung bis zur chemischen Synapse. So eignet sie sich nicht nur für einzelne Stunden, sondern auch für längere Unterrichtsreihen mit aufeinander aufbauenden Schwerpunkten.
+    cardDesc: 'Choose grade 8 or 13 and explore an especially extensive simulation on neural information processing, from neuron structure to synaptic modulation.',
+    detailDesc: `This simulation is designed as an especially extensive digital learning environment for neurobiology. It brings together several subtopics within one interface and leads from the structure of the neuron through membrane potentials and signal transmission to the chemical synapse. It is therefore suitable not only for individual lessons but also for longer teaching units with connected focal points.
 
-Ein zentrales Merkmal ist die Auswahl zwischen 8. und 13. Jahrgangsstufe bereits im Hauptmenü. Dadurch werden verfügbare Modi, fachliche Tiefe, Aufgabenstellungen, Informationstexte und Arbeitsblätter an die jeweilige Lerngruppe angepasst. In der 8. Jgst. stehen stärker grundlegende, anschauliche und handlungsorientierte Zugänge im Vordergrund, während in der 13. Jgst. zusätzliche physiologische und fachsprachlich vertiefte Inhalte freigeschaltet werden.
+A key feature is the choice between grade 8 and grade 13 directly in the main menu. This adapts the available modes, scientific depth, tasks, information texts, and worksheets to the respective learner group. In grade 8, more fundamental, concrete, and action-oriented approaches are emphasized, whereas in grade 13 additional physiological content and more advanced terminology are unlocked.
 
-Im Überblick:
-• Die Nervenzelle
-• Reiz-Reaktionskette (8. Jgst.)
-• Ruhepotenzial (13. Jgst.)
-• Signalweiterleitung
-• Refraktärzeit (13. Jgst.)
-• Aktionspotenzial (13. Jgst.)
-• Die Synapse
-• Beeinflussung der Synapse
+Overview:
+- The neuron
+- Stimulus-response chain (grade 8)
+- Resting potential (grade 13)
+- Signal transmission
+- Refractory period (grade 13)
+- Action potential (grade 13)
+- The synapse
+- Modulation of the synapse
 
-Didaktisch kombiniert die Simulation Animationen, Informationstexte, Arbeitsblätter, Beschriftungs- und Ordnungsaufgaben, Unterstützungsmodi sowie Exportfunktionen. Dadurch kann sie sowohl zur Einführung neuer Inhalte als auch zur Vertiefung, Wiederholung und strukturierten Sicherung im Unterricht eingesetzt werden.`
+Didactically, the simulation combines animations, information texts, worksheets, labeling and ordering tasks, support modes, and export functions. This means it can be used both for introducing new content and for deepening, reviewing, and structuring classroom learning.`
   },
   {
     id: 'attrappen',
-    title: 'Attrappenversuche',
-    subtitle: 'Verhaltensbiologie',
-    desc: 'Gestalte vier Attrappen, teste ihre Wirkung im Experiment und werte die Ergebnisse direkt im Diagramm aus – eine interaktive Einführung in Schlüsselreize und tierisches Verhalten.',
-    cardDesc: 'Gestalte vier Attrappen, teste ihre Wirkung im Experiment und werte die Ergebnisse direkt im Diagramm aus – eine interaktive Einführung in Schlüsselreize und tierisches Verhalten.',
-    detailDesc: `Attrappenversuche
+    title: 'Dummy Experiments',
+    subtitle: 'Behavioral biology',
+    desc: 'Design four dummies, test their effect in the experiment, and evaluate the results directly in the chart - an interactive introduction to key stimuli and animal behavior.',
+    cardDesc: 'Design four dummies, test their effect in the experiment, and evaluate the results directly in the chart - an interactive introduction to key stimuli and animal behavior.',
+    detailDesc: `Dummy Experiments
 
-Interaktive Verhaltensbiologie zum Testen, Vergleichen und Auswerten
+Interactive behavioral biology for testing, comparing, and evaluating
 
-In dieser Simulation untersuchen Lernende, welche äußeren Merkmale das Verhalten von Schmetterlingen beeinflussen. Vier frei gestaltbare Attrappen können gezielt in Größe, Farbe und Muster variiert und anschließend im Simulationsfeld getestet werden. So wird aus eigenem Experimentieren Schritt für Schritt ableitbar, welche Merkmale als Schlüsselreize wirken und wie sich daraus die wahrscheinliche Größenklasse eines Schmetterlingstyps begründen lässt.
+In this simulation, learners investigate which external features influence butterfly behavior. Four freely designed dummies can be varied deliberately in size, color, and pattern and then tested in the simulation field. This makes it possible to work out step by step which features act as key stimuli and how the probable size class of a butterfly type can be justified.
 
-Die Anwendung verbindet Experiment, Beobachtung und Auswertung in einer übersichtlichen Oberfläche: Attrappen A–D werden individuell erstellt, erst danach kann die Simulation gestartet werden. Die Ergebnisse lassen sich direkt im Diagramm auswerten, nach einzelnen Attrappen filtern und bei Bedarf als Bild exportieren. Ergänzend stehen ein Informationstext, ein Arbeitsblatt sowie eine geschützte Lösungsansicht per Codeeingabe zur Verfügung.
+The application combines experiment, observation, and analysis in a clear interface: dummies A-D are created individually, and only then can the simulation be started. The results can be analyzed directly in the chart, filtered by individual dummy, and exported as an image if needed. An information text, a worksheet, and a protected solution view via code entry are also available.
 
-Ein besonderer Reiz liegt im zusätzlichen Entdeckungsaspekt: Ein weißer Schmetterling besitzt intern verborgene Eigenschaften, die nicht direkt sichtbar sind. Dadurch wird die Simulation nicht nur zur Auswertung vorgegebener Merkmale genutzt, sondern auch zu einer forschenden Aufgabe, bei der Hypothesen gebildet und durch wiederholte Versuche überprüft werden.`,
-    path: '../Attrappenversuche/Attrappenversuche.html',
-    icon: '🦋', grade: 'Jahrgangsstufe 8',
-    topics: ['Schlüsselreiz','Attrappe','Auslöser','Instinkt'],
-    features: ['Interaktiv','Export','Experiment'],
+An extra discovery element adds further interest: one white butterfly has hidden internal properties that are not directly visible. This means the simulation is used not only to evaluate given features, but also as an inquiry task in which hypotheses are formed and tested through repeated trials.`,
+        path: '../Attrappenversuche/Attrappenversuche_EN.html',
+    icon: '\ud83e\udd8b', grade: 'Grade 8',
+    topics: ['Key stimulus','Dummy','Trigger','Instinct'],
+    features: ['Interactive','Export','Experiment'],
     demo: false
   },
-
   {
     id: 'insekten',
-    title: 'Angepasstheit Insekten',
-    subtitle: '\u00d6kologie & Evolution',
-    desc: 'Untersuche Insektenbeine im digitalen Mikroskop, vergleiche verschiedene Beinformen und erschlie\u00dfe ihre Funktion im Zusammenhang mit Lebensweise und Lebensraum.',
-    cardDesc: 'Untersuche Insektenbeine im digitalen Mikroskop, vergleiche verschiedene Beinformen und erschlie\u00dfe ihre Funktion im Zusammenhang mit Lebensweise und Lebensraum.',
-    detailDesc: `Diese Simulation verbindet vergleichende Morphologie mit forschendem Arbeiten. Lernende untersuchen verschiedene Insekten und erforschen, wie sich ihre Beine an unterschiedliche Lebensweisen und Umweltbedingungen angepasst haben. So wird sichtbar, dass Körperbau und Funktion eng zusammenh\u00e4ngen und biologische Angepasstheit konkret an realen Beispielen nachvollzogen werden kann.\n\nIm Zentrum steht ein interaktives Mikroskop, in dem ausgew\u00e4hlte Insekten mit Zoom- und Fokusreglern betrachtet werden. Zus\u00e4tzlich lassen sich zwei Insekten direkt miteinander vergleichen, um Unterschiede in Form, Struktur und Spezialisierung der Beine systematisch herauszuarbeiten. Dadurch eignet sich die Simulation besonders gut f\u00fcr beobachtendes Vergleichen und f\u00fcr das Ableiten funktionaler Zusammenh\u00e4nge.\n\nErg\u00e4nzt wird die Untersuchung durch mehrere Materialebenen. Neben dem Mikroskopbild stehen Schemaabbildungen, Detailansichten und thematisch passende Videos zur Verf\u00fcgung. Zus\u00e4tzliche Informationstexte ordnen die Beobachtungen fachlich ein und helfen dabei, die jeweiligen Beinformen bestimmten Bewegungs- und Lebensweisen zuzuordnen.\n\nDie Simulation ist zugleich auf aktives Arbeiten ausgelegt. Beschriftungsaufgaben am Schema, Markierfunktionen, Gro\u00dfansichten sowie Screenshot- und Leerfunktionen unterst\u00fctzen die unterrichtliche Auswertung und Dokumentation. Dadurch kann die Anwendung sowohl zur eigenst\u00e4ndigen Erkundung als auch zur gezielten Sicherung im Unterricht eingesetzt werden.\n\nEin zus\u00e4tzlicher Entdeckungsaspekt entsteht durch freischaltbare \u00dcberraschungsfenster bei ausgew\u00e4hlten Insekten. Wer die Beschriftungsaufgabe korrekt l\u00f6st, erh\u00e4lt Zugang zu weiterf\u00fchrendem Zusatzmaterial. So verbindet die Simulation Beobachtung, Vergleich, fachliche Einordnung und motivierende Erweiterungen zu einer vielschichtigen digitalen Forschungsumgebung.`,
-    path: '../Angepasstheit_Insekten/Insektenforschung.html',
-    icon: '\ud83d\udc1d', grade: 'Jahrgangsstufe 9',
-    topics: ['Anpassung','Morphologie','Lebensraum','Forschung'],
-    features: ['Forschung','Interaktiv','Export'],
+    title: 'Insect Adaptations',
+    subtitle: 'Ecology & Evolution',
+    desc: 'Investigate insect legs with the digital microscope, compare different leg types, and work out their function in relation to habitat and way of life.',
+    cardDesc: 'Investigate insect legs with the digital microscope, compare different leg types, and work out their function in relation to habitat and way of life.',
+    detailDesc: `This simulation combines comparative morphology with inquiry-based work. Learners investigate different insects and explore how their legs have adapted to different lifestyles and environmental conditions. In this way, it becomes clear that body structure and function are closely connected and that biological adaptation can be understood through real examples.
+
+At the center is an interactive microscope in which selected insects can be examined with zoom and focus controls. Two insects can also be compared directly with one another in order to work out differences in shape, structure, and specialization of the legs in a systematic way. This makes the simulation especially well suited for careful comparison and for drawing functional conclusions.
+
+The investigation is supported by several levels of material. In addition to the microscope image, schematic illustrations, detail views, and topic-related videos are available. Extra information texts classify the observations scientifically and help assign each leg type to characteristic movement patterns and ways of life.
+
+The simulation is also designed for active work. Labeling tasks on the diagram, marking functions, enlarged views, and screenshot tools support classroom analysis and documentation. This allows the application to be used both for independent exploration and for targeted consolidation.
+
+An additional discovery element comes from unlockable surprise windows for selected insects. Anyone who solves the labeling task correctly gains access to further material. The simulation therefore combines observation, comparison, scientific classification, and motivating extensions in one rich digital research environment.`,
+        path: '../Angepasstheit_Insekten/Insektenforschung_EN.html',
+    icon: '\ud83d\udc1d', grade: 'Grade 9',
+    topics: ['Adaptation','Morphology','Habitat','Research'],
+    features: ['Research','Interactive','Export'],
     demo: false
   },
   {
     id: 'auge',
-    title: 'Strahlengang & Akkommodation',
-    subtitle: 'Fünf Teilmodule rund um Auge, Linse und Netzhaut',
-    desc: 'Erkunde Aufbau des Auges, Strahlengang, Akkommodation, Fehlsichtigkeit und Netzhaut in einer besonders umfangreichen Simulation.',
-    detailDesc: `Diese Simulation verbindet mehrere Themenbereiche der Sinnesphysiologie in einer Anwendung und macht deutlich, wie optische Grundlagen, Aufbau des Auges und Verarbeitung von Lichtreizen zusammenhängen. Durch die klare Untergliederung eignet sie sich sowohl für die schrittweise Erarbeitung einzelner Inhalte als auch für einen längeren Unterrichtszusammenhang.
+    title: 'Light Paths & Accommodation',
+    subtitle: 'Five modules about the eye, lens, and retina',
+    desc: 'Explore the structure of the eye, light paths, accommodation, refractive errors, and the retina in an especially extensive simulation.',
+    detailDesc: `This simulation combines several topics from sensory physiology in one application and shows how optical principles, the structure of the eye, and the processing of light stimuli are connected. Because of its clear modular structure, it is suitable both for step-by-step work on individual topics and for longer teaching sequences.
 
-Der Umfang der Simulation wird bereits im Hauptmenü sichtbar: Aufbau des Auges, Strahlengang, Akkommodation und Steuerung des Lichteinfalls, Fehlsichtigkeit und Korrektur sowie der zusätzliche Hauptbereich Die Netzhaut mit den Untermodi Aufbau der Netzhaut und Signalumwandlung.
+The scope of the simulation is already visible in the main menu: structure of the eye, light path, accommodation and control of incoming light, refractive error and correction, plus the additional main section Retina with the submodes Structure of the Retina and Signal Conversion.
 
-Im Modul Aufbau des Auges werden zentrale Strukturen beschriftet und Funktionen zugeordnet. So verbindet die Simulation anatomisches Grundwissen direkt mit passenden Aufgaben zur Sicherung.
+In the structure of the eye module, central structures are labeled and matched with functions. This means the simulation links anatomical basic knowledge directly to suitable tasks for consolidation.
 
-Im Modul Strahlengang lassen sich Linsen, Brechkraft, Gegenstand und Entfernung variieren. Im Modul Akkommodation wird untersucht, wie sich das Auge an unterschiedlich weit entfernte Objekte und an verschiedene Lichtverhältnisse anpasst.
+In the light path module, lenses, refractive power, object, and distance can be varied. In the accommodation module, learners investigate how the eye adapts to objects at different distances and to different light conditions.
 
-Im Modul Fehlsichtigkeit wird erklärt, wie Kurz- und Weitsichtigkeit entstehen und wie Sehhilfen den Strahlengang verändern. Der Bereich Netzhaut erweitert die Simulation zusätzlich um Stäbchen, Zapfen, Farbsehen und die modellhafte Umwandlung von Lichtreizen in elektrische Signale.
+The refractive error module explains how myopia and hyperopia arise and how corrective lenses change the path of light. The retina section extends the simulation with rods, cones, color vision, and a model-based conversion of light stimuli into electrical signals.
 
-Informationstexte, Arbeitsblätter, Beschriftungsaufgaben, Zuordnungsaufgaben und Exportfunktionen machen die Anwendung zu einer besonders vielseitigen und umfangreichen Unterrichtssimulation.`,
-    path: '../Strahlengang_Akkommodation/Strahlengang_und_Akkommodation.html',
-    icon: '\ud83d\udc41\ufe0f', grade: 'Jahrgangsstufe 8',
-    topics: ['Auge','Strahlengang','Akkommodation','Netzhaut'],
-    features: ['Mehrere Module','Aufgaben','Export'],
+Information texts, worksheets, labeling tasks, matching tasks, and export functions make the application a particularly versatile and extensive classroom simulation.`,
+        path: '../Strahlengang_Akkommodation/Strahlengang_und_Akkommodation_EN.html',
+    icon: '\ud83d\udc41\ufe0f', grade: 'Grade 8',
+    topics: ['Eye','Light path','Accommodation','Retina'],
+    features: ['Multiple modules','Tasks','Export'],
     demo: false
   }
-
 ];
-
 function uniqueList(arr) {
   var seen = {};
   return arr.filter(function(item) {
@@ -1413,14 +1510,28 @@ const EXACT_SCREENSHOT_MAP = {
   ]
 };
 
+const EXACT_VIDEO_MAP = {
+  schall: ['Videos/Schall_und_Hörvorgang.mp4'],
+  mitose: ['Videos/Mitose_Meiose.mp4'],
+  mendel: ['Videos/Simulation_Mendel.mp4'],
+  meselson: ['Videos/Meselson_Stahl.mp4'],
+  artbildung: ['Videos/Artbildung.mp4'],
+  fotosynthese: ['Videos/Einflussfaktoren_Fotosynthese.mp4'],
+  kaeferspiel: ['Videos/Käfer under Pressure.mp4'],
+  nerv: ['Videos/Neurobiologie.mp4'],
+  attrappen: ['Videos/Attrappenversuche.mp4'],
+  insekten: ['Videos/Insektenforschung.mp4'],
+  auge: ['Videos/Strahlengang und Akkommodation.mp4']
+};
+
 SIMS.forEach(function(sim) {
   sim.imageCandidates = (EXACT_SCREENSHOT_MAP[sim.id] || []).slice();
-  sim.videoCandidates = buildMediaCandidates(sim, 'Videos', ['.mp4', '.webm', '.mov', '.m4v']);
+  sim.videoCandidates = uniqueList((EXACT_VIDEO_MAP[sim.id] || []).concat(buildMediaCandidates(sim, 'Videos', ['.mp4', '.webm', '.mov', '.m4v'])));
   sim.qrCodeCandidates = buildQrCodeCandidates(sim);
 });
 
 
-// === ZUSTAND ===
+// === STATE ===
 var currentViewerSim = null;
 var currentDetailSim = null;
 var viewerBackView = 'landing';
@@ -1481,9 +1592,9 @@ function formatDetailDescription(sim) {
   }
 
   return blocks.map(function(part) {
-    if (/^Im Überblick:\s*/.test(part)) {
+    if (/^Overview:\s*/.test(part)) {
       var lines = part.split(/\n/).map(function(line) { return line.trim(); }).filter(Boolean);
-      var titleLine = lines.shift() || 'Im Überblick';
+      var titleLine = lines.shift() || 'Overview';
       var overviewItems = lines.map(function(line) {
         return line.replace(/^[•\-]\s*/, '').trim();
       }).filter(Boolean);
@@ -1542,11 +1653,11 @@ function openImageLightbox(src, alt, sources, currentIndex) {
   var closeBtn = document.createElement('button');
   closeBtn.className = 'lightbox-close';
   closeBtn.type = 'button';
-  closeBtn.setAttribute('aria-label', 'Schließen');
+  closeBtn.setAttribute('aria-label', 'Close');
   closeBtn.innerHTML = '&#10005;';
 
   var lightboxImg = document.createElement('img');
-  lightboxImg.alt = alt || 'Vergrößerte Screenshot-Vorschau';
+  lightboxImg.alt = alt || 'Enlarged screenshot preview';
 
   var counter = null;
   var prevBtn = null;
@@ -1597,7 +1708,7 @@ function openImageLightbox(src, alt, sources, currentIndex) {
     prevBtn = document.createElement('button');
     prevBtn.className = 'lightbox-nav prev';
     prevBtn.type = 'button';
-    prevBtn.setAttribute('aria-label', 'Vorheriges Bild');
+    prevBtn.setAttribute('aria-label', 'Previous image');
     prevBtn.innerHTML = '&#8249;';
     prevBtn.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -1607,7 +1718,7 @@ function openImageLightbox(src, alt, sources, currentIndex) {
     nextBtn = document.createElement('button');
     nextBtn.className = 'lightbox-nav next';
     nextBtn.type = 'button';
-    nextBtn.setAttribute('aria-label', 'Nächstes Bild');
+    nextBtn.setAttribute('aria-label', 'Next image');
     nextBtn.innerHTML = '&#8250;';
     nextBtn.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -1642,7 +1753,7 @@ function bindDetailImageLightbox() {
     if (img.classList.contains('hidden') || !img.src) return;
     var sources = detailResolvedImageSources.length ? detailResolvedImageSources : [img.src];
     var currentIndex = getSourceIndexBySrc(sources, img.src);
-    openImageLightbox(img.src, img.alt || 'Vergrößerte Screenshot-Vorschau', sources, currentIndex);
+    openImageLightbox(img.src, img.alt || 'Enlarged screenshot preview', sources, currentIndex);
   }
 
   img.addEventListener('click', openCurrentDetailImage);
@@ -1809,7 +1920,7 @@ function initLandingPreviewImages() {
 function buildSimCardHTML(sim) {
   return '<div class="sim-card" onclick=\"handleLandingClick(\'' + sim.id + '\')\">' +
     '<div class="sim-card-preview">' +
-      '<img class="sim-card-preview-img hidden" id="' + getImageId('landing', sim.id) + '" alt="Screenshot-Vorschau von ' + sim.title.replace(/"/g, '&quot;') + '">' +
+      '<img class="sim-card-preview-img hidden" id="' + getImageId('landing', sim.id) + '" alt="Preview screenshot of ' + sim.title.replace(/"/g, '&quot;') + '">' +
       '<div class="sim-card-preview-fallback" id="' + getImageId('landing-fallback', sim.id) + '">' + sim.icon + '</div>' +
     '</div>' +
     '<div class="sim-card-header">' +
@@ -1821,7 +1932,7 @@ function buildSimCardHTML(sim) {
       '<div class="sim-features">' + sim.features.map(function(f){ return '<span class="sim-feature-tag">&#10003; '+f+'</span>'; }).join('') + '</div>' +
     '</div>' +
     '<div class="sim-card-footer">' +
-      '<button class="btn btn-primary" style="width:100%" onclick=\"event.stopPropagation();openSimulation(\'' + sim.id + '\')\">&#9654; Simulation &#246;ffnen</button>' +
+      '<button class="btn btn-primary" style="width:100%" onclick=\"event.stopPropagation();openSimulation(\'' + sim.id + '\')\">&#9654; Open simulation</button>' +
     '</div>' +
   '</div>';
 }
@@ -1842,7 +1953,7 @@ function renderDashboard() {
   if (welcome) {
     welcome.innerHTML =
       '<div class="welcome-banner">' +
-        '<div><h2>Alle Simulationen auf einen Blick</h2><p>Direkter Zugriff auf sämtliche interaktiven Unterrichtsmaterialien.</p></div>' +
+        '<div><h2>All simulations at a glance</h2><p>Direct access to all interactive teaching materials.</p></div>' +
         '<div class="welcome-icon">&#127807;</div>' +
       '</div>';
   }
@@ -1852,13 +1963,13 @@ function renderDashboard() {
     profile.innerHTML =
       '<div class="section-header" style="text-align:left;margin-bottom:1.5rem">' +
         '<div class="section-tag">Portal</div>' +
-        '<h2>Offen zugängliches Simulationsportal</h2>' +
-        '<p class="section-subtitle" style="margin:0;max-width:none;text-align:left">Alle Inhalte stehen direkt und ohne Registrierung zur Verfügung.</p>' +
+        '<h2>Public simulation portal</h2>' +
+        '<p class="section-subtitle" style="margin:0;max-width:none;text-align:left">All content is available directly and without registration.</p>' +
       '</div>' +
       '<div class="panel" style="padding:1.25rem;display:grid;gap:0.75rem">' +
-        '<div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text-light)">Simulationen</span><span style="font-weight:500">' + SIMS.length + '</span></div>' +
-        '<div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text-light)">Zugriff</span><span style="font-weight:500">Direkt verfügbar</span></div>' +
-        '<div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text-light)">Nutzung</span><span style="font-weight:500">Im Browser</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text-light)">Simulations</span><span style="font-weight:500">' + SIMS.length + '</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text-light)">Access</span><span style="font-weight:500">Directly available</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text-light)">Usage</span><span style="font-weight:500">In browser</span></div>' +
       '</div>';
   }
 
@@ -1876,7 +1987,7 @@ function renderDashboard() {
           '<div class="sim-features">' + sim.features.map(function(f){ return '<span class="sim-feature-tag">&#10003; '+f+'</span>'; }).join('') + '</div>' +
         '</div>' +
         '<div class="sim-card-footer">' +
-          '<button class="btn btn-primary" style="width:100%" onclick=\"event.stopPropagation();openSimulation(\'' + sim.id + '\')\">&#9654; Simulation &#246;ffnen</button>' +
+          '<button class="btn btn-primary" style="width:100%" onclick=\"event.stopPropagation();openSimulation(\'' + sim.id + '\')\">&#9654; Open simulation</button>' +
         '</div></div>';
     }).join('');
   }
@@ -1915,7 +2026,7 @@ function renderDetailView(sim) {
     meta.innerHTML =
       '<span class="detail-pill">&#128218; ' + sim.grade + '</span>' +
       '<span class="detail-pill">&#128193; ' + sim.subtitle + '</span>' +
-      '<span class="detail-pill">&#9989; Interaktive HTML-Simulation</span>';
+      '<span class="detail-pill">&#9989; Interactive HTML simulation</span>';
   }
 
   if (img) {
@@ -1969,7 +2080,7 @@ function downloadCurrentQrCode() {
   if (!currentDetailSim) return;
   resolveFirstExistingSource(currentDetailSim.qrCodeCandidates || [], function(foundSrc) {
     if (!foundSrc) {
-      showToast('Kein QR-Code für diese Simulation gefunden.', 'error');
+      showToast('No QR code found for this simulation.', 'error');
       return;
     }
     var link = document.createElement('a');
@@ -1978,7 +2089,7 @@ function downloadCurrentQrCode() {
     document.body.appendChild(link);
     link.click();
     link.remove();
-    showToast('QR-Code wird heruntergeladen.', 'success');
+    showToast('QR code download started.', 'success');
   });
 }
 
@@ -2037,7 +2148,7 @@ function showToast(msg, type) {
   }, 3500);
 }
 
-// === INITIALISIERUNG ===
+// === INITIALIZATION ===
 document.addEventListener('DOMContentLoaded', function() {
   renderLandingGrid();
   renderDashboard();
@@ -2072,6 +2183,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!video) return;
     var sim = getSimById(slide.getAttribute('data-sim-id'));
     if (!sim) return;
+    var poster = sim.imageCandidates && sim.imageCandidates.length ? encodeURI(sim.imageCandidates[0]) : '';
+    if (poster) video.setAttribute('poster', poster);
     if (video.getAttribute('data-loaded') !== '1') {
       video.innerHTML = sim.videoCandidates.map(function(src) {
         return '<source src="' + encodeURI(src) + '" type="' + getVideoType(src) + '">';
@@ -2138,7 +2251,7 @@ function openFeatureMediaLightbox(type, sourceData, altText) {
   var closeBtn = document.createElement('button');
   closeBtn.className = 'lightbox-close';
   closeBtn.type = 'button';
-  closeBtn.setAttribute('aria-label', 'Schließen');
+  closeBtn.setAttribute('aria-label', 'Close');
   closeBtn.innerHTML = '&#10005;';
   stage.appendChild(closeBtn);
 
@@ -2163,7 +2276,7 @@ function openFeatureMediaLightbox(type, sourceData, altText) {
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
-    video.setAttribute('aria-label', altText || 'Vergrößertes Video');
+    video.setAttribute('aria-label', altText || 'Enlarged video');
     (sourceData || []).forEach(function(srcObj) {
       var source = document.createElement('source');
       source.src = srcObj.src;
@@ -2178,7 +2291,7 @@ function openFeatureMediaLightbox(type, sourceData, altText) {
   } else {
     var img = document.createElement('img');
     img.src = sourceData;
-    img.alt = altText || 'Vergrößerte Darstellung';
+    img.alt = altText || 'Enlarged view';
     stage.appendChild(img);
   }
 
@@ -2202,7 +2315,7 @@ document.querySelectorAll('.feature-video').forEach(function(video) {
     if (!sources.length && video.currentSrc) {
       sources.push({ src: video.currentSrc, type: video.getAttribute('type') || '' });
     }
-    openFeatureMediaLightbox('video', sources, video.getAttribute('aria-label') || 'Vergrößertes Video');
+    openFeatureMediaLightbox('video', sources, video.getAttribute('aria-label') || 'Enlarged video');
   });
 });
 </script>
