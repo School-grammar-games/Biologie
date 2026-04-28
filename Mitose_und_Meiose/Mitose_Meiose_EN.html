@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ablauf der Meiose</title>
+  <title>Course of Meiosis</title>
   <style>
     :root{
       --bg:#070a0f; --panel:#0f1522; --text:#e7eefc; --muted:#a9b6cf; --line:#1f2b43;
@@ -65,7 +65,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
       background:#0b1020; color:var(--text); border:1px solid var(--line); border-radius:15px;
       padding:12px 15px; font:inherit;
     }
-    /* Hervorgehobener Geschwindigkeitsregler */
+    /* Hervorgehobener Speedsregler */
     #speed{
       -webkit-appearance:none;
       appearance:none;
@@ -397,17 +397,17 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
 </head>
 
 <body>
-  <div id="modeChooser" class="modeChooser" aria-label="Modus wählen">
+  <div id="modeChooser" class="modeChooser" aria-label="Choose mode">
     <div class="choicePanel">
-      <div class="choiceTitle">Simulation auswählen</div>
-      <div class="choiceSubtitle">Klicke auf ein Bild, um den gewünschten Modus zu starten.</div>
+      <div class="choiceTitle">Choose simulation</div>
+      <div class="choiceSubtitle">Click an image to start the desired mode.</div>
       <div class="choiceGrid">
-        <div id="chooseMeiose" class="choiceCard" role="button" tabindex="0" aria-label="Meiose auswählen">
-          <img src="./Bilder_Chromosome/Wahl_Meiose.jpg" alt="Meiose auswählen">
+        <div id="chooseMeiose" class="choiceCard" role="button" tabindex="0" aria-label="Choose meiosis">
+          <img src="./Bilder_Chromosome/Wahl_Meiose.jpg" alt="Choose meiosis">
           <div class="choiceCaption">Meiose</div>
         </div>
-        <div id="chooseMitose" class="choiceCard" role="button" tabindex="0" aria-label="Mitose auswählen">
-          <img src="./Bilder_Chromosome/Wahl_Mitose.jpg" alt="Mitose auswählen">
+        <div id="chooseMitose" class="choiceCard" role="button" tabindex="0" aria-label="Choose mitosis">
+          <img src="./Bilder_Chromosome/Wahl_Mitose.jpg" alt="Choose mitosis">
           <div class="choiceCaption">Mitose</div>
         </div>
       </div>
@@ -418,11 +418,11 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
   <div id="scaleRoot">
 
   <div class="wrap">
-    <h1>Ablauf der Meiose</h1>
+    <h1>Course of Meiosis</h1>
 
     <div class="row">
       <div class="card canvasWrap">
-        <canvas id="c" width="980" height="760" aria-label="Meiose Simulation"></canvas>
+        <canvas id="c" width="980" height="760" aria-label="Meiosis simulation"></canvas>
       </div>
 
       <div class="card side">
@@ -442,13 +442,13 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
         </div>
 
         <div class="kv">
-          <div class="label">Geschwindigkeit</div>
+          <div class="label">Speed</div>
           <div class="tiny mono"><span id="speedVal">1.0</span>x</div>
           <input id="speed" type="range" min="0.25" max="2.5" step="0.05" value="1.0" style="grid-column:1 / -1;">
         </div>
 
         <div class="kv">
-          <div class="label">Phase wählen</div>
+          <div class="label">Choose phase</div>
           <select id="phaseSelect" style="grid-column:1 / -1;"></select>
         </div>
 
@@ -461,7 +461,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
             <span class="tiny">Crossing-over</span>
           </div>
           <div>
-            <div class="label">Autosomenpaare (n)</div>
+            <div class="label">Autosome pairs (n)</div>
             <select id="nSelect">
               <option value="1">n=1</option>
               <option value="2" selected>n=2</option>
@@ -476,48 +476,48 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
         </div>
 
         
-        <div class="lock-note" id="genomeLockNote" style="display:none;"><strong>Hinweis:</strong> Bei aktivierter <strong>Genommutation</strong> werden <strong>Autosomenpaare</strong> automatisch auf <strong>n=1</strong> gesetzt und <strong>Gonosomen</strong> deaktiviert.</div>
+        <div class="lock-note" id="genomeLockNote" style="display:none;"><strong>Note:</strong> When <strong>genome mutation</strong> is active, <strong>autosome pairs</strong> are automatically set to <strong>n=1</strong> and <strong>sex chromosomes</strong> are disabled.</div>
 <div class="row2" style="margin-top:10px;">
                   <div class="chk">
-                    <label class="toggle" title="Gonosomen">
+                    <label class="toggle" title="Sex chromosomes">
                       <input id="toggleGono" type="checkbox">
                       <span class="slider"></span>
                     </label>
-                    <span class="tiny">Gonosomen</span>
+                    <span class="tiny">Sex chromosomes</span>
                   </div>
                   <div>
-                    <div class="label">Geschlecht</div>
+                    <div class="label">Sex</div>
                     <select id="sexSelect" disabled>
-                      <option value="female" selected>Frau – XX</option>
-                      <option value="male">Mann – XY</option>
+                      <option value="female" selected>Female - XX</option>
+                      <option value="male">Male - XY</option>
                     </select>
                   </div>
                 </div>
         <div class="row2" id="genomeRow" style="margin-top:10px;">
           <div class="chk">
-            <label class="toggle" title="Genommutation">
+            <label class="toggle" title="Genome mutation">
               <input id="toggleGenome" type="checkbox">
               <span class="slider"></span>
             </label>
-            <span class="tiny">Genommutation</span>
+              <span class="tiny">Genome mutation</span>
           </div>
 
           <div class="select" style="min-width:0; width:100%;">
             <div class="label">Typ</div>
             <select id="genomeSelect" disabled style="width:100%;">
-              <option value="mono">Monosomie</option>
-              <option value="tri">Trisomie</option>
+              <option value="mono">Monosomy</option>
+              <option value="tri">Trisomy</option>
             </select>
           </div>
         </div>
 
         <div class="row2" id="oogenesisRow" style="margin-top:10px; display:none; grid-template-columns: 1fr;">
           <div class="chk">
-            <label class="toggle" title="Darstellung der Oogenese (1 Eizelle + 3 Polkörperchen)">
+            <label class="toggle" title="Show oogenesis (1 egg cell + 3 polar bodies)">
               <input id="toggleOogenese" type="checkbox">
               <span class="slider"></span>
             </label>
-            <span class="tiny">Darstellung der Oogenese</span>
+            <span class="tiny">Show oogenesis</span>
           </div>
         </div>
 </div>
@@ -865,7 +865,7 @@ function showResultsPanel(show){
 
     const fig = document.createElement('figure');
     const cap = document.createElement('figcaption');
-    cap.textContent = caption || `Möglichkeit ${runNo}`;
+    cap.textContent = caption || `Possibility ${runNo}`;
     const snap = document.createElement('canvas');
     snap.width = canvas.width;
     snap.height = canvas.height;
@@ -887,7 +887,7 @@ function showResultsPanel(show){
   function startSecondRunCountdown(onDone){
     if (!countdownEl) { onDone(); return; }
     let s = 3;
-    countdownEl.textContent = `Möglichkeit 2 startet in ${s}s …`;
+    countdownEl.textContent = `Possibility 2 starts in ${s}s ...`;
     countdownEl.style.display = '';
     if (countdownTimer) clearInterval(countdownTimer);
     countdownTimer = setInterval(() => {
@@ -898,7 +898,7 @@ function showResultsPanel(show){
         countdownEl.style.display = 'none';
         onDone();
       } else {
-        countdownEl.textContent = `Möglichkeit 2 startet in ${s}s …`;
+        countdownEl.textContent = `Possibility 2 starts in ${s}s ...`;
       }
     }, 1000);
   }
@@ -1086,7 +1086,7 @@ function activateMode(mode){
   // App anzeigen, Overlay ausblenden
   SIM_MODE = mode;
   if (mode === 'mitosis') setSimTitle('Ablauf Mitose');
-  else setSimTitle('Ablauf der Meiose');
+  else setSimTitle('Course of Meiosis');
 
   if (chooser) chooser.style.display = 'none';
   if (appRoot) appRoot.style.display = 'block';
@@ -3560,8 +3560,8 @@ prevChromList = chromList.map(it => ({...it}));
     // --- Genommutation (2 Durchläufe + Erklärung) ---
     if (genomeMutationOn){
       const caption = (runCycle === 1)
-        ? `Möglichkeit 1 (Non-disjunction während der Reduktionsteilung in der Anaphase I)`
-        : `Möglichkeit 2 (Non-disjunction während der Äquationsteilung in der Anaphase II)`;
+      ? `Possibility 1 (non-disjunction during reduction division in anaphase I)`
+      : `Possibility 2 (non-disjunction during equational division in anaphase II)`;
 
       appendRunSnapshot(runCycle, caption);
       if (typeof computeUIScaleDebounced === 'function') computeUIScaleDebounced();
@@ -3679,9 +3679,9 @@ prevChromList = chromList.map(it => ({...it}));
   applyGenomeLockState(!!(toggleGenome && toggleGenome.checked));
  
   // Tooltip, damit klar ist: bewusst gesperrt (kein Bug)
-  if (nSelect) nSelect.setAttribute('title', 'Bei Genommutation wird n automatisch auf 1 gesetzt und gesperrt.');
-  if (toggleGono) toggleGono.setAttribute('title', 'Bei Genommutation sind Gonosomen deaktiviert und gesperrt.');
-  if (sexSelect) sexSelect.setAttribute('title', 'Bei Genommutation ist die Geschlechtswahl deaktiviert.');
+  if (nSelect) nSelect.setAttribute('title', 'With genome mutation enabled, n is automatically set to 1 and locked.');
+  if (toggleGono) toggleGono.setAttribute('title', 'With genome mutation enabled, sex chromosomes are disabled and locked.');
+  if (sexSelect) sexSelect.setAttribute('title', 'With genome mutation enabled, sex selection is disabled.');
 });
 
   speed.addEventListener('input', () => {
@@ -3814,29 +3814,29 @@ prevChromList = chromList.map(it => ({...it}));
       <div class="modalHeader">
         <div>
           <div class="modalKicker">Information</div>
-          <h2 id="combinedInfoTitle" class="modalTitle">Erklärungen – Genommutation &amp; Oogenese</h2>
+          <h2 id="combinedInfoTitle" class="modalTitle">Explanations - genome mutation &amp; oogenesis</h2>
         </div>
-        <button id="combinedInfoCloseBtn" class="modalClose" aria-label="Schließen">✕</button>
+        <button id="combinedInfoCloseBtn" class="modalClose" aria-label="Close">✕</button>
       </div>
 
       <div class="modalBody">
         <div class="combinedGrid">
           <section class="combinedSection" aria-labelledby="combinedLeftTitle">
-            <div class="modalKicker" id="combinedLeftKicker">Genommutation</div>
+            <div class="modalKicker" id="combinedLeftKicker">Genome mutation</div>
             <h3 id="combinedLeftTitle" class="combinedTitle">—</h3>
             <div id="combinedLeftBody"></div>
           </section>
 
           <section class="combinedSection" aria-labelledby="combinedRightTitle">
-            <div class="modalKicker">Oogenese</div>
-            <h3 id="combinedRightTitle" class="combinedTitle">Oogenese – 1 Eizelle und 3 Polkörperchen</h3>
+            <div class="modalKicker">Oogenesis</div>
+            <h3 id="combinedRightTitle" class="combinedTitle">Oogenesis - 1 egg cell and 3 polar bodies</h3>
             <div id="combinedRightBody"></div>
           </section>
         </div>
       </div>
 
       <div class="modalFooter">
-        <button id="combinedInfoOkBtn" class="modalPrimary">Verstanden</button>
+        <button id="combinedInfoOkBtn" class="modalPrimary">Understood</button>
       </div>
     </div>
   </div>
@@ -3847,23 +3847,23 @@ prevChromList = chromList.map(it => ({...it}));
     <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="oogenesisTitle">
       <div class="modalHeader">
         <div>
-          <div class="modalKicker">Oogenese</div>
-          <h2 id="oogenesisTitle" class="modalTitle">Oogenese – 1 Eizelle und 3 Polkörperchen</h2>
+          <div class="modalKicker">Oogenesis</div>
+          <h2 id="oogenesisTitle" class="modalTitle">Oogenesis - 1 egg cell and 3 polar bodies</h2>
         </div>
-        <button id="oogenesisCloseBtn" class="modalClose" aria-label="Schließen">✕</button>
+        <button id="oogenesisCloseBtn" class="modalClose" aria-label="Close">✕</button>
       </div>
 
       <div class="modalBody">
-        <p><strong>Im Vergleich zur Spermatogenese</strong>, bei der vier gleichwertige Keimzellen entstehen, werden bei der <strong>Oogenese</strong> <strong>eine Eizelle</strong> und <strong>drei Polkörperchen</strong> gebildet.</p>
+        <p><strong>Compared with spermatogenesis</strong>, in which four equivalent gametes are formed, <strong>oogenesis</strong> produces <strong>one egg cell</strong> and <strong>three polar bodies</strong>.</p>
         <ul>
-          <li>Die <strong>Reduktionsteilung</strong> und die <strong>Äquationsteilung</strong> verlaufen grundsätzlich wie in der Meiose.</li>
-          <li>Die Cytokinese ist jedoch <strong>asymmetrisch</strong>: Fast das gesamte Cytoplasma bleibt in der Eizelle.</li>
-          <li>Die Polkörperchen dienen dazu, die <strong>Chromosomenzahl</strong> zu reduzieren, ohne viel Cytoplasma zu „verschenken“.</li>
+          <li>The <strong>reduction division</strong> and the <strong>equational division</strong> basically proceed as in meiosis.</li>
+          <li>Cytokinesis is <strong>asymmetrical</strong>: almost all cytoplasm remains in the egg cell.</li>
+          <li>The polar bodies reduce the <strong>chromosome number</strong> without giving up much cytoplasm.</li>
         </ul>
       </div>
 
       <div class="modalFooter">
-        <button id="oogenesisOkBtn" class="btnPrimary">Verstanden</button>
+        <button id="oogenesisOkBtn" class="btnPrimary">Understood</button>
       </div>
     </div>
   </div>
@@ -3873,30 +3873,30 @@ prevChromList = chromList.map(it => ({...it}));
     <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="monosomyTitle">
       <div class="modalHeader">
         <div>
-          <div class="modalKicker">Genommutation</div>
-          <h2 id="monosomyTitle" class="modalTitle">Monosomie – was bedeutet das?</h2>
+          <div class="modalKicker">Genome mutation</div>
+          <h2 id="monosomyTitle" class="modalTitle">Monosomy - what does it mean?</h2>
         </div>
-        <button id="monosomyCloseBtn" class="modalClose" aria-label="Schließen">✕</button>
+        <button id="monosomyCloseBtn" class="modalClose" aria-label="Close">✕</button>
       </div>
 
       <div class="modalBody">
-        <p><strong>Monosomie</strong> bedeutet: In der Zygote fehlt <strong>ein Chromosom</strong> eines homologen Paares. Statt <strong>2n</strong> liegt dann <strong>2n−1</strong> vor.</p>
+        <p><strong>Monosomy</strong> means that the zygote is missing <strong>one chromosome</strong> from a homologous pair. Instead of <strong>2n</strong>, it has <strong>2n−1</strong>.</p>
 
-        <p>Sie entsteht typischerweise, wenn bei der Meiose durch <strong>Non-disjunction</strong> eine Keimzelle ein Chromosom <strong>nicht erhält</strong> (eine „nullisomische“ Keimzelle, bei n=1 also <strong>0</strong> statt <strong>1</strong> Chromosom dieses Paares).</p>
+        <p>It typically arises when, during meiosis, <strong>non-disjunction</strong> causes a gamete to receive <strong>no chromosome</strong> from that pair (a nullisomic gamete: with n=1, that means <strong>0</strong> instead of <strong>1</strong> chromosome from this pair).</p>
 
-        <p><strong>Warum sind die rot markierten Beispiele Monosomien?</strong><br>
-        In den markierten Fällen enthält die Keimzelle <em>kein</em> Chromosom dieses Autosomenpaares. Nach der Befruchtung durch ein Spermium (mit <strong>1</strong> Chromosom dieses Paares) entsteht eine Zygote mit <strong>nur 1 statt 2</strong> Chromosomen – das ist eine <strong>Monosomie (2n−1)</strong>.</p>
+        <p><strong>Why are the red-marked examples monosomies?</strong><br>
+        In the marked cases, the gamete contains <em>no</em> chromosome from this autosome pair. After fertilization by a sperm cell (with <strong>1</strong> chromosome from this pair), the zygote contains <strong>only 1 instead of 2</strong> chromosomes - this is a <strong>monosomy (2n−1)</strong>.</p>
 
         <ul>
-          <li><strong>Möglichkeit 1:</strong> Non-disjunction in der <strong>Anaphase I</strong> → zwei Keimzellen ohne dieses Chromosom (markiert).</li>
-          <li><strong>Möglichkeit 2:</strong> Non-disjunction in der <strong>Anaphase II</strong> → eine Keimzelle ohne dieses Chromosom (markiert).</li>
+          <li><strong>Possibility 1:</strong> Non-disjunction in <strong>anaphase I</strong> -> two gametes without this chromosome (marked).</li>
+          <li><strong>Possibility 2:</strong> Non-disjunction in <strong>anaphase II</strong> -> one gamete without this chromosome (marked).</li>
         </ul>
 
-        <p class="modalHint">Hinweis: Bei <em>Trisomie</em> wäre es umgekehrt – die Keimzelle enthält <strong>2</strong> statt <strong>1</strong> Chromosom dieses Paares (Zygote: <strong>2n+1</strong>).</p>
+        <p class="modalHint">Note: in a <em>trisomy</em>, the opposite happens - the gamete contains <strong>2</strong> instead of <strong>1</strong> chromosome from this pair (zygote: <strong>2n+1</strong>).</p>
       </div>
 
       <div class="modalFooter">
-        <button id="monosomyOkBtn" class="modalPrimary">Verstanden</button>
+        <button id="monosomyOkBtn" class="modalPrimary">Understood</button>
       </div>
     </div>
   </div>
@@ -3907,35 +3907,35 @@ prevChromList = chromList.map(it => ({...it}));
     <div class="modalCard">
       <div class="modalHeader">
         <div>
-          <div class="modalBadge">Genommutation</div>
-          <h2 id="trisomyTitle" class="modalTitle">Trisomie – was bedeutet das?</h2>
+          <div class="modalBadge">Genome mutation</div>
+          <h2 id="trisomyTitle" class="modalTitle">Trisomy - what does it mean?</h2>
         </div>
-        <button id="trisomyCloseBtn" class="modalClose" aria-label="Schließen">✕</button>
+        <button id="trisomyCloseBtn" class="modalClose" aria-label="Close">✕</button>
       </div>
 
       <div class="modalBody">
-        <p><strong>Trisomie</strong> bedeutet: In der Zygote liegt ein Chromosom <strong>dreifach</strong> vor.
-        Statt <strong>2n</strong> liegt dann <strong>2n+1</strong> vor.</p>
+        <p><strong>Trisomy</strong> means that one chromosome is present <strong>three times</strong> in the zygote.
+        Instead of <strong>2n</strong>, the zygote has <strong>2n+1</strong>.</p>
 
-        <p>Sie entsteht typischerweise, wenn bei der Meiose durch <strong>Non-disjunction</strong> (Nichttrennung)
-        eine Keimzelle oder ein Spermium eine <strong>zusätzliche</strong> Kopie dieses Chromosoms erhält.</p>
+        <p>It typically arises when <strong>non-disjunction</strong> during meiosis causes
+        a gamete or a sperm cell to receive an <strong>additional</strong> copy of this chromosome.</p>
 
-        <p><strong>Warum sind die markierten Beispiele Trisomien?</strong><br>
-        In den markierten Fällen liegt insgesamt eine <strong>zusätzliche</strong> Kopie dieses Chromosoms vor:
-        <br>• <strong>Rot</strong>: Die Keimzelle enthält <strong>n+1</strong> (zwei Chromatiden/Chromosomen dieses Paares) und wird von einem normalen Spermium (<strong>n</strong>) befruchtet.
-        <br>• <strong>Gelb</strong>: Das Spermium enthält <strong>n+1</strong> (zwei Chromatiden/Chromosomen dieses Paares) und verschmilzt mit einer normalen Keimzelle (<strong>n</strong>).
-        <br>In beiden Fällen entsteht eine Zygote mit <strong>3</strong> Kopien dieses Chromosoms – eine <strong>Trisomie (2n+1)</strong>.</p>
+        <p><strong>Why are the marked examples trisomies?</strong><br>
+        In the marked cases there is an <strong>additional</strong> copy of this chromosome overall:
+        <br>• <strong>Red</strong>: the gamete contains <strong>n+1</strong> (two chromatids/chromosomes from this pair) and is fertilized by a normal sperm cell (<strong>n</strong>).
+        <br>• <strong>Yellow</strong>: the sperm cell contains <strong>n+1</strong> (two chromatids/chromosomes from this pair) and fuses with a normal gamete (<strong>n</strong>).
+        <br>In both cases, the zygote ends up with <strong>3</strong> copies of this chromosome - a <strong>trisomy (2n+1)</strong>.</p>
 
         <ul>
-          <li><strong>Möglichkeit 1:</strong> Non-disjunction in der <strong>Anaphase I</strong> (Reduktionsteilung).
-          Die homologen Chromosomen trennen sich nicht – dadurch entstehen Keimzellen mit <strong>n+1</strong> bzw. <strong>n−1</strong>.</li>
-          <li><strong>Möglichkeit 2:</strong> Non-disjunction in der <strong>Anaphase II</strong> (Äquationsteilung).
-          Die Schwesterchromatiden trennen sich nicht – dadurch entsteht (neben normalen Keimzellen) eine Keimzelle mit <strong>n+1</strong> und eine mit <strong>n−1</strong>.</li>
+          <li><strong>Possibility 1:</strong> Non-disjunction in <strong>anaphase I</strong> (reduction division).
+          The homologous chromosomes do not separate - producing gametes with <strong>n+1</strong> and <strong>n−1</strong>.</li>
+          <li><strong>Possibility 2:</strong> Non-disjunction in <strong>anaphase II</strong> (equational division).
+          The sister chromatids do not separate - producing one gamete with <strong>n+1</strong> and one with <strong>n−1</strong>, alongside normal gametes.</li>
         </ul>
       </div>
 
       <div class="modalFooter">
-        <button id="trisomyOkBtn" class="modalOkBtn" type="button">Verstanden</button>
+        <button id="trisomyOkBtn" class="modalOkBtn" type="button">Understood</button>
       </div>
     </div>
   </div>
@@ -3946,20 +3946,20 @@ prevChromList = chromList.map(it => ({...it}));
 <div id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle">
   <div class="im-card">
     <div class="im-head">
-      <h2 id="introModalTitle" class="im-title">Mitose und Meiose</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+      <h2 id="introModalTitle" class="im-title">Mitosis and Meiosis</h2>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Close">×</button>
     </div>
-    <p class="im-grade">Jahrgangsstufe: 9 · 12</p>
+    <p class="im-grade">Grade level: 9 · 12</p>
     <div class="im-desc">
-      Diese Simulation zeigt den schrittweisen Ablauf der Meiose und der Mitose. Wähle zu Beginn den Modus, beobachte wie sich Chromosomen verdoppeln, paaren und auf Tochterzellen verteilen, und entdecke die Unterschiede zwischen beiden Zellteilungsarten.
+      This simulation shows the step-by-step course of meiosis and mitosis. Choose the mode at the beginning, observe how chromosomes duplicate, pair, and are distributed into daughter cells, and discover the differences between the two types of cell division.
     </div>
     <div class="im-btn-row">
-      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
+      <button id="introModalStartBtn" class="im-start-btn" type="button">Start simulation →</button>
     </div>
   </div>
 </div>
 <!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -3983,9 +3983,9 @@ prevChromList = chromList.map(it => ({...it}));
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Alle Abbildungen in dieser Simulation sind vollständig KI-generiert.</li>
+      <li>All illustrations in this simulation are fully AI-generated.</li>
     </ul>
   </div>
 </div>

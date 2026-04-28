@@ -4,14 +4,14 @@
   - nutzt Muster/Holzmaserung_Innen.png und Muster/Holzmaserung_Rand.png
   - Dropdown/Buttons mit höherem Kontrast
   - Attrappen ohne Blur, Hintergrund transparent (Gras sichtbar)
-  Öffne diese Datei (nicht Attrappenversuche.html), wenn du den Holz-Look sehen willst.
+  Open this file for the wood-style layout.
 -->
 
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Attrappenversuch zur Bestimmung der Schmetterlingsgröße</title>
+  <title>Dummy Experiment for Determining Butterfly Size</title>
   <style>
 :root{
   --bg:#0c0f14;
@@ -321,7 +321,7 @@ tr:nth-child(even) td{background:rgba(255,255,255,0.02)}
 footer{padding:10px 14px 16px; color:var(--muted)}
 
 
-/* Protokoll & Diagramm unterhalb, breit nutzbar */
+/* Log & chart unterhalb, breit nutzbar */
 #results{
   display:grid;
   grid-template-columns: 1.3fr 1fr;
@@ -1245,7 +1245,7 @@ select option:checked{
 
 
 
-/* --- Targeted button polish: "Zurücksetzen" & "Diagramme exportieren" --- */
+/* --- Targeted button polish: "Zurücksetzen" & "Export charts" --- */
 #resetBtn, #exportBtn, #solutionBtn{
   background:
     linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.58)),
@@ -1597,9 +1597,9 @@ select option:checked{
 </head>
 <body>
   <header>
-    <h1>Attrappenversuch zur Bestimmung der Schmetterlingsgröße</h1>
+    <h1>Dummy Experiment for Determining Butterfly Size</h1>
     <div class="hint">
-      Entwerft Attrappen (A–D), führt mehrere Durchgänge durch und nutzt die Simulationausgabe, um die Größenklasse (klein / mittel / groß) eines ausgewählten Schmetterlingstyps begründet abzuleiten.
+      Design dummies (A-D), run several trials, and use the simulation output to justify the size class (small / medium / large) of a selected butterfly type.
     </div>
   </header>
 
@@ -1607,15 +1607,15 @@ select option:checked{
     <section class="panel" id="controls">
       <div class="controls-head">
         <h2>Attrappen</h2>
-        <button type="button" id="introInfoBtn" class="panelInfoBtn">Informationstext anzeigen</button>
+        <button type="button" id="introInfoBtn" class="panelInfoBtn">Show information text</button>
       </div>
 
       <div class="decoy-editor" id="decoyEditor"></div>
 
       <div class="buttons">
         <button id="startBtn" class="primary" disabled>Start</button>
-        <button type="button" id="startInfoBtn" class="infoIcon" aria-label="Hinweis" title="Hinweis">ℹ</button>
-        <button id="resetBtn">Zurücksetzen</button>
+        <button type="button" id="startInfoBtn" class="infoIcon" aria-label="Note" title="Note">ℹ</button>
+        <button id="resetBtn">Reset</button>
       </div>
 
     </section>
@@ -1632,10 +1632,10 @@ select option:checked{
           <div class="badge">A</div>
           <div class="imgwrap">
             <div class="ph">
-              <img class="phimg" alt="Platzhalter Attrappe A" src="Muster/Platzhalter%201.png" />
-              <div class="phlabel">Attrappe A<br><small>noch nicht gesetzt</small></div>
+              <img class="phimg" alt="Placeholder dummy A" src="Muster/Platzhalter%201.png" />
+              <div class="phlabel">Dummy A<br><small>not set yet</small></div>
             </div>
-            <canvas class="main decoyCanvas" aria-label="Attrappe A"></canvas>
+            <canvas class="main decoyCanvas" aria-label="Dummy A"></canvas>
 </div>
 </div>
 
@@ -1643,10 +1643,10 @@ select option:checked{
           <div class="badge">B</div>
           <div class="imgwrap">
             <div class="ph">
-              <img class="phimg" alt="Platzhalter Attrappe B" src="Muster/Platzhalter%202.png" />
-              <div class="phlabel">Attrappe B<br><small>noch nicht gesetzt</small></div>
+              <img class="phimg" alt="Placeholder dummy B" src="Muster/Platzhalter%202.png" />
+              <div class="phlabel">Dummy B<br><small>not set yet</small></div>
             </div>
-            <canvas class="main decoyCanvas" aria-label="Attrappe B"></canvas>
+            <canvas class="main decoyCanvas" aria-label="Dummy B"></canvas>
 </div>
 </div>
 
@@ -1654,10 +1654,10 @@ select option:checked{
           <div class="badge">C</div>
           <div class="imgwrap">
             <div class="ph">
-              <img class="phimg" alt="Platzhalter Attrappe C" src="Muster/Platzhalter%203.png" />
-              <div class="phlabel">Attrappe C<br><small>noch nicht gesetzt</small></div>
+              <img class="phimg" alt="Placeholder dummy C" src="Muster/Platzhalter%203.png" />
+              <div class="phlabel">Dummy C<br><small>not set yet</small></div>
             </div>
-            <canvas class="main decoyCanvas" aria-label="Attrappe C"></canvas>
+            <canvas class="main decoyCanvas" aria-label="Dummy C"></canvas>
 </div>
 </div>
 
@@ -1665,10 +1665,10 @@ select option:checked{
           <div class="badge">D</div>
           <div class="imgwrap">
             <div class="ph">
-              <img class="phimg" alt="Platzhalter Attrappe D" src="Muster/Platzhalter%204.png" />
-              <div class="phlabel">Attrappe D<br><small>noch nicht gesetzt</small></div>
+              <img class="phimg" alt="Placeholder dummy D" src="Muster/Platzhalter%204.png" />
+              <div class="phlabel">Dummy D<br><small>not set yet</small></div>
             </div>
-            <canvas class="main decoyCanvas" aria-label="Attrappe D"></canvas>
+            <canvas class="main decoyCanvas" aria-label="Dummy D"></canvas>
 </div>
 </div>
       </div>
@@ -1677,33 +1677,33 @@ select option:checked{
     </section>
 
     <section class="panel" id="results">
-      <div class="results-head"><h2>Protokoll & Diagramm</h2><span class="pill" id="runStatus"></span></div>
+      <div class="results-head"><h2>Log & chart</h2><span class="pill" id="runStatus"></span></div>
 
       <div class="grid-2">
         <div class="control">
-          <label for="chartFilter">Diagramm: Attrappe wählen</label>
+          <label for="chartFilter">Chart: choose dummy</label>
           <select id="chartFilter"></select>
         </div>
         <div class="control">
           <label>&nbsp;</label>
           <div class="resultActionButtons">
-            <button id="exportBtn">Diagramme exportieren</button>
-            <button id="solutionBtn">Lösung anzeigen</button>
+            <button id="exportBtn">Export charts</button>
+            <button id="solutionBtn">Show solution</button>
           </div>
         </div>
       </div>
 
-      <canvas id="chartCanvas" width="520" height="260" aria-label="Diagramm" role="img"></canvas>
+      <canvas id="chartCanvas" width="520" height="260" aria-label="Chart" role="img"></canvas>
 
-      <div class="subhead">Letzte Starts</div>
+      <div class="subhead">Recent starts</div>
       <div class="logwrap">
         <table id="logTable">
           <thead>
             <tr>
               <th>#</th>
-              <th>Zeit</th>
-              <th>Typ</th>
-              <th>Attrappe</th>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Dummy</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -1717,22 +1717,22 @@ select option:checked{
   <div class="modal hidden" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
     <div class="modalBox">
       <div class="modalHead">
-        <div class="modalTitle" id="exportModalTitle">Diagramme exportieren</div>
-        <button class="modalClose" type="button" id="exportModalClose" aria-label="Schließen">✕</button>
+        <div class="modalTitle" id="exportModalTitle">Export charts</div>
+        <button class="modalClose" type="button" id="exportModalClose" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="hint">Welche Diagramme sollen exportiert werden?</div>
+        <div class="hint">Which charts should be exported?</div>
         <div class="exportGrid" id="exportGrid">
-          <label class="exportChoice"><input type="checkbox" value="0" checked> <span>Attrappe A</span></label>
-          <label class="exportChoice"><input type="checkbox" value="1" checked> <span>Attrappe B</span></label>
-          <label class="exportChoice"><input type="checkbox" value="2" checked> <span>Attrappe C</span></label>
-          <label class="exportChoice"><input type="checkbox" value="3" checked> <span>Attrappe D</span></label>
+          <label class="exportChoice"><input type="checkbox" value="0" checked> <span>Dummy A</span></label>
+          <label class="exportChoice"><input type="checkbox" value="1" checked> <span>Dummy B</span></label>
+          <label class="exportChoice"><input type="checkbox" value="2" checked> <span>Dummy C</span></label>
+          <label class="exportChoice"><input type="checkbox" value="3" checked> <span>Dummy D</span></label>
         </div>
         <div class="modalActions">
-          <button type="button" id="exportModalCancel">Abbrechen</button>
-          <button type="button" class="primary" id="exportModalGo">Exportieren</button>
+          <button type="button" id="exportModalCancel">Cancel</button>
+          <button type="button" class="primary" id="exportModalGo">Export</button>
         </div>
-        <div class="modalHint">Hinweis: Der Export versucht die Diagramme als PNG in die Zwischenablage zu kopieren. Falls das nicht möglich ist, wird ein Download angeboten.</div>
+        <div class="modalHint">Note: The export tries to copy the charts as PNG files to the clipboard. If that is not possible, a download is offered.</div>
       </div>
     </div>
   </div>
@@ -1741,17 +1741,17 @@ select option:checked{
   <div class="modal hidden" id="patternModal" role="dialog" aria-modal="true" aria-labelledby="patternModalTitle">
     <div class="modalBox">
       <div class="modalHead">
-        <div class="modalTitle" id="patternModalTitle">Musterübersicht</div>
-        <button class="modalClose" type="button" id="patternModalClose" aria-label="Schließen">✕</button>
+        <div class="modalTitle" id="patternModalTitle">Pattern overview</div>
+        <button class="modalClose" type="button" id="patternModalClose" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
         <div class="patternGrid" id="patternGrid">
-          <div class="patternTile"><img class="patternPreviewImg" data-pattern="1" alt="Muster 1" /><div class="patternCap">Muster 1</div></div>
-          <div class="patternTile"><img class="patternPreviewImg" data-pattern="2" alt="Muster 2" /><div class="patternCap">Muster 2</div></div>
-          <div class="patternTile"><img class="patternPreviewImg" data-pattern="3" alt="Muster 3" /><div class="patternCap">Muster 3</div></div>
-          <div class="patternTile"><img class="patternPreviewImg" data-pattern="4" alt="Muster 4" /><div class="patternCap">Muster 4</div></div>
+          <div class="patternTile"><img class="patternPreviewImg" data-pattern="1" alt="Pattern 1" /><div class="patternCap">Pattern 1</div></div>
+          <div class="patternTile"><img class="patternPreviewImg" data-pattern="2" alt="Pattern 2" /><div class="patternCap">Pattern 2</div></div>
+          <div class="patternTile"><img class="patternPreviewImg" data-pattern="3" alt="Pattern 3" /><div class="patternCap">Pattern 3</div></div>
+          <div class="patternTile"><img class="patternPreviewImg" data-pattern="4" alt="Pattern 4" /><div class="patternCap">Pattern 4</div></div>
         </div>
-        <div class="modalHint">Hinweis: Es werden Dateien aus <span class="mono">Muster/</span> (oder Fallback aus <span class="mono">Schmetterlinge GIFs/</span>) geladen. Falls eine Datei fehlt, wird ein prozedurales Ersatzmuster angezeigt.</div>
+        <div class="modalHint">Note: Files are loaded from <span class="mono">Muster/</span> (or, as a fallback, from <span class="mono">Schmetterlinge GIFs/</span>). If a file is missing, a procedural replacement pattern is shown.</div>
       </div>
     </div>
   </div>
@@ -1759,12 +1759,12 @@ select option:checked{
   <div class="modal hidden" id="startInfoModal" role="dialog" aria-modal="true" aria-labelledby="startInfoModalTitle">
     <div class="modalBox">
       <div class="modalHead">
-        <div class="modalTitle" id="startInfoModalTitle">Hinweis</div>
-        <button class="modalClose" type="button" id="startInfoModalClose" aria-label="Schließen">✕</button>
+        <div class="modalTitle" id="startInfoModalTitle">Note</div>
+        <button class="modalClose" type="button" id="startInfoModalClose" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="hint">Bitte erstellen Sie alle 4 Attrappen (Farbe, Größe, Muster) über den Button <b>„Erstellen“</b>, bevor Sie starten.</div>
-        <div class="modalHint">Zum Schließen: Klick außerhalb des Fensters oder Esc.</div>
+        <div class="hint">Please create all 4 dummies (colour, size, pattern) using the <b>Create</b> button before you start.</div>
+        <div class="modalHint">To close: click outside the window or press Esc.</div>
       </div>
     </div>
   </div>
@@ -1773,8 +1773,8 @@ select option:checked{
   <div class="modal hidden" id="phModal" role="dialog" aria-modal="true" aria-labelledby="phModalTitle">
     <div class="modalBox">
       <div class="modalHead">
-        <div class="modalTitle" id="phModalTitle">Platzhalter vergrößert</div>
-        <button class="modalClose" type="button" id="phModalClose" aria-label="Schließen">✕</button>
+        <div class="modalTitle" id="phModalTitle">Enlarged placeholder</div>
+        <button class="modalClose" type="button" id="phModalClose" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
         <div class="phModalFrame">
@@ -1789,16 +1789,16 @@ select option:checked{
   <div class="modal hidden" id="solutionCodeModal" role="dialog" aria-modal="true" aria-labelledby="solutionCodeModalTitle">
     <div class="modalBox">
       <div class="modalHead">
-        <div class="modalTitle" id="solutionCodeModalTitle">Code eingeben</div>
-        <button class="modalClose" type="button" id="solutionCodeModalClose" aria-label="Schließen">✕</button>
+        <div class="modalTitle" id="solutionCodeModalTitle">Enter code</div>
+        <button class="modalClose" type="button" id="solutionCodeModalClose" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="hint">Bitte gib den Code ein, um die Lösung anzuzeigen.</div>
-        <input id="solutionCodeInput" class="codeModalInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code eingeben" />
-        <div class="codeModalError" id="solutionCodeError" hidden>Der eingegebene Code ist falsch.</div>
+        <div class="hint">Please enter the code to show the solution.</div>
+        <input id="solutionCodeInput" class="codeModalInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Enter code" />
+        <div class="codeModalError" id="solutionCodeError" hidden>The code you entered is incorrect.</div>
         <div class="modalActions">
-          <button type="button" id="solutionCodeCancel">Abbrechen</button>
-          <button type="button" class="primary" id="solutionCodeConfirm">Bestätigen</button>
+          <button type="button" id="solutionCodeCancel">Cancel</button>
+          <button type="button" class="primary" id="solutionCodeConfirm">Confirm</button>
         </div>
       </div>
     </div>
@@ -1808,13 +1808,13 @@ select option:checked{
   <div class="modal hidden" id="solutionModal" role="dialog" aria-modal="true" aria-labelledby="solutionModalTitle">
     <div class="modalBox">
       <div class="modalHead">
-        <div class="modalTitle" id="solutionModalTitle">Lösungen</div>
-        <button class="modalClose" type="button" id="solutionModalClose" aria-label="Schließen">✕</button>
+        <div class="modalTitle" id="solutionModalTitle">Solutions</div>
+        <button class="modalClose" type="button" id="solutionModalClose" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
         <div id="solutionContent"></div>
         <div class="modalActions">
-          <button type="button" class="primary" id="solutionModalOk">Schließen</button>
+          <button type="button" class="primary" id="solutionModalOk">Close</button>
         </div>
       </div>
     </div>
@@ -1912,13 +1912,13 @@ const PLACEHOLDER_EXTS = ["png","gif","jpg","jpeg","webp","svg"];
 const PLACEHOLDER_DIRS = [PATTERN_DIR, GIF_DIR];
 
   const COLOR_OPTIONS = [
-    { id: "Gelb", label: "Gelb", colors: ["Gelb"] },
-    { id: "Blau", label: "Blau", colors: ["Blau"] },
-    { id: "Rot", label: "Rot", colors: ["Rot"] },
-    { id: "Lila", label: "Lila", colors: ["Lila"] },
-    { id: "Gelb_Rot", label: "Gelb/Rot", colors: ["Gelb", "Rot"] },
-    { id: "Blau_Gelb", label: "Blau/Gelb", colors: ["Blau", "Gelb"] },
-    { id: "Gelb_Lila", label: "Gelb/Lila", colors: ["Gelb", "Lila"] },
+    { id: "Gelb", label: "Yellow", colors: ["Gelb"] },
+    { id: "Blau", label: "Blue", colors: ["Blau"] },
+    { id: "Rot", label: "Red", colors: ["Rot"] },
+    { id: "Lila", label: "Purple", colors: ["Lila"] },
+    { id: "Gelb_Rot", label: "Yellow/Red", colors: ["Gelb", "Rot"] },
+    { id: "Blau_Gelb", label: "Blue/Yellow", colors: ["Blau", "Gelb"] },
+    { id: "Gelb_Lila", label: "Yellow/Purple", colors: ["Gelb", "Lila"] },
   ];
 
   // Farbwerte für Filter/Tint der Attrappen (Anzeige im Feld)
@@ -1979,16 +1979,16 @@ const PLACEHOLDER_DIRS = [PATTERN_DIR, GIF_DIR];
 
 
   const SIZE_OPTIONS = [
-    { id: "Gross", label: "Groß", v: 1.0, scale: 1.25 },
-    { id: "Mittel", label: "Mittel", v: 0.5, scale: 1.00 },
-    { id: "Klein", label: "Klein", v: 0.0, scale: 0.75 },
+    { id: "Gross", label: "Large", v: 1.0, scale: 1.25 },
+    { id: "Mittel", label: "Medium", v: 0.5, scale: 1.00 },
+    { id: "Klein", label: "Small", v: 0.0, scale: 0.75 },
   ];
 
   const PATTERN_OPTIONS = [
-    { id: 1, label: "Muster 1" },
-    { id: 2, label: "Muster 2" },
-    { id: 3, label: "Muster 3" },
-    { id: 4, label: "Muster 4" },
+    { id: 1, label: "Pattern 1" },
+    { id: 2, label: "Pattern 2" },
+    { id: 3, label: "Pattern 3" },
+    { id: 4, label: "Pattern 4" },
   ];
 
   function randomChoice(arr) {
@@ -2030,30 +2030,30 @@ const PLACEHOLDER_DIRS = [PATTERN_DIR, GIF_DIR];
   // Zusätzlich: natürliche Größen (small/medium/large) gemäß Beschreibung.
   const BUTTERFLY_TYPES = [
     // Einfarbig
-    { id: "Blau", label: "Blau", file: "Blau.gif", colors: ["Blau"], gemustert: false, sizeClass: "small" },
-    { id: "Blau_Gemustert", label: "Blau (gemustert)", file: "Blau_Gemustert.gif", colors: ["Blau"], gemustert: true, sizeClass: "small" },
+    { id: "Blau", label: "Blue", file: "Blau.gif", colors: ["Blau"], gemustert: false, sizeClass: "small" },
+    { id: "Blau_Gemustert", label: "Blue (patterned)", file: "Blau_Gemustert.gif", colors: ["Blau"], gemustert: true, sizeClass: "small" },
 
-    { id: "Gelb", label: "Gelb", file: "Gelb.gif", colors: ["Gelb"], gemustert: false, sizeClass: "large" },
-    { id: "Gelb_Gemustert", label: "Gelb (gemustert)", file: "Gelb_Gemustert.gif", colors: ["Gelb"], gemustert: true, sizeClass: "large" },
+    { id: "Gelb", label: "Yellow", file: "Gelb.gif", colors: ["Gelb"], gemustert: false, sizeClass: "large" },
+    { id: "Gelb_Gemustert", label: "Yellow (patterned)", file: "Gelb_Gemustert.gif", colors: ["Gelb"], gemustert: true, sizeClass: "large" },
 
-    { id: "Rot", label: "Rot", file: "Rot.gif", colors: ["Rot"], gemustert: false, sizeClass: "large" },
-    { id: "Rot_Gemustert", label: "Rot (gemustert)", file: "Rot_Gemustert.gif", colors: ["Rot"], gemustert: true, sizeClass: "large" },
+    { id: "Rot", label: "Red", file: "Rot.gif", colors: ["Rot"], gemustert: false, sizeClass: "large" },
+    { id: "Rot_Gemustert", label: "Red (patterned)", file: "Rot_Gemustert.gif", colors: ["Rot"], gemustert: true, sizeClass: "large" },
 
-    { id: "Lila", label: "Lila", file: "Lila.gif", colors: ["Lila"], gemustert: false, sizeClass: "small" },
-    { id: "Lila_Gemustert", label: "Lila (gemustert)", file: "Lila_Gemustert.gif", colors: ["Lila"], gemustert: true, sizeClass: "small" },
+    { id: "Lila", label: "Purple", file: "Lila.gif", colors: ["Lila"], gemustert: false, sizeClass: "small" },
+    { id: "Lila_Gemustert", label: "Purple (patterned)", file: "Lila_Gemustert.gif", colors: ["Lila"], gemustert: true, sizeClass: "small" },
 
     // Gemischt
-    { id: "Gelb_Rot", label: "Gelb/Rot", file: "Gelb_Rot.gif", colors: ["Gelb", "Rot"], gemustert: false, sizeClass: "large" },
-    { id: "Gelb_Rot_Gemustert", label: "Gelb/Rot (gemustert)", file: "Gelb_Rot_Gemustert.gif", colors: ["Gelb", "Rot"], gemustert: true, sizeClass: "large" },
+    { id: "Gelb_Rot", label: "Yellow/Red", file: "Gelb_Rot.gif", colors: ["Gelb", "Rot"], gemustert: false, sizeClass: "large" },
+    { id: "Gelb_Rot_Gemustert", label: "Yellow/Red (patterned)", file: "Gelb_Rot_Gemustert.gif", colors: ["Gelb", "Rot"], gemustert: true, sizeClass: "large" },
 
-    { id: "Blau_Gelb", label: "Blau/Gelb", file: "Blau_Gelb.gif", colors: ["Blau", "Gelb"], gemustert: false, sizeClass: "medium" },
-    { id: "Blau_Gelb_Gemustert", label: "Blau/Gelb (gemustert)", file: "Blau_Gelb_Gemustert.gif", colors: ["Blau", "Gelb"], gemustert: true, sizeClass: "medium" },
+    { id: "Blau_Gelb", label: "Blue/Yellow", file: "Blau_Gelb.gif", colors: ["Blau", "Gelb"], gemustert: false, sizeClass: "medium" },
+    { id: "Blau_Gelb_Gemustert", label: "Blue/Yellow (patterned)", file: "Blau_Gelb_Gemustert.gif", colors: ["Blau", "Gelb"], gemustert: true, sizeClass: "medium" },
 
-    { id: "Gelb_Lila", label: "Gelb/Lila", file: "Gelb_Lila.gif", colors: ["Gelb", "Lila"], gemustert: false, sizeClass: "medium" },
-    { id: "Gelb_Lila_Gemustert", label: "Gelb/Lila (gemustert)", file: "Gelb_Lila_Gemustert.gif", colors: ["Gelb", "Lila"], gemustert: true, sizeClass: "medium" },
+    { id: "Gelb_Lila", label: "Yellow/Purple", file: "Gelb_Lila.gif", colors: ["Gelb", "Lila"], gemustert: false, sizeClass: "medium" },
+    { id: "Gelb_Lila_Gemustert", label: "Yellow/Purple (patterned)", file: "Gelb_Lila_Gemustert.gif", colors: ["Gelb", "Lila"], gemustert: true, sizeClass: "medium" },
 
     // Zusatztyp: sichtbar weiß, Verhalten über versteckte Zufallseigenschaften
-    { id: "Weiss", label: "Weiß", file: "Weiss.gif", colors: ["Gelb"], gemustert: false, sizeClass: "medium" },
+    { id: "Weiss", label: "White", file: "Weiss.gif", colors: ["Gelb"], gemustert: false, sizeClass: "medium" },
   ];
 
   const TYPE_BY_ID = new Map(BUTTERFLY_TYPES.map(t => [t.id, t]));
@@ -2074,9 +2074,9 @@ const PLACEHOLDER_DIRS = [PATTERN_DIR, GIF_DIR];
   function clamp01(x) { return Math.max(0, Math.min(1, x)); }
 
   function sizeClassToLabel(sizeClass) {
-    if (sizeClass === "small") return "klein";
-    if (sizeClass === "medium") return "mittel";
-    return "groß";
+    if (sizeClass === "small") return "small";
+    if (sizeClass === "medium") return "medium";
+    return "large";
   }
 
   function colorIdToLabel(colorId) {
@@ -2084,7 +2084,7 @@ const PLACEHOLDER_DIRS = [PATTERN_DIR, GIF_DIR];
   }
 
   function patternStateToLabel(gemustert) {
-    return gemustert ? "gemustert" : "nicht gemustert";
+    return gemustert ? "patterned" : "not patterned";
   }
 
   // -------------------------
@@ -2147,7 +2147,7 @@ startBtn: document.getElementById("startBtn"),
   }
   // Chartfilter: Auswahl der Attrappe (A–D)
   ["A","B","C","D"].forEach((lab, idx) => {
-    el.chartFilter.append(optionHTML(String(idx), `Attrappe ${lab}`));
+    el.chartFilter.append(optionHTML(String(idx), `Dummy ${lab}`));
   });
 
   // -------------------------
@@ -2182,7 +2182,7 @@ function updateStartButtonState(){
   if (!ok) {
     el.runStatus.textContent = "";
   } else if (runNo === 0 && !runActive) {
-    el.runStatus.textContent = "Bereit";
+    el.runStatus.textContent = "Ready";
   }
 }
 
@@ -2196,10 +2196,10 @@ function updateStartButtonState(){
     const title = document.createElement("div");
     title.className = "title";
     const left = document.createElement("div");
-    left.textContent = `Attrappe ${DECOY_LABELS[i]}`;
+    left.textContent = `Dummy ${DECOY_LABELS[i]}`;
     const tag = document.createElement("div");
     tag.className = "tag";
-    tag.textContent = `Ecke ${DECOY_LABELS[i]}`;
+    tag.textContent = `Corner ${DECOY_LABELS[i]}`;
     title.append(left, tag);
 
     const grid = document.createElement("div");
@@ -2209,7 +2209,7 @@ function updateStartButtonState(){
     const c1 = document.createElement("div");
     c1.className = "control";
     const c1l = document.createElement("label");
-    c1l.textContent = "Farbe";
+    c1l.textContent = "Colour";
     const c1s = document.createElement("select");
     COLOR_OPTIONS.forEach(opt => c1s.append(optionHTML(opt.id, opt.label)));
     c1s.value = cfg.colorId || "";
@@ -2223,7 +2223,7 @@ function updateStartButtonState(){
     const c2 = document.createElement("div");
     c2.className = "control";
     const c2l = document.createElement("label");
-    c2l.textContent = "Größe";
+    c2l.textContent = "Size";
     const c2s = document.createElement("select");
     SIZE_OPTIONS.forEach(opt => c2s.append(optionHTML(opt.id, opt.label)));
     c2s.value = cfg.sizeId || "";
@@ -2237,12 +2237,12 @@ function updateStartButtonState(){
     const c3 = document.createElement("div");
     c3.className = "control";
     const c3l = document.createElement("label");
-    c3l.textContent = "Muster";
+    c3l.textContent = "Pattern";
     const infoBtn = document.createElement("button");
     infoBtn.type = "button";
     infoBtn.className = "infoIcon";
     infoBtn.textContent = "i";
-    infoBtn.title = "Muster ansehen";
+    infoBtn.title = "View patterns";
     infoBtn.addEventListener("click", openPatternModal);
     const c3LabelRow = document.createElement("div");
     c3LabelRow.className = "label-row";
@@ -2306,16 +2306,16 @@ function updateStartButtonState(){
       btn.disabled = runActive || !draftOk;
 
       if (!dep) {
-        status.textContent = draftOk ? "Status: nicht erstellt" : "Status: Entwurf unvollständig";
-        btn.textContent = "Erstellen";
+        status.textContent = draftOk ? "Status: not created" : "Status: draft incomplete";
+        btn.textContent = "Create";
         status.className = "status" + (draftOk ? "" : " warn");
       } else if (cfgEqual(dep, draft)) {
-        status.textContent = "Status: erstellt";
-        btn.textContent = "Neu erstellen";
+        status.textContent = "Status: created";
+        btn.textContent = "Create again";
         status.className = "status ok";
       } else {
-        status.textContent = "Status: erstellt (Änderungen ausstehend)";
-        btn.textContent = "Änderungen übernehmen";
+        status.textContent = "Status: created (changes pending)";
+        btn.textContent = "Apply changes";
         status.className = "status warn";
       }
     }
@@ -2388,8 +2388,8 @@ function openPhModal(src, title){
   el.phModalImg.src = src;
   el.phModalImg.alt = title || "Platzhalter vergrößert";
   const t = document.getElementById("phModalTitle");
-  if (t) t.textContent = title || "Platzhalter vergrößert";
-  if (el.phModalHint) el.phModalHint.textContent = "Zum Schließen: Klick außerhalb des Fensters oder Esc.";
+  if (t) t.textContent = title || "Enlarged placeholder";
+  if (el.phModalHint) el.phModalHint.textContent = "To close: click outside the window or press Esc.";
   el.phModal.classList.remove("hidden");
 }
 
@@ -2414,7 +2414,7 @@ if (el.stageInner) el.stageInner.addEventListener("click", (e) => {
 
   const decoy = img.closest(".decoy");
   const lab = decoy ? (decoy.querySelector(".badge")?.textContent || "").trim() : "";
-  const title = lab ? `Platzhalter Attrappe ${lab}` : "Platzhalter vergrößert";
+  const title = lab ? `Placeholder dummy ${lab}` : "Enlarged placeholder";
   openPhModal(img.currentSrc || img.src, title);
 });
 
@@ -2916,7 +2916,7 @@ function getDecoyCenters() {
 // -------------------------
 // Aufenthaltsbereiche (Ecken) + langsames Umherfliegen nach Ankunft
 // -------------------------
-const LOITER_SPEED_PX_S = 22;      // Geschwindigkeit im Aufenthaltsbereich (px/s)
+const LOITER_SPEED_PX_S = 22;      // Speed im Aufenthaltsbereich (px/s)
 const LOITER_TARGET_EPS = 6;       // Distanz, ab der ein Ziel als erreicht gilt
 const LOITER_SPAWN_JITTER = 18;    // kleiner Versatz nach Ankunft (px)
 
@@ -3163,6 +3163,12 @@ function randomPointInRect(r){
     "Gelb": "#fbbf24",
     "Rot":  "#ef4444",
     "Lila": "#a855f7",
+    "Blue": "#3b82f6",
+    "Yellow": "#fbbf24",
+    "Red":  "#ef4444",
+    "Purple": "#a855f7",
+    "White": "#e5e7eb",
+    "Black": "#111827",
     "Weiß": "#e5e7eb",
     "Schwarz": "#111827",
   };
@@ -3179,8 +3185,8 @@ function randomPointInRect(r){
   }
 
   function _parseTypeLabel(label){
-    const isPatterned = /\(gemustert\)/i.test(label);
-    const clean = String(label).replace(/\s*\(gemustert\)\s*/i, "").trim();
+    const isPatterned = /\(patterned\)/i.test(label);
+    const clean = String(label).replace(/\s*\(patterned\)\s*/i, "").trim();
     const parts = clean.split("/").map(s => s.trim()).filter(Boolean);
     return { parts, isPatterned };
   }
@@ -3188,19 +3194,19 @@ function randomPointInRect(r){
 
   // Balken-Texturen (aus Muster/) – werden als wiederholtes Pattern lückenlos gekachelt
   const BAR_TEXTURE_SOURCES = {
-    "Blau (gemustert)": "Muster/Diagramm_Blau_Gemustert.png",
-    "Gelb (gemustert)": "Muster/Diagramm_Gelb_Gemustert.png",
-    "Rot (gemustert)": "Muster/Daigramm_Rot_Gemustert.png",
-    "Lila (gemustert)": "Muster/Diagramm_Lila_Gemustert.png",
+    "Blue (patterned)": "Muster/Diagramm_Blau_Gemustert.png",
+    "Yellow (patterned)": "Muster/Diagramm_Gelb_Gemustert.png",
+    "Red (patterned)": "Muster/Daigramm_Rot_Gemustert.png",
+    "Purple (patterned)": "Muster/Diagramm_Lila_Gemustert.png",
 
-    "Blau/Gelb": "Muster/Diagramm_Blau_Gelb.png",
-    "Blau/Gelb (gemustert)": "Muster/Diagramm_Blau_Gelb_Gemustert.png",
+    "Blue/Yellow": "Muster/Diagramm_Blau_Gelb.png",
+    "Blue/Yellow (patterned)": "Muster/Diagramm_Blau_Gelb_Gemustert.png",
 
-    "Gelb/Rot": "Muster/Diagramm_Gelb_Rot.png",
-    "Gelb/Rot (gemustert)": "Muster/Diagramm_Gelb_Rot_Gemustert.png",
+    "Yellow/Red": "Muster/Diagramm_Gelb_Rot.png",
+    "Yellow/Red (patterned)": "Muster/Diagramm_Gelb_Rot_Gemustert.png",
 
-    "Gelb/Lila": "Muster/Diagramm_Gelb_Lila.png",
-    "Gelb/Lila (gemustert)": "Muster/Diagramm_Gelb_Lila_Gemustert.png",
+    "Yellow/Purple": "Muster/Diagramm_Gelb_Lila.png",
+    "Yellow/Purple (patterned)": "Muster/Diagramm_Gelb_Lila_Gemustert.png",
   };
 
   const _barTextureImg = new Map();         // label -> HTMLImageElement
@@ -3445,7 +3451,7 @@ function renderChart(ctx, w, h, decoyIndex) {
   ctx.font = "13px system-ui";
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
-  ctx.fillText(`Attrappe ${DECOY_LABELS[decoyIndex]}: Anflüge nach Schmetterlingstyp`, padL, 18);
+  ctx.fillText(`Dummy ${DECOY_LABELS[decoyIndex]}: approaches by butterfly type`, padL, 18);
 
   // Achsenrahmen
   ctx.strokeStyle = "rgba(255,255,255,0.12)";
@@ -3539,7 +3545,7 @@ function startRun() {
   }
 
   if (!decoyDeployed.every(isDecoyComplete)) {
-    el.runStatus.textContent = "Bitte zuerst 4 Attrappen erstellen";
+    el.runStatus.textContent = "Please create all 4 dummies first";
     updateStartButtonState();
     return;
   }
@@ -3549,7 +3555,7 @@ function startRun() {
   runNo += 1;
 
   clearButterflies();
-  el.runStatus.textContent = `Durchgang ${runNo} läuft…`;
+  el.runStatus.textContent = `Run ${runNo} running...`;
   el.startBtn.disabled = true;
 
   const stageRect = el.stageInner.getBoundingClientRect();
@@ -3714,7 +3720,7 @@ function tick(now) {
   const allArrived = flying.length > 0 && flying.every(b => b.done);
   if (runActive && allArrived) {
     runActive = false;
-    el.runStatus.textContent = `Durchgang ${runNo} beendet`;
+    el.runStatus.textContent = `Run ${runNo} finished`;
     el.startBtn.disabled = false;
     renderLogTable();
     drawChart();
@@ -3735,7 +3741,7 @@ function easeInOut(t){
   }
 
   // -------------------------
-  // Diagramme exportieren (Modal + Clipboard) + Fallback Download
+  // Export charts (Modal + Clipboard) + Fallback Download
   // -------------------------
 
   function openExportModal(){
@@ -3756,7 +3762,7 @@ function easeInOut(t){
 
   async function exportSelectedCharts(indices){
     if (!indices || indices.length === 0) {
-      el.runStatus.textContent = "Bitte mindestens ein Diagramm auswählen";
+      el.runStatus.textContent = "Please select at least one chart";
       return;
     }
 
@@ -3870,9 +3876,9 @@ function easeInOut(t){
       let cfgLine = "";
       if (cfg) {
         const c = labelOf(COLOR_OPTIONS, cfg.colorId, cfg.colorId);
-        const p = labelOf(PATTERN_OPTIONS, cfg.patternId, `Muster ${cfg.patternId}`);
+        const p = labelOf(PATTERN_OPTIONS, cfg.patternId, `Pattern ${cfg.patternId}`);
         const s = labelOf(SIZE_OPTIONS, cfg.sizeId, cfg.sizeId);
-        cfgLine = `Farbe: ${c}   Muster: ${p}   Größe: ${s}`;
+        cfgLine = `Colour: ${c}   Pattern: ${p}   Size: ${s}`;
       } else {
         cfgLine = "Konfiguration: nicht erstellt";
       }
@@ -3907,20 +3913,20 @@ function easeInOut(t){
 
       if (navigator.clipboard && window.ClipboardItem) {
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-        el.runStatus.textContent = "Diagramme + Attrappen-Konfiguration in Zwischenablage kopiert";
+      el.runStatus.textContent = "Charts + dummy configuration copied to the clipboard";
         return;
       }
-      throw new Error("Clipboard API nicht verfügbar");
+      throw new Error("Clipboard API is not available");
     } catch (err) {
       // Fallback: Download
       const url = out.toDataURL("image/png");
       const a = document.createElement("a");
       a.href = url;
-      a.download = `diagramme_attrappen_${runNo || 0}.png`;
+      a.download = `dummy_charts_${runNo || 0}.png`;
       document.body.appendChild(a);
       a.click();
       a.remove();
-      el.runStatus.textContent = "Clipboard nicht möglich → PNG heruntergeladen";
+      el.runStatus.textContent = "Clipboard unavailable - PNG downloaded";
     }
   }
 
@@ -3970,7 +3976,7 @@ function easeInOut(t){
     if (el.solutionCodeInput) el.solutionCodeInput.value = "";
     if (el.solutionCodeError) {
       el.solutionCodeError.hidden = true;
-      el.solutionCodeError.textContent = "Der eingegebene Code ist falsch.";
+      el.solutionCodeError.textContent = "The code you entered is incorrect.";
     }
     document.body.style.overflow = "";
   }
@@ -3985,7 +3991,7 @@ function easeInOut(t){
     }
     if (el.solutionCodeError) {
       el.solutionCodeError.hidden = true;
-      el.solutionCodeError.textContent = "Der eingegebene Code ist falsch.";
+      el.solutionCodeError.textContent = "The code you entered is incorrect.";
     }
   }
 
@@ -4001,17 +4007,17 @@ function easeInOut(t){
       <li><strong>${escapeHtml(t.label)}:</strong> ${sizeClassToLabel(t.sizeClass)}</li>`).join("");
 
     const whiteHtml = `
-      <li><strong>Farbe:</strong> ${escapeHtml(colorIdToLabel(WHITE_BUTTERFLY_HIDDEN.colorId))}</li>
-      <li><strong>Größe:</strong> ${sizeClassToLabel(WHITE_BUTTERFLY_HIDDEN.sizeClass)}</li>
-      <li><strong>Muster:</strong> ${patternStateToLabel(WHITE_BUTTERFLY_HIDDEN.gemustert)}</li>`;
+      <li><strong>Colour:</strong> ${escapeHtml(colorIdToLabel(WHITE_BUTTERFLY_HIDDEN.colorId))}</li>
+      <li><strong>Size:</strong> ${sizeClassToLabel(WHITE_BUTTERFLY_HIDDEN.sizeClass)}</li>
+      <li><strong>Pattern:</strong> ${patternStateToLabel(WHITE_BUTTERFLY_HIDDEN.gemustert)}</li>`;
 
     return `
       <div class="solutionSection">
-        <h3>Größen der verschiedenen Schmetterlinge</h3>
+        <h3>Sizes of the different butterflies</h3>
         <ul class="solutionList">${sizeItems}</ul>
       </div>
       <div class="solutionSection">
-        <h3>Aktuelle Merkmalskombination des weißen Schmetterlings</h3>
+        <h3>Current trait combination of the white butterfly</h3>
         <ul class="solutionList">${whiteHtml}</ul>
       </div>`;
   }
@@ -4029,7 +4035,7 @@ function easeInOut(t){
     if (value !== "4321") {
       if (el.solutionCodeError) {
         el.solutionCodeError.hidden = false;
-        el.solutionCodeError.textContent = "Der eingegebene Code ist falsch.";
+        el.solutionCodeError.textContent = "The code you entered is incorrect.";
       }
       el.solutionCodeInput.focus();
       el.solutionCodeInput.select();
@@ -4160,24 +4166,24 @@ function easeInOut(t){
 <div id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle">
   <div class="im-card">
     <div class="im-head">
-      <h2 id="introModalTitle" class="im-title">Attrappenversuch zur Bestimmung der Schmetterlingsgröße</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+      <h2 id="introModalTitle" class="im-title">Dummy Experiment for Determining Butterfly Size</h2>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Close">×</button>
     </div>
-    <p class="im-grade">Jahrgangsstufe: 8</p>
+    <p class="im-grade">Grade level: 8</p>
     <div class="im-desc">
-      <p>Diese Simulation greift das Prinzip der Attrappenforschung in der Verhaltensbiologie auf. Mit künstlich gestalteten Modellen lässt sich untersuchen, auf welche äußeren Merkmale Tiere reagieren und welche Reize ihr Verhalten besonders stark beeinflussen.</p>
-      <p><strong>Arbeitsauftrag:</strong> Erstelle vier Attrappen, variiere gezielt Größe, Farbe und Muster, führe mehrere Durchgänge durch und leite aus den Ergebnissen die wahrscheinliche Größenklasse eines oder mehrerer ausgewählten Schmetterlingstypen begründet ab.</p>
-      <p><strong>Zusatz für Schnelle:</strong> Bei einem Schmetterling wird Größe, Muster und Farbe versteckt und er wird weiß angezeigt. Versuche von diesem Schmetterling die drei unbekannten Eigenschaften herauszufinden.</p>
+      <p>This simulation uses the principle of dummy experiments in behavioural biology. Artificially designed models can be used to investigate which external traits animals respond to and which stimuli influence their behaviour most strongly.</p>
+      <p><strong>Task:</strong> Create four dummies, vary size, colour, and pattern deliberately, run several trials, and use the results to justify the likely size class of one or more selected butterfly types.</p>
+      <p><strong>Extension:</strong> For one butterfly, size, pattern, and colour are hidden and the butterfly is shown in white. Try to work out its three unknown traits.</p>
     </div>
     <div class="im-btn-row">
-      <a id="introModalWorksheetBtn" class="im-worksheet-btn" href="Arbeitsbl%C3%A4tter/AB_Schmetterlingsversuch.pdf" download>Arbeitsblatt</a>
-      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
-      <button id="introModalManualCloseBtn" class="im-close-btn" type="button">Schließen</button>
+      <a id="introModalWorksheetBtn" class="im-worksheet-btn" href="Arbeitsbl%C3%A4tter/AB_Schmetterlingsversuch_EN.pdf" download>Worksheet</a>
+      <button id="introModalStartBtn" class="im-start-btn" type="button">Start simulation →</button>
+      <button id="introModalManualCloseBtn" class="im-close-btn" type="button">Close</button>
     </div>
   </div>
 </div>
 <!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -4201,9 +4207,9 @@ function easeInOut(t){
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Alle Abbildungen in dieser Simulation sind vollständig KI-generiert.</li>
+      <li>All illustrations in this simulation are fully AI-generated.</li>
     </ul>
   </div>
 </div>

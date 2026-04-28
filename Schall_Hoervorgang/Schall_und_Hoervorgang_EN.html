@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulation Schall und Hörvorgang</title>
+  <title>Sound and Hearing Simulation</title>
   <style>
     :root{
       --bg:#f4f6fa;
@@ -1091,7 +1091,7 @@ button.btn-export{
 }
 .icon-btn:hover{ filter:brightness(0.98); }
 
-/* --- Export-Auswahl (Option 2): Auswahl-Toggles + Vorschau --- */
+/* --- Export selection (Option 2): Auswahl-Toggles + Vorschau --- */
 #exportSelectModal .modal-card{ width:min(980px, 100%); }
 .export-grid{
   display:grid;
@@ -1704,7 +1704,7 @@ button.btn-export{
     row-gap: 6px;
     align-items: flex-start;
   }
-  /* "Darstellung" als eigene Zeile, darunter "Schallwellen [Toggle] Teilchen" */
+  /* "Darstellung" als eigene Zeile, darunter "Sound waves [Toggle] Teilchen" */
   #soundMode .sound-controls-panel .sound-view-line .view-label-prefix{
     flex: 0 0 100%;
     margin-bottom: 2px;
@@ -1759,56 +1759,56 @@ button.btn-export{
 <body>
 <div class="menu-overlay" id="startMenu">
   <div class="menu-card">
-    <h1>Simulation: Schall und Hörvorgang</h1>
-    <div class="muted">Wähle einen Modus für die Untersuchung im Unterricht.</div>
+    <h1>Simulation: Sound and hearing</h1>
+    <div class="muted">Choose a mode for the classroom investigation.</div>
     <div class="menu-options">
       <div class="menu-option">
         <div class="menu-preview-wrap">
-          <img class="menu-preview" src="Bilder/Schallwellen.png" alt="Vorschaubild Schallwellen" onerror="this.onerror=null;this.src='Schallwellen.png';">
-          <h2 class="menu-title-overlay">Schallwellen</h2>
+          <img class="menu-preview" src="Bilder/Schallwellen.png" alt="Preview image: sound waves" onerror="this.onerror=null;this.src='Bilder/Schallwellen.png';">
+          <h2 class="menu-title-overlay">Sound waves</h2>
         </div>
-        <p>Untersuche, wie sich Schallwellen in Luft ausbreiten und wodurch die Tonhöhe und Lautstärke eines Geräusches bestimmt wird.</p>
+          <p>Investigate how sound waves spread through air and what determines the pitch and volume of a sound.</p>
         <div class="btn-row">
           <button id="btnOpenSound" type="button" class="btn-start"><span class="btn-ic" aria-hidden="true">▶</span><span class="btn-txt">Start</span></button>
-          <button id="btnWorksheetSound" type="button" class="btn-worksheet"><span class="btn-ic" aria-hidden="true">📄</span><span class="btn-txt">Arbeitsblatt</span></button>
+          <button id="btnWorksheetSound" type="button" class="btn-worksheet"><span class="btn-ic" aria-hidden="true">📄</span><span class="btn-txt">Worksheet</span></button>
         </div>
       </div>
       <div class="menu-option">
         <div class="menu-preview-wrap">
-          <img class="menu-preview" src="Bilder/Der Hörvorgang.png" alt="Vorschaubild Der Hörvorgang" onerror="this.onerror=null;this.src='Der Hörvorgang.png';">
-          <h2 class="menu-title-overlay">Hörvorgang</h2>
+        <img class="menu-preview" src="Bilder/Der Hörvorgang.png" alt="Preview image: hearing process" onerror="this.onerror=null;this.src='Bilder/Der Hörvorgang.png';">
+        <h2 class="menu-title-overlay">Hearing process</h2>
         </div>
-        <p>Beobachte die Weiterleitung eines Schallereignisses durch <b>Außenohr, Mittelohr und Innenohr</b> in einer vereinfachten, animierten Darstellung.</p>
+        <p>Observe how a sound event is transmitted through the <b>outer ear, middle ear, and inner ear</b> in a simplified animated display.</p>
         <div class="btn-row">
           <button id="btnOpenHearing" type="button" class="btn-start"><span class="btn-ic" aria-hidden="true">▶</span><span class="btn-txt">Start</span></button>
-          <button id="btnWorksheetHearing" type="button" class="btn-worksheet"><span class="btn-ic" aria-hidden="true">📄</span><span class="btn-txt">Arbeitsblatt</span></button>
+          <button id="btnWorksheetHearing" type="button" class="btn-worksheet"><span class="btn-ic" aria-hidden="true">📄</span><span class="btn-txt">Worksheet</span></button>
         </div>
       </div>
       <div class="menu-option">
         <div class="menu-preview-wrap">
-          <img class="menu-preview" src="Bilder/Richtungshören.png" alt="Vorschaubild Richtungshören" onerror="this.onerror=null;this.src='Richtungshören.png';">
-          <h2 class="menu-title-overlay">Das Richtungshören</h2>
+        <img class="menu-preview" src="Bilder/Richtungshören.png" alt="Preview image: sound localization" onerror="this.onerror=null;this.src='Bilder/Richtungshören.png';">
+        <h2 class="menu-title-overlay">Sound localization</h2>
         </div>
-        <p>Untersuche, wie die Position einer Tonquelle um den Kopf herum über <b>Laufzeitdifferenz</b> und <b>Pegeldifferenz</b> zwischen beiden Ohren erkannt wird.</p>
+        <p>Investigate how the position of a sound source around the head is determined by the <b>interaural time difference</b> and <b>interaural level difference</b> between the two ears.</p>
         <div class="btn-row">
           <button id="btnOpenDirection" type="button" class="btn-start"><span class="btn-ic" aria-hidden="true">▶</span><span class="btn-txt">Start</span></button>
-          <button id="btnWorksheetDirection" type="button" class="btn-worksheet"><span class="btn-ic" aria-hidden="true">📄</span><span class="btn-txt">Arbeitsblatt</span></button>
+          <button id="btnWorksheetDirection" type="button" class="btn-worksheet"><span class="btn-ic" aria-hidden="true">📄</span><span class="btn-txt">Worksheet</span></button>
         </div>
       </div>
     </div>
-    <div class="status-line">Hinweis: Tonwiedergabe startet nur nach Klick (Browser-Sicherheitsregel).</div>
+    <div class="status-line">Note: audio playback starts only after a click (browser security rule).</div>
   </div>
 </div>
 
 <div class="app">
   <div class="topbar">
     <div>
-      <div class="title">Schall &amp; Hören – Unterrichtssimulation</div>
-      <div class="muted" id="modeLabel">Bitte Modus wählen</div>
+      <div class="title">Sound &amp; Hearing - classroom simulation</div>
+      <div class="muted" id="modeLabel">Please choose a mode</div>
     </div>
     <div class="btn-row">
-    <button id="btnExportTop" type="button" class="btn-export hidden"><span class="btn-ic" aria-hidden="true">⤓</span><span class="btn-txt">Exportieren</span></button>
-    <button id="btnBackToMenu" type="button" class="btn-menu"><span class="btn-ic" aria-hidden="true">↩</span><span class="btn-txt">Menü</span></button>
+    <button id="btnExportTop" type="button" class="btn-export hidden"><span class="btn-ic" aria-hidden="true">⤓</span><span class="btn-txt">Export</span></button>
+        <button id="btnBackToMenu" type="button" class="btn-menu"><span class="btn-ic" aria-hidden="true">↩</span><span class="btn-txt">Menu</span></button>
   </div>
   </div>
 
@@ -1818,27 +1818,27 @@ button.btn-export{
   <section id="soundMode" class="hidden">
     <div class="grid mode-layout">
       <div class="panel controls sound-controls-panel">
-        <h3>Steuerung: Schallwellen</h3>
+        <h3>Controls: sound waves</h3>
 
         <div class="row signal-mode-row">
-          <div class="signal-mode-title">Impulsmodus</div>
+          <div class="signal-mode-title">Pulse mode</div>
           <div class="signal-mode-toggle-line">
-            <span class="mode-word">Dauerimpuls</span>
-            <label class="toggle-switch" aria-label="Zwischen Dauerimpuls und Einzelimpuls umschalten"><input id="signalModeToggle" type="checkbox"><span class="slider"></span></label>
-            <span class="mode-word">Einzelimpuls</span>
+            <span class="mode-word">Continuous pulse</span>
+            <label class="toggle-switch" aria-label="Switch between continuous pulse and single pulse"><input id="signalModeToggle" type="checkbox"><span class="slider"></span></label>
+            <span class="mode-word">Single pulse</span>
           </div>
         </div>
 
         <div class="row">
           <div class="btn-row">
-            <button id="btnToggleTone">Ton aktivieren</button>
-            <button id="btnPulse" class="secondary">Einzelimpuls auslösen</button>
+            <button id="btnToggleTone">Enable tone</button>
+            <button id="btnPulse" class="secondary">Trigger single pulse</button>
           </div>
         </div>
 
         <div class="row">
           <label for="freqSlider">
-            <span>Tonhöhe</span>
+            <span>Pitch</span>
             <strong id="freqValue">440 Hz</strong>
           </label>
           <input id="freqSlider" type="range" min="120" max="1200" value="440" step="1">
@@ -1846,7 +1846,7 @@ button.btn-export{
 
         <div class="row">
           <label for="ampSlider">
-            <span>Lautstärke</span>
+            <span>Volume</span>
             <strong id="ampValue">50 %</strong>
           </label>
           <input id="ampSlider" type="range" min="5" max="100" value="50" step="1">
@@ -1854,10 +1854,10 @@ button.btn-export{
 
         <div class="row sound-view-row">
           <div class="sound-view-line">
-            <span class="view-label-prefix">Darstellung:</span>
-            <span class="mode-word">Schallwellen</span>
-            <label class="toggle-switch" aria-label="Zwischen Schallwellen- und Teilchendarstellung umschalten"><input id="soundViewToggle" type="checkbox"><span class="slider"></span></label>
-            <span class="mode-word">Teilchen</span>
+            <span class="view-label-prefix">Display:</span>
+            <span class="mode-word">Sound waves</span>
+            <label class="toggle-switch" aria-label="Switch between sound-wave and particle view"><input id="soundViewToggle" type="checkbox"><span class="slider"></span></label>
+            <span class="mode-word">Particles</span>
           </div>
           <button id="btnViewWave" class="hidden" type="button" aria-hidden="true" tabindex="-1"></button>
           <button id="btnViewParticles" class="hidden" type="button" aria-hidden="true" tabindex="-1"></button>
@@ -1866,60 +1866,60 @@ button.btn-export{
         <div class="panel" style="padding:10px; margin-top:6px;">
           <div class="readouts">
             <div class="readout">
-              <div><b>Tonhöhe</b></div>
-              <div id="qualFreq">mittel</div>
+              <div><b>Pitch</b></div>
+            <div id="qualFreq">medium</div>
             </div>
             <div class="readout">
-              <div><b>Lautstärke</b></div>
-              <div id="qualAmp">mittel</div>
+              <div><b>Volume</b></div>
+              <div id="qualAmp">medium</div>
             </div>
           </div>
           <div class="status-line hidden" id="soundStatus"></div>
         </div>
 
         <div class="legend" style="margin-top:8px;">
-          <div><span class="dot" style="background:#ef4444"></span>Schallquelle (Subwoofer)</div>
-          <div><span class="dot" style="background:#10b981"></span>Messort (Mikrofon)</div>
-          <div><span class="dot" style="background:#2563eb"></span>Schallwelle / Verdichtung</div>
+          <div><span class="dot" style="background:#ef4444"></span>Sound source (subwoofer)</div>
+          <div><span class="dot" style="background:#10b981"></span>Measurement location (microphone)</div>
+          <div><span class="dot" style="background:#2563eb"></span>Sound wave / compression</div>
         </div>
 
         <div class="panel" id="soundBonusPanel" style="margin-top:10px; padding:10px;">
-          <div><b>Bonus für Schnelle</b></div>
+          <div><b>Bonus for fast finishers</b></div>
 
           <div id="soundBonusLockedArea" style="margin-top:8px;">
-            <div class="small">Dieses Bonusfenster wird durch die Eingabe eines Codes freigeschaltet.</div>
+            <div class="small">This bonus panel is unlocked by entering a code.</div>
             <div class="bonus-code-row">
-              <input id="soundBonusCodeInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Code eingeben">
-              <button id="soundBonusUnlockBtn" type="button" class="secondary" style="white-space:nowrap;">Freischalten</button>
+              <input id="soundBonusCodeInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Enter code">
+              <button id="soundBonusUnlockBtn" type="button" class="secondary" style="white-space:nowrap;">Unlock</button>
             </div>
             <div id="soundBonusUnlockMsg" class="small" style="margin-top:6px; min-height:1.1em; color:#64748b;"></div>
           </div>
 
           <div id="soundBonusUnlockedArea" class="hidden" style="margin-top:8px;">
             <div class="small" style="line-height:1.35;">
-              Hörtest: Der Ton startet bei <b>20 Hz</b> und steigt innerhalb von <b>60 Sekunden</b> bis <b>20.000 Hz</b>. Drücke den roten Knopf, sobald du kein Geräusch mehr wahrnimmst.
-              <br>Hinweis: Starte mit niedriger Lautstärke.
+              Hearing test: the tone starts at <b>20 Hz</b> and rises to <b>20,000 Hz</b> within <b>60 seconds</b>. Press the red button as soon as you can no longer hear the sound.
+              <br>Note: start with a low volume.
             </div>
 
             <div class="bonus-inline">
-              <button id="soundSweepStartBtn" type="button" class="bonus-btn-primary" style="padding:10px 12px; border-radius:12px;">Hörtest starten</button>
+              <button id="soundSweepStartBtn" type="button" class="bonus-btn-primary" style="padding:10px 12px; border-radius:12px;">Start hearing test</button>
               <div style="text-align:right;">
-                <div class="small">Aktuelle Frequenz</div>
+                <div class="small">Current frequency</div>
                 <strong id="soundSweepFreqNow">20 Hz</strong>
               </div>
             </div>
 
             <div class="row" style="margin-top:10px; margin-bottom:0;">
               <label for="soundSweepVol">
-                <span>Lautstärke (Hörtest)</span>
+                <span>Volume (hearing test)</span>
                 <strong id="soundSweepVolValue">20 %</strong>
               </label>
               <input id="soundSweepVol" type="range" min="0" max="100" value="20" step="1">
             </div>
 
-            <button id="soundSweepStopBtn" type="button" class="bonus-stop-btn">Ich höre nichts mehr</button>
+            <button id="soundSweepStopBtn" type="button" class="bonus-stop-btn">I cannot hear anything anymore</button>
             <div class="small" style="margin-top:8px; line-height:1.35;">
-              Achtung: Dies ist kein medizinischer Test. Raumgeräusche und Lautstärke beeinflussen das Ergebnis.
+              Warning: this is not a medical test. Room noise and volume affect the result.
             </div>
             <div id="soundSweepResult" class="status-line" style="margin-top:8px; color:#334155;"></div>
           </div>
@@ -1929,19 +1929,19 @@ button.btn-export{
       <div class="stack">
         <div class="panel" id="soundSimPanel">
           <div class="panel-head-inline">
-            <h3>Simulationsfeld</h3>
-            <button id="btnParticleIntro" type="button" class="secondary hidden">Zusatzerklärung</button>
+            <h3>Simulation field</h3>
+            <button id="btnParticleIntro" type="button" class="secondary hidden">Additional explanation</button>
           </div>
           <div class="canvas-wrap">
             <canvas id="soundCanvas" width="900" height="420"></canvas>
           </div>
           <div class="small" style="margin-top:8px;">
-            Umschaltbar zwischen Wellenbild und vereinfachtem Teilchenmodell der Luft.
+            Switch between the wave view and a simplified particle model of air.
           </div>
         </div>
 
         <div class="panel">
-          <h3>Mikrofon-Messung</h3>
+          <h3>Microphone measurement</h3>
           <div class="canvas-wrap">
             <canvas id="chartCanvas" width="900" height="260"></canvas>
           </div>
@@ -1950,31 +1950,31 @@ button.btn-export{
       </div>
     </div>
 
-    <!-- Option 1: Intro-Popup bei erster Aktivierung der Teilchendarstellung -->
+    <!-- Option 1: intro popup when particle view is activated for the first time -->
     <div id="particleIntroModal" class="modal hidden" aria-hidden="true">
       <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="particleIntroTitle">
         <div class="modal-head">
-          <h3 id="particleIntroTitle" style="margin:0;">Grundlagen zur Ausbreitung von Schallwellen</h3>
-          <button id="btnCloseParticleIntroX" class="icon-btn" type="button" aria-label="Schließen">×</button>
+          <h3 id="particleIntroTitle" style="margin:0;">Basics of sound-wave propagation</h3>
+        <button id="btnCloseParticleIntroX" class="icon-btn" type="button" aria-label="Close">×</button>
         </div>
 
-        <div class="particle-intro-text">Ein Newton-Pendel besteht aus mehreren gleich großen Metallkugeln, die sich berühren und an Fäden hängen. Wenn man eine Kugel anhebt und loslässt, stößt sie gegen die anderen Kugeln. Die Bewegung wird durch die mittleren Kugeln hindurch weitergegeben. Am Ende schwingt dann eine Kugel auf der anderen Seite aus. Die Energie wird also weitergeleitet, auch wenn sich die mittleren Kugeln kaum sichtbar bewegen. Je stärker man die erste Kugel auslenkt, desto größer ist die übertragene Bewegung. 
-Ähnlich funktioniert die Schallübertragung in der Luft. Wenn ein Geräusch entsteht, geraten Luftteilchen in Schwingung. Diese stoßen die benachbarten Teilchen an, die wiederum weitere Teilchen anstoßen. So breitet sich der Schall aus. Dabei wandern nicht die Luftteilchen selbst durch den Raum, sondern nur die Bewegung wird weitergegeben.</div>
+        <div class="particle-intro-text">A Newton's cradle consists of several metal balls of the same size that touch each other and hang from strings. When one ball is lifted and released, it hits the other balls. The motion is passed through the middle balls, and a ball on the opposite side swings outward. Energy is transferred even though the middle balls barely move visibly. The farther the first ball is pulled back, the stronger the transferred motion becomes.
+Sound transmission in air works in a similar way. When a sound is produced, air particles begin to vibrate. They push neighboring particles, which then push further particles. In this way, sound spreads through the air. The air particles themselves do not travel across the room; instead, the motion is passed on.</div>
 
         <div class="particle-intro-grid">
           <div class="particle-intro-col">
-            <div class="col-text">Wird beim Newton-Pendel nur eine Kugel ausgelenkt, ist die übertragene Bewegung geringer – vergleichbar mit einem niedrigen Schalldruck.</div>
-            <img src="Bilder/Newton_1Ball.gif" alt="Newton-Pendel: 1 Kugel" onerror="this.onerror=null; this.src='./Bilder/Newton_1Ball.gif';" />
+            <div class="col-text">If only one ball is displaced in the Newton's cradle, the transferred motion is smaller - comparable to low sound pressure.</div>
+            <img src="Bilder/Newton_1Ball.gif" alt="Newton's cradle: 1 ball" onerror="this.onerror=null; this.src='./Bilder/Newton_1Ball.gif';" />
           </div>
 
           <div class="particle-intro-col">
-            <div class="col-text">Werden dagegen zwei oder mehrere Kugeln gleichzeitig ausgelenkt, ist die übertragene Bewegung größer. Entsprechend ist auch die Auslenkung der Luftteilchen stärker, was einem höheren Schalldruck entspricht.</div>
-            <img src="Bilder/Newton_2Ball.gif" alt="Newton-Pendel: 2 Kugeln" onerror="this.onerror=null; this.src='./Bilder/Newton_2Ball.gif';" />
+            <div class="col-text">If two or more balls are displaced at the same time, the transferred motion is larger. Likewise, air particles are displaced more strongly, which corresponds to higher sound pressure.</div>
+            <img src="Bilder/Newton_2Ball.gif" alt="Newton's cradle: 2 balls" onerror="this.onerror=null; this.src='./Bilder/Newton_2Ball.gif';" />
           </div>
         </div>
 
         <div class="btn-row" style="margin-top:12px; justify-content:flex-end;">
-          <button id="btnCloseParticleIntro" type="button">Verstanden</button>
+          <button id="btnCloseParticleIntro" type="button">Understood</button>
         </div>
       </div>
     </div>
@@ -1986,43 +1986,43 @@ button.btn-export{
     <div class="grid mode-layout">
       <div class="controls-col">
 <div class="panel aux-panel" id="cochleaUnrolledPanel">
-        <h3>Hörschnecke – ausgerollter Zustand</h3>
+        <h3>Cochlea - unrolled view</h3>
         <div class="cochlea-legend-toggle-row">
-          <label class="inline-toggle cochlea-legend-toggle" title="Beschriftung ein-/ausblenden">
-            <span class="cochlea-toggle-label">Beschriftung anzeigen</span>
+          <label class="inline-toggle cochlea-legend-toggle" title="Show or hide labels">
+            <span class="cochlea-toggle-label">Show labels</span>
             <span class="toggle-switch">
               <input id="toggleCochleaLegend" type="checkbox" />
               <span class="slider"></span>
             </span>
           </label>
         </div>
-<div class="aux-figure click-zoom" id="cochleaDetailFigure" role="button" tabindex="0" title="Klicken zum Vergrößern" aria-label="Hörschnecke – ausgerollter Zustand (klicken zum Vergrößern)">
-          <img class="aux-img" id="cochleaDetailImg" alt="Hörschnecke – ausgerollter Zustand" src="Bilder/Hörschnecke.png"
+<div class="aux-figure click-zoom" id="cochleaDetailFigure" role="button" tabindex="0" title="Click to enlarge" aria-label="Cochlea - unrolled view (click to enlarge)">
+          <img class="aux-img" id="cochleaDetailImg" alt="Cochlea - unrolled view" src="Bilder/Hörschnecke.png"
                onerror="this.onerror=null; this.src='./Bilder/Hörschnecke.png';" />
           <canvas id="cochleaDetailCanvas" aria-hidden="true"></canvas>
           <img class="aux-img" id="deckmembranOverlayGif" aria-hidden="true" alt="" src="Bilder/Deckmembran.gif"
                onerror="this.style.display='none';" />
 
-          <div id="cochleaZoomLegend" class="legend legend-zoom cochlea-legend" aria-label="Legende (Popup)" style="display:none;">
-            <div class="legend-item" style="color:#22c55e;">Grün = Oberer Gang</div>
-            <div class="legend-item" style="color:#d6c6a6;">Beige = Unterer Gang</div>
-            <div class="legend-item" style="color:#ec4899;">Rosa = Mittlerer Gang</div>
-            <div class="legend-item" style="color:#06b6d4;">Türkis = Rundes Fenster</div>
-            <div class="legend-item" style="color:#a16207;">Braun = Deckmembran</div>
-            <div class="legend-item" style="color:#ef4444;">Rot = Ovales Fenster</div>
-            <div class="legend-item" style="color:#2563eb;">Blau = Hörsinneszellen</div>
-            <div class="legend-item" style="color:#facc15;">Gelb = Hörnerv</div>
+          <div id="cochleaZoomLegend" class="legend legend-zoom cochlea-legend" aria-label="Legend (popup)" style="display:none;">
+            <div class="legend-item" style="color:#22c55e;">Green = upper canal</div>
+            <div class="legend-item" style="color:#d6c6a6;">Beige = lower canal</div>
+            <div class="legend-item" style="color:#ec4899;">Pink = middle canal</div>
+            <div class="legend-item" style="color:#06b6d4;">Turquoise = round window</div>
+            <div class="legend-item" style="color:#a16207;">Brown = tectorial membrane</div>
+            <div class="legend-item" style="color:#ef4444;">Red = oval window</div>
+            <div class="legend-item" style="color:#2563eb;">Blue = sensory cells</div>
+            <div class="legend-item" style="color:#facc15;">Yellow = auditory nerve</div>
           </div>
 </div>
-<div id="cochleaDetailLegend" class="legend legend-under cochlea-legend" aria-label="Legende (Hörschnecke – ausgerollter Zustand)" style="display:none;">
-            <div class="legend-item" style="color:#22c55e;">Grün = Oberer Gang</div>
-            <div class="legend-item" style="color:#d6c6a6;">Beige = Unterer Gang</div>
-            <div class="legend-item" style="color:#ec4899;">Rosa = Mittlerer Gang</div>
-            <div class="legend-item" style="color:#06b6d4;">Türkis = Rundes Fenster</div>
-            <div class="legend-item" style="color:#a16207;">Braun = Deckmembran</div>
-            <div class="legend-item" style="color:#ef4444;">Rot = Ovales Fenster</div>
-            <div class="legend-item" style="color:#2563eb;">Blau = Hörsinneszellen</div>
-            <div class="legend-item" style="color:#facc15;">Gelb = Hörnerv</div>
+<div id="cochleaDetailLegend" class="legend legend-under cochlea-legend" aria-label="Legend (cochlea - unrolled view)" style="display:none;">
+            <div class="legend-item" style="color:#22c55e;">Green = upper canal</div>
+            <div class="legend-item" style="color:#d6c6a6;">Beige = lower canal</div>
+            <div class="legend-item" style="color:#ec4899;">Pink = middle canal</div>
+            <div class="legend-item" style="color:#06b6d4;">Turquoise = round window</div>
+            <div class="legend-item" style="color:#a16207;">Brown = tectorial membrane</div>
+            <div class="legend-item" style="color:#ef4444;">Red = oval window</div>
+            <div class="legend-item" style="color:#2563eb;">Blue = sensory cells</div>
+            <div class="legend-item" style="color:#facc15;">Yellow = auditory nerve</div>
           </div>
 
       </div>
@@ -2031,18 +2031,18 @@ button.btn-export{
 
 
       <div class="panel aux-panel" id="hairCellPanel">
-        <h3>Aktivierung der Hörsinneszellen</h3>
-        <div class="aux-figure hair-figure" id="hairCellFigure" aria-label="Aktivierung der Hörsinneszellen">
+        <h3>Activation of the sensory cells</h3>
+        <div class="aux-figure hair-figure" id="hairCellFigure" aria-label="Activation of the sensory cells">
           <img class="aux-img" id="hairCellBaseImg" alt="Deckmembran" src="Bilder/Deckmembran.png" />
           <img class="aux-img hair-overlay-gif" id="hairCellOverlayGif" alt="" aria-hidden="true" src="Bilder/Hörsinneszellen.gif" />
         
           <canvas id="hairCellSignalCanvas" aria-hidden="true"></canvas>
 </div>
-<div id="hairCellLegend" class="legend legend-under hair-legend" aria-label="Legende (Aktivierung der Hörsinneszellen)">
-            <div class="legend-item" style="color:#f97316;">Orange = Deckmembran</div>
-            <div class="legend-item" style="color:#ef4444;">Rot = Hörsinneszellen mit Härchen</div>
-            <div class="legend-item" style="color:#facc15;">Gelb = Hörnerv</div>
-            <div class="legend-item" style="color:#06b6d4;">Türkis = Elektrischer Impuls</div>
+<div id="hairCellLegend" class="legend legend-under hair-legend" aria-label="Legend (activation of the sensory cells)">
+            <div class="legend-item" style="color:#f97316;">Orange = tectorial membrane</div>
+            <div class="legend-item" style="color:#ef4444;">Red = sensory cells with hairs</div>
+            <div class="legend-item" style="color:#facc15;">Yellow = auditory nerve</div>
+            <div class="legend-item" style="color:#06b6d4;">Turquoise = electrical impulse</div>
           </div>
 
       </div>
@@ -2052,35 +2052,35 @@ button.btn-export{
       <div class="stack">
         <div class="panel label-task-panel" id="taskHearingLabelPanel">
           <div class="collapse-head">
-            <h3>Aufgabe 1: Bau des Ohres</h3>
-            <button type="button" class="ghost collapse-toggle" id="btnToggleHearingLabelPanel" aria-expanded="false" aria-controls="taskHearingLabelBody">Aufklappen</button>
+            <h3>Task 1: Structure of the Ear</h3>
+            <button type="button" class="ghost collapse-toggle" id="btnToggleHearingLabelPanel" aria-expanded="false" aria-controls="taskHearingLabelBody">Expand</button>
           </div>
           <div class="collapse-body hidden" id="taskHearingLabelBody">
-            <div class="small">Ziehe die Begriffe an die passende Stelle im Simulationsfenster. Die Zielbereiche erscheinen nur während des Ziehens.</div>
+            <div class="small">Drag the labels to the matching position in the simulation window. The target areas appear only while dragging.</div>
             <div class="label-task-toolbar">
-              <div class="label-action-bar" role="group" aria-label="Aktionen zur Beschriftungsaufgabe des Ohrs">
-                <button id="btnCheckHearingLabels" type="button" class="secondary">Korrigieren</button>
-                <button id="btnHearingLabelReset" type="button" class="secondary">Zurücksetzen</button>
-                <button id="btnToggleHearingLabels" type="button" class="secondary" aria-pressed="false">Ausblenden</button>
+              <div class="label-action-bar" role="group" aria-label="Actions for the ear labeling task">
+                <button id="btnCheckHearingLabels" type="button" class="secondary">Check</button>
+                <button id="btnHearingLabelReset" type="button" class="secondary">Reset</button>
+                <button id="btnToggleHearingLabels" type="button" class="secondary" aria-pressed="false">Hide</button>
                 <div class="button-lock-wrap" id="wrapExportHearingLabels">
-                  <button id="btnExportHearingLabels" type="button" class="export-positive" disabled>Exportieren</button>
+                  <button id="btnExportHearingLabels" type="button" class="export-positive" disabled>Export</button>
                   <div class="lock-overlay" aria-hidden="true"><span class="lock-badge">🔒</span></div>
                 </div>
               </div>
               <div id="feedbackHearingLabel" class="status-line label-feedback">&nbsp;</div>
             </div>
-            <div id="hearingLabelBank" class="label-bank" aria-label="Beschriftungsbegriffe des Ohrs"></div>
+            <div id="hearingLabelBank" class="label-bank" aria-label="Ear labeling terms"></div>
           </div>
         </div>
 
         <div class="panel" id="hearingSimPanel">
           <div class="panel-head-inline">
-            <h3>Simulationsfeld</h3>
+            <h3>Simulation field</h3>
             <div class="panel-head-actions">
-              <button id="btnTriggerSoundEvent" type="button" class="btn-inline">Schallereignis auslösen</button>
-              <button id="btnOpenHearingInfo" type="button" class="btn-inline">Informationstext</button>
-              <label class="inline-toggle head-toggle" title="Animation in den Fenstern rechts loopen">
-                <span><strong>Dauerschleife</strong></span>
+              <button id="btnTriggerSoundEvent" type="button" class="btn-inline">Trigger sound event</button>
+              <button id="btnOpenHearingInfo" type="button" class="btn-inline">Info text</button>
+              <label class="inline-toggle head-toggle" title="Loop the animations in the windows on the right">
+                <span><strong>Loop</strong></span>
                 <span class="toggle-switch">
                   <input id="toggleCochleaLoop" type="checkbox" />
                   <span class="slider"></span>
@@ -2093,29 +2093,29 @@ button.btn-export{
             <div id="hearingLabelLayer" class="label-layer force-hidden" aria-hidden="true">
               <svg id="hearingLabelSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
             </div>
-            <button id="btnFieldSoundEvent" class="field-btn" type="button" aria-label="Schallereignis auslösen" title="Schallereignis auslösen"></button>
+            <button id="btnFieldSoundEvent" class="field-btn" type="button" aria-label="Trigger sound event" title="Trigger sound event"></button>
           
-                        <div id="hearingLegend" class="legend legend-overlay" aria-label="Legende">
-              <div class="legend-item"><span class="dot" style="background:#2563eb"></span>Schallwelle</div>
-              <div class="legend-item"><span class="dot" style="background:#ef4444"></span>bewegte Struktur</div>
-              <div class="legend-item"><span class="dot" style="background:#10b981"></span>Flüssigkeitsbewegung</div>
+        <div id="hearingLegend" class="legend legend-overlay" aria-label="Legend">
+              <div class="legend-item"><span class="dot" style="background:#2563eb"></span>Sound wave</div>
+              <div class="legend-item"><span class="dot" style="background:#ef4444"></span>Moving structure</div>
+              <div class="legend-item"><span class="dot" style="background:#10b981"></span>Fluid movement</div>
             </div>
           </div>
         </div>
 
         <div class="panel" id="hearingOrderTaskPanel">
           <div class="hearing-task-head">
-            <h3>Aufgabe 2: Ablauf des Hörvorgangs</h3>
-            <button id="btnToggleHearingTask" class="ghost task-toggle-btn" type="button" aria-expanded="false" aria-controls="hearingOrderTaskContent">Aufgabe anzeigen</button>
+            <h3>Task 2: Sequence of hearing</h3>
+            <button id="btnToggleHearingTask" class="ghost task-toggle-btn" type="button" aria-expanded="false" aria-controls="hearingOrderTaskContent">Show task</button>
           </div>
 
           <div id="hearingOrderTaskContent" class="hearing-task-content hidden">
-            <div class="small">Ziehe die Bausteine per Drag &amp; Drop in die richtige Reihenfolge oder nutze die Pfeile rechts. Klicke danach auf <b>Korrigieren</b>.</div>
+            <div class="small">Drag the blocks into the correct order or use the arrows on the right. Then click <b>Check</b>.</div>
 
-            <ul id="hearingOrderList" class="order-list" aria-label="Reihenfolge Aufgabe"></ul>
+            <ul id="hearingOrderList" class="order-list" aria-label="Sequence task"></ul>
 
             <div class="btn-row" style="margin-top:10px; align-items:center;">
-              <button id="btnCheckHearingOrder" class="secondary" type="button">Korrigieren</button>
+              <button id="btnCheckHearingOrder" class="secondary" type="button">Check</button>
               <div id="hearingOrderFeedback" class="status-line" style="margin:0; flex:1;">&nbsp;</div>
             </div>
           </div>
@@ -2126,25 +2126,25 @@ button.btn-export{
     <div id="hearingInfoModal" class="modal hidden" aria-hidden="true">
       <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="hearingInfoTitle">
         <div class="modal-head">
-          <h3 id="hearingInfoTitle" style="margin:0;">Informationstext: Bau des Ohres und Ablauf des Hörvorgangs</h3>
-          <button id="btnCloseHearingInfo" type="button" class="icon-btn" aria-label="Informationstext schließen">×</button>
+          <h3 id="hearingInfoTitle" style="margin:0;">Info text: structure of the ear and sequence of hearing</h3>
+          <button id="btnCloseHearingInfo" type="button" class="icon-btn" aria-label="Close info text">×</button>
         </div>
         <div class="hearing-info-text">
-          <p>Das Ohr gliedert sich in Außenohr, Mittelohr und Innenohr. Zur äußeren Form gehört die Ohrmuschel, die Schallwellen aufnimmt und in den Gehörgang leitet. Am Ende des Gehörgangs liegt das Trommelfell. Dahinter befinden sich im Mittelohr die drei Gehörknöchelchen Hammer, Amboss und Steigbügel. Ebenfalls mit dem Mittelohr verbunden ist die Ohrtrompete, die für den Druckausgleich wichtig ist. Zum Innenohr gehören die Hörschnecke und die Bogengänge. Die Bogengänge sind vor allem für den Gleichgewichtssinn bedeutsam, während die Hörschnecke das eigentliche Hörorgan ist.</p>
-          <p>Beim Hörvorgang werden Schallwellen zunächst von der Ohrmuschel aufgefangen und im Gehörgang weitergeleitet. Treffen sie auf das Trommelfell, beginnt es zu schwingen. Diese Bewegung wird auf Hammer, Amboss und Steigbügel übertragen. Der Steigbügel drückt dabei gegen das ovale Fenster. Auf diese Weise gelangt die Schwingung aus dem Außenohr über das Mittelohr bis in das Innenohr.</p>
-          <p>In der Hörschnecke setzt die Bewegung des ovalen Fensters die Flüssigkeit im Inneren in Bewegung. Dadurch gerät auch die Deckmembran in Schwingung. Die Bewegung der Deckmembran verbiegt die Härchen der Hörsinneszellen. So entstehen elektrische Signale, die über den Hörnerv zum Gehirn weitergeleitet werden. Erst dort werden die Signale verarbeitet, sodass wir Töne, Geräusche und Sprache wahrnehmen können.</p>
-          <div class="hearing-info-footer"><strong>Aufgabe 1: Bau des Ohres</strong><br><strong>Aufgabe 2: Ablauf des Hörvorgangs</strong></div>
+          <p>The ear is divided into the outer ear, middle ear, and inner ear. The pinna collects sound waves and directs them into the ear canal. At the end of the canal lies the eardrum. Behind it, in the middle ear, are the three auditory ossicles: hammer, anvil, and stirrup. The Eustachian tube is also connected to the middle ear and is important for pressure equalization. The inner ear includes the cochlea and the semicircular canals. The semicircular canals are mainly responsible for balance, while the cochlea is the actual hearing organ.</p>
+          <p>During hearing, sound waves are first collected by the pinna and passed through the ear canal. When they reach the eardrum, it begins to vibrate. This movement is transferred to the hammer, anvil, and stirrup. The stirrup presses against the oval window. In this way, the vibration travels from the outer ear through the middle ear into the inner ear.</p>
+          <p>Inside the cochlea, movement at the oval window sets the fluid inside into motion. This also causes the tectorial membrane to vibrate. As it moves, the hairs of the sensory cells bend. Electrical signals are created and transmitted to the brain through the auditory nerve. Only there are the signals processed so that we perceive tones, sounds, and speech.</p>
+          <div class="hearing-info-footer"><strong>Task 1: Structure of the ear</strong><br><strong>Task 2: Sequence of hearing</strong></div>
         </div>
       </div>
     </div>
 
     <div id="hearingSolvedModal" class="modal hidden" aria-hidden="true">
       <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="hearingSolvedTitle">
-        <h3 id="hearingSolvedTitle" style="margin:0 0 6px 0;">Richtig!</h3>
-        <div class="muted" style="margin-bottom:12px;">Exportiere jetzt deine Lösung (als Screenshot in die Zwischenablage) und füge sie z.&nbsp;B. in OneNote ein.</div>
+        <h3 id="hearingSolvedTitle" style="margin:0 0 6px 0;">Correct!</h3>
+        <div class="muted" style="margin-bottom:12px;">Now export your solution as a screenshot to the clipboard and paste it, for example, into OneNote.</div>
         <div class="btn-row">
-          <button id="btnExportHearingOrder" type="button">Exportieren</button>
-          <button id="btnCloseHearingModal" class="secondary" type="button">Schließen</button>
+          <button id="btnExportHearingOrder" type="button">Export</button>
+          <button id="btnCloseHearingModal" class="secondary" type="button">Close</button>
         </div>
         <div id="hearingExportStatus" class="status-line" style="margin-top:10px;">&nbsp;</div>
       </div>
@@ -2154,16 +2154,16 @@ button.btn-export{
       <div class="modal-card modal-wide" role="dialog" aria-modal="true" aria-labelledby="cochleaZoomTitle">
         <div class="modal-head cochlea-zoom-head">
           <div class="modal-head-left">
-            <h3 id="cochleaZoomTitle" style="margin:0;">Hörschnecke – ausgerollter Zustand</h3>
-            <label class="inline-toggle cochlea-legend-toggle cochlea-legend-toggle-zoom" title="Beschriftung ein-/ausblenden">
-              <span class="cochlea-toggle-label">Beschriftung anzeigen</span>
+            <h3 id="cochleaZoomTitle" style="margin:0;">Cochlea - unrolled view</h3>
+            <label class="inline-toggle cochlea-legend-toggle cochlea-legend-toggle-zoom" title="Show or hide labels">
+              <span class="cochlea-toggle-label">Show labels</span>
               <span class="toggle-switch">
                 <input id="toggleCochleaLegendZoom" type="checkbox" />
                 <span class="slider"></span>
               </span>
             </label>
           </div>
-          <button id="btnCloseCochleaZoom" class="icon-btn" type="button" aria-label="Schließen">×</button>
+          <button id="btnCloseCochleaZoom" class="icon-btn" type="button" aria-label="Close">×</button>
         </div>
                 <div id="cochleaZoomStage" class="cochlea-zoom-stage"></div>
       </div>
@@ -2175,19 +2175,19 @@ button.btn-export{
   <section id="directionMode" class="hidden">
     <div class="grid mode-layout">
       <div class="panel controls direction-controls-panel">
-        <h3>Steuerung: Richtungshören</h3>
+        <h3>Controls: sound localization</h3>
 
         <div class="row">
           <div class="btn-row">
-            <button id="btnDirectionTone">Tonquelle starten</button>
-            <button id="btnDirectionReset" class="secondary">Quelle nach vorne</button>
+            <button id="btnDirectionTone">Start sound source</button>
+            <button id="btnDirectionReset" class="secondary">Move source to the front</button>
           </div>
-          <div class="small" style="display:none;">Tipp: Quelle im Simulationsfeld direkt auf dem Kreis verschieben.</div>
+          <div class="small" style="display:none;">Tip: move the source directly along the circle in the simulation field.</div>
         </div>
 
         <div class="row">
           <label for="dirAngleSlider">
-            <span>Position der Tonquelle</span>
+            <span>Position of the sound source</span>
             <strong id="dirAngleValue">0°</strong>
           </label>
           <input id="dirAngleSlider" type="range" min="0" max="359" value="0" step="1">
@@ -2195,14 +2195,14 @@ button.btn-export{
 
         <div class="row">
           <label for="dirFreqSlider">
-            <span>Tonfrequenz</span>
+            <span>Sound frequency</span>
             <strong id="dirFreqValue">440 Hz</strong>
           </label>
           <input id="dirFreqSlider" type="range" min="180" max="1200" value="440" step="1">
         </div>
         <div class="row">
           <label for="dirVolSlider">
-            <span>Lautstärke</span>
+            <span>Volume</span>
             <strong id="dirVolValue">50 %</strong>
           </label>
           <input id="dirVolSlider" type="range" min="0" max="100" value="50" step="1">
@@ -2211,42 +2211,42 @@ button.btn-export{
 
         <div class="row" style="display:none;">
           <label for="dirVisualPreset">
-            <span>Darstellungsstil</span>
-            <strong id="dirVisualPresetLabel">Realistischer Kopf</strong>
+            <span>Display style</span>
+            <strong id="dirVisualPresetLabel">Realistic head</strong>
           </label>
           <select id="dirVisualPreset" style="width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:#0f172a;">
-            <option value="realistic" selected>Realistischer Kopf</option>
-            <option value="highcontrast">High-Contrast (Beamer)</option>
+            <option value="realistic" selected>Realistic head</option>
+            <option value="highcontrast">High contrast (projector)</option>
           </select>
         </div>
 
         <div class="panel" style="padding:10px;">
-          <div><b>Prinzip des Richtungshörens</b></div>
+          <div><b>Principle of sound localization</b></div>
           <div class="direction-principle-text" style="margin:8px 0 0 0; font-size:.9rem; color:var(--muted); line-height:1.45; text-align:justify;">
-            Das Richtungshören hängt vor allem von zwei Faktoren ab: dem <b>Laufzeitunterschied</b> und dem <b>Pegelunterschied</b> zwischen linkem und rechtem Ohr. Untersucht in dieser Simulation beide Faktoren und vergleicht, wie sie sich mit der Position der Tonquelle verändern.
+            Sound localization depends mainly on two factors: the <b>interaural time difference</b> and the <b>interaural level difference</b> between the left and right ear. Use this simulation to investigate both factors and compare how they change with the position of the sound source.
           </div>
           <div class="status-line" id="directionStatus" style="display:none;"></div>
         </div>
 
         <div class="legend" style="margin-top:8px;">
-          <div><span class="dot" style="background:#ef4444"></span>Tonquelle auf Kreisbahn</div>
-          <div><span class="dot" style="background:#2563eb"></span>Laufweg zu linkem Ohr</div>
-          <div><span class="dot" style="background:#10b981"></span>Laufweg zum rechten Ohr</div>
+          <div><span class="dot" style="background:#ef4444"></span>Sound source on circular path</div>
+          <div><span class="dot" style="background:#2563eb"></span>Path to the left ear</div>
+          <div><span class="dot" style="background:#10b981"></span>Path to the right ear</div>
         </div>
 
         <div class="panel" id="bonusFastPanel" style="margin-top:10px; padding:10px; position:relative;">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-            <div><b>Bonus für Schnelle</b></div>
-            <button id="bonusInfoBtn" class="hidden" type="button" aria-label="Informationen zur Audioquelle" title="Informationen zur Audioquelle"
+            <div><b>Bonus for fast finishers</b></div>
+            <button id="bonusInfoBtn" class="hidden" type="button" aria-label="Information about the audio source" title="Information about the audio source"
               style="width:28px; height:28px; border-radius:999px; border:1px solid #bfd0eb; background:#eef4ff; color:#1d4ed8; font-weight:700; cursor:pointer; padding:0; display:inline-flex; align-items:center; justify-content:center; line-height:1; text-align:center; font-size:16px;">i</button>
           </div>
 
           <div id="bonusLockedArea" style="margin-top:8px;">
-            <div class="small" style="margin-bottom:8px;">Dieses Bonusfenster wird durch die Eingabe eines Codes freigeschaltet.</div>
+            <div class="small" style="margin-bottom:8px;">This bonus panel is unlocked by entering a code.</div>
             <div style="display:flex; gap:8px; align-items:center;">
-              <input id="bonusCodeInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Code eingeben"
+              <input id="bonusCodeInput" type="password" inputmode="numeric" autocomplete="off" placeholder="Enter code"
                      style="flex:1; min-width:0; padding:8px 10px; border:1px solid #cbd5e1; border-radius:10px; background:#fff; color:#0f172a;">
-              <button id="bonusUnlockBtn" type="button" class="secondary" style="white-space:nowrap;">Freischalten</button>
+              <button id="bonusUnlockBtn" type="button" class="secondary" style="white-space:nowrap;">Unlock</button>
             </div>
             <div id="bonusUnlockMsg" class="small" style="margin-top:6px; min-height:1.1em; color:#64748b;"></div>
           </div>
@@ -2260,22 +2260,22 @@ button.btn-export{
             <audio id="bonusAudioPlayer" controls preload="none" style="width:100%; margin-top:8px;">
               <source src="Tucker%20Zone%203D%20Experience.mp3" type="audio/mpeg">
               <source src="Tucker%20Zone%203D%20Experience.mp3" type="audio/mpeg">
-              Dein Browser unterstützt das Audio-Element nicht.
+              Your browser does not support the audio element.
             </audio>
             <div class="small" style="margin-top:8px; line-height:1.35;">
-              Hinweis: Diese Audio-Datei muss mit beiden Kopfhörern im Ohr angehört werden um den Effekt zu erleben.
+              Note: this audio file must be played with both headphones on to experience the effect.
             </div>
           </div>
 
-          <div id="bonusInfoPopup" class="hidden" role="dialog" aria-modal="false" aria-label="Quelle der Audiodatei"
+          <div id="bonusInfoPopup" class="hidden" role="dialog" aria-modal="false" aria-label="Source of the audio file"
                style="position:absolute; right:10px; top:42px; z-index:20; width:min(330px, calc(100% - 20px)); background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; box-shadow:0 10px 25px rgba(15,23,42,.15); padding:10px;">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
-              <div style="font-weight:700; color:#0f172a;">Quelle der Audiodatei</div>
-              <button id="bonusInfoCloseBtn" type="button" aria-label="Infofenster schließen"
+              <div style="font-weight:700; color:#0f172a;">Source of the audio file</div>
+              <button id="bonusInfoCloseBtn" type="button" aria-label="Close info window"
                 style="width:24px; height:24px; border-radius:999px; border:1px solid #cbd5e1; background:#fff; color:#334155; cursor:pointer; padding:0; display:inline-flex; align-items:center; justify-content:center; line-height:1; text-align:center; font-size:16px;">×</button>
             </div>
             <div class="small" style="line-height:1.35; color:#475569;">
-              YouTube-Quelle:
+              YouTube source:
             </div>
             <a href="https://www.youtube.com/watch?v=3txhT2ncNOU&t=2s" target="_blank" rel="noopener noreferrer"
                style="display:block; margin-top:4px; font-size:.82rem; line-height:1.35; color:#1d4ed8; word-break:break-all; text-decoration:none;">
@@ -2287,7 +2287,7 @@ button.btn-export{
 
       <div class="stack">
         <div class="panel">
-          <h3>Simulationsfeld: Richtungshören</h3>
+          <h3>Simulation panel: sound localization</h3>
           <div class="canvas-wrap">
             <div class="canvas-stack">
               <canvas id="directionCanvas" width="900" height="470"></canvas>
@@ -2295,12 +2295,12 @@ button.btn-export{
             </div>
           </div>
           <div class="small" style="margin-top:8px;">
-            Tipp: Quelle im Simulationsfeld direkt auf dem Kreis verschieben.
+            Tip: drag the source directly along the circle inside the simulation panel.
           </div>
         </div>
 
         <div class="panel" id="directionComparePanel">
-          <h3>Vergleich: Laufzeitdifferenz und Pegeldifferenz</h3>
+          <h3>Comparison: interaural time difference and interaural level difference</h3>
           <div class="canvas-wrap">
             <canvas id="directionCompareCanvas" width="900" height="320"></canvas>
           </div>
@@ -2310,110 +2310,110 @@ button.btn-export{
   </section>
 </div>
 
-<!-- Export-Auswahl (Option 1: Schallwellen) -->
+<!-- Export selection (Option 1: Sound waves) -->
 <div id="soundExportSelectModal" class="modal hidden" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="soundExportSelectTitle">
     <div class="modal-head">
-      <h3 id="soundExportSelectTitle" style="margin:0;">Exportieren</h3>
-      <button id="btnCloseSoundExportSelectX" class="icon-btn" type="button" aria-label="Schließen">×</button>
+      <h3 id="soundExportSelectTitle" style="margin:0;">Export</h3>
+      <button id="btnCloseSoundExportSelectX" class="icon-btn" type="button" aria-label="Close">×</button>
     </div>
 
     <div class="muted" style="margin-bottom:8px;">
-      Wähle einen Bereich. Die Vorschau zeigt, was in die Zwischenablage kopiert wird.
+      Choose an area. The preview shows what will be copied to the clipboard.
     </div>
 
     <div class="export-grid">
       <div class="export-box">
-        <h3>Auswahl</h3>
+        <h3>Selection</h3>
 
-        <label class="export-choice" title="Simulationsfeld Schallwellen exportieren">
+        <label class="export-choice" title="Export sound waves simulation area">
           <span class="txt">
-            <span class="lbl">Simulationsfeld</span>
-            <span class="desc">Schallwellen-Simulationsfeld.</span>
+            <span class="lbl">Simulation area</span>
+            <span class="desc">Sound waves simulation area.</span>
           </span>
           <input type="radio" name="soundExportChoice" value="sim" checked>
           <span class="sw" aria-hidden="true"></span>
         </label>
 
-        <label class="export-choice" title="Mikrofon-Messung exportieren">
+        <label class="export-choice" title="Export microphone measurement">
           <span class="txt">
-            <span class="lbl">Mikrofon-Messung</span>
-            <span class="desc">Messdiagramm des Mikrofons.</span>
+            <span class="lbl">Microphone measurement</span>
+            <span class="desc">Measurement chart of the microphone.</span>
           </span>
           <input type="radio" name="soundExportChoice" value="chart">
           <span class="sw" aria-hidden="true"></span>
         </label>
 
         <div class="export-actions">
-          <button id="btnDoSoundExportChoice" type="button" class="btn-export"><span class="btn-ic" aria-hidden="true">⤓</span><span class="btn-txt">In Zwischenablage kopieren</span></button>
-          <button id="btnCancelSoundExportSelect" type="button" class="secondary">Abbrechen</button>
+          <button id="btnDoSoundExportChoice" type="button" class="btn-export"><span class="btn-ic" aria-hidden="true">⤓</span><span class="btn-txt">Copy to clipboard</span></button>
+          <button id="btnCancelSoundExportSelect" type="button" class="secondary">Cancel</button>
         </div>
 
         <div id="soundExportChoiceStatus" class="export-status" aria-live="polite"></div>
       </div>
 
-      <div class="export-preview" aria-label="Vorschau">
-        <div id="soundExportPreviewEmpty" class="preview-empty">Noch keine Vorschau erstellt.</div>
-        <img id="soundExportPreviewImg" alt="Export-Vorschau Schallwellen" style="display:none;">
+      <div class="export-preview" aria-label="Preview">
+        <div id="soundExportPreviewEmpty" class="preview-empty">No preview created yet.</div>
+        <img id="soundExportPreviewImg" alt="Export preview Sound waves" style="display:none;">
       </div>
     </div>
   </div>
 </div>
 
-<!-- Export-Auswahl (Option 2) -->
+<!-- Export selection (Option 2) -->
 <div id="exportSelectModal" class="modal hidden" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="exportSelectTitle">
     <div class="modal-head">
-      <h3 id="exportSelectTitle" style="margin:0;">Exportieren</h3>
-      <button id="btnCloseExportSelectX" class="icon-btn" type="button" aria-label="Schließen">×</button>
+      <h3 id="exportSelectTitle" style="margin:0;">Export</h3>
+      <button id="btnCloseExportSelectX" class="icon-btn" type="button" aria-label="Close">×</button>
     </div>
 
     <div class="muted" style="margin-bottom:8px;">
-      Wähle einen Bereich. Die Vorschau zeigt, was in die Zwischenablage kopiert wird.
+      Choose an area. The preview shows what will be copied to the clipboard.
     </div>
 
     <div class="export-grid">
       <div class="export-box">
-        <h3>Auswahl</h3>
+        <h3>Selection</h3>
 
-        <label class="export-choice" title="Simulationsfeld Hörvorgang exportieren">
+        <label class="export-choice" title="Export hearing simulation area">
           <span class="txt">
-            <span class="lbl">Simulationsfenster</span>
-            <span class="desc">Simulationsfeld Hörvorgang.</span>
+            <span class="lbl">Simulation window</span>
+            <span class="desc">Hearing simulation area.</span>
           </span>
           <input type="radio" name="exportChoice" value="sim" checked>
           <span class="sw" aria-hidden="true"></span>
         </label>
 
-        <label class="export-choice" title="Hörschnecke – ausgerollter Zustand exportieren">
+        <label class="export-choice" title="Export cochlea - unrolled view">
           <span class="txt">
-            <span class="lbl">Hörschnecke (mit Legende)</span>
-            <span class="desc">Hörschnecke mit Legende.</span>
+            <span class="lbl">Cochlea (with legend)</span>
+            <span class="desc">Cochlea with legend.</span>
           </span>
           <input type="radio" name="exportChoice" value="cochlea">
           <span class="sw" aria-hidden="true"></span>
         </label>
 
-        <label class="export-choice" title="Aktivierung der Hörsinneszellen exportieren">
+        <label class="export-choice" title="Export activation of the sensory cells">
           <span class="txt">
-            <span class="lbl">Aktivierung der Hörsinneszellen</span>
-            <span class="desc">Deckmembran mit elektrischem Impuls.</span>
+            <span class="lbl">Activation of the sensory cells</span>
+            <span class="desc">Tectorial membrane with electrical impulse.</span>
           </span>
           <input type="radio" name="exportChoice" value="hair">
           <span class="sw" aria-hidden="true"></span>
         </label>
 
         <div class="export-actions">
-          <button id="btnDoExportChoice" type="button" class="btn-export"><span class="btn-ic" aria-hidden="true">⤓</span><span class="btn-txt">In Zwischenablage kopieren</span></button>
-          <button id="btnCancelExportSelect" type="button" class="secondary">Abbrechen</button>
+          <button id="btnDoExportChoice" type="button" class="btn-export"><span class="btn-ic" aria-hidden="true">⤓</span><span class="btn-txt">Copy to clipboard</span></button>
+          <button id="btnCancelExportSelect" type="button" class="secondary">Cancel</button>
         </div>
 
         <div id="exportChoiceStatus" class="export-status" aria-live="polite"></div>
       </div>
 
-      <div class="export-preview" aria-label="Vorschau">
-        <div id="exportPreviewEmpty" class="preview-empty">Noch keine Vorschau erstellt.</div>
-        <img id="exportPreviewImg" alt="Export-Vorschau" style="display:none;">
+      <div class="export-preview" aria-label="Preview">
+        <div id="exportPreviewEmpty" class="preview-empty">No preview created yet.</div>
+        <img id="exportPreviewImg" alt="Export preview" style="display:none;">
       </div>
     </div>
   </div>
@@ -2553,9 +2553,9 @@ button.btn-export{
 
 
   const MODE_DESCRIPTIONS = {
-    sound: 'Untersuche, wie sich Schallwellen in Luft ausbreiten und wodurch die Tonhöhe und Lautstärke eines Geräusches bestimmt wird.',
-    hearing: 'Beobachte die Weiterleitung eines Schallereignisses durch Außenohr, Mittelohr und Innenohr in einer vereinfachten, animierten Darstellung.',
-    direction: 'Untersuche, wie die Position einer Tonquelle um den Kopf herum über Laufzeitdifferenz und Pegeldifferenz zwischen beiden Ohren erkannt wird.'
+  sound: 'Investigate how sound waves spread through air and what determines the pitch and volume of a sound.',
+    hearing: 'Observe how a sound event is transmitted through the outer ear, middle ear, and inner ear in a simplified animated display.',
+  direction: 'Investigate how the position of a sound source around the head is detected through interaural time difference and interaural level difference between the two ears.'
   };
 
   function showMenu() {
@@ -2563,7 +2563,7 @@ button.btn-export{
     soundModeEl.classList.add('hidden');
     hearingModeEl.classList.add('hidden');
     directionModeEl.classList.add('hidden');
-    modeLabel.textContent = 'Bitte Modus wählen';
+    modeLabel.textContent = 'Please choose a mode';
     app.currentMode = null;
     if (btnExportTop) btnExportTop.classList.add('hidden');
     stopTone();
@@ -2609,9 +2609,9 @@ button.btn-export{
     a.remove();
   }
 
-  document.getElementById('btnWorksheetSound')?.addEventListener('click', () => downloadWorksheet('AB_Schallwellen'));
-  document.getElementById('btnWorksheetHearing')?.addEventListener('click', () => downloadWorksheet('AB_Hörvorgang'));
-  document.getElementById('btnWorksheetDirection')?.addEventListener('click', () => downloadWorksheet('AB_Richtungshören'));
+  document.getElementById('btnWorksheetSound')?.addEventListener('click', () => downloadWorksheet('AB_Schallwellen_EN'));
+  document.getElementById('btnWorksheetHearing')?.addEventListener('click', () => downloadWorksheet('AB_Hörvorgang_EN'));
+  document.getElementById('btnWorksheetDirection')?.addEventListener('click', () => downloadWorksheet('AB_Richtungshören_EN'));
 
 
 // ---------- Export (Screenshot → Zwischenablage) ----------
@@ -2622,7 +2622,7 @@ function showExportToast(msg, ok=true){
   if(!exportToast) return;
   let m = String(msg ?? '');
   if(!ok && /tainted canvases/i.test(m) && location && location.protocol === 'file:'){
-    m += ' (Hinweis: Bitte über einen Webserver/GitHub Pages öffnen; „file://“ blockiert Canvas-Export.)';
+    m += ' (Note: please open this through a web server/GitHub Pages; file:// blocks canvas export.)';
   }
   exportToast.textContent = m;
   exportToast.classList.remove('hidden');
@@ -2636,23 +2636,23 @@ function showExportToast(msg, ok=true){
 }
 
 async function copyBlobToClipboard(blob){
-  if(!blob) throw new Error('Kein Bilddaten-Blob.');
+  if(!blob) throw new Error('No image-data blob.');
   if(!navigator.clipboard || !window.ClipboardItem){
-    throw new Error('Clipboard-API nicht verfügbar (Browser-Einschränkung).');
+    throw new Error('Clipboard API is not available (browser restriction).');
   }
   await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
 }
 
 async function copyCanvasToClipboard(canvas){
   const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-  if(!blob) throw new Error('Export fehlgeschlagen (kein Blob).');
+  if(!blob) throw new Error('Export failed (no blob).');
   await copyBlobToClipboard(blob);
 }
 
 async function elementToCanvas(el, extraOpts){
-  if(!el) throw new Error('Export-Ziel nicht gefunden.');
+  if(!el) throw new Error('Export target not found.');
   if(!window.html2canvas){
-    throw new Error('html2canvas ist nicht verfügbar (Offline/Blocker).');
+    throw new Error('html2canvas is not available (offline/blocker).');
   }
   const isFile = (location.protocol === 'file:');
   const opts = Object.assign({
@@ -2672,11 +2672,11 @@ async function elementToCanvas(el, extraOpts){
 async function elementToPngBlob(el, extraOpts){
   const canvas = await elementToCanvas(el, extraOpts);
   const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-  if(!blob) throw new Error('Export fehlgeschlagen (kein Blob).');
+  if(!blob) throw new Error('Export failed (no blob).');
   return blob;
 }
 
-// ---- Export-Helfer: <img> in Clone als Data-URL ersetzen (reduziert „tainted canvas“ v. a. bei file://) ----
+// ---- Export helper: replace <img> in the clone with data URLs (reduces tainted canvas issues, especially with file://) ----
 let __exportIdSeq = 1;
 
 function _ensureExportIds(root){
@@ -2733,7 +2733,7 @@ async function copyElementToClipboard(el){
 
 function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
-// ---- Option 1: Export-Auswahl Schallwellen (Popup + Vorschau) ----
+// ---- Option 1: Export selection Sound waves (Popup + Vorschau) ----
 const soundExportSelectModal = document.getElementById('soundExportSelectModal');
 const soundExportChoiceStatus = document.getElementById('soundExportChoiceStatus');
 const btnDoSoundExportChoice = document.getElementById('btnDoSoundExportChoice');
@@ -2752,7 +2752,7 @@ function _setSoundExportChoiceStatus(msg, kind){
   let m = msg || '';
   try{
     if(kind === 'err' && /tainted canvases/i.test(String(m)) && location && location.protocol === 'file:'){
-      m += ' (Hinweis: Bitte über einen Webserver/GitHub Pages öffnen; „file://“ blockiert Canvas-Export.)';
+      m += ' (Note: please open this through a web server/GitHub Pages; file:// blocks canvas export.)';
     }
   }catch(_){ }
   soundExportChoiceStatus.textContent = m;
@@ -2811,11 +2811,11 @@ async function refreshSoundExportPreview(){
   _soundExportPreviewBusy = true;
 
   try{
-    _setSoundExportChoiceStatus('Vorschau wird erstellt…', null);
+  _setSoundExportChoiceStatus('Creating preview...', null);
     const choice = getSoundExportChoice();
     const canvas = captureSoundExportChoiceCanvas(choice);
     const blob = await _canvasToBlob(canvas);
-    if(!blob) throw new Error('Vorschau konnte nicht erzeugt werden.');
+      if(!blob) throw new Error('Preview could not be generated.');
 
     if(_soundExportPreviewUrl){
       try{ URL.revokeObjectURL(_soundExportPreviewUrl); }catch(_){ }
@@ -2832,9 +2832,9 @@ async function refreshSoundExportPreview(){
     }
     if(soundExportPreviewEmpty) soundExportPreviewEmpty.style.display = 'none';
 
-    _setSoundExportChoiceStatus('Vorschau bereit.', 'ok');
+      _setSoundExportChoiceStatus('Preview ready.', 'ok');
   } catch(err){
-    _setSoundExportChoiceStatus('Export nicht möglich: ' + (err?.message || err), 'err');
+    _setSoundExportChoiceStatus('Export unavailable: ' + (err?.message || err), 'err');
   } finally {
     _soundExportPreviewBusy = false;
   }
@@ -2862,18 +2862,18 @@ if(btnDoSoundExportChoice){
       } else {
         const canvas = captureSoundExportChoiceCanvas(choice);
         const blob = await _canvasToBlob(canvas);
-        if(!blob) throw new Error('Export fehlgeschlagen (kein Blob).');
+        if(!blob) throw new Error('Export failed (no blob).');
         await copyBlobToClipboard(blob);
       }
 
-      _setSoundExportChoiceStatus('In die Zwischenablage kopiert (Strg+V).', 'ok');
+      _setSoundExportChoiceStatus('Copied to the clipboard (Ctrl+V).', 'ok');
     } catch(err){
-      _setSoundExportChoiceStatus('Export nicht möglich: ' + (err?.message || err), 'err');
+      _setSoundExportChoiceStatus('Export not possible: ' + (err?.message || err), 'err');
     }
   });
 }
 
-// ---- Option 2: Export-Auswahl (Popup + Vorschau) ----
+// ---- Option 2: Export selection (Popup + Vorschau) ----
 const exportSelectModal = document.getElementById('exportSelectModal');
 const exportChoiceStatus = document.getElementById('exportChoiceStatus');
 const btnDoExportChoice = document.getElementById('btnDoExportChoice');
@@ -2894,7 +2894,7 @@ function _setExportChoiceStatus(msg, kind){
   // file:// kann Canvas-Export bei Bildern/Canvas (tainted) blockieren → Hinweis ausgeben
   try{
     if(kind === 'err' && /tainted canvases/i.test(String(m)) && location && location.protocol === 'file:'){
-      m += ' (Hinweis: Bitte über einen Webserver/GitHub Pages öffnen; „file://“ blockiert Canvas-Export.)';
+      m += ' (Note: please open this through a web server/GitHub Pages; file:// blocks canvas export.)';
     }
   }catch(_){}
   exportChoiceStatus.textContent = m;
@@ -3003,7 +3003,7 @@ function _extractColoredOverlayCanvas(srcCanvas, chromaThreshold){
 }
 
 function _buildHearingCompositeCanvas(){
-  if(!earCanvas) throw new Error('Simulations-Canvas nicht gefunden.');
+  if(!earCanvas) throw new Error('Simulation canvas not found.');
   const now = performance.now() / 1000;
   const savedEvents = hearingState.events.slice();
   const savedSpeed = hearingState.speedFactor;
@@ -3017,7 +3017,7 @@ function _buildHearingCompositeCanvas(){
   // -> verhindert, dass das Basisbild mehrfach „drübergezeichnet“ wird (Problem in v2)
   const keyframes = [
     { p: 0.55, a: 0.85 }, // Schallquelle (außen)
-    { p: 1.25, a: 0.85 }, // Schallwellen im Gehörgang
+    { p: 1.25, a: 0.85 }, // Sound waves im Gehörgang
     { p: 2.15, a: 0.92 }, // Trommelfell
     { p: 2.90, a: 0.92 }, // Hammer/Amboss
     { p: 3.55, a: 0.94 }, // Steigbügel/Ovales Fenster
@@ -3106,9 +3106,9 @@ function _drawHearingLegendOnCanvas(canvas){
     ctx.fillStyle = '#374151';
 
     const items = [
-      { c:'#2563eb', t:'Schallwelle' },
+      { c:'#2563eb', t:'Sound wave' },
       { c:'#ef4444', t:'bewegte Struktur' },
-      { c:'#10b981', t:'Flüssigkeitsbewegung' }
+      { c:'#10b981', t:'Fluid movement' }
     ];
 
     const lineY0 = y + 34;
@@ -3383,12 +3383,12 @@ async function refreshExportPreview(){
   _exportPreviewBusy = true;
 
   try{
-    _setExportChoiceStatus('Vorschau wird erstellt…', null);
+      _setExportChoiceStatus('Creating preview...', null);
     const choice = getExportChoice();
 
     const canvas = await captureExportChoiceCanvas(choice);
     const blob = await _canvasToBlob(canvas);
-    if(!blob) throw new Error('Vorschau konnte nicht erzeugt werden.');
+      if(!blob) throw new Error('Preview could not be generated.');
 
     if(_exportPreviewUrl){
       try{ URL.revokeObjectURL(_exportPreviewUrl); }catch(_){}
@@ -3405,9 +3405,9 @@ async function refreshExportPreview(){
     }
     if(exportPreviewEmpty) exportPreviewEmpty.style.display = 'none';
 
-    _setExportChoiceStatus('Vorschau bereit.', 'ok');
+      _setExportChoiceStatus('Preview ready.', 'ok');
   } catch(err){
-    _setExportChoiceStatus('Export nicht möglich: ' + (err?.message || err), 'err');
+    _setExportChoiceStatus('Export unavailable: ' + (err?.message || err), 'err');
   } finally {
     _exportPreviewBusy = false;
   }
@@ -3433,7 +3433,7 @@ async function exportSoundSim(){
     }
     return;
   }
-  throw new Error('Export nicht möglich (Simulationsfenster nicht gefunden).');
+  throw new Error('Export unavailable (simulation window not found).');
 }
 
 async function exportDirectionCompare(){
@@ -3453,7 +3453,7 @@ async function exportDirectionCompare(){
     } finally { exportFreeze = false; }
     return;
   }
-  throw new Error('Export nicht möglich (Vergleichsfenster nicht gefunden).');
+  throw new Error('Export unavailable (comparison window not found).');
 }
 
 async function exportHearingSimulationOverview(){
@@ -3477,12 +3477,12 @@ async function runTopExport(){
       openSoundExportSelectModal();
     } else if(app.currentMode === 'direction'){
       await exportDirectionCompare();
-      showExportToast('Richtungshören: Screenshot in die Zwischenablage kopiert (Strg+V).', true);
+      showExportToast('Sound localization: screenshot copied to the clipboard (Ctrl+V).', true);
     } else if(app.currentMode === 'hearing'){
       openExportSelectModal();
     }
   } catch(err){
-    showExportToast('Export nicht möglich: ' + (err?.message || err), false);
+    showExportToast('Export not possible: ' + (err?.message || err), false);
   }
 }
 
@@ -3491,7 +3491,7 @@ if(btnExportTop) btnExportTop.addEventListener('click', runTopExport);
 if(btnDoExportChoice){
   btnDoExportChoice.addEventListener('click', async () => {
     try{
-      _setExportChoiceStatus('Export läuft…', null);
+      _setExportChoiceStatus('Export in progress...', null);
       const choice = getExportChoice();
 
       if(_exportPreviewBlob && _exportPreviewChoice === choice){
@@ -3499,13 +3499,13 @@ if(btnDoExportChoice){
       } else {
         const canvas = await captureExportChoiceCanvas(choice);
         const blob = await _canvasToBlob(canvas);
-        if(!blob) throw new Error('Export fehlgeschlagen (kein Blob).');
+        if(!blob) throw new Error('Export failed (no blob).');
         await copyBlobToClipboard(blob);
       }
 
-      _setExportChoiceStatus('In die Zwischenablage kopiert (Strg+V).', 'ok');
+      _setExportChoiceStatus('Copied to the clipboard (Ctrl+V).', 'ok');
     } catch(err){
-      _setExportChoiceStatus('Export nicht möglich: ' + (err?.message || err), 'err');
+      _setExportChoiceStatus('Export not possible: ' + (err?.message || err), 'err');
     }
   });
 }
@@ -3650,7 +3650,7 @@ if(btnDoExportChoice){
     }
   }
 
-  // ---------- Schallwellen-Modus ----------
+  // ---------- Sound waves-Modus ----------
   const soundCanvas = document.getElementById('soundCanvas');
   const sctx = soundCanvas.getContext('2d');
   const chartCanvas = document.getElementById('chartCanvas');
@@ -4095,9 +4095,9 @@ if(btnDoExportChoice){
     if (soundSweepResult) {
       if (reason === 'clicked') {
         const age = estimateHearingAgeFromHz(hz);
-        soundSweepResult.innerHTML = `Gedrückt bei ca. <b>${Math.round(hz)} Hz</b> → Ungefähres Gehöralter: <b>${age}</b> <span class="small">(didaktische Schätzung)</span>`;
+        soundSweepResult.innerHTML = `Pressed at about <b>${Math.round(hz)} Hz</b> → estimated hearing age: <b>${age}</b> <span class="small">(didactic estimate)</span>`;
       } else if (reason === 'completed') {
-        soundSweepResult.innerHTML = `Du hast bis <b>20.000 Hz</b> durchgehalten. <span class="small">(Achtung: Lautstärke/Headphones beeinflussen das Ergebnis)</span>`;
+        soundSweepResult.innerHTML = `You made it up to <b>20,000 Hz</b>. <span class="small">(Warning: volume/headphones affect the result)</span>`;
       } else {
         soundSweepResult.textContent = '';
       }
@@ -4108,12 +4108,12 @@ if(btnDoExportChoice){
     ensureAudio();
     if (!audioCtx) return;
 
-    // Standard-Ton aus Option 1 aus
+    // Switch off the standard tone from option 1.
     soundState.isToneOn = false;
     stopTone();
     updateSoundUI();
 
-    // Reset UI
+    // Reset UI.
     if (soundSweepResult) soundSweepResult.textContent = '';
 
     // stop existing sweep
@@ -4239,7 +4239,7 @@ if(btnDoExportChoice){
       // labels
       ctx.fillStyle = '#334155';
       ctx.font = '12px system-ui, sans-serif';
-      ctx.fillText('Schallquelle (Subwoofer)', source.x - 42, source.y + 34);
+      ctx.fillText('Sound source (subwoofer)', source.x - 42, source.y + 34);
       ctx.fillText('Mikrofon', mic.x - 22, mic.y + 38);
     }
   }
@@ -4677,7 +4677,7 @@ if(btnDoExportChoice){
   const HEARING_COCHLEA_T0 = 3.95;
   const HEARING_COCHLEA_DUR = HEARING_EVENT_MAX_DUR - HEARING_COCHLEA_T0;
   
-  // Loop-Geschwindigkeit nur für die rechten Fenster (Hörschnecke + Hörsinneszellen)
+  // Loop-Speed nur für die rechten Fenster (Hörschnecke + Hörsinneszellen)
   const COCHLEA_LOOP_SPEED = 0.70;
 function smoothstep01(t){
     t = clamp(t, 0, 1);
@@ -5099,7 +5099,7 @@ window.addEventListener('load', () => {
     const now = performance.now() / 1000;
     hearingState.events.push({ t0: now });
     if (hearingState.events.length > 6) hearingState.events.shift();
-    if (hearingStatus) hearingStatus.textContent = 'Status: Schallereignis ausgelöst';
+    if (hearingStatus) hearingStatus.textContent = 'Status: sound event triggered';
     // Panel „Aktivierung der Hörsinneszellen“ sofort umschalten
     updateHairCellVisuals(true, _hairVisualLastCochlea === true);
     // optional short click tone
@@ -5207,29 +5207,29 @@ window.addEventListener('load', () => {
 
   // --- Aufgabe: Hörvorgang-Reihenfolge ---
   const hearingStepsCorrect = [
-    "Schallwellen werden von der Ohrmuschel aufgefangen und gebündelt.",
-    "Schallwellen werden innerhalb des Gehörgangs weitergeleitet.",
-    "Das Trommelfell wird durch die Schallwellen in Schwingung versetzt.",
-    "Die Schwingung versetzt den Hammer in Bewegung.",
-    "Nun wird der Amboss in Bewegung gesetzt und überträgt die Bewegung auf das letzte Gehörknöchelchen.",
-    "Der Steigbügel überträgt die Bewegung auf das ovale Fenster.",
-    "Durch die Bewegung des ovalen Fensters wird die Flüssigkeit in der Hörschnecke in Bewegung versetzt, wodurch die Deckmembran in Schwingung versetzt wird.",
-    "Die Wellenbewegung der Deckmembran knickt die Härchen der Hörsinneszellen ab, wodurch ein elektrisches Signal entsteht.",
-    "Die elektrischen Signale werden über den Hörnerv zum Gehirn geleitet."
+    "Sound waves are collected and focused by the pinna.",
+    "Sound waves are transmitted through the ear canal.",
+    "The eardrum begins to vibrate because of the sound waves.",
+    "The vibration sets the hammer in motion.",
+    "The anvil is then set in motion and transfers the movement to the final auditory ossicle.",
+    "The stirrup transfers the movement to the oval window.",
+    "Movement at the oval window sets the fluid in the cochlea in motion and causes the tectorial membrane to vibrate.",
+    "The wave movement of the tectorial membrane bends the hairs of the sensory cells, creating an electrical signal.",
+    "The electrical signals are transmitted to the brain through the auditory nerve."
   ];
 
 
   const hearingLabelDefs = [
-    { id:'ohrmuschel', label:'Ohrmuschel', targets:[{x:17.2,y:48.3}], slot:{x:12.0,y:88.0,w:136} },
-    { id:'gehoergang', label:'Gehörgang', targets:[{x:42.5,y:51.0}], slot:{x:12.0,y:12.5,w:134} },
-    { id:'trommelfell', label:'Trommelfell', targets:[{x:63.7,y:53.5}], slot:{x:30.0,y:12.5,w:146} },
+    { id:'ohrmuschel', label:'Pinna', targets:[{x:17.2,y:48.3}], slot:{x:12.0,y:88.0,w:136} },
+    { id:'gehoergang', label:'Ear canal', targets:[{x:42.5,y:51.0}], slot:{x:12.0,y:12.5,w:134} },
+    { id:'trommelfell', label:'Eardrum', targets:[{x:63.7,y:53.5}], slot:{x:30.0,y:12.5,w:146} },
     { id:'hammer', label:'Hammer', targets:[{x:65.2,y:43.2}], slot:{x:48.0,y:12.5,w:126} },
-    { id:'bogengaenge', label:'Bogengänge', targets:[{x:81.0,y:21.0}], slot:{x:66.5,y:12.5,w:144} },
-    { id:'amboss', label:'Amboss', targets:[{x:71.8,y:45.8}], slot:{x:37.0,y:88.0,w:126} },
-    { id:'steigbuegel', label:'Steigbügel', targets:[{x:75.8,y:48.0}], slot:{x:55.5,y:88.0,w:140} },
-    { id:'ovales_fenster', label:'ovales Fenster', targets:[{x:77.3,y:43.1}], slot:{x:74.0,y:88.0,w:154} },
-    { id:'hoerschnecke', label:'Hörschnecke', targets:[{x:85.6,y:44.7}], slot:{x:89.0,y:12.5,w:144} },
-    { id:'ohrtrompete', label:'Ohrtrompete', targets:[{x:80.7,y:61.5}], slot:{x:88.0,y:73.0,w:148} }
+    { id:'bogengaenge', label:'Semicircular canals', targets:[{x:81.0,y:21.0}], slot:{x:66.5,y:12.5,w:144} },
+    { id:'amboss', label:'Anvil', targets:[{x:71.8,y:45.8}], slot:{x:37.0,y:88.0,w:126} },
+    { id:'steigbuegel', label:'Stirrup', targets:[{x:75.8,y:48.0}], slot:{x:55.5,y:88.0,w:140} },
+    { id:'ovales_fenster', label:'Oval window', targets:[{x:77.3,y:43.1}], slot:{x:74.0,y:88.0,w:154} },
+    { id:'hoerschnecke', label:'Cochlea', targets:[{x:85.6,y:44.7}], slot:{x:89.0,y:12.5,w:144} },
+    { id:'ohrtrompete', label:'Eustachian tube', targets:[{x:80.7,y:61.5}], slot:{x:88.0,y:73.0,w:148} }
   ];
 
   function shuffleArray(arr){
@@ -5504,7 +5504,7 @@ function attachDnD(li){
       setHearingFeedback("Korrekt – gut gemacht!", true);
       openHearingSolvedModal();
     } else {
-      setHearingFeedback("Noch nicht korrekt. Überprüfe die Reihenfolge und versuche es erneut.", false);
+      setHearingFeedback("Not correct yet. Check the order and try again.", false);
     }
   }
 
@@ -5575,7 +5575,7 @@ function attachDnD(li){
       // Titel
       ctx.fillStyle = '#0f172a';
       ctx.font = titleFont;
-      ctx.fillText('Ablauf des Hörvorgangs', pad, titleTopY);
+      ctx.fillText('Sequence of hearing', pad, titleTopY);
 
       // Liste (mit Umbruch + Einzug)
       ctx.font = listFont;
@@ -5599,16 +5599,16 @@ function attachDnD(li){
       });
 
       const blob = await new Promise(res => c.toBlob(res, 'image/png'));
-      if(!blob) throw new Error('Export fehlgeschlagen (kein Blob).');
+      if(!blob) throw new Error('Export failed (no blob).');
 
       if(!navigator.clipboard || !window.ClipboardItem){
-        throw new Error('Zwischenablage-Export wird vom Browser nicht unterstützt.');
+        throw new Error('Clipboard export is not supported by the browser.');
       }
       await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-      if(status) status.textContent = 'Bild wurde in die Zwischenablage kopiert.';
+      if(status) status.textContent = 'Image copied to the clipboard.';
     } catch(err){
       console.error(err);
-      if(status) status.textContent = 'Export nicht möglich: ' + (err?.message || err);
+      if(status) status.textContent = 'Export unavailable: ' + (err?.message || err);
     }
   }
 
@@ -5623,7 +5623,7 @@ function attachDnD(li){
       if(!btnToggleTask || !taskContent) return;
       taskContent.classList.toggle('hidden', collapsed);
       btnToggleTask.setAttribute('aria-expanded', String(!collapsed));
-      btnToggleTask.textContent = collapsed ? 'Aufgabe anzeigen' : 'Aufgabe ausblenden';
+      btnToggleTask.textContent = collapsed ? 'Show task' : 'Hide task';
     }
 
     setHearingTaskCollapsed(true);
@@ -5674,7 +5674,7 @@ function attachDnD(li){
   function renderHearingLabelExportCanvas(){
     const canvas = document.getElementById('earCanvas');
     const state = app.hearingLabelTask;
-    if(!canvas || !state) throw new Error('Simulationsfenster nicht verfügbar.');
+  if(!canvas || !state) throw new Error('Simulation window is not available.');
 
     const pad = 18;
     const w = canvas.width;
@@ -5819,7 +5819,7 @@ function attachDnD(li){
     function setCollapseState(collapsed){
       body.classList.toggle('hidden', collapsed);
       collapseBtn.setAttribute('aria-expanded', String(!collapsed));
-      collapseBtn.textContent = collapsed ? 'Aufklappen' : 'Zuklappen';
+      collapseBtn.textContent = collapsed ? 'Expand' : 'Collapse';
     }
 
     function syncLegendVisibility(){
@@ -6009,7 +6009,7 @@ function attachDnD(li){
       toggleBtn.addEventListener('click', () => {
         state.hidden = !state.hidden;
         toggleBtn.setAttribute('aria-pressed', state.hidden ? 'true' : 'false');
-        toggleBtn.textContent = state.hidden ? 'Einblenden' : 'Ausblenden';
+        toggleBtn.textContent = state.hidden ? 'Show' : 'Hide';
         layer.classList.toggle('force-hidden', state.hidden || body.classList.contains('hidden'));
         if(state.hidden) layer.classList.remove('show-targets');
         renderHearingLabelTask();
@@ -6023,13 +6023,13 @@ function attachDnD(li){
       const solved = placed === hearingLabelDefs.length && correct === hearingLabelDefs.length;
       setExportEnabled(solved);
       if(placed < hearingLabelDefs.length){
-        feedback.textContent = `${correct}/${hearingLabelDefs.length} richtig. Bitte platziere zuerst alle Begriffe.`;
+        feedback.textContent = `${correct}/${hearingLabelDefs.length} correct. Please place all labels first.`;
         feedback.style.color = correct === hearingLabelDefs.length ? '#059669' : '#b45309';
       } else if(solved){
-        feedback.textContent = 'Alle Begriffe sind korrekt platziert.';
+        feedback.textContent = 'All labels are placed correctly.';
         feedback.style.color = '#059669';
       } else {
-        feedback.textContent = `${correct}/${hearingLabelDefs.length} richtig. Überprüfe die markierten Zuordnungen.`;
+        feedback.textContent = `${correct}/${hearingLabelDefs.length} correct. Check the highlighted matches.`;
         feedback.style.color = '#dc2626';
       }
       renderHearingLabelTask();
@@ -6041,9 +6041,9 @@ function attachDnD(li){
         try{
           const c = renderHearingLabelExportCanvas();
           await copyCanvasToClipboard(c);
-          showExportToast('Simulationsfenster wurde in die Zwischenablage kopiert.', true);
+          showExportToast('Simulation window copied to the clipboard.', true);
         }catch(err){
-          showExportToast('Export nicht möglich: ' + (err?.message || err), false);
+          showExportToast('Export not possible: ' + (err?.message || err), false);
         }
       });
     }
@@ -6052,7 +6052,7 @@ function attachDnD(li){
       if(state.checked) return;
       const placed = Object.values(state.placements).filter(Boolean).length;
       if(placed === hearingLabelDefs.length){
-        feedback.textContent = 'Alle Begriffe sind platziert. Klicke auf „Korrigieren“. ';
+        feedback.textContent = 'All labels are placed. Click "Check".';
         feedback.style.color = '#059669';
       }else{
         feedback.innerHTML = '&nbsp;';
@@ -6397,7 +6397,7 @@ function attachDnD(li){
     // Basisbild exakt verwenden (unverändert)
     ctx.drawImage(hearingExactBase, dx, dy, dw, dh);
 
-    // Schallwellen: Quelle links außerhalb der Ohrmuschel, danach Wellenfronten
+    // Sound waves: Quelle links außerhalb der Ohrmuschel, danach Wellenfronten
     // entlang des vom Nutzer markierten Verlaufs durch den Gehörgang (rote Linie).
     if (p !== null && p < 1.76) {
       const u = Math.max(0, Math.min(1, p / 1.52));
@@ -6455,7 +6455,7 @@ function attachDnD(li){
 
       ctx.save();
 
-      // Außenbereich: deutliche Schallwellen mit Zentrum an der linken Schallquelle (Subwoofer),
+      // Außenbereich: deutliche Sound waves mit Zentrum an der linken Schallquelle (Subwoofer),
       // sichtbar nur nach rechts (Richtung Ohrmuschel).
       const emitPhase = Math.min(1, u / 0.44);
       const emitPulse = 0.88 + 0.12 * Math.sin(Math.PI * emitPhase);
@@ -6939,11 +6939,11 @@ if (p === null) {
       if (hearingStatus) hearingStatus.textContent = 'Status: bereit';
     } else {
       if (hearingStatus) {
-        if (p < 1.45) hearingStatus.textContent = 'Status: Schallwelle im Außenohr / Gehörgang';
-        else if (p < 2.35) hearingStatus.textContent = 'Status: Trommelfell schwingt';
-        else if (p < 3.25) hearingStatus.textContent = 'Status: Gehörknöchelchen übertragen Schwingung';
-        else if (p < 3.95) hearingStatus.textContent = 'Status: Ovales Fenster bewegt sich';
-        else hearingStatus.textContent = 'Status: Flüssigkeitswelle in der Schnecke';
+        if (p < 1.45) hearingStatus.textContent = 'Status: sound wave in the outer ear / ear canal';
+        else if (p < 2.35) hearingStatus.textContent = 'Status: eardrum vibrates';
+        else if (p < 3.25) hearingStatus.textContent = 'Status: auditory ossicles transmit the vibration';
+        else if (p < 3.95) hearingStatus.textContent = 'Status: oval window moves';
+        else hearingStatus.textContent = 'Status: fluid wave in the cochlea';
       }
     }
 
@@ -7498,11 +7498,11 @@ if (p === null) {
   function drawHearingTimeline(ctx, p, w, h) {
     const x = 34, y = 430, tw = w - 68, th = 20;
     const stages = [
-      { name: 'Außenohr', dur: 1.2, color: '#dbeafe' },
-      { name: 'Trommelfell', dur: 1.0, color: '#fee2e2' },
-      { name: 'Gehörknöchelchen', dur: 1.0, color: '#ffedd5' },
-      { name: 'Ovales Fenster', dur: 0.6, color: '#fde68a' },
-      { name: 'Schnecke', dur: 1.0, color: '#dcfce7' },
+      { name: 'Outer ear', dur: 1.2, color: '#dbeafe' },
+      { name: 'Eardrum', dur: 1.0, color: '#fee2e2' },
+      { name: 'Auditory ossicles', dur: 1.0, color: '#ffedd5' },
+      { name: 'Oval window', dur: 0.6, color: '#fde68a' },
+      { name: 'Cochlea', dur: 1.0, color: '#dcfce7' },
     ];
     const total = stages.reduce((a,s)=>a+s.dur,0);
     let cx = x;
@@ -7748,18 +7748,18 @@ if (p === null) {
   function describeDirection(angleDeg) {
     const a = ((angleDeg % 360) + 360) % 360;
     const sectors = [
-      [22.5, 'vorne'],
-      [67.5, 'vorne rechts'],
-      [112.5, 'rechts'],
-      [157.5, 'hinten rechts'],
-      [202.5, 'hinten'],
-      [247.5, 'hinten links'],
-      [292.5, 'links'],
-      [337.5, 'vorne links'],
-      [360.0, 'vorne']
+      [22.5, 'front'],
+      [67.5, 'front right'],
+      [112.5, 'right'],
+      [157.5, 'back right'],
+      [202.5, 'back'],
+      [247.5, 'back left'],
+      [292.5, 'left'],
+      [337.5, 'front left'],
+      [360.0, 'front']
     ];
     for (const [lim, txt] of sectors) if (a < lim) return txt;
-    return 'vorne';
+    return 'front';
   }
 
   function computeDirectionMetrics() {
@@ -7811,8 +7811,8 @@ if (p === null) {
     dirAngleValue.textContent = `${Math.round(directionState.angleDeg)}°`;
     dirFreqValue.textContent = `${Math.round(directionState.freq)} Hz`;
     if (dirVolValue) dirVolValue.textContent = `${Math.round(directionState.volume)} %`;
-    dirVisualPresetLabel.textContent = (directionState.visualPreset === 'highcontrast') ? 'High-Contrast (Beamer)' : 'Realistischer Kopf';
-    btnDirectionTone.textContent = directionState.isToneOn ? 'Tonquelle stoppen' : 'Tonquelle starten';
+    dirVisualPresetLabel.textContent = (directionState.visualPreset === 'highcontrast') ? 'High contrast (projector)' : 'Realistic head';
+    btnDirectionTone.textContent = directionState.isToneOn ? 'Stop sound source' : 'Start sound source';
     if (directionStatus) {
       directionStatus.textContent = '';
     }
@@ -8395,10 +8395,10 @@ if (p === null) {
     dctx.font = '12px system-ui, sans-serif';
     dctx.fillStyle = pal.label;
     dctx.textAlign = 'center';
-    dctx.fillText('vorne', cx, cy - orbitR - 12);
-    dctx.fillText('hinten', cx, cy + orbitR + 22);
-    dctx.fillText('links', cx - orbitR - 26, cy + 4);
-    dctx.fillText('rechts', cx + orbitR + 30, cy + 4);
+    dctx.fillText('front', cx, cy - orbitR - 12);
+    dctx.fillText('back', cx, cy + orbitR + 22);
+    dctx.fillText('left', cx - orbitR - 26, cy + 4);
+    dctx.fillText('right', cx + orbitR + 30, cy + 4);
 
     // guide lines are drawn on a separate overlay canvas (togglebar)
 
@@ -8429,7 +8429,7 @@ if (p === null) {
       dctx.arc(tx + 6, ty, 4, 0, Math.PI * 2);
       dctx.fill();
       dctx.fillStyle = '#991b1b';
-      dctx.fillText('Ton aktiv', tx + 18, ty);
+      dctx.fillText('Tone active', tx + 18, ty);
       dctx.restore();
     }
 
@@ -8455,7 +8455,7 @@ if (p === null) {
 
     ctx.fillStyle = '#0f172a';
     ctx.font = '600 13px system-ui, sans-serif';
-    ctx.fillText('Entfernung zur Tonquelle (Laufzeitmessung)', 24, 34);
+    ctx.fillText('Distance to the sound source (time-of-flight measurement)', 24, 34);
 
     const barX = 255;
     const barW = 595;
@@ -8470,8 +8470,8 @@ if (p === null) {
 
     ctx.font = '12px system-ui, sans-serif';
     ctx.fillStyle = '#334155';
-    ctx.fillText(`Linkes Ohr (t = ${(m.tL * 1000).toFixed(3)} ms)`, 24, topYL + 4);
-    ctx.fillText(`Rechtes Ohr (t = ${(m.tR * 1000).toFixed(3)} ms)`, 24, topYR + 4);
+    ctx.fillText(`Left ear (t = ${(m.tL * 1000).toFixed(3)} ms)`, 24, topYL + 4);
+    ctx.fillText(`Right ear (t = ${(m.tR * 1000).toFixed(3)} ms)`, 24, topYR + 4);
 
     // Balken-Hintergründe
     ctx.fillStyle = '#eef3fa';
@@ -8513,7 +8513,7 @@ if (p === null) {
     drawBarValue(lenR, topYR, `${m.dRm.toFixed(3)} m`, '#059669');
 
     const dtY = topYL + 2 * lineGap;
-    const dtText = `Laufzeitunterschied = ${(Math.abs(m.dt) * 1e6).toFixed(0)} µs`;
+    const dtText = `Time difference = ${(Math.abs(m.dt) * 1e6).toFixed(0)} µs`;
     // optisch leicht hervorheben
     ctx.save();
     ctx.font = '600 12px system-ui, sans-serif';
@@ -8525,10 +8525,10 @@ if (p === null) {
     ctx.fillText(dtText, 24, dtY);
     ctx.restore();
 
-    // Pegelvergleich (linksbündig wie Laufwege)
+    // Level comparison
     ctx.fillStyle = '#0f172a';
     ctx.font = '600 13px system-ui, sans-serif';
-    ctx.fillText('Pegelvergleich', 24, 154);
+    ctx.fillText('Level comparison', 24, 154);
 
     const baseY = 172; // erste Pegelbalken-Track-Zeile
     const aMax = Math.max(m.ampL, m.ampR, 1e-6);
@@ -8553,8 +8553,8 @@ if (p === null) {
     const pegLine1Y = baseY + 13;
     const pegLine2Y = pegLine1Y + lineGap;
     const pegDiffY = pegLine2Y + lineGap;
-    ctx.fillText(`Linkes Ohr (t = ${(m.tL * 1000).toFixed(3)} ms)`, 24, pegLine1Y);
-    ctx.fillText(`Rechtes Ohr (t = ${(m.tR * 1000).toFixed(3)} ms)`, 24, pegLine2Y);
+    ctx.fillText(`Left ear (t = ${(m.tL * 1000).toFixed(3)} ms)`, 24, pegLine1Y);
+    ctx.fillText(`Right ear (t = ${(m.tR * 1000).toFixed(3)} ms)`, 24, pegLine2Y);
 
     // Anzeige: Grundpegel (Lautstärke-Regler) + Pegelunterschied
     const volPct = clamp((Number(directionState.volume) || 0), 0, 100);
@@ -8583,7 +8583,7 @@ if (p === null) {
     drawBarValue(bwL, baseY + barH/2, `${dispL.toFixed(1)} dB`, '#1d4ed8');
     drawBarValue(bwR, baseY + lineGap + barH/2, `${dispR.toFixed(1)} dB`, '#059669');
 
-    const pegelDiffText = `Pegelunterschied = ${dispDiff.toFixed(2)} dB`;
+    const pegelDiffText = `Level difference = ${dispDiff.toFixed(2)} dB`;
     // optisch leicht hervorheben
     ctx.save();
     ctx.font = '600 12px system-ui, sans-serif';
@@ -8850,20 +8850,20 @@ function endDirectionDrag(ev) {
 <div id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle">
   <div class="im-card">
     <div class="im-head">
-      <h2 id="introModalTitle" class="im-title">Simulation Schall und Hörvorgang</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+      <h2 id="introModalTitle" class="im-title">Sound and hearing</h2>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Close">×</button>
     </div>
-    <p class="im-grade">Jahrgangsstufe: 8</p>
+    <p class="im-grade">Grade level: 8</p>
     <div class="im-desc">
-      Diese Simulation veranschaulicht, wie Schallwellen entstehen, sich ausbreiten und im menschlichen Ohr verarbeitet werden. Verändere Frequenz und Amplitude und verfolge den Weg des Schalls vom Außenohr durch Mittelohr und Innenohr bis zur Hörschnecke.
+This simulation shows how sound waves are created, how they spread, and how they are processed in the human ear. Change frequency and amplitude and follow the path of sound from the outer ear through the middle ear and inner ear to the cochlea.
     </div>
     <div class="im-btn-row">
-      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
+      <button id="introModalStartBtn" class="im-start-btn" type="button">Start simulation →</button>
     </div>
   </div>
 </div>
 <!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -8887,17 +8887,17 @@ function endDirectionDrag(ev) {
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Wenn nicht anders angegeben, sind alle Abbildungen mittels KI erstellt worden.</li>
-      <li><strong>Außen-, Innen- und Mittelohr:</strong><br>
-        OpenStax: <em>The Structures of the Ear.</em> Wikimedia Commons, CC BY 4.0, bearbeitet.</li>
-      <li><strong>Aktivierung Hörsinneszellen:</strong><br>
-        OpenStax: <em>Cochlea.</em> Wikimedia Commons, CC BY 4.0, bearbeitet.</li>
-      <li><strong>Ausgerollte Hörschnecke:</strong><br>
-        „Schnecke – transparent ausgerollt", MediaHouse GmbH für Siemens Stiftung,
-        © Siemens Stiftung 2018, CC BY-SA 4.0, bearbeitet.<br>
-        Quelle: Medienportal der Siemens Stiftung.</li>
+      <li>Unless otherwise stated, all images were created with AI.</li>
+      <li><strong>Outer, middle, and inner ear:</strong><br>
+        OpenStax: <em>The Structures of the Ear.</em> Wikimedia Commons, CC BY 4.0, edited.</li>
+      <li><strong>Activation of the sensory cells:</strong><br>
+        OpenStax: <em>Cochlea.</em> Wikimedia Commons, CC BY 4.0, edited.</li>
+      <li><strong>Unrolled cochlea:</strong><br>
+        "Cochlea - transparent, unrolled", MediaHouse GmbH for Siemens Stiftung,
+        © Siemens Stiftung 2018, CC BY-SA 4.0, adapted.<br>
+        Source: Siemens Stiftung media portal.</li>
     </ul>
   </div>
 </div>

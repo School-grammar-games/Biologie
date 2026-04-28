@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -572,20 +572,20 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
 
 <body>
 <header>
-  <h1>Einflussfaktoren der Fotosynthese - Erweiterter Engelmann Versuch</h1>
-  <div class="sub">Untersuchung verschiedener Einflussfaktoren auf die Fotosynthese</div>
+  <h1>Factors Affecting Photosynthesis - Extended Engelmann Experiment</h1>
+  <div class="sub">Investigating different factors that affect photosynthesis</div>
 </header>
 
 <div id="errOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.72); z-index:9999; padding:24px;">
   <div style="max-width:900px; margin:40px auto; background:#fff; color:#111; border-radius:14px; padding:16px 18px; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;">
-    <h2 style="margin:0 0 8px; font-size:18px;">Simulation konnte nicht starten</h2>
+    <h2 style="margin:0 0 8px; font-size:18px;">The simulation could not start</h2>
     <div style="color:#333; font-size:13px; line-height:1.4;">
-      Es liegt ein JavaScript-Fehler vor. Bitte unten stehende Meldung kopieren (oder Screenshot) und schicken.
+      A JavaScript error occurred. Please copy the message below (or send a screenshot).
     </div>
     <pre id="errText" style="white-space:pre-wrap; background:#f5f5f5; border:1px solid #ddd; border-radius:10px; padding:10px; margin:12px 0 0; font-size:12px;"></pre>
     <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      <button id="errClose" style="padding:8px 10px; border-radius:10px; border:1px solid #ccc; background:#fff; cursor:pointer;">Schließen</button>
-      <button id="errReload" style="padding:8px 10px; border-radius:10px; border:1px solid #ccc; background:#fff; cursor:pointer;">Neu laden</button>
+      <button id="errClose" style="padding:8px 10px; border-radius:10px; border:1px solid #ccc; background:#fff; cursor:pointer;">Close</button>
+      <button id="errReload" style="padding:8px 10px; border-radius:10px; border:1px solid #ccc; background:#fff; cursor:pointer;">Reload</button>
     </div>
   </div>
 </div>
@@ -593,15 +593,15 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
 <div class="wrap">
   <div class="card" style="grid-column:1 / -1; padding:12px 14px;">
     <details>
-      <summary><b>Versuchsaufbau</b> (aufklappen) <button class="infoBtn" type="button" data-tip="algaeSource" aria-label="Quelle der Algenabbildung">i</button></summary>
+      <summary><b>Experimental setup</b> (expand) <button class="infoBtn" type="button" data-tip="algaeSource" aria-label="Source of the algae illustration">i</button></summary>
       <div class="smallnote" style="margin-top:10px; line-height:1.45">
-        Der <b>Engelmann-Versuch</b> untersucht die Photosynthese über die <b>Sauerstoffbildung</b>.<br>
-        Eine <b>Fadenalge</b> (z.&nbsp;B. <i>Spirogyra</i>) liegt in einem Wassertropfen unter dem Mikroskop.
-        <b>Weißes Licht</b> wird mit einem <b>Prisma</b> in Spektralfarben zerlegt und als farbiger Streifen auf die Alge projiziert,
-        sodass entlang der Alge unterschiedliche Wellenlängen einwirken.<br>
-        In die Umgebung werden <b>bewegliche, aerobe Bakterien</b> gegeben. Sie benötigen Sauerstoff und dienen deshalb als
-        <b>biologischer Indikator</b>: Wo lokal mehr O₂ vorhanden ist, kann sich ihre Verteilung verändern.
-        So lässt sich räumlich (entlang des Spektrums) beobachten, wie stark die Photosynthese unter den jeweiligen Bedingungen abläuft,
+        The <b>Engelmann experiment</b> investigates photosynthesis via <b>oxygen production</b>.<br>
+        A <b>filamentous alga</b> (for example <i>Spirogyra</i>) lies in a water droplet under the microscope.
+        <b>White light</b> is split into spectral colours by a <b>prism</b> and projected onto the alga as a coloured band,
+        so that different wavelengths act on different parts of the alga.<br>
+        <b>Motile aerobic bacteria</b> are added to the surrounding water. They need oxygen and therefore serve as
+        <b>biological indicators</b>: where more O₂ is available locally, their distribution can change.
+        This makes it possible to observe spatially, along the spectrum, how strongly photosynthesis proceeds under each condition,
       </div>
     </details>
   </div>
@@ -613,25 +613,25 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
                 <canvas id="sim" width="1040" height="540" aria-label="Simulation"></canvas>
       </div>
 
-      <div class="diagGrid" aria-label="Diagramme">
+      <div class="diagGrid" aria-label="Charts">
         <div class="diagCard">
           <div class="ttl">
-            <span>Diagramm 1: Beleuchtungsstärke</span>
-            <span class="pill" id="pillLight">Apparente Fotosynthese (gesamt): –</span>
+            <span>Chart 1: light intensity</span>
+          <span class="pill" id="pillLight">Apparent photosynthesis (total): –</span>
           </div>
           <canvas id="diagLight" width="1040" height="170"></canvas>
         </div>
         <div class="diagCard">
           <div class="ttl">
-            <span>Diagramm 2: Temperatur</span>
-            <span class="pill" id="pillTemp">Apparente Fotosynthese (gesamt): –</span>
+            <span>Chart 2: temperature</span>
+          <span class="pill" id="pillTemp">Apparent photosynthesis (total): –</span>
           </div>
           <canvas id="diagTemp" width="1040" height="170"></canvas>
         </div>
         <div class="diagCard">
           <div class="ttl">
-            <span>Diagramm 3: CO₂-Gehalt</span>
-            <span class="pill" id="pillCO2">Apparente Fotosynthese (gesamt): –</span>
+            <span>Chart 3: CO₂ concentration</span>
+          <span class="pill" id="pillCO2">Apparent photosynthesis (total): –</span>
           </div>
           <canvas id="diagCO2" width="1040" height="170"></canvas>
         </div>
@@ -646,7 +646,7 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
       <div class="controls-header">
         <h2>Parameter</h2>
         <div class="btns">
-          <button id="worksheetBtn" class="worksheet-btn" type="button">Arbeitsblatt</button>
+          <button id="worksheetBtn" class="worksheet-btn" type="button">Worksheet</button>
           <button id="reset">Reset</button>
           <button class="secondary" id="pause">Pause</button>
         </div>
@@ -654,53 +654,53 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
 
       <div class="row">
         <div class="field">
-          <label>Anzeige <button class="infoBtn" data-tip="psTerms" aria-label="Info: Apparente und reelle Fotosynthese">i</button></label>
+          <label>Display <button class="infoBtn" data-tip="psTerms" aria-label="Info: apparent and actual photosynthesis">i</button></label>
           <div class="inline inlineTabs">
-<div class="seg segTabs" role="group" aria-label="Anzeige: apparente oder reelle Fotosynthese">
+<div class="seg segTabs" role="group" aria-label="Display: apparent or actual photosynthesis">
             <input type="radio" name="viewMode" id="modeApp" value="app">
-            <label for="modeApp">Apparente Fotosynthese</label>
+            <label for="modeApp">Apparent photosynthesis</label>
             <input type="radio" name="viewMode" id="modeReal" value="real" checked>
-            <label for="modeReal">Reelle Fotosynthese</label>
+            <label for="modeReal">Actual photosynthesis</label>
           </div>
 
-          <label class="togglePrism" title="Wassereffekt an/aus">
+          <label class="togglePrism" title="Water effect on/off">
             <input id="waterFxToggle" type="checkbox" checked />
             <span class="switch" aria-hidden="true"></span>
-            <span class="pill">Wassereffekt</span>
+            <span class="pill">Water effect</span>
           </label>
           </div>
 </div>
       </div>
 <div class="kpis" id="kpiModeRow" style="margin-top:8px">
-        <span class="pill" id="kpiApp">Apparente: –</span>
-        <span class="pill" id="kpiReal">Reelle: –</span>
-        <span class="pill" id="kpiResp">Atmung: –</span>
+        <span class="pill" id="kpiApp">Apparent: –</span>
+        <span class="pill" id="kpiReal">Actual: –</span>
+        <span class="pill" id="kpiResp">Respiration: –</span>
       </div>
 
 
       <div class="row">
         <div class="field">
-          <label for="lightColor">Lichtfarbe <button type="button" class="infoBtn" data-tip="lightColor" aria-label="Info: Lichtfarbe">i</button></label>
+          <label for="lightColor">Light colour <button type="button" class="infoBtn" data-tip="lightColor" aria-label="Info: light colour">i</button></label>
           <select id="lightColor">
-            <option value="white">weiß</option>
-            <option value="blue">blau</option>
-            <option value="green">grün</option>
-            <option value="red">rot</option>
+            <option value="white">white</option>
+            <option value="blue">blue</option>
+            <option value="green">green</option>
+            <option value="red">red</option>
           </select>
         </div>
         <div class="field">
-          <label>Prisma <button type="button" class="infoBtn" data-tip="prism" aria-label="Info: Prisma">i</button></label>
+          <label>Prism <button type="button" class="infoBtn" data-tip="prism" aria-label="Info: prism">i</button></label>
           <label class="togglePrism">
             <input id="prism" type="checkbox" />
             <span class="switch" aria-hidden="true"></span>
-            <span class="pill">Spektrum 400–700 nm</span>
+            <span class="pill">Spectrum 400-700 nm</span>
           </label>
         </div>
       </div>
 <div class="row sliderRow">
         <div class="field">
           <div class="field-header">
-            <label for="light">Beleuchtungsstärke <button type="button" class="infoBtn" data-tip="light" aria-label="Info: Beleuchtungsstärke">i</button></label>
+            <label for="light">Light intensity <button type="button" class="infoBtn" data-tip="light" aria-label="Info: light intensity">i</button></label>
             <span id="lightVal" class="pill">–</span>
           </div>
           <input id="light" type="range" min="0" max="100" step="1" value="25" />
@@ -708,7 +708,7 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
 
         <div class="field">
           <div class="field-header">
-            <label for="co2">CO₂-Zufuhr <button type="button" class="infoBtn" data-tip="co2" aria-label="Info: CO₂-Zufuhr">i</button></label>
+            <label for="co2">CO₂ supply <button type="button" class="infoBtn" data-tip="co2" aria-label="Info: CO₂ supply">i</button></label>
             <span id="co2Val" class="pill">–</span>
           </div>
           <input id="co2" type="range" min="0" max="100" step="1" value="55" />
@@ -717,7 +717,7 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
 
       <div class="field" style="margin-bottom:10px">
         <div class="field-header">
-          <label for="temp">Temperatur <button type="button" class="infoBtn" data-tip="temp" aria-label="Info: Temperatur">i</button></label>
+          <label for="temp">Temperature <button type="button" class="infoBtn" data-tip="temp" aria-label="Info: temperature">i</button></label>
           <span id="tempVal" class="pill">–</span>
         </div>
         <input id="temp" type="range" min="0" max="50" step="0.5" value="22" />
@@ -727,19 +727,19 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
         <span class="pill" id="kpiWL">λ: –</span>
         <span class="pill" id="kpiPS">PS: –</span>
         <span class="pill" id="kpiO2">O₂ (rel.): –</span>
-        <span class="pill" id="kpiTemp">T-Faktor: –</span>
-        <span class="pill" id="kpiLight">Licht-Faktor: –</span>
-        <span class="pill" id="kpiCO2">CO₂-Faktor: –</span>
+        <span class="pill" id="kpiTemp">T-factor: –</span>
+        <span class="pill" id="kpiLight">Light factor: –</span>
+        <span class="pill" id="kpiCO2">CO₂ factor: –</span>
       </div>
 
       <details style="margin-top:10px">
-        <summary>Legende: Parameter & Modellannahmen (aufklappen)</summary>
+        <summary>Legend: parameters & model assumptions (expand)</summary>
         <div class="smallnote" style="margin-top:10px">
-          <b>Lichtfarbe:</b> bestimmt, wie gut die Alge Licht nutzen kann (bei Prisma je nach Wellenlänge entlang der Breite).<br>
-          <b>Beleuchtungsstärke:</b> Mehr Licht erhöht die Photosynthese bis zur Sättigung (bei sehr viel Licht nimmt der Zugewinn ab).<br>
-          <b>CO₂-Zufuhr:</b> mehr CO₂ erhöht die Photosynthese bis zur Sättigung.<br>
-          <b>Temperatur:</b> steigt bis zum Optimum, danach sinkt sie; bei sehr hohen Temperaturen fällt die Aktivität stark ab.<br>
-          <b>Bakterien:</b> sammeln sich dort, wo mehr O₂ entsteht (Proxy für Photosynthese).<br><b>Diagramme:</b> Mausrad = Zoom, Ziehen = Verschieben, Doppelklick = Reset.
+          <b>Light colour:</b> determines how well the alga can use the light (with a prism, this depends on the wavelength across the width).<br>
+          <b>Light intensity:</b> more light increases photosynthesis up to saturation (at very high light levels, the additional gain becomes smaller).<br>
+          <b>CO₂ supply:</b> more CO₂ increases photosynthesis up to saturation.<br>
+          <b>Temperature:</b> activity rises up to an optimum and then decreases; at very high temperatures it drops sharply.<br>
+          <b>Bacteria:</b> gather where more O₂ is produced (a proxy for photosynthesis).<br><b>Charts:</b> mouse wheel = zoom, drag = pan, double-click = reset.
         </div>
       </details>
 
@@ -749,13 +749,13 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
       <h2>Messfenster an der Lupe</h2>
       <div class="lensRow">
         <div class="lensMetric">
-          <div class="k">Relative Fotosynthese (an Lupenposition)</div>
+          <div class="k">Relative photosynthesis (at the magnifier position)</div>
           <div class="v" id="lensPS">– %</div>
                   </div>
         <div class="lensMetric">
-          <div class="k">Bakterienhäufung (Lupe)</div>
+                    <div class="k">Bacterial accumulation (magnifier)</div>
           <div class="v" id="lensCL">– %</div>
-          <div class="smallnote">Vergleich zum Durchschnitt im Becken: positive Werte bedeuten Häufung im Messfenster.</div>
+          <div class="smallnote">Comparison with the average in the basin: positive values indicate accumulation in the measurement window.</div>
         </div>
       </div>
     </div>
@@ -763,41 +763,41 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
   </div>
 
   <div class="card proto">
-    <h2>Protokoll</h2>
+    <h2>Log</h2>
 
     <div class="measureBox">
       <div class="btns">
-        <button id="saveMeasure">Messpunkt speichern</button>
-        <button class="secondary" id="exportPdf">Exportieren</button>
-        <button class="secondary" id="clearMeasure">Messreihe löschen</button>
+        <button id="saveMeasure">Save measurement point</button>
+        <button class="secondary" id="exportPdf">Export</button>
+        <button class="secondary" id="clearMeasure">Delete measurement series</button>
       </div>
-      <div class="tableWrap" aria-label="Messreihe">
+      <div class="tableWrap" aria-label="Measurement series">
         <table id="measureTable">
           <thead>
             <tr>
-              <th>Messpunkt</th>
-              <th>Licht&nbsp;(%)</th>
+              <th>Measurement point</th>
+              <th>Light&nbsp;(%)</th>
               <th>CO₂&nbsp;(%)</th>
               <th>T&nbsp;(°C)</th>
-              <th>Farbe</th>
-              <th>Prisma</th>
+              <th>Colour</th>
+              <th>Prism</th>
               <th>λ&nbsp;(nm)</th>
-              <th>Reelle&nbsp;(%)</th>
-              <th>Atmung&nbsp;(%)</th>
-              <th>Apparente&nbsp;(%)</th>
+              <th>Actual&nbsp;(%)</th>
+              <th>Respiration&nbsp;(%)</th>
+              <th>Apparent&nbsp;(%)</th>
             </tr>
           </thead>
           <tbody id="measureBody"></tbody>
         </table>
       </div>
       <div class="smallnote" style="margin-top:6px">
-        Gespeichert wird der Messwert im aktuellen Messfenster (Lupe) zusammen mit den aktuellen Reglereinstellungen.
+The measurement value from the current measurement window (magnifier) is saved together with the current slider settings.
       </div>
     </div>
 
-    <textarea id="note" placeholder="Beobachtung/Hypothese/Versuchsplan/Ergebnis/Interpretation …"></textarea>
+    <textarea id="note" placeholder="Observation / hypothesis / experimental plan / result / interpretation ..."></textarea>
     <div class="btns">
-      <button id="addNote">Notiz speichern</button>
+      <button id="addNote">Save note</button>
     </div>
   </div>
   </div>
@@ -808,7 +808,7 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
   <div class="modalCard" role="document">
     <div class="modalHead">
       <div class="modalTitle" id="tipTitle">Info</div>
-      <button class="modalClose" id="tipClose" aria-label="Schließen">×</button>
+      <button class="modalClose" id="tipClose" aria-label="Close">×</button>
     </div>
     <div class="modalBody" id="tipBody"></div>
   </div>
@@ -820,51 +820,51 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
   <div class="modalCard" role="document" style="width:min(920px, 96vw);">
     <div class="modalHead">
       <div class="modalTitle" id="exportTitle">Export</div>
-      <button class="modalClose" id="exportClose" aria-label="Schließen">×</button>
+      <button class="modalClose" id="exportClose" aria-label="Close">×</button>
     </div>
     <div class="modalBody">
-      <div class="smallnote">Wähle die Bereiche aus. Es werden Screenshots erzeugt und unten als Vorschau untereinander angezeigt.</div>
+      <div class="smallnote">Choose the areas to export. Screenshots will be created and shown below as a preview.</div>
 
       <div class="exportGrid">
         <div class="exportBox">
-          <h3>Auswahl</h3>
+          <h3>Selection</h3>
           <div class="exportOpts" id="exportOpts">
             <label class="togglePrism exportToggle">
               <input id="exSim" type="checkbox" checked />
               <span class="switch" aria-hidden="true"></span>
-              <span class="pill">Simulationsbecken</span>
+              <span class="pill">Simulation basin</span>
             </label>
             <label class="togglePrism exportToggle">
               <input id="exLight" type="checkbox" checked />
               <span class="switch" aria-hidden="true"></span>
-              <span class="pill">Diagramm Beleuchtungsstärke</span>
+              <span class="pill">Light-intensity chart</span>
             </label>
             <label class="togglePrism exportToggle">
               <input id="exTemp" type="checkbox" checked />
               <span class="switch" aria-hidden="true"></span>
-              <span class="pill">Diagramm Temperatur</span>
+              <span class="pill">Temperature chart</span>
             </label>
             <label class="togglePrism exportToggle">
               <input id="exCO2" type="checkbox" checked />
               <span class="switch" aria-hidden="true"></span>
-              <span class="pill">Diagramm Kohlenstoffdioxid</span>
+              <span class="pill">Carbon-dioxide chart</span>
             </label>
             <label class="togglePrism exportToggle">
               <input id="exMeasure" type="checkbox" checked />
               <span class="switch" aria-hidden="true"></span>
-              <span class="pill">Messreihe</span>
+              <span class="pill">Measurement series</span>
             </label>
           </div>
 
           <div class="exportActions">
-            <button class="secondary" id="exportRefresh">Vorschau aktualisieren</button>
-            <button id="exportCopy">In Zwischenablage kopieren</button>
-            <button class="secondary" id="exportDownload" style="display:none">PNG herunterladen</button>
+            <button class="secondary" id="exportRefresh">Update preview</button>
+            <button id="exportCopy">Copy to clipboard</button>
+            <button class="secondary" id="exportDownload" style="display:none">Download PNG</button>
           </div>
 </div>
 
-        <div class="exportPreview" id="exportPreview" aria-label="Export-Vorschau">
-          <div class="smallnote" id="exportPreviewEmpty">Noch keine Vorschau erstellt.</div>
+        <div class="exportPreview" id="exportPreview" aria-label="Export preview">
+          <div class="smallnote" id="exportPreviewEmpty">No preview has been generated yet.</div>
         </div>
       </div>
     </div>
@@ -910,9 +910,9 @@ button.worksheet-btn:hover{background:linear-gradient(180deg, rgba(255,213,106,.
 
   const waterFxImg = new Image();
   waterFxImg.decoding = "async";
-  // Prefer the user-facing filename; fall back to the alternative spelling if needed.
+  // Keep the overlay on the existing asset filename.
   waterFxImg.src = "Wassereffekt.png";
-  waterFxImg.onerror = () => { waterFxImg.onerror = null; waterFxImg.src = "Wasserffekt.png"; };
+  waterFxImg.onerror = () => { waterFxImg.onerror = null; waterFxImg.src = "Wassereffekt.png"; };
 // Precompute a tight crop (remove transparent margins) so the filament fills its rectangle
 let spiroCrop = null;
 spiroImg.onload = () => {
@@ -980,8 +980,8 @@ spiroImg.onload = () => {
   modeInputs.forEach(r=>r.addEventListener("change", ()=>{ if(r.checked) setViewMode(r.value); }));
 
   function yRangeForMode(){
-    if(viewMode === "real") return {yMin:0, yMax:100, yLab:"Reelle Fotosynthese (%)"};
-    return {yMin:-20, yMax:100, yLab:"Apparente Fotosynthese (%)"};
+    if(viewMode === "real") return {yMin:0, yMax:100, yLab:"Actual photosynthesis (%)"};
+    return {yMin:-20, yMax:100, yLab:"Apparent photosynthesis (%)"};
   }
 
   function componentsAtLens(){
@@ -999,8 +999,8 @@ spiroImg.onload = () => {
     return net; // apparente Fotosynthese
   }
   function labelForMode(){
-    if(viewMode === "real") return "Reelle Fotosynthese";
-    return "Apparente Fotosynthese";
+    if(viewMode === "real") return "Actual photosynthesis";
+    return "Apparent photosynthesis";
   }
 
   // Tooltips / Pop-up-Infos
@@ -1012,12 +1012,12 @@ spiroImg.onload = () => {
   
 const TIP_TEXT = {
   algaeSource: {
-    title: "Quelle der Algenabbildung",
+    title: "Source of the algae illustration",
     body: 'Spirogyra-Abbildung: <a href="https://en.wikipedia.org/wiki/Spirogyra" target="_blank" rel="noopener noreferrer">Wikipedia – Spirogyra</a>'
   },
   psTerms: {
-    title: "Apparente und reelle Fotosynthese",
-    body: "<b>Reelle Fotosynthese</b> entspricht der gesamten photosynthetischen O<sub>2</sub>-Produktion bzw. CO<sub>2</sub>-Fixierung ohne Abzug der Atmung.<br><br><b>Apparente Fotosynthese</b> ist die nach außen messbare apparente Rate: Reelle Fotosynthese minus Atmung. Sie kann bei sehr ungünstigen Bedingungen auch <b>negativ</b> sein, wenn die Atmung überwiegt."
+    title: "Apparent and actual photosynthesis",
+    body: "<b>Actual photosynthesis</b> is the total photosynthetic O<sub>2</sub> production or CO<sub>2</sub> fixation before respiration is subtracted.<br><br><b>Apparent photosynthesis</b> is the externally measurable net rate: actual photosynthesis minus respiration. Under very unfavorable conditions it can even become <b>negative</b> when respiration dominates."
   },
 lightColor: {
       title: "Lichtfarbe",
@@ -1591,7 +1591,7 @@ async function buildExportCanvases(){
     const t = document.getElementById("measureTable");
     const tc = t ? renderTableToCanvas(t) : null;
     const sub = (typeof measures !== "undefined")
-      ? (measures.length ? (measures.length + " Messpunkte") : "Keine Messpunkte")
+      ? (measures.length ? (measures.length + " measurement points") : "No measurement points")
       : null;
     if(tc) out.push(makeHeaderedCanvas("Messreihe", sub, tc));
   }
@@ -1638,7 +1638,7 @@ async function refreshExportPreview(){
     __exportLastCanvases = list;
 
     if(!list.length){
-      toast("Bitte mindestens eine Option auswählen.");
+      toast("Please select at least one option.");
       return;
     }
 
@@ -1664,7 +1664,7 @@ async function refreshExportPreview(){
     if(exportPreviewEmpty) exportPreviewEmpty.style.display = "none";
   }catch(e){
     console.error(e);
-    toast("Export-Vorschau konnte nicht erstellt werden.");
+    toast("The export preview could not be created.");
   }finally{
     setExportBusy(false);
   }
@@ -1686,13 +1686,13 @@ async function copyExportToClipboard(){
 
     if(navigator.clipboard && window.ClipboardItem){
       await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-      toast("Screenshot(s) in Zwischenablage kopiert.");
+      toast("Screenshot(s) copied to the clipboard.");
       return;
     }
     throw new Error("Clipboard API not available");
   }catch(e){
     console.warn(e);
-    toast("Zwischenablage nicht verfügbar – PNG-Download bereitgestellt.");
+    toast("Clipboard is not available - PNG download has been prepared.");
     try{
       const url = __exportMerged ? __exportMerged.toDataURL("image/png", 1.0) : null;
       setExportDownload(url);
@@ -1722,9 +1722,9 @@ function exportProtocolAsPdf_DEPRECATED(){
 
     const canvIds = [
       {id:"sim", title:"Simulation"},
-      {id:"diagLight", title:"Diagramm: Beleuchtungsstärke"},
-      {id:"diagCO2", title:"Diagramm: CO₂-Zufuhr"},
-      {id:"diagTemp", title:"Diagramm: Temperatur"},
+      {id:"diagLight", title:"Chart: light intensity"},
+      {id:"diagCO2", title:"Chart: CO₂ supply"},
+      {id:"diagTemp", title:"Chart: temperature"},
     ];
     const images = canvIds.map(c=>{
       const el = document.getElementById(c.id);
@@ -1740,33 +1740,33 @@ function exportProtocolAsPdf_DEPRECATED(){
     }).filter(Boolean);
 
     const table = document.getElementById("measureTable");
-    const tableHtml = table ? table.outerHTML : "<p>Keine Messreihe verfügbar.</p>";
+    const tableHtml = table ? table.outerHTML : "<p>No measurement series available.</p>";
 const notesHtml = (Array.isArray(logEntries) && logEntries.length)
       ? `<div class="notes">` + logEntries.map((e, idx) => {
           const p = e.params || {};
           const txt = String(e.text||"")
             .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
-          const meta = `Notiz ${idx+1} | Licht=${(p.lightPct??"–")}% | CO₂=${(p.co2??"–")}% | T=${(p.temperature!=null? (+p.temperature).toFixed(1):"–")}°C | Farbe=${(p.lightColor??"–")}${p.prism?" + Prisma":""}`;
+          const meta = `Note ${idx+1} | light=${(p.lightPct??"–")}% | CO₂=${(p.co2??"–")}% | T=${(p.temperature!=null? (+p.temperature).toFixed(1):"–")}°C | colour=${(p.lightColor??"–")}${p.prism?" + prism":""}`;
           return `<div class="noteEntry"><div class="noteMeta">${meta}</div><pre class="noteTxt">${txt}</pre></div>`;
         }).join("") + `</div>`
-      : `<p>Keine Notizen gespeichert.</p>`;
+      : `<p>No notes saved.</p>`;
 
     const settings = {
       light: (+elLight.value).toFixed(0) + " %",
       co2: (+elCO2.value).toFixed(0) + " %",
       temp: (+elTemp.value).toFixed(1) + " °C",
       color: (elColor && elColor.options[elColor.selectedIndex]) ? elColor.options[elColor.selectedIndex].text : (elColor?.value || ""),
-      prism: elPrism?.checked ? "ja" : "nein",
+      prism: elPrism?.checked ? "yes" : "no",
       view: viewMode || "app",
     };
-    const viewMap = {app:"Apparente Fotosynthese", real:"Reelle Fotosynthese"};
+    const viewMap = {app:"Apparent photosynthesis", real:"Actual photosynthesis"};
     const viewLabel = viewMap[settings.view] || settings.view;
 
     const htmlDoc = `<!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Protokoll_${safeStamp}</title>
+<title>Log_${safeStamp}</title>
 <style>
   @page { size: A4; margin: 14mm; }
   body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:#000; }
@@ -1843,38 +1843,38 @@ const notesHtml = (Array.isArray(logEntries) && logEntries.length)
 </style>
 </head>
 <body>
-  <h1>Einflussfaktoren der Fotosynthese – Protokoll</h1>
+  <h1>Factors Affecting Photosynthesis - Log</h1>
   <div class="meta">
     <div class="row"><b>Export:</b> ${dateStr}</div>
-    <div class="row"><b>Ansicht:</b> ${viewLabel}</div>
-    <div class="row"><b>Aktuelle Einstellungen:</b> Licht ${settings.light}, CO₂ ${settings.co2}, Temperatur ${settings.temp}, Lichtfarbe ${settings.color}, Prisma ${settings.prism}</div>
+    <div class="row"><b>View:</b> ${viewLabel}</div>
+    <div class="row"><b>Current settings:</b> light ${settings.light}, CO₂ ${settings.co2}, temperature ${settings.temp}, light colour ${settings.color}, prism ${settings.prism}</div>
   </div>
 
-  <h2>Aufnahmen</h2>
+  <h2>Images</h2>
   <div class="grid">
-    ${images.map(im=>`<figure><img class="${im.kind||""}" src="${im.data}" alt="${im.title}"><figcaption>${im.title}</figcaption></figure>`).join("") || "<p>Keine Aufnahmen verfügbar.</p>"}
+    ${images.map(im=>`<figure><img class="${im.kind||""}" src="${im.data}" alt="${im.title}"><figcaption>${im.title}</figcaption></figure>`).join("") || "<p>No images available.</p>"}
   </div>
 
-  <h2>Messreihe</h2>
+  <h2>Measurement series</h2>
   ${tableHtml}
 
-  <h2>Notizen</h2>
+  <h2>Notes</h2>
   ${notesHtml}
 
-  <div class="note">Hinweis: Der Export nutzt den Druckdialog des Browsers. Dort kann als PDF gespeichert werden.</div>
+  <div class="note">Note: the export uses the browser print dialog. You can save it as a PDF there.</div>
 </body>
 </html>`;
 
     const w = window.open("", "_blank");
     if(!w){
-      alert("PDF-Export wurde vom Browser blockiert (Pop-up). Bitte Pop-ups für diese Seite erlauben.");
+      alert("PDF export was blocked by the browser as a pop-up. Please allow pop-ups for this page.");
       return;
     }
     w.document.open();
     w.document.write(htmlDoc);
     w.document.close();
     w.focus();
-    // Druckdialog nach dem Rendern öffnen
+    // Open the print dialog after rendering.
     w.onload = ()=>{
       w.print();
       // optional: nach Druck schließen (manche Browser blockieren das)
@@ -1886,12 +1886,12 @@ const notesHtml = (Array.isArray(logEntries) && logEntries.length)
     const lam = localWavelengthAt(magnifier.x);
     const {gross, resp, net} = componentsAtLens();
     measures.push({
-      label: `Messpunkt ${measures.length+1}`,
+      label: `Measurement point ${measures.length+1}`,
       light: (+elLight.value).toFixed(0),
       co2: (+elCO2.value).toFixed(0),
       temp: (+elTemp.value).toFixed(1),
       color: elColor.value,
-      prism: elPrism.checked ? "ja" : "nein",
+      prism: elPrism.checked ? "yes" : "no",
       lam: Math.round(lam),
       gross: gross.toFixed(1),
       resp: resp.toFixed(1),
@@ -2166,7 +2166,7 @@ const btnExportPDF = document.getElementById("exportPDF");
   }
 
   // Denaturierung (gemeinsamer Faktor): ab 45°C unverändert, danach zunehmend steiler Abfall bis 0 bei 50°C.
-  // Ziel: kein Knick bei 45°C und kein "langes Auslaufen" – der Einbruch soll sich nach 45°C beschleunigen.
+  // Goal: kein Knick bei 45°C und kein "langes Auslaufen" – der Einbruch soll sich nach 45°C beschleunigen.
   function denaturationFactor(t){
     if(t <= 45) return 1;
     const x = clamp((t - 45)/5, 0, 1);               // 0..1 zwischen 45 und 50
@@ -2199,7 +2199,7 @@ const btnExportPDF = document.getElementById("exportPDF");
     const t = clamp(T, 0, 60);
 
     // Starklicht: ausgeprägtes Temperatur-Optimum.
-    // Ziel: bis ~37°C deutlicher Anstieg, danach bogenförmiger Abfall (37–45°C),
+    // Goal: bis ~37°C deutlicher Anstieg, danach bogenförmiger Abfall (37–45°C),
     // Denaturierung -> 0 bis 50°C, ohne Knick bei 45°C.
 
     // Asymmetrische "Gauß-Glocke": links breit (realistischer Anstieg), rechts schmaler (sichtbar bogenförmiger Abfall).
@@ -2335,7 +2335,7 @@ const btnExportPDF = document.getElementById("exportPDF");
       meta.className = "meta";
       const p = e.params;
       meta.textContent =
-        `${e.time} | Licht: ${p.lightColor}${p.prism?" + Prisma":""} | Beleuchtung=${p.lightPct}% | T=${p.temperature.toFixed(1)}°C | CO₂=${p.co2}% | λ(Lupe)≈${p.lambdaAtLens}nm`;
+        `${e.time} | light: ${p.lightColor}${p.prism?" + prism":""} | illumination=${p.lightPct}% | T=${p.temperature.toFixed(1)}°C | CO₂=${p.co2}% | λ(magnifier)≈${p.lambdaAtLens}nm`;
       div.appendChild(meta);
 
       if(e.text){
@@ -2356,7 +2356,7 @@ const btnExportPDF = document.getElementById("exportPDF");
       if(e.imgDiag){
         const im2 = document.createElement("img");
         im2.src = e.imgDiag;
-        im2.alt = "Snapshot Diagramme";
+        im2.alt = "Snapshot charts";
         thumbs.appendChild(im2);
       }
       if(thumbs.children.length) div.appendChild(thumbs);
@@ -3227,7 +3227,7 @@ const uCur = clamp(Icur/1.0,0,1);
       const netCur = grossCur - respCur;
       const yCur = yForMode(grossCur, respCur, netCur);
       marker(d1,A,uCur,yCur,"rgba(125,211,252,.95)", zL.x0, zL.x1);
-      pillLight.textContent = `${labelForMode()} (gesamt): ${yCur.toFixed(0)}%`;
+      pillLight.textContent = `${labelForMode()}: ${yCur.toFixed(0)}%`;
     }
 
     // Diagram 2: Temperature optimum
@@ -3252,7 +3252,7 @@ const uCur = clamp(Icur/1.0,0,1);
       const netCur = grossCur - respCur;
       const yCur = yForMode(grossCur, respCur, netCur);
       marker(d2,A,uCur,yCur,"rgba(122,162,255,.95)", zT.x0, zT.x1);
-      pillTemp.textContent = `${labelForMode()} (gesamt): ${yCur.toFixed(0)}%`;
+      pillTemp.textContent = `${labelForMode()}: ${yCur.toFixed(0)}%`;
     }
 
     // Diagram 3: CO2 saturation
@@ -3300,7 +3300,7 @@ const uCur = clamp(Icur/1.0,0,1);
       const netCur = grossCur - respCur;
       const yCur = yForMode(grossCur, respCur, netCur);
       marker(d3,A,uCur,yCur,"rgba(255,213,106,.90)", zC.x0, zC.x1);
-      pillCO2.textContent = `${labelForMode()} (gesamt): ${yCur.toFixed(0)}%`;
+      pillCO2.textContent = `${labelForMode()}: ${yCur.toFixed(0)}%`;
     }
   }
 
@@ -3346,15 +3346,15 @@ const uCur = clamp(Icur/1.0,0,1);
     kpiPS.textContent = `${labelForMode()}: ${shown.toFixed(1)}%`;
 
     if(kpiApp && kpiReal && kpiResp){
-      kpiApp.textContent  = `Apparente: ${net.toFixed(1)}%`;
-      kpiReal.textContent = `Reelle: ${gross.toFixed(1)}%`;
-      kpiResp.textContent = `Atmung: ${resp.toFixed(1)}%`;
+      kpiApp.textContent  = `Apparent: ${net.toFixed(1)}%`;
+      kpiReal.textContent = `Actual: ${gross.toFixed(1)}%`;
+      kpiResp.textContent = `Respiration: ${resp.toFixed(1)}%`;
     }
 
-    kpiO2.textContent = `O₂ (apparente): ${o2Rel.toFixed(0)}%`;
-    kpiTemp.textContent = `T-Faktor: ${tf.toFixed(2)}`;
-    kpiLight.textContent = `Licht-Faktor: ${lf.toFixed(2)}`;
-    kpiCO2.textContent = `CO₂-Faktor: ${cf.toFixed(2)}`;
+    kpiO2.textContent = `O₂ (apparent): ${o2Rel.toFixed(0)}%`;
+    kpiTemp.textContent = `T-factor: ${tf.toFixed(2)}`;
+    kpiLight.textContent = `Light factor: ${lf.toFixed(2)}`;
+    kpiCO2.textContent = `CO₂ factor: ${cf.toFixed(2)}`;
 
     lensPS.textContent = `${shown.toFixed(1)} %`;
     const deltaPct = (clusterIdx - 1) * 100;
@@ -3458,21 +3458,21 @@ function openReportAndPrint(){
     const entriesHtml = logEntries.map(e => {
       const txt = (e.text||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
       const simImg = e.imgSim ? `<img src="${e.imgSim}" alt="Snapshot Simulation">` : "";
-      const diagImg = e.imgDiag ? `<img src="${e.imgDiag}" alt="Snapshot Diagramme">` : "";
+      const diagImg = e.imgDiag ? `<img src="${e.imgDiag}" alt="Snapshot charts">` : "";
       const p = e.params;
       return `
         <section class="entry">
-          <div class="meta">${e.time} | Licht: ${p.lightColor}${p.prism?" + Prisma":""} | Beleuchtung=${p.lightPct}% | T=${p.temperature.toFixed(1)}°C | CO₂=${p.co2}% | λ(Lupe)≈${p.lambdaAtLens}nm</div>
+          <div class="meta">${e.time} | light: ${p.lightColor}${p.prism?" + prism":""} | illumination=${p.lightPct}% | T=${p.temperature.toFixed(1)}°C | CO₂=${p.co2}% | λ(magnifier)≈${p.lambdaAtLens}nm</div>
           ${txt ? `<pre class="txt">${txt}</pre>` : ""}
           <div class="imgs">${simImg}${diagImg}</div>
         </section>`;
     }).join("");
 
-    const emptyHtml = '<p style="color:#444">Keine Einträge vorhanden.</p>';
+    const emptyHtml = '<p style="color:#444">No entries available.</p>';
 
-    const html = `<!doctype html><html lang="de"><head><meta charset="utf-8">
+    const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
-      <title>Protokoll-Report – Photosynthese-Simulation</title>
+      <title>Log Report - Photosynthesis Simulation</title>
       <style>
         body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#ffffff;color:#111}
         header{padding:16px 18px;border-bottom:1px solid #ddd}
@@ -3491,8 +3491,8 @@ function openReportAndPrint(){
       </style>
 </head><body>
       <header>
-        <h1>Protokoll-Report – Photosynthese-Simulation</h1>
-        <div class="sub">Erstellt am ${fmtTime(new Date())}. Export als PDF: Browser-Druckdialog → „Als PDF speichern“.</div>
+        <h1>Log Report - Photosynthesis Simulation</h1>
+        <div class="sub">Created on ${fmtTime(new Date())}. Export as PDF: browser print dialog -> "Save as PDF".</div>
       </header>
       <main>
         ${entriesHtml || emptyHtml}
@@ -3503,7 +3503,7 @@ function openReportAndPrint(){
 </body></html>`;
 
     const w = window.open("", "_blank");
-    if(!w){ alert("Popup blockiert. Bitte Popups erlauben oder Report in neuem Tab zulassen."); return; }
+    if(!w){ alert("Pop-up blocked. Please allow pop-ups or allow the report to open in a new tab."); return; }
     w.document.open();
     w.document.write(html);
     w.document.close();
@@ -3557,8 +3557,8 @@ function openReportAndPrint(){
     function closeIntroModal(){el.style.display='none';document.body.style.overflow='';}
     function downloadWorksheet(){
       var link=document.createElement('a');
-      link.href='AB_Einflussfaktoren_Fotosynthese.pdf';
-      link.download='AB_Einflussfaktoren_Fotosynthese.pdf';
+      link.href='AB_Einflussfaktoren_Fotosynthese_EN.pdf';
+      link.download='AB_Einflussfaktoren_Fotosynthese_EN.pdf';
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -3578,21 +3578,21 @@ function openReportAndPrint(){
 <div id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle">
   <div class="im-card">
     <div class="im-head">
-      <h2 id="introModalTitle" class="im-title">Einflussfaktoren der Fotosynthese</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+      <h2 id="introModalTitle" class="im-title">Factors Affecting Photosynthesis</h2>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Close">×</button>
     </div>
-    <p class="im-grade">Jahrgangsstufe: 13</p>
+    <p class="im-grade">Grade level: 13</p>
     <div class="im-desc">
-      Diese Simulation rekonstruiert den Engelmann-Versuch und zeigt, wie Lichtintensität, Wellenlänge, CO₂-Konzentration und Temperatur die Fotosyntheserate beeinflussen. Verändere die Parameter interaktiv und beobachte, wie sich die Sauerstoffproduktion der Bakterien in Abhängigkeit von den Einflussfaktoren verändert.
+      This simulation reconstructs the Engelmann experiment and shows how light intensity, wavelength, CO₂ concentration, and temperature affect the rate of photosynthesis. Change the parameters interactively and observe how the bacteria's oxygen production changes depending on these factors.
     </div>
     <div class="im-btn-row">
-      <button id="introWorksheetBtn" class="im-worksheet-btn" type="button">Arbeitsblatt</button>
-      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
+      <button id="introWorksheetBtn" class="im-worksheet-btn" type="button">Worksheet</button>
+      <button id="introModalStartBtn" class="im-start-btn" type="button">Start simulation →</button>
     </div>
   </div>
 </div>
 <!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -3616,12 +3616,12 @@ function openReportAndPrint(){
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Wenn nicht anders angegeben, sind alle Abbildungen mittels KI erstellt worden.</li>
-      <li><strong>Alge:</strong><br>
+      <li>Unless otherwise stated, all illustrations were created with AI.</li>
+      <li><strong>Alga:</strong><br>
         Wiedehopf20: <em>The freshwater alga Spirogyra.</em>
-        Wikimedia Commons, CC BY-SA 4.0, bearbeitet.</li>
+        Wikimedia Commons, CC BY-SA 4.0, edited.</li>
     </ul>
   </div>
 </div>

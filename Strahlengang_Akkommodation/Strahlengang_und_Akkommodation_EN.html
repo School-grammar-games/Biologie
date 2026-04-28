@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>Optik-Simulation: Auge</title>
+<title>Optics Simulation: Eye</title>
 <style>
     :root{
       --bg:#0b1020; --panel:#121a33; --text:#e8ecff; --muted:#a8b3e6;
@@ -444,7 +444,7 @@ select option{
 }
 .export-toast.show{opacity:1; transform:translateX(-50%) translateY(-6px);}
 
-/* Header: Titel + Informationstext-Button */
+/* Header: Titel + Info text-Button */
 .hdLeft{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
 .btn-explain{
   padding:8px 12px;
@@ -459,7 +459,7 @@ select option{
 }
 .btn-explain:hover{filter:brightness(1.10); background:linear-gradient(180deg, rgba(255,204,102,.30), rgba(255,204,102,.13));}
 
-/* Popup: Informationstext */
+/* Popup: Info text */
 .explainModal{
   position:fixed;
   inset:0;
@@ -511,7 +511,7 @@ select option{
 }
 .explainFt{padding:12px 14px; border-top:1px solid rgba(106,166,255,.14); display:flex; justify-content:flex-end; gap:10px;}
 
-/* === Neuer Modus: Aufbau des Auges === */
+/* === Neuer Modus: Structure of the Eye === */
     .hidden{display:none !important;}
 
     #view-aufbau .grid{align-items:start;}
@@ -961,7 +961,7 @@ select option{
       font-size:11.2px;
     }
 
-    /* Aufbau des Auges: Exportieren-Buttons wie im Screenshot */
+    /* Structure of the Eye: Exportieren-Buttons wie im Screenshot */
     #view-aufbau #btnExportEyeLabels,
     #view-aufbau #btnExportEyeMatch{
       min-height:40px;
@@ -1059,7 +1059,7 @@ select option{
       }
     }
 
-/* === Neuer Modus: Die Netzhaut === */
+/* === Neuer Modus: The Retina === */
 #view-retina .grid{
   grid-template-columns:minmax(0,1fr);
   gap:12px;
@@ -1519,7 +1519,7 @@ select option{
   background:rgba(8,12,24,.38);
 }
 
-/* v60: Aufbau der Netzhaut – Bildfenster an Bildgröße anpassen */
+/* v60: Structure of the Retina – Bildfenster an Bildgröße anpassen */
 #view-retina-build #taskRetinaLabelPanel.is-collapsed ~ #retinaBuildSimPanel .eye-canvas-wrap,
 #view-retina-build #taskRetinaLabelPanel:not(.is-collapsed) ~ #retinaBuildSimPanel .eye-canvas-wrap{
   background:#ffffff;
@@ -1822,12 +1822,12 @@ select option{
 <div class="titlePanel">
 <div class="titlePanelInner">
 <div class="titlePanelText">
-<h1 id="app-title">Simulationen zum Thema Strahlengang und Auge</h1>
-<div class="sub" id="app-subtitle">Erforsche die Wirkung von Linsen auf Lichtstrahlen und wie unser Auge ein scharfes Bild unserer Umwelt erzeugt. Untersuche außerdem, wie Sehhilfen bei Fehlsichtigkeit den Strahlengang verändern, um wieder scharfes Sehen zu ermöglichen.</div>
+<h1 id="app-title">Simulations on Light Paths and the Eye</h1>
+<div class="sub" id="app-subtitle">Explore how lenses affect light rays and how our eye creates a sharp image of the world around us. Also investigate how visual aids change the path of light in cases of refractive error to restore clear vision.</div>
 </div>
 <div class="titlePanelActions" id="aufbauHeaderActions" hidden>
-<button class="btn-ghost btn-export" type="button" onclick="App.show('menu')">↩ Menü</button>
-<button type="button" class="btn-ghost btn-explain" onclick="openExplain('aufbau')">Informationstext</button>
+<button class="btn-ghost btn-export" type="button" onclick="App.show('menu')">↩ Menu</button>
+<button type="button" class="btn-ghost btn-explain" onclick="openExplain('aufbau')">Info text</button>
 </div>
 </div>
 </div>
@@ -1835,50 +1835,50 @@ select option{
 <section class="view active" id="view-menu">
 <div class="menuCards">
 <div class="card">
-<h2>Aufbau des Auges</h2>
-      <div class="card-preview"><img class="menu-preview-eye" src="Bilder/Anzeige_Augapfel.png" alt="Vorschau Modus 1: Aufbau des Auges" loading="lazy"></div>
+<h2>Structure of the Eye</h2>
+      <div class="card-preview"><img class="menu-preview-eye" src="Bilder/Anzeige_Augapfel.png" alt="Preview mode 1: structure of the eye" loading="lazy"></div>
 
-<p>Erarbeite den Aufbau des menschlichen Auges, beschrifte seine Bestandteile und ordne den einzelnen Strukturen die passenden Funktionen zu.</p>
+<p>Work out the structure of the human eye, label its parts, and match each structure to the correct function.</p>
 <div class="card-btns">
   <button class="btn-primary" onclick="App.show('aufbau')">▶ Start</button>
-  <a class="btn-worksheet" href="Arbeitsblätter/AB_Aufbau_des_Auges.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+  <a class="btn-worksheet" href="Arbeitsblätter/AB_Aufbau_des_Auges_EN.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Worksheet</a>
 </div>
 </div>
 <div class="card">
-<h2>Die Simulation des Strahlengangs</h2>
-      <div class="card-preview"><img class="menu-preview-ray" src="Bilder/Anzeige_Strahlengang.png" alt="Vorschau Modus 1: Strahlengang" loading="lazy"></div>
+<h2>The Light Path Simulation</h2>
+      <div class="card-preview"><img class="menu-preview-ray" src="Bilder/Anzeige_Strahlengang.png" alt="Preview mode 1: light path" loading="lazy"></div>
 
-<p>Erforsche den Strahlengang unter Veränderung der Anzahl von Linsen und deren Brechkraft. Ändere dargestellte Gegenstände und untersuche die Auswirkung der Entfernung auf die auf dem Schirm abgebildete Darstellung.</p>
+<p>Explore the path of light while changing the number of lenses and their refractive power. Change the displayed objects and investigate how distance affects the image shown on the screen.</p>
 <div class="card-btns">
   <button class="btn-primary" onclick="App.show('ray')">▶ Start</button>
-  <a class="btn-worksheet" href="Arbeitsblätter/AB_Strahlengang.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+  <a class="btn-worksheet" href="Arbeitsblätter/AB_Strahlengang_EN.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Worksheet</a>
 </div>
 </div>
 <div class="card">
-<h2>Akkommodation und Steuerung des Lichteinfalls</h2>
-      <div class="card-preview"><img class="menu-preview-acco" src="Bilder/Anzeige_Akkommodation.gif" alt="Vorschau Modus 2: Akkommodation" loading="lazy"></div>
+<h2>Accommodation and Control of Incoming Light</h2>
+      <div class="card-preview"><img class="menu-preview-acco" src="Bilder/Anzeige_Akkommodation.gif" alt="Preview mode 2: accommodation" loading="lazy"></div>
 
-<p>Untersuche, wie sich das Auge an unterschiedlich weit entfernte Objekte anpasst, um dauerhaft ein scharfes Bild darzustellen, und wie es die Menge des einfallenden Lichts steuert.</p>
+<p>Investigate how the eye adapts to objects at different distances to maintain a sharp image and how it regulates the amount of incoming light.</p>
 <div class="card-btns">
   <button class="btn-primary" onclick="App.show('acco')">▶ Start</button>
-  <a class="btn-worksheet" href="Arbeitsblätter/AB_Akkommodation.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+  <a class="btn-worksheet" href="Arbeitsblätter/AB_Akkommodation_EN.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Worksheet</a>
 </div>
 </div>
 <div class="card">
-<h2>Ursache von Fehlsichtigkeit und deren Korrektur</h2>
-      <div class="card-preview"><img class="menu-preview-refr" src="Bilder/Anzeige_Fehlsichtigkeit.png" alt="Vorschau Modus 3: Fehlsichtigkeit" loading="lazy"></div>
+<h2>Causes of Refractive Error and Their Correction</h2>
+      <div class="card-preview"><img class="menu-preview-refr" src="Bilder/Anzeige_Fehlsichtigkeit.png" alt="Preview mode 3: refractive error" loading="lazy"></div>
 
-<p>Untersuche, wie es zu den beiden Arten der Fehlsichtigkeit kommt und wie Sehhilfen wirken, um wieder eine Normalsichtigkeit wiederherzustellen.</p>
+<p>Investigate how the two types of refractive error arise and how corrective lenses restore normal vision.</p>
 <div class="card-btns">
   <button class="btn-primary" onclick="App.show('refr')">▶ Start</button>
-  <a class="btn-worksheet" href="Arbeitsblätter/AB_Fehlsichtigkeit.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+  <a class="btn-worksheet" href="Arbeitsblätter/AB_Fehlsichtigkeit_EN.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Worksheet</a>
 </div>
 </div>
 <div class="card card-retina-main">
-<h2>Die Netzhaut</h2>
-      <div class="card-preview"><img class="menu-preview-retina" src="Bilder/Anzeige_Aufbau Netzhaut.png" alt="Vorschau Modus 4: Die Netzhaut" loading="lazy"></div>
+<h2>The Retina</h2>
+      <div class="card-preview"><img class="menu-preview-retina" src="Bilder/Anzeige_Aufbau Netzhaut.png" alt="Preview mode 4: the retina" loading="lazy"></div>
 
-<p>Untersuche, wie Stäbchen und Zapfen auf Licht reagieren, wie Farbwahrnehmung entsteht und wie Lichtreize in der Netzhaut in elektrische Impulse umgewandelt und weitergeleitet werden.</p>
+<p>Investigate how rods and cones respond to light, how colour vision arises, and how light stimuli in the retina are converted into electrical impulses and passed on.</p>
 <div class="card-btns">
   <button class="btn-primary" onclick="App.show('retinaMenu')">▶ Start</button>
 </div>
@@ -1886,7 +1886,7 @@ select option{
 </div>
 <div class="sep"></div>
 <div class="hint">
-      Hinweis: Dünnlinsen-/paraxiales Strahlenmodell (didaktisch). Parameter sind bewusst „greifbar“, nicht physiologisch exakt.
+      Note: thin-lens/paraxial ray model (didactic). Parameters are deliberately easy to grasp, not physiologically exact.
     </div>
 </section>
 
@@ -1895,33 +1895,33 @@ select option{
 <div class="eye-main-stack">
 <div class="panel label-task-panel collapse-panel is-collapsed" id="taskEyeLabelPanel">
 <div class="hd collapse-head">
-<h3>Aufgabe 1: Beschrifte die Bestandteile des Auges in der Abbildung.</h3>
-<button type="button" class="btn-ghost collapse-toggle" data-target="taskEyeLabelBody" aria-expanded="false">Aufklappen</button>
+<h3>Task 1: Label the parts of the eye in the illustration.</h3>
+<button type="button" class="btn-ghost collapse-toggle" data-target="taskEyeLabelBody" aria-expanded="false">Expand</button>
 </div>
 <div class="bd collapse-body hidden" id="taskEyeLabelBody">
-<div class="small">Klappe Aufgabe 1 auf, um Dropbereiche, Marker und Verbindungslinien einzublenden.</div>
+<div class="small">Expand task 1 to show the drop zones, markers, and connecting lines.</div>
 <div class="label-task-toolbar">
-<div class="label-action-bar" role="group" aria-label="Aktionen zur Beschriftungsaufgabe Auge">
-<button id="btnCheckEyeLabels" type="button">Korrigieren</button>
-<button id="btnEyeLabelReset" type="button">Zurücksetzen</button>
-<button id="btnToggleEyeLabels" type="button" aria-pressed="false">Ausblenden</button>
+<div class="label-action-bar" role="group" aria-label="Actions for the eye labelling task">
+<button id="btnCheckEyeLabels" type="button">Check</button>
+<button id="btnEyeLabelReset" type="button">Reset</button>
+<button id="btnToggleEyeLabels" type="button" aria-pressed="false">Hide</button>
 <div class="button-lock-wrap" id="wrapExportEyeLabels">
-<button id="btnExportEyeLabels" type="button" disabled>⤓ Exportieren</button>
+<button id="btnExportEyeLabels" type="button" disabled>⤓ Export</button>
 <div class="lock-overlay" aria-hidden="true"><span class="lock-badge">🔒</span></div>
 </div>
 </div>
 <div id="feedbackEyeLabel" class="status-line label-feedback">&nbsp;</div>
 </div>
-<div id="eyeLabelBank" class="label-bank" aria-label="Beschriftungsbegriffe Auge"></div>
+<div id="eyeLabelBank" class="label-bank" aria-label="Eye labelling terms"></div>
 </div>
 </div>
 
 <div class="panel" id="eyeSimPanel">
-<div class="hd"><b>Augendarstellung</b></div>
+<div class="hd"><b>Eye diagram</b></div>
 <div class="bd eye-sim-body">
 <div class="eye-canvas-wrap">
 <div class="eye-image-stage image-stage" id="eyeImageStage">
-<img id="imgEyeBuild" src="Bilder/Aufbau_Auge.png" alt="Querschnitt durch das menschliche Auge">
+<img id="imgEyeBuild" src="Bilder/Aufbau_Auge.png" alt="Cross-section of the human eye">
 <div id="eyeLabelLayer" class="label-layer" aria-hidden="true">
 <svg id="eyeLabelSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
 </div>
@@ -1932,24 +1932,24 @@ select option{
 
 <div class="panel collapse-panel is-collapsed" id="taskEyeFunctionPanel">
 <div class="hd collapse-head">
-<h3>Aufgabe 2: Ordne den Bestandteilen des Auges die korrekte Funktion zu.</h3>
-<button type="button" class="btn-ghost collapse-toggle" data-target="taskEyeFunctionBody" aria-expanded="false">Aufklappen</button>
+<h3>Task 2: Match each part of the eye to the correct function.</h3>
+<button type="button" class="btn-ghost collapse-toggle" data-target="taskEyeFunctionBody" aria-expanded="false">Expand</button>
 </div>
 <div class="bd collapse-body hidden" id="taskEyeFunctionBody">
-<div class="small">Ordne die Funktionen per Drag &amp; Drop oder mit den Pfeilen in die richtige Reihenfolge zu den Strukturen und klicke auf Korrigieren.</div>
+<div class="small">Match the functions to the structures in the correct order by drag and drop or with the arrows, then click Check.</div>
 <table class="task-table" id="tableEyeMatch">
 <thead>
 <tr>
-<th>Struktur</th>
-<th>Funktion</th>
+<th>Structure</th>
+<th>Function</th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
 <div class="eye-match-actions">
-<button id="btnCheckEyeMatch" type="button">Korrigieren</button>
+<button id="btnCheckEyeMatch" type="button">Check</button>
 <div class="button-lock-wrap" id="wrapExportEyeMatch">
-<button id="btnExportEyeMatch" type="button" disabled>⤓ Exportieren</button>
+<button id="btnExportEyeMatch" type="button" disabled>⤓ Export</button>
 <div class="lock-overlay" aria-hidden="true"><span class="lock-badge">🔒</span></div>
 </div>
 <div id="feedbackEyeMatch" class="status-line">&nbsp;</div>
@@ -1964,32 +1964,32 @@ select option{
 <div class="grid">
 <div class="panel">
 <div class="hd">
-<b>Strahlengang</b>
+<b>Light Path</b>
       <div class="hd-actions">
-        <button class="btn-ghost btn-export" onclick="Exporter.exportMode('ray', this)">⤓ Exportieren</button>
-        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menü</button>
+<button class="btn-ghost btn-export" onclick="Exporter.exportMode('ray', this)">⤓ Export</button>
+        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menu</button>
       </div>
     </div>
 <div class="bd">
 <div class="control">
-<label>Linse 1
+<label>Lens 1
               <span class="val">
 <select id="ray-lensType">
-<option value="convex">Konvex (Sammellinse)</option>
-<option value="concave">Konkav (Streulinse)</option>
+<option value="convex">Convex (converging lens)</option>
+<option value="concave">Concave (diverging lens)</option>
 </select>
 </span>
 </label>
 </div>
 <div class="control">
-<label>Brechkraft Linse 1 (Dioptrien)
+<label>Refractive power of lens 1 (diopters)
               <span class="val"><span id="ray-dVal"></span></span>
 </label>
 <input id="ray-d" max="8.00" min="0.50" step="0.001" type="range" value="1.500"/>
 </div>
 <div class="control">
 <label style="gap:12px;">
-<span>Strahlengang animiert</span>
+<span>Animate light path</span>
 <span class="val">
 <span class="switch">
 <input checked="" id="toggle-gifrays-ray" type="checkbox"/>
@@ -2000,28 +2000,28 @@ select option{
 </div>
 <div class="control">
 <label style="gap:12px;">
-<span>Linse 2 aktiv</span>
+<span>Lens 2 active</span>
 <span class="val">
 <span class="switch" id="rayL2SwitchWrap">
 <input id="ray-l2-enabled" type="checkbox"/>
 <span class="slider"></span>
 </span>
-<span id="ray-l2-lock" class="lockBadge" title="Bei aktiviertem Objekt gesperrt" style="display:none; margin-left:8px;">🔒</span>
+<span id="ray-l2-lock" class="lockBadge" title="Locked when an object is active" style="display:none; margin-left:8px;">🔒</span>
 </span>
 </label>
 <div class="disabled" id="ray-l2-controls">
 <div class="control" style="margin-top:8px;">
-<label>Linse 2
+<label>Lens 2
                   <span class="val">
 <select id="ray-l2-type">
-<option value="convex">Konvex (Sammellinse)</option>
-<option value="concave">Konkav (Streulinse)</option>
+<option value="convex">Convex (converging lens)</option>
+<option value="concave">Concave (diverging lens)</option>
 </select>
 </span>
 </label>
 </div>
 <div class="control">
-<label>Brechkraft Linse 2 (Dioptrien)
+<label>Refractive power of lens 2 (diopters)
                   <span class="val"><span id="ray-l2-dVal"></span></span>
 </label>
 <input id="ray-l2-d" max="8.00" min="0.50" step="0.001" type="range" value="1.500"/>
@@ -2029,63 +2029,63 @@ select option{
 </div>
 </div>
 <div class="control">
-<label>Darstellung
+<label>Display mode
               <span class="val">
 <select id="ray-mode">
-<option value="rays">3 Lichtstrahlen</option>
-<option value="object">Bild verwenden</option>
+<option value="rays">3 light rays</option>
+<option value="object">Use image</option>
 </select>
 </span>
 </label>
 </div>
 <div id="ray-objectControls" style="display:none;">
 <div class="control">
-<label>Entfernung des Objekts</label>
+<label>Object distance</label>
 <div class="rangeWrap">
 <input id="ray-objDist" max="335" min="230" step="1" type="range" value="260"/>
-<div class="rangeEnds"><span>Nah</span><span>Fern</span></div>
+<div class="rangeEnds"><span>Near</span><span>Far</span></div>
 </div>
 </div>
 </div>
 <div id="ray-colorControls">
 <div class="control">
-<label>Farbe Strahl oben
+<label>Colour of top ray
                 <span class="val">
 <select id="ray-colTop">
-<option value="white">weiß</option>
-<option value="red">rot</option>
+<option value="white">white</option>
+<option value="red">red</option>
 </select>
 </span>
 </label>
 </div>
 <div class="control">
-<label>Farbe Strahl Mitte
+<label>Colour of middle ray
                 <span class="val">
 <select id="ray-colMid">
-<option value="white">weiß</option>
-<option value="red">rot</option>
+<option value="white">white</option>
+<option value="red">red</option>
 </select>
 </span>
 </label>
 </div>
 <div class="control">
-<label>Farbe Strahl unten
+<label>Colour of bottom ray
                 <span class="val">
 <select id="ray-colBot">
-<option value="white">weiß</option>
-<option value="red">rot</option>
+<option value="white">white</option>
+<option value="red">red</option>
 </select>
 </span>
 </label>
 </div>
 </div>
 <div class="sep"></div>
-<div class="hint" style="margin-bottom:8px;"><b>Seheindruck</b></div>
+<div class="hint" style="margin-bottom:8px;"><b>Visual impression</b></div>
 <canvas class="visionCanvas" height="220" id="ray-vision" width="320"></canvas>
 </div>
 </div>
 <div class="panel">
-<div class="hd"><div class="hdLeft"><b>Darstellung</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('ray')">Informationstext</button></div><span class="badge" id="ray-badge"></span></div>
+<div class="hd"><div class="hdLeft"><b>Display</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('ray')">Info text</button></div><span class="badge" id="ray-badge"></span></div>
 <canvas height="540" id="ray-canvas" width="1000"></canvas>
 
 </div>
@@ -2095,31 +2095,31 @@ select option{
 <div class="grid">
 <div class="panel optionsPanel">
 <div class="hd">
-<b>Akkommodation</b>
+<b>Accommodation</b>
       <div class="hd-actions">
-        <button class="btn-ghost btn-export" onclick="Exporter.exportMode('acco', this)">⤓ Exportieren</button>
-        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menü</button>
+<button class="btn-ghost btn-export" onclick="Exporter.exportMode('acco', this)">⤓ Export</button>
+        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menu</button>
       </div>
     </div>
 <div class="bd">
 <div class="control">
-<label>Objektentfernung (m)
+<label>Object distance (m)
               <span class="val" id="acco-distVal"></span>
 </label>
 <input id="acco-dist" max="6" min="0.25" step="0.05" type="range" value="2"/>
 </div>
 <div class="control">
-<label>Helligkeit
+<label>Brightness
               <span class="val"><span id="acco-lightVal"></span></span>
 </label>
 <div class="rangeWrap">
 <input id="acco-light" max="100" min="0" step="1" type="range" value="50"/>
-<div class="rangeEnds"><span>Dunkel</span><span>Hell</span></div>
+<div class="rangeEnds"><span>Dark</span><span>Bright</span></div>
 </div>
 </div>
 <div class="control">
 <label style="gap:12px;">
-<span>Strahlengang animiert</span>
+<span>Animate light path</span>
 <span class="val">
 <span class="switch">
 <input checked="" id="toggle-gifrays-acco" type="checkbox"/>
@@ -2130,7 +2130,7 @@ select option{
 </div>
 <div class="control">
 <label style="gap:12px;">
-<span>Lichtmenge anzeigen</span>
+<span>Show light amount</span>
 <span class="val">
 <span class="switch">
 <input id="toggle-lightamount-acco" type="checkbox"/>
@@ -2140,46 +2140,46 @@ select option{
 </label>
 </div>
 <div class="control">
-<label>Einfallswinkel an der Linse
+<label>Angle of incidence at the lens
               <span class="val"><span id="acco-angleVal"></span>°</span>
 </label>
 </div>
 <div class="control">
-<label>Brechkraft der Linse
+<label>Refractive power of the lens
               <span class="val"><span id="acco-powerVal"></span> dpt</span>
 </label>
 </div>
 <div class="control">
-<label>Pupillendurchmesser
+<label>Pupil diameter
               <span class="val"><span id="acco-pupilVal"></span> mm</span>
 </label>
 </div>
 <div class="control">
-<label>Lichtmenge (rel.)
+<label>Light amount (rel.)
               <span class="val"><span id="acco-lightRelVal"></span></span>
 </label>
 </div>
 <div class="sep"></div>
-<div class="hint" style="margin-bottom:6px;"><b>Legende</b></div>
+<div class="hint" style="margin-bottom:6px;"><b>Legend</b></div>
 <div class="legend" id="acco-legend">
-<div class="legendItem"><img alt="Objekt" class="legendIcon" src="Bilder/Objekt.png"/>Objekt</div>
-<div class="legendItem"><span class="legendLine"></span>Strahlengang</div>
-<div class="legendItem"><img alt="Linse" class="legendIcon" src="Bilder/Linse.png"/>Linse</div>
-<div class="legendItem"><img alt="Iris" class="legendIcon" onerror="this.onerror=null;this.src='Bilder/Iris_Darstellung.png';" src="Bilder/Iris_Legende.png"/>Iris/ Regenbogenhaut</div>
-<div class="legendItem"><span class="legendPupil"></span>Pupillendurchmesser</div>
-<div class="legendItem"><img alt="Ziliarmuskel" class="legendIcon" src="Bilder/Muskel.png"/>Ziliarmuskel</div>
-<div class="legendItem"><img alt="Zonulafasern" class="legendIcon" onerror="this.onerror=null;this.src='Bilder/Zonula_schlaff.png';" src="Bilder/Zonula_straff.png"/>Zonulafasern</div>
-<div class="legendItem"><span class="legendRetina"></span>Netzhaut</div>
+<div class="legendItem"><img alt="Object" class="legendIcon" src="Bilder/Objekt.png"/>Object</div>
+<div class="legendItem"><span class="legendLine"></span>Light path</div>
+<div class="legendItem"><img alt="Lens" class="legendIcon" src="Bilder/Linse.png"/>Lens</div>
+<div class="legendItem"><img alt="Iris" class="legendIcon" onerror="this.onerror=null;this.src='Bilder/Iris_Darstellung.png';" src="Bilder/Iris_Legende.png"/>Iris</div>
+<div class="legendItem"><span class="legendPupil"></span>Pupil diameter</div>
+<div class="legendItem"><img alt="Ciliary muscle" class="legendIcon" src="Bilder/Muskel.png"/>Ciliary muscle</div>
+<div class="legendItem"><img alt="Zonular fibres" class="legendIcon" onerror="this.onerror=null;this.src='Bilder/Zonula_schlaff.png';" src="Bilder/Zonula_straff.png"/>Zonular fibres</div>
+<div class="legendItem"><span class="legendRetina"></span>Retina</div>
 </div>
 <div class="sep"></div>
-<div class="hint" style="margin-bottom:8px;"><b>Seheindruck</b></div>
+<div class="hint" style="margin-bottom:8px;"><b>Visual impression</b></div>
 <canvas class="visionCanvas" height="220" id="acco-vision" width="320"></canvas>
 </div>
 </div>
 <div class="panel panelCanvas">
-<div class="hd"><div class="hdLeft"><b>Augenquerschnitt</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('acco')">Informationstext</button></div><div class="hdRight">
-<label class="toggleInline" title="Gesicht als Hintergrund ein-/ausblenden">
-<span>Hintergrund anzeigen</span>
+<div class="hd"><div class="hdLeft"><b>Eye cross-section</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('acco')">Info text</button></div><div class="hdRight">
+<label class="toggleInline" title="Show or hide face background">
+<span>Show background</span>
 <span class="switch">
 <input id="toggle-bg-acco" type="checkbox"/>
 <span class="slider"></span>
@@ -2190,9 +2190,9 @@ select option{
 <div class="bd canvasStack">
 <canvas height="540" id="acco-canvas" width="1000"></canvas>
 <div class="subhd">
-<b>Aufsicht auf die Linse</b>
+<b>Top view of the lens</b>
 <label class="toggleInline">
-<span>Iris anzeigen</span>
+<span>Show iris</span>
 <span class="switch">
 <input id="acco-topviewShowIris" type="checkbox"/>
 <span class="slider"></span>
@@ -2208,30 +2208,30 @@ select option{
 <section class="view" id="view-retina-menu">
 <div class="panel retina-submenu-panel">
 <div class="hd">
-<div class="hdLeft"><b>Die Netzhaut</b></div>
+<div class="hdLeft"><b>The Retina</b></div>
 <div class="hd-actions">
-<button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Hauptmenü</button>
+<button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Main menu</button>
 </div>
 </div>
 <div class="bd">
-<p class="retina-submenu-note">Wähle, ob du den strukturellen Aufbau der Netzhaut untersuchen oder die Umwandlung von Lichtreizen in elektrische Signale modellhaft beobachten möchtest.</p>
+<p class="retina-submenu-note">Choose whether you want to investigate the structural organisation of the retina or model how light stimuli are converted into electrical signals.</p>
 <div class="retina-submenu-cards">
 <div class="card retina-submenu-card">
-<h2>Aufbau der Netzhaut</h2>
-<div class="card-preview"><img class="preview-retina-build" src="Bilder/Anzeige_Aufbau Netzhaut.png" alt="Vorschau Untermodus Aufbau der Netzhaut" loading="lazy"></div>
-<p>Beschrifte wichtige Strukturen der Netzhaut und ordne ihnen passende Aufgaben zu. Der Schwerpunkt liegt auf dem Aufbau von Sinneszellen und nachgeschalteten Nervenzellen.</p>
+<h2>Structure of the Retina</h2>
+<div class="card-preview"><img class="preview-retina-build" src="Bilder/Anzeige_Aufbau Netzhaut.png" alt="Preview sub-mode: structure of the retina" loading="lazy"></div>
+<p>Label key retinal structures and match them to the correct functions. The focus is on the structure of sensory cells and downstream nerve cells.</p>
 <div class="card-btns">
 <button class="btn-primary" onclick="App.show('retinaBuild')">▶ Start</button>
-<a class="btn-worksheet" href="Arbeitsblätter/AB_Netzhaut.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+<a class="btn-worksheet" href="Arbeitsblätter/AB_Netzhaut_EN.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Worksheet</a>
 </div>
 </div>
 <div class="card retina-submenu-card">
-<h2>Signalumwandlung</h2>
-<div class="card-preview"><img class="preview-retina-signal" src="Bilder/Anzeige_Signal Netzhaut.png" alt="Vorschau Untermodus Signalumwandlung" loading="lazy"></div>
-<p>Untersuche, wie Stäbchen und Zapfen auf Licht reagieren und wie Lichtreize in der Netzhaut modellhaft in elektrische Impulse umgewandelt und weitergeleitet werden.</p>
+<h2>Signal conversion</h2>
+<div class="card-preview"><img class="preview-retina-signal" src="Bilder/Anzeige_Signal Netzhaut.png" alt="Preview sub-mode: signal conversion" loading="lazy"></div>
+<p>Investigate how rods and cones respond to light and how light stimuli in the retina are modelled as electrical impulses and passed on.</p>
 <div class="card-btns">
 <button class="btn-primary" onclick="App.show('retina')">▶ Start</button>
-<a class="btn-worksheet" href="Arbeitsblätter/AB_Netzhaut.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Arbeitsblatt</a>
+<a class="btn-worksheet" href="Arbeitsblätter/AB_Netzhaut_EN.pdf" download style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;border:1px solid;">📄 Worksheet</a>
 </div>
 </div>
 </div>
@@ -2245,39 +2245,39 @@ select option{
 <div class="eye-main-stack">
 <div class="panel label-task-panel collapse-panel is-collapsed" id="taskRetinaLabelPanel">
 <div class="hd collapse-head">
-<h3>Aufgabe 1: Beschrifte wichtige Strukturen der Netzhaut in der Abbildung.</h3>
-<button type="button" class="btn-ghost collapse-toggle" data-target="taskRetinaLabelBody" aria-expanded="false" aria-label="Aufklappen" title="Aufklappen">▾</button>
+<h3>Task 1: Label key retinal structures in the illustration.</h3>
+<button type="button" class="btn-ghost collapse-toggle" data-target="taskRetinaLabelBody" aria-expanded="false" aria-label="Expand" title="Expand">▾</button>
 </div>
 <div class="bd collapse-body hidden" id="taskRetinaLabelBody">
-<div class="small">Klappe Aufgabe 1 auf, um Dropbereiche, Marker und Verbindungslinien einzublenden.</div>
+<div class="small">Expand task 1 to show the drop zones, markers, and connecting lines.</div>
 <div class="label-task-toolbar">
-<div class="label-action-bar" role="group" aria-label="Aktionen zur Beschriftungsaufgabe Netzhaut">
-<button id="btnCheckRetinaLabels" type="button">Korrigieren</button>
-<button id="btnRetinaLabelReset" type="button">Zurücksetzen</button>
-<button id="btnToggleRetinaLabels" type="button" aria-pressed="false">Ausblenden</button>
+<div class="label-action-bar" role="group" aria-label="Actions for the retina labelling task">
+<button id="btnCheckRetinaLabels" type="button">Check</button>
+<button id="btnRetinaLabelReset" type="button">Reset</button>
+<button id="btnToggleRetinaLabels" type="button" aria-pressed="false">Hide</button>
 <div class="button-lock-wrap" id="wrapExportRetinaLabels">
-<button id="btnExportRetinaLabels" type="button" disabled>⤓ Exportieren</button>
+<button id="btnExportRetinaLabels" type="button" disabled>⤓ Export</button>
 <div class="lock-overlay" aria-hidden="true"><span class="lock-badge">🔒</span></div>
 </div>
 </div>
 <div id="feedbackRetinaLabel" class="status-line label-feedback">&nbsp;</div>
 </div>
-<div id="retinaBuildLabelBank" class="label-bank" aria-label="Beschriftungsbegriffe Netzhaut"></div>
+<div id="retinaBuildLabelBank" class="label-bank" aria-label="Retina labelling terms"></div>
 </div>
 </div>
 
 <div class="panel" id="retinaBuildSimPanel">
 <div class="hd">
-<div class="hdLeft"><b>Aufbau der Netzhaut</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('retinaBuild')">Informationstext</button></div>
+<div class="hdLeft"><b>Structure of the Retina</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('retinaBuild')">Info text</button></div>
 <div class="hd-actions">
-<button class="btn-ghost btn-export" onclick="App.show('retinaMenu')">↩ Untermodi</button>
-<button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menü</button>
+<button class="btn-ghost btn-export" onclick="App.show('retinaMenu')">↩ Sub-modes</button>
+<button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menu</button>
 </div>
 </div>
 <div class="bd eye-sim-body">
 <div class="eye-canvas-wrap">
 <div class="eye-image-stage image-stage" id="retinaBuildImageStage">
-<img id="imgRetinaBuild" src="Bilder/Netzhaut.png" alt="Schematische Darstellung der Netzhaut">
+<img id="imgRetinaBuild" src="Bilder/Netzhaut.png" alt="Schematic view of the retina">
 <div id="retinaBuildLabelLayer" class="label-layer" aria-hidden="true">
 <svg id="retinaBuildLabelSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
 </div>
@@ -2288,24 +2288,24 @@ select option{
 
 <div class="panel collapse-panel is-collapsed" id="taskRetinaFunctionPanel">
 <div class="hd collapse-head">
-<h3>Aufgabe 2: Ordne den Bestandteilen der Netzhaut die passende Funktion zu.</h3>
-<button type="button" class="btn-ghost collapse-toggle" data-target="taskRetinaFunctionBody" aria-expanded="false" aria-label="Aufklappen" title="Aufklappen">▾</button>
+<h3>Task 2: Match each retinal structure to the correct function.</h3>
+<button type="button" class="btn-ghost collapse-toggle" data-target="taskRetinaFunctionBody" aria-expanded="false" aria-label="Expand" title="Expand">▾</button>
 </div>
 <div class="bd collapse-body hidden" id="taskRetinaFunctionBody">
-<div class="small">Ordne die Funktionen per Drag &amp; Drop oder mit den Pfeilen in die richtige Reihenfolge zu den Strukturen und klicke auf Korrigieren.</div>
+<div class="small">Match the functions to the structures in the correct order by drag and drop or with the arrows, then click Check.</div>
 <table class="task-table" id="tableRetinaMatch">
 <thead>
 <tr>
-<th>Struktur</th>
-<th>Funktion</th>
+<th>Structure</th>
+<th>Function</th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
 <div class="eye-match-actions">
-<button id="btnCheckRetinaMatch" type="button">Korrigieren</button>
+<button id="btnCheckRetinaMatch" type="button">Check</button>
 <div class="button-lock-wrap" id="wrapExportRetinaMatch">
-<button id="btnExportRetinaMatch" type="button" disabled>⤓ Exportieren</button>
+<button id="btnExportRetinaMatch" type="button" disabled>⤓ Export</button>
 <div class="lock-overlay" aria-hidden="true"><span class="lock-badge">🔒</span></div>
 </div>
 <div id="feedbackRetinaMatch" class="status-line">&nbsp;</div>
@@ -2320,10 +2320,10 @@ select option{
 <div class="grid">
 <div class="panel retina-controls-panel">
 <div class="hd">
-<div class="hdLeft"><b>Signalumwandlung</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('retina')">Informationstext</button></div>
+<div class="hdLeft"><b>Signal conversion</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('retina')">Info text</button></div>
       <div class="hd-actions">
-        <button class="btn-ghost btn-export" onclick="App.show('retinaMenu')">↩ Untermodi</button>
-        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menü</button>
+<button class="btn-ghost btn-export" onclick="App.show('retinaMenu')">↩ Sub-modes</button>
+<button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menu</button>
       </div>
     </div>
 <div class="bd">
@@ -2331,7 +2331,7 @@ select option{
 <div class="control retina-slider-control" id="retina-hue-control">
 <div class="retina-hue-wrap">
 <div class="retina-toggle-col" id="retina-whiteLight-wrap">
-<span class="retina-control-title">Weißes Licht</span>
+<span class="retina-control-title">White light</span>
 <label class="retina-toggle-inline" for="retina-whiteLight">
 <span class="switch">
 <input id="retina-whiteLight" type="checkbox"/>
@@ -2341,29 +2341,29 @@ select option{
 </div>
 <div class="retina-slider-col retina-slider-col-hue">
 <div class="retina-control-top">
-<span class="retina-control-title">Farbton</span>
+<span class="retina-control-title">Hue</span>
 <span class="val"><span id="retina-hueVal"></span>°</span>
 </div>
 <input class="rainbow-range" id="retina-hue" max="300" min="0" step="1" type="range" value="120"/>
-<div class="rangeEnds"><span>Rot</span><span>Violett</span></div>
+<div class="rangeEnds"><span>Red</span><span>Violet</span></div>
 </div>
 </div>
 </div>
 <div class="control retina-slider-control">
 <div class="retina-control-top">
-<span class="retina-control-title">Helligkeit</span>
+<span class="retina-control-title">Brightness</span>
 <span class="val"><span id="retina-brightnessVal"></span> %</span>
 </div>
 <div class="retina-slider-wrap">
 <input id="retina-brightness" max="100" min="0" step="1" type="range" value="100"/>
-<div class="rangeEnds"><span>gering</span><span>hoch</span></div>
+<div class="rangeEnds"><span>low</span><span>high</span></div>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="panel panelCanvas">
-<div class="hd"><div class="hdLeft"><b>Modell der Netzhaut</b></div><div class="hd-actions"><button class="btn-ghost btn-export" onclick="Exporter.exportMode('retinaSignal', this)">⤓ Exportieren</button><span class="badge" id="retina-badge"></span></div></div>
+<div class="hd"><div class="hdLeft"><b>Model of the Retina</b></div><div class="hd-actions"><button class="btn-ghost btn-export" onclick="Exporter.exportMode('retinaSignal', this)">⤓ Export</button><span class="badge" id="retina-badge"></span></div></div>
 <div class="bd">
 <div class="retinaCanvasWrap">
 <canvas class="retinaMainCanvas" height="1080" id="retina-canvas" width="1680"></canvas>
@@ -2377,43 +2377,43 @@ select option{
 <div class="grid">
 <div class="panel">
 <div class="hd">
-<b>Ursache von Fehlsichtigkeit und deren Korrektur</b>
+<b>Causes of Refractive Error and Their Correction</b>
       <div class="hd-actions">
-        <button class="btn-ghost btn-export" onclick="Exporter.exportMode('refr', this)">⤓ Exportieren</button>
-        <button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menü</button>
+        <button class="btn-ghost btn-export" onclick="Exporter.exportMode('refr', this)">⤓ Export</button>
+<button class="btn-ghost btn-export" onclick="App.show('menu')">↩ Menu</button>
       </div>
     </div>
 <div class="bd">
 <div class="control">
-<label>Sehzustand
+<label>Vision state
               <span class="val">
 <select id="refr-eyePreset">
-<option value="normal" selected>Normalsichtigkeit</option>
-<option value="myopia">Kurzsichtigkeit</option>
-<option value="hyperopia">Weitsichtigkeit</option>
-<option value="free">Frei regulierbar</option>
+<option value="normal" selected>Normal vision</option>
+<option value="myopia">Nearsightedness</option>
+<option value="hyperopia">Farsightedness</option>
+<option value="free">Freely adjustable</option>
 </select>
 </span>
 </label>
 </div>
 <div class="control" id="refr-axControl" style="display:none;">
-<label>Form des Augapfels
+<label>Eyeball shape
               <span class="val" id="refr-axVal"></span></label>
 
-<div class="rangeWrap"><input id="refr-ax" max="60" min="-60" type="range" value="0" disabled/><div class="rangeEnds"><span>Kurz</span><span>Lang</span></div></div></div>
+<div class="rangeWrap"><input id="refr-ax" max="60" min="-60" type="range" value="0" disabled/><div class="rangeEnds"><span>Short</span><span>Long</span></div></div></div>
 
 <div class="control">
-<label>Entfernung des Objekts
+<label>Object distance
               <span class="val" id="refr-objDistVal"></span>
 </label>
 <div class="rangeWrap">
 <input id="refr-objDist" max="440" min="180" step="1" type="range" value="360"/>
-<div class="rangeEnds"><span>Nah</span><span>Fern</span></div>
+<div class="rangeEnds"><span>Near</span><span>Far</span></div>
 </div>
 </div>
 <div class="control">
 <label style="gap:12px;">
-<span>Strahlengang animiert</span>
+<span>Animate light path</span>
 <span class="val">
 <span class="switch">
 <input checked="" id="toggle-gifrays-refr" type="checkbox"/>
@@ -2424,28 +2424,28 @@ select option{
 </div>
 <div class="control">
 <label style="gap:12px;">
-<span>Korrekturlinse aktiv</span>
+<span>Corrective lens active</span>
 <span class="val">
 <span class="switch" id="refrCorrSwitchWrap">
 <input id="refr-corrEnabled" type="checkbox"/>
 <span class="slider"></span>
 </span>
-<span id="refrCorrLock" class="lockBadge" title="Bei Normalsichtigkeit gesperrt" aria-label="gesperrt">🔒</span>
+<span id="refrCorrLock" class="lockBadge" title="Locked for normal vision" aria-label="locked">🔒</span>
 </span>
 </label>
 </div>
 <div class="control">
-<label>Korrekturlinse (Typ)
+<label>Corrective lens (type)
               <span class="val">
 <select id="refr-corrType">
-<option value="concave">Konkav (Streulinse)</option>
-<option value="convex">Konvex (Sammellinse)</option>
+<option value="concave">Concave (diverging lens)</option>
+<option value="convex">Convex (converging lens)</option>
 </select>
 </span>
 </label>
 </div>
 <div class="control">
-<label>Korrekturlinse (Dioptrien)
+<label>Corrective lens (diopters)
               <span class="val" id="refr-dVal"></span>
 </label>
 <input id="refr-d" max="6" min="0" step="0.25" type="range" value="0"/>
@@ -2456,18 +2456,18 @@ select option{
 </div>
 </div>
 <div class="panel">
-<div class="hd"><div class="hdLeft"><b>Augenquerschnitt</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('refr')">Informationstext</button></div><span class="badge" id="refr-badge"></span></div>
+<div class="hd"><div class="hdLeft"><b>Eye cross-section</b><button type="button" class="btn-ghost btn-explain" onclick="openExplain('refr')">Info text</button></div><span class="badge" id="refr-badge"></span></div>
 <canvas height="540" id="refr-canvas" width="1000"></canvas>
         <div class="bd">
-  <div class="status small" style="margin-bottom:6px;"><b>Legende</b></div>
+<div class="status small" style="margin-bottom:6px;"><b>Legend</b></div>
   <div class="legend legendInline" id="refr-legend">
-    <div class="legendItem"><span class="legendLineSolid"></span>Strahlengang</div>
-    <div class="legendItem"><span class="legendLine"></span>Verlängerung (theoretisch)</div>
-    <div class="legendItem"><span class="legendRetinaGrey"></span>Netzhaut</div>
-    <div class="legendItem"><span class="legendFocus"></span>Fokus (Brennpunkt)</div>
-        <div class="legendItem"><img class="legendIcon" src="Bilder/Linse.png" alt="Linse">Linse</div>
-        <div class="legendItem"><img class="legendIcon" src="Bilder/Muskel.png" alt="Ziliarmuskel">Ziliarmuskel</div>
-        <div class="legendItem"><img class="legendIcon" src="Bilder/Zonula_straff.png" alt="Zonulafasern" onerror="this.onerror=null; this.src='Bilder/Zonulafaser.png';">Zonulafasern</div>
+    <div class="legendItem"><span class="legendLineSolid"></span>Light path</div>
+    <div class="legendItem"><span class="legendLine"></span>Theoretical extension</div>
+<div class="legendItem"><span class="legendRetinaGrey"></span>Retina</div>
+    <div class="legendItem"><span class="legendFocus"></span>Focus point</div>
+        <div class="legendItem"><img class="legendIcon" src="Bilder/Linse.png" alt="Lens">Lens</div>
+        <div class="legendItem"><img class="legendIcon" src="Bilder/Muskel.png" alt="Ciliary muscle">Ciliary muscle</div>
+            <div class="legendItem"><img class="legendIcon" src="Bilder/Zonula_straff.png" alt="Zonular fibres" onerror="this.onerror=null; this.src='Bilder/Zonula_schlaff.png';">Zonular fibres</div>
 </div>
   </div>
 </div>
@@ -2476,17 +2476,17 @@ select option{
 </section>
 </div>
 
-<!-- Informationstext (Popup) -->
+<!-- Info text (Popup) -->
 <div class="explainModal" id="explainModal" aria-hidden="true">
   <div class="explainBackdrop" data-close="1"></div>
   <div class="explainCard" role="dialog" aria-modal="true" aria-labelledby="explainTitle">
     <div class="explainHd">
-      <div id="explainTitle">Informationstext</div>
-      <button type="button" class="btn-ghost explainClose" aria-label="Schließen" data-close="1">✕</button>
+      <div id="explainTitle">Info text</div>
+<button type="button" class="btn-ghost explainClose" aria-label="Close" data-close="1">✕</button>
     </div>
     <div class="explainBd" id="explainBody"></div>
     <div class="explainFt">
-      <button type="button" class="btn-primary" data-close="1">Schließen</button>
+<button type="button" class="btn-primary" data-close="1">Close</button>
     </div>
   </div>
 </div>
@@ -2511,27 +2511,27 @@ const App = (() => {
   const titlePanel = document.querySelector('.titlePanel');
   const aufbauHeaderActions = document.getElementById('aufbauHeaderActions');
 
-  const MENU_TITLE = "Simulationen zum Thema Strahlengang und Auge";
-  const MENU_SUB   = "Erforsche die Wirkung von Linsen auf Lichtstrahlen und wie unser Auge ein scharfes Bild unserer Umwelt erzeugt. Untersuche außerdem, wie Sehhilfen bei Fehlsichtigkeit den Strahlengang verändern, um wieder scharfes Sehen zu ermöglichen.";
+  const MENU_TITLE = "Simulations on Light Paths and the Eye";
+  const MENU_SUB   = "Explore how lenses affect light rays and how our eye creates a sharp image of the world around us. Also investigate how visual aids change the path of light in cases of refractive error to restore clear vision.";
 
-  const AUFBAU_TITLE = "Aufbau des Auges";
-  const AUFBAU_SUB   = "Beschrifte die Bestandteile des Auges und ordne ihnen die passenden Funktionen zu.";
+  const AUFBAU_TITLE = "Structure of the Eye";
+  const AUFBAU_SUB   = "Label the parts of the eye and match them to the correct functions.";
 
-  const RAY_TITLE  = "Die Simulation des Strahlengangs";
-  const RAY_SUB    = "Erforsche den Strahlengang unter Veränderung der Anzahl von Linsen und deren Brechkraft. Ändere dargestellte Gegenstände und untersuche die Auswirkung der Entfernung auf die auf dem Schirm abgebildete Darstellung.";
+  const RAY_TITLE  = "The Light Path Simulation";
+  const RAY_SUB    = "Explore the path of light while changing the number of lenses and their refractive power. Change the displayed objects and investigate how distance affects the image shown on the screen.";
 
-  const ACCO_TITLE = "Betrachtung der Akkommodation und Steuerung des Lichteinfalls";
-  const ACCO_SUB   = "Untersuche, wie sich das Auge an unterschiedlich weit entfernte Objekte anpasst, um dauerhaft ein scharfes Bild darzustellen, und wie es die Menge des einfallenden Lichts steuert.";
+  const ACCO_TITLE = "Accommodation and Control of Incoming Light";
+  const ACCO_SUB   = "Investigate how the eye adapts to objects at different distances to maintain a sharp image and how it regulates the amount of incoming light.";
 
-  const RETINA_MENU_TITLE = "Die Netzhaut";
-  const RETINA_MENU_SUB   = "Wähle zwischen einem Aufbau-Modus zur Beschriftung wichtiger Strukturen der Netzhaut und dem Untermodus zur modellhaften Signalumwandlung.";
-  const RETINA_BUILD_TITLE = "Aufbau der Netzhaut";
-  const RETINA_BUILD_SUB   = "Beschrifte wichtige Strukturen der Netzhaut und ordne ihnen passende Funktionen zu.";
-  const RETINA_SIGNAL_TITLE = "Signalumwandlung in der Netzhaut";
-  const RETINA_SIGNAL_SUB   = "Untersuche, wie Stäbchen und Zapfen auf Licht reagieren und wie Lichtreize in der Netzhaut modellhaft in elektrische Impulse umgewandelt und weitergeleitet werden.";
+  const RETINA_MENU_TITLE = "The Retina";
+  const RETINA_MENU_SUB   = "Choose between a structural mode for labelling key retinal structures and the sub-mode for modelled signal conversion.";
+  const RETINA_BUILD_TITLE = "Structure of the Retina";
+  const RETINA_BUILD_SUB   = "Label key retinal structures and match them to the correct functions.";
+  const RETINA_SIGNAL_TITLE = "Signal Conversion in the Retina";
+  const RETINA_SIGNAL_SUB   = "Investigate how rods and cones respond to light and how light stimuli in the retina are modelled as electrical impulses and passed on.";
 
-  const REFR_TITLE = "Ursache von Fehlsichtigkeit und deren Korrektur";
-  const REFR_SUB   = "Untersuche, wie es zu den beiden Arten der Fehlsichtigkeit kommt und wie Sehhilfen wirken, um wieder eine Normalsichtigkeit wiederherzustellen.";
+  const REFR_TITLE = "Causes of Refractive Error and Their Correction";
+  const REFR_SUB   = "Investigate how the two types of refractive error arise and how corrective lenses restore normal vision.";
 
   const VIEW_META = {
     menu:   { title: MENU_TITLE,   sub: MENU_SUB   },
@@ -3123,7 +3123,7 @@ const TestChart = (() => {
 
     ctx.fillStyle="rgba(168,179,230,.9)";
     ctx.font="13px system-ui";
-    ctx.fillText("Seheindruck (modelliert)", boxX+12, boxY+18);
+    ctx.fillText("Visual impression (modelled)", boxX+12, boxY+18);
 
     const imgX = boxX+16, imgY = boxY+32, imgW = boxW-32, imgH = boxH-48;
 
@@ -3180,7 +3180,7 @@ const Vision = (() => {
     ctx.stroke();
     ctx.fillStyle="rgba(168,179,230,.9)";
     ctx.font="13px system-ui";
-    ctx.fillText(msg || "Seheindruck deaktiviert", 12, 22);
+    ctx.fillText(msg || "Visual impression disabled", 12, 22);
     ctx.restore();
   }
 
@@ -3275,12 +3275,12 @@ const elL2Controls = document.getElementById('ray-l2-controls');
 
   const SCREEN_X = 840;
   const K = 900; // f_px = K / D
-  const NEAR_POINT_PX = 230; // minimale Objektentfernung im Modus „Bild verwenden“
+  const NEAR_POINT_PX = 230; // minimale Objektentfernung im Modus „Use image“
 
   function updateL2Availability(){
     const isObject = (elMode.value === 'object');
 
-    // Wenn "Bild verwenden" aktiv ist, soll Linse 2 nicht genutzt werden können.
+    // Wenn "Use image" aktiv ist, soll Linse 2 nicht genutzt werden können.
     // Das Schloss ersetzt dann den Toggle (keine doppelte Anzeige).
     if(isObject){
       if(elL2Enabled.checked) elL2Enabled.checked = false;
@@ -3446,7 +3446,7 @@ function drawObjectF0(ctx){
     const { lensType, Dmag, D1, l2Enabled, l2Type, D2mag, D2, mode, colTop, colMid, colBot, objDistPx } = read();
     elDVal.textContent = `${D1>=0?"+":""}${D1.toFixed(1)} dpt`;
     elL2DVal.textContent = `${D2>=0?"+":""}${D2.toFixed(1)} dpt`;
-    badge.textContent = (mode === 'rays') ? "3 Strahlen" : "Objektmodus";
+    badge.textContent = (mode === 'rays') ? "3 rays" : "Object mode";
     elColorControls.style.display = (mode === 'rays') ? "block" : "none";
     elObjControls.style.display = (mode === 'object') ? "block" : "none";
     elL2Controls.classList.toggle('disabled', !l2Enabled);
@@ -3472,10 +3472,10 @@ function drawObjectF0(ctx){
     ctx.save();
     ctx.fillStyle = "rgba(255,255,255,.95)";
     ctx.font = "700 14px system-ui";
-    ctx.fillText("Einfallende Strahlen / Objekt", 18, 22);
-    ctx.fillText("Linse 1", xLens1-18, 22);
-    if(l2Enabled) ctx.fillText("Linse 2", xLens2-18, 22);
-    ctx.fillText("Netzhaut", SCREEN_X-36, 22);
+    ctx.fillText("Incoming rays / object", 18, 22);
+    ctx.fillText("Lens 1", xLens1-18, 22);
+    if(l2Enabled) ctx.fillText("Lens 2", xLens2-18, 22);
+    ctx.fillText("Retina", SCREEN_X-36, 22);
     ctx.restore();
 
 
@@ -3582,7 +3582,7 @@ function drawObjectF0(ctx){
       }
 
     } else {
-      // object mode: "Bild verwenden" — 3 Strahlen vom oberen UND unteren Ende des Objektbildes
+      // object mode: "Use image" — 3 Strahlen vom oberen UND unteren Ende des Objektbildes
       // Farbcodierung wie in der Referenz:
       // - orange Strahlen -> rot (Licht_rot.gif / rote Linie)
       // - grüne Strahlen  -> weiß (Licht_weiß.gif / weiße Linie)
@@ -3783,7 +3783,7 @@ function drawObjectF0(ctx){
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.fillStyle = realFinal ? "rgba(98,210,111,.85)" : "rgba(255,204,102,.85)";
-      ctx.fillText("Bildebene", xImgFinal+6, 44);
+      ctx.fillText("Image plane", xImgFinal+6, 44);
       ctx.restore();
 
       }
@@ -3791,7 +3791,7 @@ function drawObjectF0(ctx){
 
     // Legende: Gestrichelte Linie stellt den theoretischen Strahlengang ohne Schirm dar. (unten im Simulationfenster)
     {
-      const legendText = "Legende: Gestrichelte Linie stellt den theoretischen Strahlengang ohne Schirm dar.";
+  const legendText = "Legend: the dashed line shows the theoretical light path without a screen.";
       const padX = 12;
       const lineW = 28;
       const boxH  = 26;
@@ -3860,7 +3860,7 @@ const Acco = (() => {
   const topCanvas = document.getElementById('acco-topview');
   const tctx = topCanvas ? topCanvas.getContext('2d') : null;
 
-// Hintergrund (Gesicht) im Augenquerschnitt – Position aus Referenzbild "Position Auge" (normierte Kreisposition)
+// Hintergrund (Gesicht) im Eye cross-section – Position aus Referenzbild "Position Auge" (normierte Kreisposition)
   const elShowBg = document.getElementById('toggle-bg-acco');
   const faceBg = new Image();
   let faceBgOk = false;
@@ -3955,7 +3955,7 @@ function drawVision(distRatio, L, defocusPx=0, pupilMm=PUPIL_MIN_MM){
     vctx.save();
     vctx.fillStyle = "rgba(232,236,255,.55)";
     vctx.font = "13px system-ui, -apple-system, Segoe UI, Roboto, Ubuntu";
-    vctx.fillText("Seheindruck (Bilder fehlen)", 12, 22);
+    vctx.fillText("Visual impression (images missing)", 12, 22);
     vctx.restore();
     return;
   }
@@ -4539,7 +4539,7 @@ function drawCiliaryAndZonules(xLens, yMid, accRatio, distRatio, lensRx, lensRy,
 }
 
   // Iris/Pupille als Blende: an den Ziliarmuskel "angesetzt" (didaktisch schematisch).
-  // pupilDiamPx: Pupillendurchmesser in Pixeln (bereits skaliert).
+  // pupilDiamPx: Pupil diameter in Pixeln (bereits skaliert).
   // Rückgabe: { xIris, pupilR } für Strahlbegrenzung.
   function drawIrisAtCiliary(xLens, yMid, cxEye, eyeR, lensRx, pupilDiamPx, distRatio, scale=1){
     const pad = 2 * scale;
@@ -5194,7 +5194,7 @@ drawEyeSchematic(g);
       false, intensity,
       !!(elShowLightAmount && elShowLightAmount.checked)
     );
-    drawFocusPlane(xFocusAcc, yMid, "mit Akkommodation", { stroke: okAcc ? "rgba(98,210,111,.45)" : "rgba(255,204,102,.45)", fill: okAcc ? "rgba(98,210,111,.80)" : "rgba(255,204,102,.80)", dashed:false, alpha:1 }, 72);
+    drawFocusPlane(xFocusAcc, yMid, "with accommodation", { stroke: okAcc ? "rgba(98,210,111,.45)" : "rgba(255,204,102,.45)", fill: okAcc ? "rgba(98,210,111,.80)" : "rgba(255,204,102,.80)", dashed:false, alpha:1 }, 72);
     drawBlurOnRetina(xRet, yMid, blurAcc, { stroke: okAcc ? "rgba(98,210,111,.60)" : "rgba(255,204,102,.65)", dashed:false, alpha:1 });
     // Aufsicht (Top-View) aktualisieren
     drawTopView({ accRatio, distRatio, scale, pupilMm });
@@ -5823,7 +5823,7 @@ const elAx = document.getElementById('refr-ax');
 function traceRays(DuseLocal, fEyeLocal){
       const fCorr = fCorrFromD(DuseLocal);
 
-      // Ziel: Strahlen sollen die Augenlinse sicher treffen → h adaptiv begrenzen
+      // Goal: Strahlen sollen die Augenlinse sicher treffen → h adaptiv begrenzen
       const corrH_model = clamp(lensHeight*0.70, 90*scale, 180*scale);
       let h0 = clamp(lensRy*0.42, 12*scale, 90*scale);
       h0 = Math.min(h0, corrH_model*0.50);
@@ -5915,16 +5915,16 @@ function traceRays(DuseLocal, fEyeLocal){
     // - Fernsichtig: Nahbereich nicht erreichbar (zu kurze Axiallänge → Fokus hinter Retina).
     const needsCorrection = !tracedUncorr.ok;
 
-    let diagnosis = "Normalsichtigkeit";
+let diagnosis = "Normal vision";
     const preset = elEyePreset ? elEyePreset.value : 'normal';
     if(preset === 'free'){
-      diagnosis = "Frei regulierbar";
+      diagnosis = "Freely adjustable";
     } else if(ax > 2){
-      diagnosis = "Kurzsichtigkeit";
+      diagnosis = "Nearsightedness";
     } else if(ax < -2){
-      diagnosis = "Weitsichtigkeit";
+      diagnosis = "Farsightedness";
     } else {
-      diagnosis = "Normalsichtigkeit";
+      diagnosis = "Normal vision";
     }
 
     return {
@@ -6016,8 +6016,8 @@ bctx.restore();
     if(badge) badge.textContent = s.diagnosis;
     if(status){
       if(s.needsCorrection){
-        if(!s.corrEnabled) status.textContent = `${s.diagnosis} · Korrekturlinse benötigt`;
-        else status.textContent = `${s.diagnosis}${s.ok ? " · korrigiert" : " · noch unscharf"}`.trim();
+        if(!s.corrEnabled) status.textContent = `${s.diagnosis} · corrective lens required`;
+        else status.textContent = `${s.diagnosis}${s.ok ? " · corrected" : " · still blurred"}`.trim();
       } else {
         status.textContent = s.diagnosis;
       }
@@ -6896,8 +6896,8 @@ const Retina = (() => {
     }
     if(badgeEl){
       badgeEl.textContent = state.whiteLight
-        ? 'Weißes Licht · Zapfen + Stäbchen aktiv'
-        : 'Farbmodus · Zapfen + Stäbchen aktiv';
+        ? 'White light · cones + rods active'
+        : 'Colour mode · cones + rods active';
     }
     if(!!state.whiteLight !== lastWhiteLight){
       pulses = [];
@@ -7550,7 +7550,7 @@ const Retina = (() => {
       pulses = pulses.filter((pulse) => drawPulse(ctx, pulse, now));
       ctx.restore();
     } else {
-      const msg = retinaImgFailed ? 'Netzhaut-Abbildung konnte nicht geladen werden.' : 'Netzhaut-Abbildung wird geladen …';
+      const msg = retinaImgFailed ? 'Retina image could not be loaded.' : 'Retina image is loading …';
       ctx.fillStyle = 'rgba(232,236,255,0.82)';
       ctx.font = `${Math.max(18, Math.round(retinaCanvas.width*0.02))}px system-ui, sans-serif`;
       ctx.textAlign = 'center';
@@ -7738,7 +7738,7 @@ document.addEventListener('visibilitychange', () => {
   }
 
   async function canvasToImage(canvas){
-    if(!canvas) throw new Error("Canvas nicht gefunden.");
+    if(!canvas) throw new Error("Canvas not found.");
     // Prefer blob -> ImageBitmap where possible; fall back to Image decode
     if(canvas.toBlob){
       const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
@@ -7840,32 +7840,32 @@ document.addEventListener('visibilitychange', () => {
 
     function getRaySettings(){
     const lines=[];
-    lines.push("Darstellung: " + selText("ray-mode"));
-    lines.push("Linse 1: " + selText("ray-lensType") + " (" + txt("ray-dVal") + ")");
+    lines.push("Display: " + selText("ray-mode"));
+    lines.push("Lens 1: " + selText("ray-lensType") + " (" + txt("ray-dVal") + ")");
     const l2=isChecked("ray-l2-enabled");
-    lines.push("Linse 2 aktiv: " + (l2 ? "ja" : "nein"));
+    lines.push("Lens 2 active: " + (l2 ? "yes" : "no"));
     if(l2){
-      lines.push("Linse 2: " + selText("ray-l2-type") + " (" + txt("ray-l2-dVal") + ")");
+      lines.push("Lens 2: " + selText("ray-l2-type") + " (" + txt("ray-l2-dVal") + ")");
     }
     const mode = val("ray-mode");
     if(mode==="object"){
-      const bar = sliderBar("ray-objDist", "Nah", "Fern");
-      if(bar) lines.push("Entfernung des Objekts: " + bar);
+      const bar = sliderBar("ray-objDist", "Near", "Far");
+      if(bar) lines.push("Object distance: " + bar);
     }
     return lines;
   }
 
     function getRefrSettings(){
     const lines=[];
-    lines.push("Sehzustand: " + selText("refr-eyePreset"));
-    const bar = sliderBar("refr-objDist", "Nah", "Fern");
-    if(bar) lines.push("Entfernung des Objekts: " + bar);
+    lines.push("Vision state: " + selText("refr-eyePreset"));
+    const bar = sliderBar("refr-objDist", "Near", "Far");
+    if(bar) lines.push("Object distance: " + bar);
     const corr=isChecked("refr-corrEnabled");
-    lines.push("Korrekturlinse: " + (corr ? "aktiv" : "inaktiv"));
+    lines.push("Corrective lens: " + (corr ? "active" : "inactive"));
     if(corr){
-      lines.push("Korrekturlinse (Typ): " + selText("refr-corrType"));
+      lines.push("Corrective lens (type): " + selText("refr-corrType"));
       const dpt = (txt("refr-dVal") || (val("refr-d")+"")).trim();
-      if(dpt) lines.push("Korrekturlinse (Dioptrien): " + dpt);
+      if(dpt) lines.push("Corrective lens (diopters): " + dpt);
     }
     return lines;
   }
@@ -7874,17 +7874,17 @@ document.addEventListener('visibilitychange', () => {
     const lines=[];
     const dist = (txt("acco-distVal") || (val("acco-dist")+"")).trim();
     if(dist){
-      lines.push("Objektentfernung: " + (/(\bm\b|meter)/i.test(dist) ? dist : (dist + " m")));
+      lines.push("Object distance: " + (/(\bm\b|meter)/i.test(dist) ? dist : (dist + " m")));
     }
     const bright = (txt("acco-lightVal") || (val("acco-light")+"")).trim();
     if(bright){
-      lines.push("Helligkeit: " + (/%/.test(bright) ? bright : (bright + "%")));
+      lines.push("Brightness: " + (/%/.test(bright) ? bright : (bright + "%")));
     }
-    const angle = txt("acco-angleVal"); if(angle) lines.push("Einfallswinkel an der Linse: " + angle + "°");
-    const power = txt("acco-powerVal"); if(power) lines.push("Brechkraft der Linse: " + power + " dpt");
-    const pupil = txt("acco-pupilVal"); if(pupil) lines.push("Pupillendurchmesser: " + pupil + " mm");
+    const angle = txt("acco-angleVal"); if(angle) lines.push("Angle of incidence at the lens: " + angle + "°");
+    const power = txt("acco-powerVal"); if(power) lines.push("Refractive power of the lens: " + power + " dpt");
+    const pupil = txt("acco-pupilVal"); if(pupil) lines.push("Pupil diameter: " + pupil + " mm");
     const light = (txt("acco-lightRelVal") || txt("acco-lightVal") || "").trim();
-    if(light) lines.push("Lichtmenge (rel.): " + light);
+    if(light) lines.push("Light amount (rel.): " + light);
     return lines;
   }
 
@@ -7925,7 +7925,7 @@ document.addEventListener('visibilitychange', () => {
   }
 
   async function buildExportRetinaSignal(){
-    // Exportiert ausschließlich das Simulationsfenster der Signalumwandlung
+    // Exportiert ausschließlich das Simulationsfenster der Signal conversion
     // inklusive der aktuell im Canvas sichtbaren Animation.
     return await exportCanvasOnly($("retina-canvas"), 1600);
   }
@@ -7943,7 +7943,7 @@ document.addEventListener('visibilitychange', () => {
     if(navigator.clipboard && window.ClipboardItem){
       try{
         await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
-        toast("Exportiert (in Zwischenablage).");
+    toast("Exported to clipboard.");
         return;
       }catch(e){
         // fall through to download
@@ -7971,64 +7971,64 @@ document.addEventListener('visibilitychange', () => {
       else if(mode==="acco") out = await buildExportAcco();
       else if(mode==="retinaSignal") out = await buildExportRetinaSignal();
       else if(mode==="refr") out = await buildExportRefr();
-      else throw new Error("Unbekannter Modus: "+mode);
+      else throw new Error("Unknown mode: "+mode);
 
       const stamp = new Date();
       const fn = "Export_" + mode + "_" + stamp.toISOString().slice(0,19).replace(/[:T]/g,"-") + ".png";
       await copyOrDownload(out, fn);
     }catch(e){
       console.error(e);
-      alert("Export fehlgeschlagen.\n\n" + (e && e.message ? e.message : e));
+      alert("Export failed.\n\n" + (e && e.message ? e.message : e));
     }finally{
-      if(b){ b.disabled=false; b.textContent=oldTxt || "⤓ Exportieren"; }
+if(b){ b.disabled=false; b.textContent=oldTxt || "⤓ Export"; }
     }
   }
 
   window.Exporter = { exportMode };
 })();
 
-/* === Informationstext: Popup-Logik === */
+/* === Info text: Popup-Logik === */
 (function(){
   const EXPLAIN_TEXT = {
-    aufbau: `Das Auge ist ein Sinnesorgan, mit dem wir Lichtreize wahrnehmen können. Das Licht tritt zuerst durch die Hornhaut in das Auge ein. Die Hornhaut schützt das Auge und bricht das Licht bereits stark. Hinter der Hornhaut liegt die Iris. Sie ist der farbige Teil des Auges und reguliert die Größe der Pupille. Die Pupille ist die Öffnung, durch die das Licht weiter in das Auge gelangt. Hinter der Pupille befindet sich die Linse. Sie kann ihre Form verändern und dadurch Licht so brechen, dass auf der Netzhaut ein möglichst scharfes Bild entsteht. Für diese Formveränderung sind der Ziliarmuskel und die Zonulafasern wichtig. Der Ziliarmuskel verändert seine Spannung, die Zonulafasern übertragen diese Veränderung auf die Linse.
+    aufbau: `The eye is a sensory organ that allows us to perceive light stimuli. Light first enters the eye through the cornea. The cornea protects the eye and already bends the light strongly. Behind the cornea lies the iris. It is the coloured part of the eye and regulates the size of the pupil. The pupil is the opening through which the light continues into the eye. Behind the pupil is the lens. It can change its shape and therefore bend light so that the sharpest possible image is formed on the retina. The ciliary muscle and the zonular fibres are important for this change in shape. The ciliary muscle changes its tension, and the zonular fibres transfer this change to the lens.
 
-Der Innenraum des Auges ist größtenteils mit dem Glaskörper gefüllt. Er stabilisiert den Augapfel. Die äußere feste Hülle des Auges ist die Lederhaut. Sie schützt das Auge und gibt ihm Form. Darunter liegt die Aderhaut. Sie versorgt das Auge mit Sauerstoff und Nährstoffen. Noch weiter innen liegt die Netzhaut. In ihr befinden sich lichtempfindliche Sinneszellen, die Lichtreize in elektrische Signale umwandeln. Diese Signale werden über den Sehnerv zum Gehirn weitergeleitet. An der Stelle, an der der Sehnerv das Auge verlässt, liegt der Blinde Fleck. Dort gibt es keine Sinneszellen. Der Gelbe Fleck ist der Bereich des schärfsten Sehens.
+The inside of the eye is largely filled with the vitreous body. It stabilises the eyeball. The firm outer shell of the eye is the sclera. It protects the eye and gives it its shape. Underneath lies the choroid, which supplies the eye with oxygen and nutrients. Further inside lies the retina. It contains light-sensitive sensory cells that convert light stimuli into electrical signals. These signals are transmitted to the brain via the optic nerve. The point where the optic nerve leaves the eye is called the blind spot. There are no sensory cells there. The fovea is the area of sharpest vision.
 
-Aufgabe 1: Beschrifte die Bestandteile des Auges in der Abbildung.
-Aufgabe 2: Ordne den Bestandteilen des Auges die korrekte Funktion zu.`,
-    ray: `Wenn Licht von einem transparenten Medium in ein anderes übergeht (z. B. von Luft in Glas/Wasser), ändert es seine Ausbreitungsgeschwindigkeit. Dadurch wird der Lichtstrahl an der Grenzfläche „gebrochen“, d. h. seine Richtung ändert sich. Eine Sammellinse (konvex) lenkt Lichtstrahlen nach innen und bündelt sie. Eine Streulinse (konkav) lenkt Lichtstrahlen nach außen und zerstreut sie.
+Task 1: Label the parts of the eye in the illustration.
+Task 2: Match each part of the eye to the correct function.`,
+    ray: `When light passes from one transparent medium into another, for example from air into glass or water, its speed of propagation changes. As a result, the light ray is refracted at the boundary, which means that its direction changes. A converging lens (convex) bends light rays inward and focuses them. A diverging lens (concave) bends light rays outward and spreads them apart.
 
-Aufgabe 1 und 2: Untersuche den Verlauf der Lichtstrahlen und wie dieser durch Linsen beeinflusst wird.
-Aufgabe 3 und 4: Untersuche den Seheindruck von Objekten und wie diese auf der Netzhaut dargestellt werden.`,
-    acco: `Akkommodation bezeichnet die Anpassung der Brechkraft der Augenlinse, damit Objekte in unterschiedlicher Entfernung auf der Netzhaut scharf abgebildet werden. Dies geschieht über das Zusammenspiel von Ziliarmuskel und Zonulafasern: Je nachdem, ob der Ziliarmuskel angespannt oder entspannt ist, verändern die Zonulafasern ihren Zug und die Linse verändert dadurch ihre Form und Brechkraft (= Maß dafür, wie stark sie die Richtung von Lichtstrahlen ändert).
+Tasks 1 and 2: Investigate the course of the light rays and how lenses influence them.
+Tasks 3 and 4: Investigate the visual impression of objects and how they are shown on the retina.`,
+    acco: `Accommodation describes how the refractive power of the eye lens is adjusted so that objects at different distances are sharply focused on the retina. This happens through the interaction of the ciliary muscle and the zonular fibres: depending on whether the ciliary muscle is contracted or relaxed, the zonular fibres change their pull and the lens changes its shape and refractive power.
 
-Aufgabe 1: Untersuche, wie sich das Auge auf Objekte in unterschiedlicher Entfernung anpasst.
-Aufgabe 2: Vergleiche bei den jeweiligen Maxima der Entfernung die Brechkraft der Linse und den Einfallswinkel der Lichtstrahlen.
-Aufgabe 3: Untersuche, wie sich das Auge an unterschiedliche Lichtverhältnisse anpasst.`,
-    retinaBuild: `Die Netzhaut ist die lichtempfindliche Innenschicht des Auges. In ihr liegen lichtempfindliche Sinneszellen und weitere Nervenzellen, die die aufgenommenen Informationen weiterverarbeiten. Besonders wichtig sind die Stäbchen und die Zapfen. Stäbchen reagieren vor allem auf Helligkeitsunterschiede und helfen beim Sehen bei wenig Licht. Zapfen sind für das Farbsehen zuständig und arbeiten besonders gut bei ausreichender Helligkeit.
+Task 1: Investigate how the eye adapts to objects at different distances.
+Task 2: Compare the refractive power of the lens and the angle of incidence of the light rays at the maximum distances.
+Task 3: Investigate how the eye adapts to different lighting conditions.`,
+    retinaBuild: `The retina is the light-sensitive inner layer of the eye. It contains light-sensitive sensory cells and additional nerve cells that process the incoming information. Rods and cones are especially important. Rods mainly respond to differences in brightness and help us see in dim light. Cones are responsible for colour vision and work especially well when there is enough light.
 
-Die von den Sinneszellen aufgenommenen Reize werden nicht direkt an das Gehirn geschickt. Zuerst werden sie innerhalb der Netzhaut über nachgeschaltete Nervenzellen weitergegeben. Am Ende laufen die Informationen in Richtung Sehnerv zusammen und werden von dort an das Gehirn weitergeleitet. So wird aus einem Lichtreiz Schritt für Schritt eine Information, die unser Gehirn auswerten kann.
+The stimuli detected by the sensory cells are not sent directly to the brain. First, they are passed on within the retina through downstream nerve cells. In the end, the information converges toward the optic nerve and is then transmitted to the brain. In this way, a light stimulus becomes a piece of information that the brain can interpret.
 
-Aufgabe 1: Beschrifte wichtige Strukturen der Netzhaut in der Abbildung.
-Aufgabe 2: Ordne den Bestandteilen der Netzhaut die passende Funktion zu.`,
-    retina: `Die Netzhaut ist die lichtempfindliche Innenschicht des Auges. Sie enthält verschiedene Zelltypen, die bei der Verarbeitung von Lichtreizen zusammenarbeiten. Besonders wichtig sind die Sehsinneszellen. Dazu gehören die Stäbchen und die Zapfen. Außerdem sind weitere Nervenzellen beteiligt, die die aufgenommenen Informationen innerhalb der Netzhaut weiterleiten.
+Task 1: Label key retinal structures in the illustration.
+Task 2: Match each retinal structure to the correct function.`,
+    retina: `The retina is the light-sensitive inner layer of the eye. It contains different cell types that work together to process light stimuli. The photoreceptor cells are especially important. These include rods and cones. Additional nerve cells also help to pass the incoming information on within the retina.
 
-Stäbchen sind vor allem für das Hell-Dunkel-Sehen wichtig. Sie reagieren besonders empfindlich auf geringe Helligkeit und helfen uns deshalb vor allem bei Dämmerung oder Dunkelheit. Farben können mit Stäbchen nicht unterschieden werden. Zapfen sind für das Farbsehen verantwortlich. Sie arbeiten besonders gut bei ausreichender Helligkeit. In der Netzhaut gibt es unterschiedliche Zapfentypen, die auf verschiedene Farbanteile des Lichts besonders stark reagieren. Erst durch das Zusammenspiel dieser Zapfen können verschiedene Farben wahrgenommen werden.
+Rods are especially important for seeing light and dark. They respond very sensitively to low levels of brightness and are therefore particularly useful in twilight or darkness. Colours cannot be distinguished with rods. Cones are responsible for colour vision. They work especially well when there is enough light. The retina contains different types of cones that respond especially strongly to different parts of the light spectrum. Only the interaction of these cones makes colour perception possible.
 
-Trifft Licht auf die Sehsinneszellen, wird der Lichtreiz in ein elektrisches Signal umgewandelt. Diese Umwandlung nennt man Reizumwandlung. Die entstehenden elektrischen Impulse werden anschließend über weitere Nervenzellen in der Netzhaut weitergegeben. So gelangt die Information Schritt für Schritt zur Sehnerv-Region. Von dort werden die elektrischen Signale über den Sehnerv an das Gehirn weitergeleitet. Erst im Gehirn entsteht daraus der bewusste Seheindruck.
+When light hits the photoreceptor cells, the light stimulus is converted into an electrical signal. This process is called stimulus conversion. The resulting electrical impulses are then passed on through other nerve cells in the retina. In this way, the information gradually reaches the region of the optic nerve. From there, the electrical signals are sent via the optic nerve to the brain. Only in the brain does the conscious visual impression arise.
 
-Aufgabe 1: Untersuche die farbliche Wahrnehmung des Auges.
-Aufgabe 2: Untersuche den Einfluss der Helligkeit auf den Seheindruck.
-Aufgabe 3: Beschreibe die Reizumwandlung und Weiterleitung innerhalb der Netzhaut.`,
-    refr: `Bei Kurzsichtigkeit ist der Augapfel zu lang oder die Brechkraft von Hornhaut und Linse ist zu groß. Personen können nur nahe Gegenstände scharf sehen, während entfernte Gegenstände unscharf dargestellt werden. Bei Weitsichtigkeit ist der Augapfel zu kurz oder die Brechkraft zu klein. In diesem Fall können Personen entfernte Gegenstände scharf sehen, nahe Gegenstände werden jedoch unscharf dargestellt.
+Task 1: Investigate the eye's perception of colour.
+Task 2: Investigate the influence of brightness on visual impression.
+Task 3: Describe stimulus conversion and signal transmission within the retina.`,
+    refr: `In nearsightedness, the eyeball is too long or the refractive power of the cornea and lens is too great. People can only see nearby objects clearly, while distant objects appear blurred. In farsightedness, the eyeball is too short or the refractive power is too weak. In this case, distant objects can be seen clearly, while nearby objects appear blurred.
 
-A) Kurzsichtigkeit:
-Aufgabe 1: Untersuche die Ursache der Kurzsichtigkeit.
-Aufgabe 2: Erkläre, wie die Kurzsichtigkeit mit einer Sehhilfe korrigiert werden kann.
+A) Nearsightedness:
+Task 1: Investigate the cause of nearsightedness.
+Task 2: Explain how nearsightedness can be corrected with a visual aid.
 
-B) Weitsichtigkeit:
-Aufgabe 1: Untersuche die Ursache der Weitsichtigkeit.
-Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werden kann.`,
+B) Farsightedness:
+Task 1: Investigate the cause of farsightedness.
+Task 2: Explain how farsightedness can be corrected with a visual aid.`,
   };
 
   function escapeExplainHtml(text){
@@ -8045,7 +8045,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       .split(/\n\n+/)
       .map((paragraph)=>`<p>${paragraph
         .replace(/\n/g, "<br>")
-        .replace(/(Aufgabe\s+\d+(?:\s+und\s+\d+)?\s*:)/g, "<strong>$1</strong>")
+        .replace(/(Tasks?\s+\d+(?:\s+and\s+\d+)?\s*:)/g, "<strong>$1</strong>")
       }</p>`)
       .join("");
   }
@@ -8061,7 +8061,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       return;
     }
 
-    title.textContent = "Informationstext";
+    title.textContent = "Info text";
     body.innerHTML  = formatExplainText(nextText);
     modal.dataset.which = which || "";
     modal.classList.add("open");
@@ -8094,41 +8094,41 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
   window.openExplain = openExplain;
 })();
 
-/* === Modus: Aufbau des Auges === */
+/* === Modus: Structure of the Eye === */
 (function(){
   const $ = (id) => document.getElementById(id);
   const qa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
   const eyeLabelDefs = [
-    { id:'hornhaut',      label:'Hornhaut',      slot:{x:9,y:34},  target:{x:19.0,y:49.8} },   // 2) Dropbereich getauscht mit Iris (war y:22)
+    { id:'hornhaut',      label:'Cornea',        slot:{x:9,y:34},  target:{x:19.0,y:49.8} },   // 2) Dropbereich getauscht mit Iris (war y:22)
     { id:'iris',          label:'Iris',          slot:{x:9,y:22},  target:{x:27.4,y:37.4} },   // 2) Dropbereich getauscht mit Hornhaut (war y:34)
-    { id:'pupille',       label:'Pupille',       slot:{x:9,y:58},  target:{x:25.5,y:49.4} },   // 1) Dropbereich nach unten (war y:53), Marker unverändert
-    { id:'linse',         label:'Linse',         slot:{x:9,y:70},  target:{x:31.4,y:49.8} },   // 1) Dropbereich nach unten (war y:65), Marker unverändert
-    { id:'zonulafasern',  label:'Zonulafasern',  slot:{x:23,y:12}, target:{x:31.8,y:35.6} },
-    { id:'ziliarmuskel',  label:'Ziliarmuskel',  slot:{x:19,y:82}, target:{x:28.1,y:68.8} },
-    { id:'glaskoerper',   label:'Glaskörper',    slot:{x:50,y:94}, target:{x:50.3,y:49.8} },
-    { id:'lederhaut',     label:'Lederhaut',     slot:{x:91,y:17}, target:{x:69.5,y:22.0} },   // 3) Marker links unten (war x:71.8,y:18.6)
-    { id:'aderhaut',      label:'Aderhaut',      slot:{x:91,y:28}, target:{x:68.0,y:23.5} },   // 3) Marker links unten (war x:70.3,y:20.8)
-    { id:'netzhaut',      label:'Netzhaut',      slot:{x:91,y:39}, target:{x:66.5,y:25.5} },   // 3) Marker links unten (war x:68.9,y:23.0)
-    { id:'gelber_fleck',  label:'Gelbe Fleck',   slot:{x:91,y:53}, target:{x:73.8,y:42.0} },   // 3) Dropbereich nach unten (war y:48), 4) x auf 91 ausgerichtet (war x:90)
-    { id:'blinder_fleck', label:'Blinde Fleck',  slot:{x:68,y:94}, target:{x:73.0,y:62.0} },   // 2) Dropbereich nach rechts (war x:63)
-    { id:'sehnerv',       label:'Sehnerv',       slot:{x:91,y:90}, target:{x:86.0,y:67.0} }    // 4) x auf 91 ausgerichtet (war x:87)
+    { id:'pupille',       label:'Pupil',         slot:{x:9,y:58},  target:{x:25.5,y:49.4} },   // 1) Dropbereich nach unten (war y:53), Marker unverändert
+    { id:'linse',         label:'Lens',          slot:{x:9,y:70},  target:{x:31.4,y:49.8} },   // 1) Dropbereich nach unten (war y:65), Marker unverändert
+    { id:'zonulafasern',  label:'Zonular fibres',slot:{x:23,y:12}, target:{x:31.8,y:35.6} },
+    { id:'ziliarmuskel',  label:'Ciliary muscle',slot:{x:19,y:82}, target:{x:28.1,y:68.8} },
+    { id:'glaskoerper',   label:'Vitreous body', slot:{x:50,y:94}, target:{x:50.3,y:49.8} },
+    { id:'lederhaut',     label:'Sclera',        slot:{x:91,y:17}, target:{x:69.5,y:22.0} },   // 3) Marker links unten (war x:71.8,y:18.6)
+    { id:'aderhaut',      label:'Choroid',       slot:{x:91,y:28}, target:{x:68.0,y:23.5} },   // 3) Marker links unten (war x:70.3,y:20.8)
+    { id:'netzhaut',      label:'Retina',        slot:{x:91,y:39}, target:{x:66.5,y:25.5} },   // 3) Marker links unten (war x:68.9,y:23.0)
+    { id:'gelber_fleck',  label:'Fovea',         slot:{x:91,y:53}, target:{x:73.8,y:42.0} },   // 3) Dropbereich nach unten (war y:48), 4) x auf 91 ausgerichtet (war x:90)
+    { id:'blinder_fleck', label:'Blind spot',    slot:{x:68,y:94}, target:{x:73.0,y:62.0} },   // 2) Dropbereich nach rechts (war x:63)
+    { id:'sehnerv',       label:'Optic nerve',   slot:{x:91,y:90}, target:{x:86.0,y:67.0} }    // 4) x auf 91 ausgerichtet (war x:87)
   ];
 
   const eyeMatchRows = [
-    ['Hornhaut', 'Schützt das Auge.'],
-    ['Aderhaut', 'Versorgt das Auge mit Sauerstoff und Nährstoffen.'],
-    ['Netzhaut', 'Enthält lichtempfindliche Sinneszellen und wandelt Licht in elektrische Signale um.'],
-    ['Lederhaut', 'Gibt dem Auge Form und schützt es nach außen.'],
-    ['Pupille', 'Ist die Öffnung, durch die Licht ins Auge einfällt.'],
-    ['Iris', 'Regelt durch Verengung oder Erweiterung der Pupille den Lichteinfall.'],
-    ['Linse', 'Verändert ihre Form und sorgt für die scharfe Abbildung auf der Netzhaut indem es einfallendes Licht bricht.'],
-    ['Zonulafasern', 'Verbinden Linse und Ziliarmuskel und übertragen dessen Zug.'],
-    ['Ziliarmuskel', 'Verändert über die Zonulafasern die Form der Linse.'],
-    ['Glaskörper', 'Füllt den Innenraum des Auges und stabilisiert den Augapfel.'],
-    ['Blinde Fleck', 'Ist die Stelle ohne Sinneszellen, an der der Sehnerv das Auge verlässt.'],
-    ['Gelbe Fleck', 'Stelle mit den meisten Sinneszellen und Bereich des schärfsten Sehens.'],
-    ['Sehnerv', 'Leitet die elektrischen Signale von der Netzhaut zum Gehirn weiter.']
+    ['Cornea', 'Protects the eye.'],
+    ['Choroid', 'Supplies the eye with oxygen and nutrients.'],
+    ['Retina', 'Contains light-sensitive sensory cells and converts light into electrical signals.'],
+    ['Sclera', 'Gives the eye its shape and protects it on the outside.'],
+    ['Pupil', 'Is the opening through which light enters the eye.'],
+    ['Iris', 'Regulates the amount of incoming light by narrowing or widening the pupil.'],
+    ['Lens', 'Changes its shape and focuses incoming light sharply onto the retina.'],
+    ['Zonular fibres', 'Connect the lens and the ciliary muscle and transmit its pull.'],
+    ['Ciliary muscle', 'Changes the shape of the lens through the zonular fibres.'],
+    ['Vitreous body', 'Fills the inside of the eye and stabilises the eyeball.'],
+    ['Blind spot', 'Is the point without sensory cells where the optic nerve leaves the eye.'],
+    ['Fovea', 'Area with the highest density of sensory cells and the sharpest vision.'],
+    ['Optic nerve', 'Carries electrical signals from the retina to the brain.']
   ];
 
   function shuffleArray(arr){
@@ -8182,7 +8182,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       if(canvas.toBlob){
         canvas.toBlob((blob) => {
           if(blob) resolve(blob);
-          else reject(new Error('Canvas konnte nicht exportiert werden.'));
+          else reject(new Error('Canvas could not be exported.'));
         }, 'image/png');
       }else{
         try{
@@ -8205,7 +8205,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
     if(navigator.clipboard && window.ClipboardItem){
       try{
         await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-        showEyeToast('Exportiert (in Zwischenablage).');
+  showEyeToast('Exported to clipboard.');
         return;
       }catch(err){
         console.warn('Clipboard write failed', err);
@@ -8251,8 +8251,8 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         body.classList.toggle('hidden', !willOpen);
         btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
         btn.textContent = willOpen ? '▴' : '▾';
-        btn.setAttribute('aria-label', willOpen ? 'Einklappen' : 'Aufklappen');
-        btn.title = willOpen ? 'Einklappen' : 'Aufklappen';
+        btn.setAttribute('aria-label', willOpen ? 'Collapse' : 'Expand');
+        btn.title = willOpen ? 'Collapse' : 'Expand';
         if(panel) panel.classList.toggle('is-collapsed', !willOpen);
       });
     });
@@ -8451,7 +8451,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         if(state.checked) return;
         const placed = Object.values(state.placements).filter(Boolean).length;
         if(placed === eyeLabelDefs.length){
-          feedback.textContent = 'Alle Begriffe sind platziert. Klicke auf „Korrigieren“.';
+          feedback.textContent = 'All terms are placed. Click "Check".';
           feedback.style.color = 'var(--ok)';
         }else{
           feedback.innerHTML = '&nbsp;';
@@ -8586,7 +8586,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         state.checked = false;
         state.hidden = false;
         toggleBtn.setAttribute('aria-pressed', 'false');
-        toggleBtn.textContent = 'Ausblenden';
+        toggleBtn.textContent = 'Hide';
         layer.classList.remove('show-targets');
         clearAllDragStates();
         clearValidation();
@@ -8596,7 +8596,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       toggleBtn.addEventListener('click', () => {
         state.hidden = !state.hidden;
         toggleBtn.setAttribute('aria-pressed', state.hidden ? 'true' : 'false');
-        toggleBtn.textContent = state.hidden ? 'Einblenden' : 'Ausblenden';
+        toggleBtn.textContent = state.hidden ? 'Show' : 'Hide';
         if(state.hidden && !state.dragging){
           layer.classList.remove('show-targets');
         }
@@ -8621,13 +8621,13 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         const solved = placed === eyeLabelDefs.length && correct === eyeLabelDefs.length;
         setExportEnabled(solved);
         if(placed < eyeLabelDefs.length){
-          feedback.textContent = `${correct}/${eyeLabelDefs.length} richtig. Bitte platziere zuerst alle Begriffe.`;
+      feedback.textContent = `${correct}/${eyeLabelDefs.length} correct. Please place all terms first.`;
           feedback.style.color = 'var(--warn)';
         }else if(solved){
-          feedback.textContent = 'Alle Begriffe sind korrekt platziert.';
+          feedback.textContent = 'All terms are correctly placed.';
           feedback.style.color = 'var(--ok)';
         }else{
-          feedback.textContent = `${correct}/${eyeLabelDefs.length} richtig. Überprüfe die markierten Zuordnungen.`;
+          feedback.textContent = `${correct}/${eyeLabelDefs.length} correct. Check the marked matches.`;
           feedback.style.color = 'var(--bad)';
         }
       });
@@ -8635,7 +8635,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       const renderEyeLabelExportCanvas = () => {
         const stage = $('eyeImageStage');
         const img = $('imgEyeBuild');
-        if(!stage || !img) throw new Error('Das Simulationsfenster ist nicht verfügbar.');
+    if(!stage || !img) throw new Error('The simulation window is not available.');
         const rect = stage.getBoundingClientRect();
         const imgRect = img.getBoundingClientRect();
         const w = Math.max(1, Math.round(rect.width));
@@ -8725,7 +8725,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
           const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
           await copyOrDownloadCanvas(canvas, `Aufbau_des_Auges_Beschriftung_${stamp}.png`);
         }catch(err){
-          alert('Export fehlgeschlagen.\n\n' + (err && err.message ? err.message : err));
+          alert('Export failed.\n\n' + (err && err.message ? err.message : err));
         }
       });
 
@@ -8843,7 +8843,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         const ok = this.current.length === eyeMatchRows.length && this.current.every((value, idx) => value === eyeMatchRows[idx][1]);
         feedback.textContent = ok
           ? 'Alle Funktionen sind korrekt zugeordnet.'
-          : 'Noch nicht korrekt. Überprüfe die Zuordnung und Reihenfolge der Funktionen.';
+          : 'Not correct yet. Check the matching and order of the functions.';
         feedback.style.color = ok ? 'var(--ok)' : 'var(--bad)';
         setExportEnabled(ok);
       });
@@ -8854,7 +8854,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
           const canvas = renderStructuredPairExport('', 'Struktur', 'Funktion', eyeMatchRows, this.current);
           await copyOrDownloadCanvas(canvas, `Aufbau_des_Auges_Funktionen_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.png`);
         }catch(err){
-          alert('Export fehlgeschlagen\n\n' + (err && err.message ? err.message : err));
+          alert('Export failed\n\n' + (err && err.message ? err.message : err));
         }
       });
 
@@ -8900,29 +8900,29 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
   initEyeBuild();
 })();
 
-/* === Untermodus: Aufbau der Netzhaut === */
+/* === Untermodus: Structure of the Retina === */
 (function(){
   const $ = (id) => document.getElementById(id);
   const qa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
   const retinaLabelDefs = [
-    { id:'nervenfasern',   label:'Nervenfasern',   slot:{x:14.700,y:29.318,w:8.60,h:5.71}, targets:[{x:24.500,y:22.563}] },
-    { id:'ganglienzellen', label:'Ganglienzellen', slot:{x:14.700,y:44.011,w:9.16,h:5.57}, targets:[{x:28.250,y:39.694}] },
-    { id:'bipolarzellen',  label:'Bipolarzellen',  slot:{x:14.700,y:59.889,w:8.41,h:5.57}, targets:[{x:43.364,y:42.479}] },
-    { id:'staebchen',      label:'Stäbchen',       slot:{x:90.400,y:21.448,w:8.04,h:5.57}, targets:[{x:58.692,y:8.450},{x:60.093,y:17.500},{x:61.495,y:28.766}] },
-    { id:'zapfen',         label:'Zapfen',         slot:{x:90.400,y:38.997,w:8.04,h:5.57}, targets:[{x:62.243,y:36.072},{x:62.430,y:38.997},{x:62.617,y:41.643}] },
-    { id:'pigmentschicht', label:'Pigmentschicht', slot:{x:90.400,y:53.621,w:9.53,h:5.57}, targets:[{x:68.800,y:55.571}] },
-    { id:'aderhaut',       label:'Aderhaut',       slot:{x:90.400,y:68.663,w:8.04,h:5.57}, targets:[{x:70.900,y:63.649}] }
+    { id:'nervenfasern',   label:'Nerve fibres',   slot:{x:14.700,y:29.318,w:8.60,h:5.71}, targets:[{x:24.500,y:22.563}] },
+    { id:'ganglienzellen', label:'Ganglion cells', slot:{x:14.700,y:44.011,w:9.16,h:5.57}, targets:[{x:28.250,y:39.694}] },
+    { id:'bipolarzellen',  label:'Bipolar cells',  slot:{x:14.700,y:59.889,w:8.41,h:5.57}, targets:[{x:43.364,y:42.479}] },
+    { id:'staebchen',      label:'Rods',           slot:{x:90.400,y:21.448,w:8.04,h:5.57}, targets:[{x:58.692,y:8.450},{x:60.093,y:17.500},{x:61.495,y:28.766}] },
+    { id:'zapfen',         label:'Cones',          slot:{x:90.400,y:38.997,w:8.04,h:5.57}, targets:[{x:62.243,y:36.072},{x:62.430,y:38.997},{x:62.617,y:41.643}] },
+    { id:'pigmentschicht', label:'Pigment layer',  slot:{x:90.400,y:53.621,w:9.53,h:5.57}, targets:[{x:68.800,y:55.571}] },
+    { id:'aderhaut',       label:'Choroid',        slot:{x:90.400,y:68.663,w:8.04,h:5.57}, targets:[{x:70.900,y:63.649}] }
   ];
 
   const retinaMatchRows = [
-    ['Nervenfasern', 'Leiten die elektrischen Signale in Richtung Sehnerv weiter.'],
-    ['Ganglienzellen', 'Sammeln Signale aus der Netzhaut und geben sie an Nervenfasern weiter.'],
-    ['Bipolarzellen', 'Leiten Signale von den Sinneszellen an weitere Nervenzellen weiter.'],
-    ['Stäbchen', 'Reagieren besonders gut bei wenig Licht und sind wichtig für das Hell-Dunkel-Sehen.'],
-    ['Zapfen', 'Sind für das Farbsehen zuständig und arbeiten besonders gut bei ausreichender Helligkeit.'],
-    ['Pigmentschicht', 'Nimmt überschüssiges Licht auf und schützt so die Sinneszellen.'],
-    ['Aderhaut', 'Versorgt die Netzhaut mit Sauerstoff und Nährstoffen.']
+    ['Nerve fibres', 'Carry the electrical signals toward the optic nerve.'],
+    ['Ganglion cells', 'Collect signals from the retina and pass them on to nerve fibres.'],
+    ['Bipolar cells', 'Pass signals from the sensory cells to other nerve cells.'],
+    ['Rods', 'Respond particularly well in low light and are important for light-dark vision.'],
+    ['Cones', 'Are responsible for colour vision and work especially well in bright light.'],
+    ['Pigment layer', 'Absorbs excess light and protects the sensory cells.'],
+    ['Choroid', 'Supplies the retina with oxygen and nutrients.']
   ];
 
   function shuffleArray(arr){
@@ -8976,7 +8976,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       if(canvas.toBlob){
         canvas.toBlob((blob) => {
           if(blob) resolve(blob);
-          else reject(new Error('Canvas konnte nicht exportiert werden.'));
+          else reject(new Error('Canvas could not be exported.'));
         }, 'image/png');
       }else{
         try{
@@ -8999,7 +8999,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
     if(navigator.clipboard && window.ClipboardItem){
       try{
         await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-        showEyeToast('Exportiert (in Zwischenablage).');
+  showEyeToast('Exported to clipboard.');
         return;
       }catch(err){
         console.warn('Clipboard write failed', err);
@@ -9045,8 +9045,8 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         body.classList.toggle('hidden', !willOpen);
         btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
         btn.textContent = willOpen ? '▴' : '▾';
-        btn.setAttribute('aria-label', willOpen ? 'Einklappen' : 'Aufklappen');
-        btn.title = willOpen ? 'Einklappen' : 'Aufklappen';
+        btn.setAttribute('aria-label', willOpen ? 'Collapse' : 'Expand');
+        btn.title = willOpen ? 'Collapse' : 'Expand';
         if(panel) panel.classList.toggle('is-collapsed', !willOpen);
       });
     });
@@ -9325,7 +9325,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         if(state.checked) return;
         const placed = Object.values(state.placements).filter(Boolean).length;
         if(placed === retinaLabelDefs.length){
-          feedback.textContent = 'Alle Begriffe sind platziert. Klicke auf „Korrigieren“.';
+          feedback.textContent = 'All terms are placed. Click "Check".';
           feedback.style.color = 'var(--ok)';
         }else{
           feedback.innerHTML = '&nbsp;';
@@ -9480,7 +9480,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         state.checked = false;
         state.hidden = false;
         toggleBtn.setAttribute('aria-pressed', 'false');
-        toggleBtn.textContent = 'Ausblenden';
+        toggleBtn.textContent = 'Hide';
         clearAllDragStates();
         clearValidation();
         render();
@@ -9491,7 +9491,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       toggleBtn.addEventListener('click', () => {
         state.hidden = !state.hidden;
         toggleBtn.setAttribute('aria-pressed', state.hidden ? 'true' : 'false');
-        toggleBtn.textContent = state.hidden ? 'Einblenden' : 'Ausblenden';
+        toggleBtn.textContent = state.hidden ? 'Show' : 'Hide';
         render();
       });
 
@@ -9513,13 +9513,13 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         const solved = placed === retinaLabelDefs.length && correct === retinaLabelDefs.length;
         setExportEnabled(solved);
         if(placed < retinaLabelDefs.length){
-          feedback.textContent = `${correct}/${retinaLabelDefs.length} richtig. Bitte platziere zuerst alle Begriffe.`;
+      feedback.textContent = `${correct}/${retinaLabelDefs.length} correct. Please place all terms first.`;
           feedback.style.color = 'var(--warn)';
         }else if(solved){
-          feedback.textContent = 'Alle Begriffe sind korrekt platziert.';
+          feedback.textContent = 'All terms are correctly placed.';
           feedback.style.color = 'var(--ok)';
         }else{
-          feedback.textContent = `${correct}/${retinaLabelDefs.length} richtig. Überprüfe die markierten Zuordnungen.`;
+          feedback.textContent = `${correct}/${retinaLabelDefs.length} correct. Check the marked matches.`;
           feedback.style.color = 'var(--bad)';
         }
       });
@@ -9527,7 +9527,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       const renderRetinaLabelExportCanvas = () => {
         const stage = $('retinaBuildImageStage');
         const img = $('imgRetinaBuild');
-        if(!stage || !img) throw new Error('Das Simulationsfenster ist nicht verfügbar.');
+    if(!stage || !img) throw new Error('The simulation window is not available.');
         const rect = stage.getBoundingClientRect();
         const imgRect = img.getBoundingClientRect();
         const w = Math.max(1, Math.round(rect.width));
@@ -9636,7 +9636,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
           const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
           await copyOrDownloadCanvas(canvas, `Aufbau_der_Netzhaut_Beschriftung_${stamp}.png`);
         }catch(err){
-          alert('Export fehlgeschlagen.\n\n' + (err && err.message ? err.message : err));
+          alert('Export failed.\n\n' + (err && err.message ? err.message : err));
         }
       });
 
@@ -9673,7 +9673,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
       resetBtn.disabled = false;
       checkBtn.disabled = false;
       toggleBtn.disabled = false;
-      toggleBtn.textContent = 'Ausblenden';
+      toggleBtn.textContent = 'Hide';
       toggleBtn.setAttribute('aria-pressed', 'false');
       feedback.innerHTML = '&nbsp;';
       feedback.style.color = 'var(--muted)';
@@ -9792,7 +9792,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
         const ok = this.current.length === retinaMatchRows.length && this.current.every((value, idx) => value === retinaMatchRows[idx][1]);
         feedback.textContent = ok
           ? 'Alle Funktionen sind korrekt zugeordnet.'
-          : 'Noch nicht korrekt. Überprüfe die Zuordnung und Reihenfolge der Funktionen.';
+          : 'Not correct yet. Check the matching and order of the functions.';
         feedback.style.color = ok ? 'var(--ok)' : 'var(--bad)';
         setExportEnabled(ok);
       });
@@ -9803,7 +9803,7 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
           const canvas = renderStructuredPairExport('', 'Struktur', 'Funktion', retinaMatchRows, this.current);
           await copyOrDownloadCanvas(canvas, `Aufbau_der_Netzhaut_Funktionen_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.png`);
         }catch(err){
-          alert('Export fehlgeschlagen\n\n' + (err && err.message ? err.message : err));
+          alert('Export failed\n\n' + (err && err.message ? err.message : err));
         }
       });
 
@@ -9869,20 +9869,20 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
 <div id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle">
   <div class="im-card">
     <div class="im-head">
-      <h2 id="introModalTitle" class="im-title">Strahlengang und Akkommodation – Optik-Simulation</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+      <h2 id="introModalTitle" class="im-title">Light Paths and Accommodation – Optics Simulation</h2>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Close">×</button>
     </div>
-    <p class="im-grade">Jahrgangsstufe: 8</p>
+    <p class="im-grade">Grade level: 8</p>
     <div class="im-desc">
-      In dieser Simulation untersuchst du wie sich der Strahlengang bei verschiedenen Linsen verhält und wie ein scharfer Seheindruck entsteht. Du beobachtest wie sich das menschliche Auge durch Akkommodation auf unterschiedliche Entfernungen einstellt und wie sich die Linsenform beim Sehen naher und ferner Objekte verändert. Schließlich untersuchst du noch die Entstehung von Fehlsichtigkeiten und wie diese durch unterschiedliche Hilfslinsen ausgeglichen werden können.
+      In this simulation you investigate how the path of light behaves with different lenses and how a sharp visual impression is formed. You observe how the human eye adjusts to different distances through accommodation and how the shape of the lens changes when viewing near and distant objects. Finally, you investigate how refractive errors arise and how they can be corrected with different visual aids.
     </div>
     <div class="im-btn-row">
-      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
+      <button id="introModalStartBtn" class="im-start-btn" type="button">Start simulation →</button>
     </div>
   </div>
 </div>
 <!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -9906,11 +9906,11 @@ Aufgabe 2: Erkläre, wie die Weitsichtigkeit mit einer Sehhilfe korrigiert werde
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li><strong>Aufbau des Auges</strong><br/>Holly Fischer: <em>Three Main Layers of the Eye</em>. Wikimedia Commons, CC BY 3.0, bearbeitet.</li>
-      <li><strong>Aufbau der Netzhaut</strong><br/>Helga Kolb: <em>Schematic diagram of the eye, retina, retinal cell layers, and neurotransmitters found in the different cells</em>. Wikimedia Commons, CC BY-SA 3.0, bearbeitet.</li>
-      <li>Alle weiteren Abbildungen wurden mittels KI erstellt.</li>
+      <li><strong>Structure of the Eye</strong><br/>Holly Fischer: <em>Three Main Layers of the Eye</em>. Wikimedia Commons, CC BY 3.0, edited.</li>
+      <li><strong>Structure of the Retina</strong><br/>Helga Kolb: <em>Schematic diagram of the eye, retina, retinal cell layers, and neurotransmitters found in the different cells</em>. Wikimedia Commons, CC BY-SA 3.0, edited.</li>
+      <li>All other images were created with AI.</li>
     </ul>
   </div>
 </div>

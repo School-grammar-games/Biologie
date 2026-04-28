@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
@@ -429,7 +429,7 @@ button:active{
   <div id="introOverlay" aria-modal="true" role="dialog">
     <div class="introCard">
       <h2>Simulation: Käfer unter Druck</h2>
-      <p>In dieser Simulation beobachtest du eine Käferpopulation über mehrere Generationen unter wechselnden Umweltbedingungen. Durch dein Eingreifen verändert sich, wie viele Käfer verschiedener Typen eine Generation überstehen und wie sich die Zusammensetzung der Population von Runde zu Runde entwickelt. Achte besonders auf die Veränderungen über die Zeit und halte deine Beobachtungen im Diagramm fest.</p>
+      <p>In this simulation, you observe a beetle population over several generations under changing environmental conditions. Your actions affect how many beetles of each type survive a generation and how the population composition changes from round to round. Pay special attention to changes over time and record your observations in the chart.</p>
       <div class="introActions">
         <button id="introStart" class="primary">Start</button>
       </div>
@@ -441,7 +441,7 @@ button:active{
         <div class="brandMark" aria-hidden="true">📓</div>
         <div>
           <p class="title">Käfer unter Druck</p>
-          <p class="subtitle">Tippe/Klicke Käfer weg. Beobachte, wie sich die Population über mehrere Generationen verändert.</p>
+    <p class="subtitle">Tap or click beetles away. Observe how the population changes over several generations.</p>
         </div>
       </div>
       <div class="topbarRight" aria-label="Status">
@@ -468,9 +468,9 @@ button:active{
             <div id="chartCard">
               <div id="chartTopRow">
                 <h3 id="chartTitle">Restbestand je Käfertyp pro Generation</h3>
-                <div class="seg" role="group" aria-label="Diagramm-Modus">
+                <div class="seg" role="group" aria-label="Chart mode">
                   <button id="btnModeAbs" class="active" type="button">Anzahl</button>
-                  <button id="btnModeRel" type="button">Anteil (%)</button>
+                  <button id="btnModeRel" type="button">Share (%)</button>
                 </div>
               </div>
               <canvas id="chartCanvas"></canvas>
@@ -482,55 +482,55 @@ button:active{
         <div class="controls">
           <button class="primary" id="btnStart">Start</button>
           <button id="btnReset" disabled>Reset</button>
-          <button class="danger" id="btnExport" disabled>Export (Bild + Diagramm)</button>
+          <button class="danger" id="btnExport" disabled>Export (image + chart)</button>
           <span class="status" id="exportStatus"></span>
         </div>
       </div>
 
             <div class="sidecol">
         <div class="card side">
-          <h2>Aufgabe</h2>
+          <h2>Task</h2>
           <p class="taskText">
-            In dieser Simulation beeinflusst du, wie viele Käfer verschiedener Typen eine Generation überstehen.
-            Beobachte über mehrere Generationen, welche Veränderungen auftreten, und vergleiche deine Beobachtungen mit dem Diagramm.
+            In this simulation you control how many beetles of different types survive each generation.
+            Observe how the population changes across several generations and compare your observations with the chart.
           </p>
         </div>
 
         <div class="card side">
-          <h2>Kontrolle &amp; Daten</h2>
-          <div class="stats" aria-label="Aktueller Status">
+          <h2>Controls &amp; data</h2>
+          <div class="stats" aria-label="Current status">
             <div class="statRow">
               <span class="statLabel">🧬 Generation</span>
               <span class="statValue" id="sideGen">–</span>
             </div>
             <div class="statRow">
-              <span class="statLabel">🪲 Übrig</span>
+              <span class="statLabel">🪲 Remaining</span>
               <span class="statValue" id="sideRemain">–</span>
             </div>
             <div class="statRow">
-              <span class="statLabel">⏱ Restzeit</span>
+              <span class="statLabel">⏱ Time left</span>
               <span class="statValue" id="sideTime">–</span>
             </div>
           </div>
           <p class="taskText" style="margin-top:10px;">
-            Tipp: Nutze den Export, um Spielbild <i>und</i> Diagramm als PNG zu sichern.
+            Tip: use export to save the game view <i>and</i> chart together as a PNG.
           </p>
         </div>
 
         <div class="card side">
           <details class="rules">
-            <summary>Spielregeln</summary>
+            <summary>Game rules</summary>
             <ul>
-          <li><b>4 Generationen</b></li>
-          <li><b>Dauer</b>: G1 15s, G2 20s, G3–G4 25s</li>
-          <li>Start: <b>5</b> Käfer je Farbe</li>
-          <li>Ende Generation:
-            <b>verdoppeln</b> – aber wenn <b>&lt; 20</b> überleben → auf <b>60</b> auffüllen (proportional)</li>
-          <li>Antippen/Klicken entfernt einen Käfer (Touch-freundliche Trefferfläche)</li>
+          <li><b>4 generations</b></li>
+          <li><b>Duration</b>: G1 15s, G2 20s, G3-G4 25s</li>
+          <li>Start: <b>5</b> beetles of each color</li>
+          <li>End of a generation:
+            <b>double</b> the survivors - but if fewer than <b>&lt; 20</b> survive, refill proportionally to <b>60</b></li>
+          <li>Tapping/clicking removes a beetle (touch-friendly hit area)</li>
         </ul>
-        <div class="badge">Nach Spielende: Überlebende werden rot markiert</div>
+        <div class="badge">After the game: survivors are marked in red</div>
         <p style="margin-top:10px;">
-          Export kopiert ein PNG (Spielbild + Diagramm) in die Zwischenablage. Falls nicht erlaubt: Download.
+          Export copies a PNG (game view + chart) to the clipboard. If that is not allowed: download.
         </p>
           </details>
         </div>
@@ -1332,7 +1332,7 @@ function spawnClickRipple(x,y){
       try{
         if(navigator.clipboard && window.ClipboardItem){
           await navigator.clipboard.write([ new ClipboardItem({ "image/png": blob }) ]);
-          exportStatus.textContent = "In Zwischenablage kopiert.";
+        exportStatus.textContent = "Copied to clipboard.";
           return;
         }
       } catch(e){
@@ -1390,7 +1390,7 @@ function spawnClickRipple(x,y){
   function showBgPoolExhaustedOverlay(){
     if(!bgExhaustedOverlay) return;
     bgExhaustedOverlay.textContent =
-      "Alle Hintergründe wurden bereits verwendet.\nBitte Browser neu laden (F5), um den Hintergrund-Pool zurückzusetzen.";
+      "All backgrounds have already been used.\nPlease reload the browser (F5) to reset the background pool.";
     bgExhaustedOverlay.style.display = "flex";
   }
 
@@ -1521,7 +1521,7 @@ function spawnClickRipple(x,y){
   });
 </script>
 <!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -1545,9 +1545,9 @@ function spawnClickRipple(x,y){
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Alle Abbildungen in dieser Simulation sind vollständig KI-generiert.</li>
+      <li>All illustrations in this simulation are fully AI-generated.</li>
     </ul>
   </div>
 </div>

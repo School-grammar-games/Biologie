@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Erforschung des Insektenbeines</title>
+  <title>Investigating the Insect Leg</title>
   <style>
     :root{
       --bg:#2a2a22;
@@ -1263,8 +1263,8 @@
 
 <body>
 <header>
-  <h1>Erforschung des Insektenbeines</h1>
-  <p>Betrachte die verschiedenen Insekten und erforsche die unterschiedlichen Anpassungen der Beine an die Lebensumgebung und Lebensweise der Insekten.</p>
+  <h1>Investigating the Insect Leg</h1>
+  <p>Examine the different insects and investigate how their legs are adapted to their habitat and way of life.</p>
 </header>
 
 <main class="app">
@@ -1273,10 +1273,10 @@
   <section class="panel left">
     <div class="hd">
       <div>
-        <div class="title">Insekten (Auswahl)</div>
+        <div class="title">Insects (selection)</div>
 </div>
       <div class="seg">
-        <span class="lbl">Ziel:</span>
+        <span class="lbl">Goal:</span>
         <button id="pickA" class="active" type="button">A</button>
         <button id="pickB" type="button">B</button>
       </div>
@@ -1288,19 +1288,19 @@
   <section class="panel middle">
     <div class="hd" id="microscopePanelHeader">
       <div class="mic-header-main">
-        <div class="title">Mikroskop</div>
-        <div class="sub" id="info">Aktuell: –</div>
+        <div class="title">Microscope</div>
+        <div class="sub" id="info">Current: -</div>
       </div>
       <div class="mic-header-actions">
-        <button class="btn worksheet-btn" id="btnWorksheetMicroscope" type="button">Arbeitsblatt</button>
+        <button class="btn worksheet-btn" id="btnWorksheetMicroscope" type="button">Worksheet</button>
       </div>
     </div>
 
     <div class="bd" style="display:flex;flex-direction:column;gap:12px;">
-      <!-- Insekt-Informationen (immer Insekt A) -->
+      <!-- Insect information (always insect A) -->
       <div class="infobox" id="insectInfoBoxMid">
         <div class="infoboxhd">
-          <div class="tag">Insekt A – Informationen</div>
+          <div class="tag">Insect A - Information</div>
           <div class="small" id="insectInfoTitleMid">–</div>
         </div>
         <div class="infotext" id="insectInfoTextMid">–</div>
@@ -1309,20 +1309,20 @@
       
 <div class="controls" id="micControls">
         <div class="ctrl">
-          <div class="lbl">Objektiv</div>
+          <div class="lbl">Objective</div>
           <input id="zoom" type="range" min="0" max="3" step="1" value="0"/>
           <div id="zoomLabel" class="val">4×</div>
         </div>
 
         <div class="ctrl">
-          <div class="lbl">Fokus</div>
+          <div class="lbl">Focus</div>
           <input id="focus" type="range" min="-1" max="1" step="0.01" value="0"/>
           <div class="val empty">.</div>
         </div>
 
         <div class="actions">
-          <button class="btn ghost" id="btnCompare" type="button">Vergleich: Aus</button>
-          <button class="btn" id="btnReset" type="button">Ansicht zurücksetzen</button>
+          <button class="btn ghost" id="btnCompare" type="button">Comparison: Off</button>
+          <button class="btn" id="btnReset" type="button">Reset view</button>
         </div>
       </div>
 
@@ -1330,23 +1330,23 @@
 <!-- single microscope -->
       <div class="scope" id="scopeSingle">
         <div class="badge" id="badgeSingle">–</div>
-        <div class="imgnum">Bild 1</div>
+        <div class="imgnum">Image 1</div>
         <div class="img-layer" id="layerSingle">
-          <img id="imgSingle" alt="Mikroskopbild (Bild 1)"/>
+          <img id="imgSingle" alt="Microscope image (image 1)"/>
         </div>
         <div class="overlay">
           <canvas id="cMicSingle" class="annot" width="10" height="10"></canvas>
         </div>
-        <div class="help">Tipp: Ziehen (Touch/Maus)<br/>Zoom per Regler</div>
+        <div class="help">Tip: drag (touch/mouse)<br/>Zoom with slider</div>
       </div>
 
-      <!-- compare (Bild 1 nur!) -->
+      <!-- compare (image 1 only) -->
       <div class="compare" id="compareWrap" style="display:none;">
         <div class="scope" id="scopeA">
           <div class="badge" id="badgeA">A</div>
-          <div class="imgnum">Bild 1</div>
+          <div class="imgnum">Image 1</div>
           <div class="img-layer" id="layerA">
-            <img id="imgA" alt="Mikroskopbild A (Bild 1)"/>
+            <img id="imgA" alt="Microscope image A (image 1)"/>
           </div>
           <div class="overlay">
             <canvas id="cMicA" class="annot" width="10" height="10"></canvas>
@@ -1355,9 +1355,9 @@
         </div>
         <div class="scope" id="scopeB">
           <div class="badge" id="badgeB">B</div>
-          <div class="imgnum">Bild 1</div>
+          <div class="imgnum">Image 1</div>
           <div class="img-layer" id="layerB">
-            <img id="imgB" alt="Mikroskopbild B (Bild 1)"/>
+            <img id="imgB" alt="Microscope image B (image 1)"/>
           </div>
           <div class="overlay">
             <canvas id="cMicB" class="annot" width="10" height="10"></canvas>
@@ -1371,16 +1371,16 @@
         </div>
       </div>
 
-      <!-- Überraschungsfenster (nur für Gottesanbeterin sichtbar) -->
+      <!-- Surprise panel -->
       <div class="surprisebox" id="surpriseBox" style="display:none;">
         <div class="infoboxhd" style="margin-bottom:8px;">
-          <div class="tag">Überraschungsfenster</div>
+          <div class="tag">Surprise panel</div>
           <div class="small" id="surpriseMeta">Instagram</div>
         </div>
         <div class="surprisecontent" id="surpriseContent"></div>
         
         <div id="surpriseFallback" class="small muted" style="margin-top:8px; display:none;">
-          Falls die Inhalte nicht laden (z. B. im Schulnetz / mit Tracking-Blockern), öffne die Beiträge direkt:
+          If the embeds do not load (for example on a school network or with tracking blockers), open the posts directly:
           <ul class="small" style="margin:6px 0 0 16px; padding:0;">
             <li><a href="https://www.instagram.com/p/DR9vzoWjN2-/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">Reel 1</a></li>
             <li><a href="https://www.instagram.com/p/DGnD9ObMOwS/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">Reel 2</a></li>
@@ -1397,38 +1397,38 @@
   <section class="panel right">
     <div class="hd">
       <div>
-        <div class="title">Bein-Material</div>
+        <div class="title">Leg material</div>
 </div>
 
     </div>
 
     <div class="bd rightgrid">
 
-      <!-- Markierfunktionen (oben) -->
+      <!-- Marking tools -->
       <div class="figure" id="markTop">
         <div class="cap" style="align-items:center;">
-          <span style="color:rgba(229,231,235,.96);font-weight:800;">Markierfunktionen</span>
-          <span class="small">Stift / Radierer</span>
+          <span style="color:rgba(229,231,235,.96);font-weight:800;">Marking tools</span>
+          <span class="small">Pen / eraser</span>
         </div>
 <div class="tools">
           <div class="g">
-            <span class="tag">Markieren:</span>
-            <button class="smallbtn" id="btnDraw" type="button">Markieren: Aus</button>
-            <button class="smallbtn" id="btnPen" type="button" aria-disabled="true">Stift</button>
-            <button class="smallbtn" id="btnEraser" type="button" aria-disabled="true">Radierer</button>
+            <span class="tag">Marking:</span>
+            <button class="smallbtn" id="btnDraw" type="button">Marking: Off</button>
+            <button class="smallbtn" id="btnPen" type="button" aria-disabled="true">Pen</button>
+            <button class="smallbtn" id="btnEraser" type="button" aria-disabled="true">Eraser</button>
           </div>
         </div>
 
         
 </div>
 
-      <!-- Bild 2: schema -->
+      <!-- Image 2: schema -->
 
 <div class="figure">
         <div class="frame" id="schemaFrame">
-          <div class="imgnum">Bild 2</div>
-          <img id="schemaImg" alt="Bein-Schema (Bild 2)"/>
-          <div id="schemaPh" class="ph" style="display:none;">Kein Schema-Bild vorhanden.</div>
+          <div class="imgnum">Image 2</div>
+          <img id="schemaImg" alt="Leg diagram (image 2)"/>
+          <div id="schemaPh" class="ph" style="display:none;">No diagram image available.</div>
 
           <div class="overlay">
             <canvas id="cSchema" class="annot" width="10" height="10"></canvas>
@@ -1438,31 +1438,31 @@
         </div>
 
         <div class="cap">
-          <span id="schemaCap">Bild 2: Schema –</span>
-          <span class="small">Referenzgrafik</span>
+          <span id="schemaCap">Image 2: diagram -</span>
+          <span class="small">Reference graphic</span>
         </div>
 
         <div id="labelTray" class="labeltray" style="display:none;">
-          <span class="trayhint">Ziehe die Begriffe am blauen Punkt auf die passenden Bereiche im Schema.</span>
+        <span class="trayhint">Drag the terms by the blue dot onto the matching areas in the diagram.</span>
         </div>
 
-        <!-- Beschriftung unter Schema (wie gewünscht) -->
+        <!-- Labelling below the diagram -->
         <div class="tools">
           <div class="g">
-            <span class="tag">Beschriftung (Bild 2):</span>
-            <button class="smallbtn" id="btnLabel" type="button">Beschriftungsmodus</button>
-            <button class="smallbtn" id="btnCheck" type="button" style="display:none;">Korrigieren</button>
+            <span class="tag">Labelling (image 2):</span>
+            <button class="smallbtn" id="btnLabel" type="button">Labelling mode</button>
+            <button class="smallbtn" id="btnCheck" type="button" style="display:none;">Check</button>
           </div>
         </div>
         <div id="labelStatus" class="status" style="display:none;"></div>
       </div>
 
-      <!-- Bild 3: detail -->
+      <!-- Image 3: detail -->
       <div class="figure">
         <div class="frame" id="detailFrame">
-          <div class="imgnum">Bild 3</div>
-          <div class="detaillayer" id="detailLayer"><img id="detailImg" alt="Bein-Detail (Bild 3)"/></div>
-          <div id="detailPh" class="ph" style="display:none;">Kein Detailbild vorhanden.</div>
+          <div class="imgnum">Image 3</div>
+          <div class="detaillayer" id="detailLayer"><img id="detailImg" alt="Leg detail (image 3)"/></div>
+          <div id="detailPh" class="ph" style="display:none;">No detail image available.</div>
           <div class="overlay">
             <canvas id="cDetail" class="annot" width="10" height="10"></canvas>
           </div>
@@ -1470,18 +1470,18 @@
 
         <div class="cap" style="align-items:center;">
           <div style="min-width:0;">
-            <div id="detailCap">Bild 3: Detail –</div>
+            <div id="detailCap">Image 3: detail -</div>
             <div id="detailSel" class="selector" style="margin-top:8px;"></div>
           </div>
-          <a class="link" id="openDetail" href="javascript:void(0)" aria-disabled="true">Groß ansehen</a>
+          <a class="link" id="openDetail" href="javascript:void(0)" aria-disabled="true">View larger</a>
         </div>
       </div>
 
       <!-- Video -->
       <div class="figure video">
         <div class="frame" style="aspect-ratio:16/9;">
-          <iframe id="videoFrame" title="YouTube-Video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="display:none;"></iframe>
-          <div id="videoPh" class="ph" style="display:none;">Kein Video für dieses Insekt hinterlegt.</div>
+          <iframe id="videoFrame" title="YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="display:none;"></iframe>
+          <div id="videoPh" class="ph" style="display:none;">No video is available for this insect.</div>
         </div>
 
         <div class="cap" style="align-items:center;">
@@ -1491,27 +1491,27 @@
       </div>
 
     
-      <!-- Exportfunktionen -->
+      <!-- Export tools -->
       <div class="figure" id="exportFigure">
         <div class="cap" style="align-items:center;">
-          <span style="color:rgba(229,231,235,.96);font-weight:800;">Leer- und Exportfunktionen</span>
+          <span style="color:rgba(229,231,235,.96);font-weight:800;">Clear and export tools</span>
 </div>
 
         <div class="tools">
           <div class="g exportline">
-            <span class="tag">Leeren:</span>
-            <button class="smallbtn" id="btnClear1" type="button" aria-disabled="false">Bild 1</button><span class="sep">/</span>
-            <button class="smallbtn" id="btnClear2" type="button" aria-disabled="false">Bild 2</button><span class="sep">/</span>
-            <button class="smallbtn" id="btnClear3" type="button" aria-disabled="false">Bild 3</button>
+            <span class="tag">Clear:</span>
+            <button class="smallbtn" id="btnClear1" type="button" aria-disabled="false">Image 1</button><span class="sep">/</span>
+            <button class="smallbtn" id="btnClear2" type="button" aria-disabled="false">Image 2</button><span class="sep">/</span>
+            <button class="smallbtn" id="btnClear3" type="button" aria-disabled="false">Image 3</button>
 </div>
         </div>
 
         <div class="tools">
           <div class="g exportline">
             <span class="tag">Screenshot:</span>
-            <button class="smallbtn" id="btnShot1" type="button" aria-disabled="false">Bild 1</button><span class="sep">/</span>
-            <button class="smallbtn" id="btnShot2" type="button" aria-disabled="false">Bild 2</button><span class="sep">/</span>
-            <button class="smallbtn" id="btnShot3" type="button" aria-disabled="false">Bild 3</button>
+            <button class="smallbtn" id="btnShot1" type="button" aria-disabled="false">Image 1</button><span class="sep">/</span>
+            <button class="smallbtn" id="btnShot2" type="button" aria-disabled="false">Image 2</button><span class="sep">/</span>
+            <button class="smallbtn" id="btnShot3" type="button" aria-disabled="false">Image 3</button>
 </div>
         </div>
       </div>
@@ -1525,13 +1525,13 @@
 <div class="modal" id="modal" aria-hidden="true">
   <div class="modalcard" role="dialog" aria-modal="true">
     <div class="modalhd">
-      <div class="t" id="modalTitle">Detailbild</div>
-      <button class="x" id="modalClose" type="button">Schließen</button>
+      <div class="t" id="modalTitle">Detail image</div>
+      <button class="x" id="modalClose" type="button">Close</button>
     </div>
     <div class="modalbd">
       <div class="modalscope" id="modalScope">
         <div class="modalimglayer" id="modalLayer">
-          <img id="modalImg" alt="Detailbild groß"/>
+          <img id="modalImg" alt="Large detail image"/>
         </div>
         <div class="overlay">
           <canvas id="cModal" class="annot" width="10" height="10"></canvas>
@@ -1539,15 +1539,15 @@
       </div>
 
       <div class="modalcontrols">
-        <label class="small">Objektiv (Großansicht)
+        <label class="small">Objective (zoom view)
           <input id="modalZoom" type="range" min="0" max="3" step="1" value="1"/>
           <span id="modalZoomLabel" class="small">10×</span>
         </label>
-        <label class="small">Fokus (Großansicht)
+        <label class="small">Focus (zoom view)
           <input id="modalFocus" type="range" min="-1" max="1" step="0.01" value="0"/>
         </label>
-        <button class="btn" id="modalReset" type="button">Zurücksetzen</button>
-        <button class="btn" id="modalFit" type="button">Einpassen</button>
+        <button class="btn" id="modalReset" type="button">Reset</button>
+        <button class="btn" id="modalFit" type="button">Fit to view</button>
       </div>
 
     </div>
@@ -1600,11 +1600,11 @@ const surpriseUnlocked = new Set();
 
 
 
-// Konfiguration: welche Insekten bekommen ein Überraschungsfenster?
+// Configuration: which insects get a surprise panel?
 const SURPRISE_CFG = {
   gottesanbeterin: {
     tplId: "tplSurpriseGottesanbeterin",
-    meta: "Instagram (4 Beiträge)",
+    meta: "Instagram (4 posts)",
     links: [
       { label: "Reel 1", url: "https://www.instagram.com/p/DR9vzoWjN2-/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
       { label: "Reel 2", url: "https://www.instagram.com/p/DGnD9ObMOwS/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
@@ -1614,7 +1614,7 @@ const SURPRISE_CFG = {
   },
   laufkaefer: {
     tplId: "tplSurpriseLaufkaefer",
-    meta: "Instagram (4 Beiträge)",
+    meta: "Instagram (4 posts)",
     links: [
   { label: "Post 1", url: "https://www.instagram.com/p/DTApx5ujIwX/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
   { label: "Post 2", url: "https://www.instagram.com/p/DJXdXO4zABg/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
@@ -1624,7 +1624,7 @@ const SURPRISE_CFG = {
   },
 heuschrecke: {
   tplId: "tplSurpriseHeuschrecke",
-  meta: "Instagram (4 Beiträge)",
+  meta: "Instagram (4 posts)",
   links: [
   { label: "Post 1", url: "https://www.instagram.com/p/DMsU4Xls5nd/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
   { label: "Post 2", url: "https://www.instagram.com/p/C4Xk-pVMWPW/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
@@ -1634,7 +1634,7 @@ heuschrecke: {
 },
 biene: {
   tplId: "tplSurpriseBiene",
-  meta: "Instagram (4 Beiträge)",
+  meta: "Instagram (4 posts)",
   links: [
   { label: "Post 1", url: "https://www.instagram.com/p/DUIqj8hjFSG/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
   { label: "Post 2", url: "https://www.instagram.com/p/DOEFSQkjDAV/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
@@ -1644,7 +1644,7 @@ biene: {
 }
 ,maulwurfsgrille: {
   tplId: "tplSurpriseMaulwurfsgrille",
-  meta: "Instagram (4 Beiträge)",
+  meta: "Instagram (4 posts)",
   links: [
     { label: "Post 1", url: "https://www.instagram.com/p/DLmOlyZy29V/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" },
     { label: "Post 2", url: "https://www.instagram.com/p/Ch9Y72nOyzx/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" },
@@ -1655,7 +1655,7 @@ biene: {
 ,
   schwimmkaefer: {
     tplId: "tplSurpriseSchwimmkaefer",
-    meta: "Instagram (4 Beiträge)",
+    meta: "Instagram (4 posts)",
     links: [
       { label: "Post 1", url: "https://www.instagram.com/p/CtZU8qzNRzE/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" },
       { label: "Post 2", url: "https://www.instagram.com/p/C6b9tQrNV85/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==" },
@@ -1672,7 +1672,7 @@ function updateSurprise(insectA){
   const surpriseFallback = document.getElementById("surpriseFallback");
   const surpriseMeta = document.getElementById("surpriseMeta");
 
-  // nur für konfigurierte Insekten
+  // only for configured insects
   if(!insectA || !cfg){
     surpriseBox.style.display = "none";
     if(surpriseFallback) surpriseFallback.style.display="none";
@@ -1683,7 +1683,7 @@ function updateSurprise(insectA){
   if(surpriseMeta) surpriseMeta.textContent = cfg.meta || "Instagram";
   if(surpriseFallback) surpriseFallback.style.display="none";
 
-  // Fallback-Links dynamisch setzen
+  // set fallback links dynamically
   if(surpriseFallback){
     const ul = surpriseFallback.querySelector("ul");
     if(ul){
@@ -1693,19 +1693,19 @@ function updateSurprise(insectA){
     }
   }
 
-  // Gating: Inhalte erst nach korrekt gelöster Beschriftungsaufgabe anzeigen
+  // Gating: reveal content only after the labelling task is solved correctly
   if(!surpriseUnlocked.has(insectA.id)){
     surpriseContent.dataset.loaded = "0";
     surpriseContent.dataset.loadedFor = "";
     surpriseContent.innerHTML = `
       <div class="status" style="display:block;">
-        <strong>🔒 Überraschungsfenster gesperrt</strong><br>
-        Löse zuerst die <strong>Beschriftungsaufgabe (Bild 2)</strong> vollständig korrekt und klicke auf <strong>„Korrigieren“</strong>.
+        <strong>🔒 Surprise panel locked</strong><br>
+        First solve the <strong>labeling task (image 2)</strong> completely correctly and click <strong>"Check"</strong>.
       </div>`;
     return;
   }
 
-  // Inhalt aus Template setzen (je Insekt einmal)
+  // set content from template once per insect
   if(surpriseContent.dataset.loaded !== "1" || surpriseContent.dataset.loadedFor !== insectA.id){
     const tpl = document.getElementById(cfg.tplId);
     surpriseContent.innerHTML = tpl ? tpl.innerHTML : "";
@@ -1717,8 +1717,8 @@ function updateSurprise(insectA){
 
   ensureInstagramEmbed();
 
-  // Tablet: Element ins Sichtfeld scrollen (löst lazy-iframe-Laden aus)
-  // + Verzögerungs-Retry für embed.js (falls IntersectionObserver erst nach Scroll greift)
+  // Tablet: scroll the element into view so lazy iframes load
+  // + delayed retry for embed.js in case IntersectionObserver starts after scrolling
   if(window.innerWidth >= 768 && window.innerWidth <= 1450){
     setTimeout(function(){
       surpriseBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -1732,200 +1732,200 @@ function updateSurprise(insectA){
 const INSECTS = [
   {
     id:"laufkaefer",
-    name:"Laufkäfer",
+    name:"Ground beetle",
     latin:"Carabus violaceus",
-    hint:"Standardbein / Laufbein",
+    hint:"standard leg / walking leg",
     microscope:"Laufkäfer.png",
     thumb:"Laufkäfer.png",
     schema:"Schema Standardbein.png",
-    schemaLabel:"Schema Standardbein",
-    /* Reihenfolge wie gewünscht: Standardbein zuerst, dann Laufbein */
+    schemaLabel:"standard-leg diagram",
+    /* Order: standard leg first, then walking leg */
     closeups:[
-      { label:"Standardbein", file:"Standardbein.jpg" },
-      { label:"Laufbein",     file:"Laufbein.jpg" }
+      { label:"Standard leg", file:"Standardbein.jpg" },
+      { label:"Walking leg",  file:"Laufbein.jpg" }
     ],
     video:"Video_Laufkäfer",
     videoSource:"https://www.youtube.com/watch?v=xEQniBG2x28",
-    videoTitle:"Laufkäfer",
+    videoTitle:"Ground beetle",
     info:
-      "Der Laufkäfer (<em>Carabus violaceus</em>) ist in Mitteleuropa weit verbreitet und lebt vor allem in Wäldern, Gärten und an Wegrändern mit Laub- oder Totholzstruktur. " +
-      "Er ist überwiegend dämmerungs- und nachtaktiv und läuft meist am Boden, wo er unter Steinen, Rinde oder Laub Unterschlupf findet. " +
-      "Als Räuber frisst er unter anderem Schnecken, Insektenlarven und andere kleine Bodentiere und ist damit ein wichtiger Nützling im Ökosystem. " +
-      "Die langen, kräftigen Laufbeine ermöglichen schnelles Laufen, Richtungswechsel und das Verfolgen von Beute auf unebenem Untergrund. " +
-      "In der Simulation dient der Laufkäfer als Vergleichsbeispiel für ein „Standardbein“ ohne extreme Spezialisierung." +
-      "<br><br><strong>Allgemeiner Aufbau eines Insektenbeines:</strong><br>" +
-      "Ein Insektenbein ist gliedmaßenartig aufgebaut und besteht aus mehreren hintereinander liegenden Abschnitten, die vom Körper nach außen immer weiter gehen. " +
-      "Direkt am Körper sitzt zunächst die <strong>Hüfte (Coxa)</strong>; sie stellt die Verbindung zwischen Bein und Brustabschnitt her. " +
-      "Daran schließt sich ein kurzes, ringförmiges Gelenkstück, der <strong>Schenkelring (Trochanter)</strong>, an. " +
-      "Danach folgt als kräftiger, meist relativ dicker Abschnitt der <strong>Schenkel (Femur)</strong>, der vor allem der Kraftübertragung dient. " +
-      "Auf den Schenkel folgt die <strong>Schiene (Tibia)</strong>, ein längerer, schlanker Abschnitt, der zusammen mit dem Femur die Bewegung des Beines ermöglicht. " +
-      "Ganz außen befindet sich der <strong>Fuß (Tarsus)</strong>; er ist häufig in mehrere kleine Glieder unterteilt und trägt am Ende oftmals Klauen oder Haftstrukturen, mit denen sich das Insekt festhalten oder laufen kann."
+      "The ground beetle (<em>Carabus violaceus</em>) is widespread in Central Europe and lives mainly in forests, gardens, and along field margins with leaf litter or deadwood. " +
+      "It is mostly active at dusk and at night and usually moves along the ground, where it finds shelter under stones, bark, or leaves. " +
+      "As a predator, it feeds on snails, insect larvae, and other small ground-dwelling animals, making it a useful part of the ecosystem. " +
+      "Its long, strong walking legs allow fast running, quick changes of direction, and the pursuit of prey on uneven ground. " +
+      "In this simulation, the ground beetle serves as a comparison example for a standard leg without extreme specialization." +
+      "<br><br><strong>General structure of an insect leg:</strong><br>" +
+      "An insect leg is jointed and consists of several sections arranged one after another from the body outward. " +
+      "Closest to the body is the <strong>coxa</strong>, which connects the leg to the thorax. " +
+      "Next comes the short, ring-shaped <strong>trochanter</strong>. " +
+      "This is followed by the strong, usually thicker <strong>femur</strong>, which mainly transfers force. " +
+      "After the femur comes the <strong>tibia</strong>, a longer, slimmer section that works with the femur to move the leg. " +
+      "At the outer end is the <strong>tarsus</strong>; it is often divided into several small segments and frequently carries claws or adhesive structures that help the insect hold on or walk."
   },
 
   {
     id:"maulwurfsgrille",
-    name:"Maulwurfsgrille",
+    name:"Mole cricket",
     latin:"Gryllotalpa gryllotalpa",
-    hint:"Grabbein",
+    hint:"digging leg",
     microscope:"Maulwurfsgrille.png",
     thumb:"Maulwurfsgrille.png",
     schema:"Schema Grabbein.png",
-    schemaLabel:"Schema Grabbein",
+    schemaLabel:"digging-leg diagram",
     closeups:[
-      { label:"Grabbein", file:"Grabbein.jpg" }
+      { label:"Digging leg", file:"Grabbein.jpg" }
     ],
     video:"Video_Maulwurfsgrille",
     videoSource:"https://www.youtube.com/watch?v=Ted0q4Iuk1g",
-    videoTitle:"Maulwurfsgrille",
+    videoTitle:"Mole cricket",
     info:
-      "Die Maulwurfsgrille (<em>Gryllotalpa gryllotalpa</em>) bevorzugt feuchte, lockere Böden in Wiesen, Gärten, Auen oder an Gewässerrändern. " +
-      "Sie lebt überwiegend unterirdisch in selbst gegrabenen Gängen und kommt meist in der Dämmerung oder nachts an die Oberfläche. " +
-      "Ernährt wird sie sowohl von Wurzeln als auch von kleinen Bodentieren, sodass sie teils pflanzen- und teils fleischfressend ist. " +
-      "Die stark verbreiterten Vorderbeine sind zu Grabbeinen umgebildet und wirken wie Schaufeln, um Erde effizient zu verdrängen. " +
-      "Diese Bein-Anpassung passt ideal zu einem Leben im Boden und erklärt ihr typisches, „maulwurfartiges“ Verhalten."
+      "The mole cricket (<em>Gryllotalpa gryllotalpa</em>) prefers moist, loose soils in meadows, gardens, floodplains, or near water. " +
+      "It lives mainly underground in self-dug tunnels and usually comes to the surface at dusk or at night. " +
+      "It feeds on both roots and small soil animals, so it is partly herbivorous and partly predatory. " +
+      "The strongly widened front legs are modified into digging legs and work like shovels to move soil efficiently. " +
+      "This leg adaptation is ideal for life underground and explains its typical mole-like behaviour."
   },
 
   {
     id:"schwimmkaefer",
-    name:"Schwimmkäfer",
+    name:"Diving beetle",
     latin:"Dytiscus marginalis",
-    hint:"Schwimmbein",
+    hint:"swimming leg",
     microscope:"Schwimmkäfer.png",
     thumb:"Schwimmkäfer.png",
     schema:"Schema Schwimmbein.png",
-    schemaLabel:"Schema Schwimmbein",
+    schemaLabel:"swimming-leg diagram",
     closeups:[
-      { label:"Schwimmbein", file:"Schwimmbein.jpg" }
+      { label:"Swimming leg", file:"Schwimmbein.jpg" }
     ],
     video:"Video_Schwimmkäfer",
     videoSource:"https://www.youtube.com/watch?v=Hwqja6FWUzA",
-    videoTitle:"Schwimmkäfer",
+    videoTitle:"Diving beetle",
     info:
-      "Der Gelbrandkäfer (<em>Dytiscus marginalis</em>) lebt in stehenden oder langsam fließenden Süßgewässern wie Teichen, Tümpeln oder Gräben. " +
-      "Er ist ein aktiver Räuber und jagt unter Wasser Insektenlarven, Kaulquappen oder andere kleine Wassertiere. " +
-      "Zum Luftholen steigt er regelmäßig an die Oberfläche und speichert Luft unter den Flügeldecken. " +
-      "Die hinteren Beine sind zu Schwimmbeinen umgebildet und besitzen Borsten, die die Ruderfläche vergrößern. " +
-      "So kann der Käfer sehr effizient beschleunigen, wenden und Beute im Wasser verfolgen."
+      "The great diving beetle (<em>Dytiscus marginalis</em>) lives in standing or slow-flowing freshwater such as ponds, pools, and ditches. " +
+      "It is an active predator and hunts insect larvae, tadpoles, and other small aquatic animals underwater. " +
+      "To breathe, it regularly rises to the surface and stores air under its wing cases. " +
+      "The hind legs are modified into swimming legs and carry bristles that increase the rowing surface. " +
+      "This allows the beetle to accelerate, turn, and pursue prey efficiently in water."
   },
 
   {
     id:"biene",
-    name:"Biene",
+    name:"Honey bee",
     latin:"Apis mellifera",
-    hint:"Sammelbein",
+    hint:"collecting leg",
     microscope:"Biene.png",
     thumb:"Biene.png",
     schema:"Schema Sammelbein.png",
-    schemaLabel:"Schema Sammelbein",
+    schemaLabel:"collecting-leg diagram",
     closeups:[
-      { label:"Sammelbein", file:"Sammelbein.png" }
+      { label:"Collecting leg", file:"Sammelbein.png" }
     ],
     video:"Video_Biene",
     videoSource:"https://www.youtube.com/watch?v=ymjZlOkwGVw",
-    videoTitle:"Biene",
+    videoTitle:"Honey bee",
     info:
-      "Die Honigbiene (<em>Apis mellifera</em>) ist in vielen Lebensräumen Mitteleuropas anzutreffen, besonders in blütenreichen Landschaften und Kulturlandschaften. " +
-      "Sie lebt sozial in Staaten und sammelt Nektar und Pollen, die als Energie- bzw. Proteinquelle dienen. " +
-      "Bei der Bestäubung spielt sie eine zentrale Rolle für Wildpflanzen und viele Nutzpflanzen. " +
-      "Die Hinterbeine sind zu Sammelbeinen spezialisiert und tragen Bürsten sowie Pollenkörbchen (Corbicula), um Pollen zu transportieren. " +
-      "Die Bein-Anpassung ist damit direkt an ihre Lebensweise als Blütenbesucherin und Sammlerin gekoppelt."
+      "The honey bee (<em>Apis mellifera</em>) occurs in many Central European habitats, especially flower-rich landscapes and cultivated areas. " +
+      "It lives socially in colonies and collects nectar and pollen as sources of energy and protein. " +
+      "In pollination, it plays a central role for wild plants and many crop plants. " +
+      "The hind legs are specialized as collecting legs and carry brushes and pollen baskets (corbiculae) to transport pollen. " +
+      "This leg adaptation is directly linked to its way of life as a flower visitor and collector."
   },
 
   {
     id:"gottesanbeterin",
-    name:"Gottesanbeterin",
+    name:"Praying mantis",
     latin:"Mantis religiosa",
-    hint:"Fangbein",
+    hint:"raptorial leg",
     microscope:"Gottesanbeterin.png",
     thumb:"Gottesanbeterin.png",
     schema:"Schema Fangbein.png",
-    schemaLabel:"Schema Fangbein",
+    schemaLabel:"raptorial-leg diagram",
     closeups:[
-      { label:"Fangbein", file:"Fangbein.jpg" }
+      { label:"Raptorial leg", file:"Fangbein.jpg" }
     ],
     video:"Video_Gottesanbeterin",
     videoSource:"https://www.youtube.com/watch?v=WDXufvqJ13I",
-    videoTitle:"Fangbein – Beutefang",
+    videoTitle:"Raptorial leg - catching prey",
     info:
-      "Die Gottesanbeterin (<em>Mantis religiosa</em>) kommt in warmen, sonnigen Lebensräumen vor, z. B. auf Trockenrasen, in Hecken oder an Waldrändern. " +
-      "Sie ist eine Lauerjägerin und verharrt oft reglos, bis Beute in Reichweite kommt. " +
-      "Ernährt wird sie vor allem von Insekten, gelegentlich auch von größeren Wirbellosen; sie ist damit klar räuberisch. " +
-      "Die Vorderbeine sind zu Fangbeinen umgebildet und besitzen Dornen, die Beute beim Zugreifen festhalten. " +
-      "Diese Spezialisierung ermöglicht einen sehr schnellen, präzisen Beutefang und passt perfekt zu ihrer Jagdstrategie."
+      "The praying mantis (<em>Mantis religiosa</em>) occurs in warm, sunny habitats, for example dry grasslands, hedges, and forest edges. " +
+      "It is an ambush predator and often remains motionless until prey comes within reach. " +
+      "It feeds mainly on insects and sometimes larger invertebrates, so it is clearly predatory. " +
+      "The front legs are modified into raptorial legs and have spines that hold prey when the mantis strikes. " +
+      "This specialization enables very fast, precise prey capture and fits its hunting strategy perfectly."
   },
 
   {
     id:"heuschrecke",
-    name:"Heuschrecke",
+    name:"Grasshopper",
     latin:"Chorthippus sp.",
-    hint:"Sprungbein",
+    hint:"jumping leg",
     microscope:"Heuschrecke.png",
     thumb:"Heuschrecke.png",
     schema:"Schema Sprungbein.png",
-    schemaLabel:"Schema Sprungbein",
+    schemaLabel:"jumping-leg diagram",
     closeups:[
-      { label:"Sprungbein", file:"Sprungbein.jpg" }
+      { label:"Jumping leg", file:"Sprungbein.jpg" }
     ],
     video:"Video_Heuschrecke",
     videoSource:"https://www.youtube.com/watch?v=zqfTg6dw6Vs",
-    videoTitle:"Heuschrecke",
+    videoTitle:"Grasshopper",
     info:
-      "Viele Feldheuschrecken (z. B. <em>Chorthippus</em>-Arten) leben in Wiesen, Weiden und anderen offenen, grasreichen Lebensräumen. " +
-      "Sie sind überwiegend tagaktiv und ernähren sich hauptsächlich pflanzlich, besonders von Gräsern. " +
-      "Bei Gefahr flüchten sie oft durch Sprünge, die schneller sind als reines Laufen und sie rasch aus dem Gefahrenbereich bringen. " +
-      "Die Hinterbeine sind zu kräftigen Sprungbeinen umgebaut, wobei besonders der verdickte Schenkel (Femur) viel Muskelmasse für den Absprung enthält. " +
-      "Die Sprungbein-Anpassung unterstützt damit direkt ihre Fortbewegung und Fluchtstrategie in offenem Gelände."
+      "Many field grasshoppers (for example <em>Chorthippus</em> species) live in meadows, pastures, and other open grassy habitats. " +
+      "They are mostly active during the day and feed mainly on plants, especially grasses. " +
+      "When threatened, they often escape by jumping, which is faster than walking and quickly moves them away from danger. " +
+      "The hind legs are modified into powerful jumping legs; the thickened femur contains much of the muscle mass needed for take-off. " +
+      "This jumping-leg adaptation directly supports their locomotion and escape strategy in open terrain."
   }
 ];
 
-/* Beschriftungsziel (nur Standardbein-Schema). Koordinaten relativ zum Bild (0..1) */
+/* Labelling targets. Coordinates are relative to the image (0..1). */
 const LABEL_TARGETS = {
   "Schema Standardbein.png": [
-    { key:"Hüfte",         id:"coxa",       x:0.0846, y:0.1343 },
-    { key:"Schenkelring",  id:"trochanter", x:0.1681, y:0.2027 },
-    { key:"Schenkel",      id:"femur",      x:0.4059, y:0.1122 },
-    { key:"Schiene",       id:"tibia",      x:0.7425, y:0.4716 },
-    { key:"Fuß",           id:"tarsus",     x:0.8219, y:0.8415 }
+    { key:"Coxa",       id:"coxa",       x:0.0846, y:0.1343 },
+    { key:"Trochanter", id:"trochanter", x:0.1681, y:0.2027 },
+    { key:"Femur",      id:"femur",      x:0.4059, y:0.1122 },
+    { key:"Tibia",      id:"tibia",      x:0.7425, y:0.4716 },
+    { key:"Tarsus",     id:"tarsus",     x:0.8219, y:0.8415 }
   ],
 
   "Schema Grabbein.png": [
-    { key:"Hüfte",         id:"coxa",       x:0.18, y:0.07 },
-    { key:"Schenkelring",  id:"trochanter", x:0.13, y:0.18 },
-    { key:"Schenkel",      id:"femur",      x:0.56, y:0.28 },
-    { key:"Schiene",       id:"tibia",      x:0.60, y:0.62 },
-    { key:"Fuß",           id:"tarsus",     x:0.38, y:0.73 }
+    { key:"Coxa",       id:"coxa",       x:0.18, y:0.07 },
+    { key:"Trochanter", id:"trochanter", x:0.13, y:0.18 },
+    { key:"Femur",      id:"femur",      x:0.56, y:0.28 },
+    { key:"Tibia",      id:"tibia",      x:0.60, y:0.62 },
+    { key:"Tarsus",     id:"tarsus",     x:0.38, y:0.73 }
   ],
 
   "Schema Schwimmbein.png": [
-    { key:"Hüfte",         id:"coxa",       x:0.44, y:0.12 },
-    { key:"Schenkelring",  id:"trochanter", x:0.39, y:0.24 },
-    { key:"Schenkel",      id:"femur",      x:0.72, y:0.25 },
-    { key:"Schiene",       id:"tibia",      x:0.78, y:0.45 },
-    { key:"Fuß",           id:"tarsus",     x:0.63, y:0.78 }
+    { key:"Coxa",       id:"coxa",       x:0.44, y:0.12 },
+    { key:"Trochanter", id:"trochanter", x:0.39, y:0.24 },
+    { key:"Femur",      id:"femur",      x:0.72, y:0.25 },
+    { key:"Tibia",      id:"tibia",      x:0.78, y:0.45 },
+    { key:"Tarsus",     id:"tarsus",     x:0.63, y:0.78 }
   ],
 
   "Schema Sammelbein.png": [
-    { key:"Hüfte",         id:"coxa",       x:0.10, y:0.38 },
-    { key:"Schenkelring",  id:"trochanter", x:0.20, y:0.40 },
-    { key:"Schenkel",      id:"femur",      x:0.34, y:0.25 },
-    { key:"Schiene",       id:"tibia",      x:0.78, y:0.43 },
-    { key:"Fuß",           id:"tarsus",     x:0.73, y:0.87 }
+    { key:"Coxa",       id:"coxa",       x:0.10, y:0.38 },
+    { key:"Trochanter", id:"trochanter", x:0.20, y:0.40 },
+    { key:"Femur",      id:"femur",      x:0.34, y:0.25 },
+    { key:"Tibia",      id:"tibia",      x:0.78, y:0.43 },
+    { key:"Tarsus",     id:"tarsus",     x:0.73, y:0.87 }
   ],
 
   "Schema Fangbein.png": [
-    { key:"Hüfte",         id:"coxa",       x:0.12, y:0.44 },
-    { key:"Schenkelring",  id:"trochanter", x:0.31, y:0.62 },
-    { key:"Schenkel",      id:"femur",      x:0.60, y:0.35 },
-    { key:"Schiene",       id:"tibia",      x:0.89, y:0.18 },
-    { key:"Fuß",           id:"tarsus",     x:0.89, y:0.70 }
+    { key:"Coxa",       id:"coxa",       x:0.12, y:0.44 },
+    { key:"Trochanter", id:"trochanter", x:0.31, y:0.62 },
+    { key:"Femur",      id:"femur",      x:0.60, y:0.35 },
+    { key:"Tibia",      id:"tibia",      x:0.89, y:0.18 },
+    { key:"Tarsus",     id:"tarsus",     x:0.89, y:0.70 }
   ],
 
   "Schema Sprungbein.png": [
-    { key:"Hüfte",         id:"coxa",       x:0.08, y:0.78 },
-    { key:"Schenkelring",  id:"trochanter", x:0.14, y:0.75 },
-    { key:"Schenkel",      id:"femur",      x:0.32, y:0.56 },
-    { key:"Schiene",       id:"tibia",      x:0.82, y:0.45 },
-    { key:"Fuß",           id:"tarsus",     x:0.85, y:0.91 }
+    { key:"Coxa",       id:"coxa",       x:0.08, y:0.78 },
+    { key:"Trochanter", id:"trochanter", x:0.14, y:0.75 },
+    { key:"Femur",      id:"femur",      x:0.32, y:0.56 },
+    { key:"Tibia",      id:"tibia",      x:0.82, y:0.45 },
+    { key:"Tarsus",     id:"tarsus",     x:0.85, y:0.91 }
   ]
 };
 
@@ -1998,7 +1998,7 @@ function restoreInk(insId, key, canvas){
 }
 
 function persistVisibleInk(){
-  // Mikroskop (Bild 1): je nach Modus in verschiedene Canvas gerendert
+  // Mikroskop (Image 1): je nach Modus in verschiedene Canvas gerendert
   if(compareOn){
     saveInk(A.id, "mic", cMicA);
     saveInk(B.id, "mic", cMicB);
@@ -2209,15 +2209,15 @@ function applyLayer(layer, p, scale){
 }
 
 function setCompare(on){
-  // vorherige Markierungen sichern
+  // Save existing markings before changing the layout.
   persistVisibleInk();
   compareOn = on;
-  btnCompare.textContent = on ? "Vergleich: An" : "Vergleich: Aus";
+  btnCompare.textContent = on ? "Comparison: On" : "Comparison: Off";
   $("#compareWrap").style.display = on ? "grid" : "none";
   scopeSingle.style.display = on ? "none" : "block";
 
   if(on){
-    // Vergleich startet sauber zentriert (jede Seite für sich)
+    // Start comparison mode centered on each side.
     pan.A.x = 0; pan.A.y = 0;
     pan.B.x = 0; pan.B.y = 0;
     pickSide = "A";
@@ -2225,17 +2225,17 @@ function setCompare(on){
 
   resizeAll();
   renderMic();
-  // nach Layout: Motiv zentrieren (damit Okular im Vergleich korrekt sitzt)
+  // Center the specimen after layout changes.
   requestAnimationFrame(()=>{ recenterVisibleScopes(); });
 
   syncMicControls();
   loadPenState();
-  // passende Markierungen für die sichtbaren Insekten laden
+  // Restore markings for the currently visible insects.
   restoreVisibleInk();
 }
 
 function safeSetImg(imgEl, phEl, file){
-  // Robust loader: versucht bei Bedarf alternative Dateiendungen (.png/.jpg/.jpeg)
+  // Robust loader: try alternative file extensions (.png/.jpg/.jpeg) when needed.
   if(!file){
     imgEl.style.display="none";
     phEl.style.display="flex";
@@ -2314,7 +2314,7 @@ function clearVideoEmbed(){
 }
 
 function safeSetVideo(sourceUrl){
-  // Verwendet die offizielle YouTube-Einbettung statt lokal gespeicherter Videodateien.
+  // Use the official YouTube embed instead of local video files.
   const embedUrl = youtubeEmbedUrl(sourceUrl);
   if(!embedUrl){
     clearVideoEmbed();
@@ -2346,7 +2346,7 @@ function buildList(){
       if(compareOn){
         if(pickSide==="A"){
           A = ins;
-          // neue Probe unter Objektiv: zentriert starten
+          // New specimen under the objective: start centered.
           pan.A.x = 0; pan.A.y = 0;
         }else{
           B = ins;
@@ -2354,7 +2354,7 @@ function buildList(){
         }
       }else{
         A = ins;
-        // Single-Ansicht bei Wechsel ebenfalls zentriert starten
+        // Single view also starts centered after switching specimens.
         pan.single.x = 0; pan.single.y = 0;
       }
       if(compareOn){
@@ -2391,7 +2391,7 @@ function renderMic(){
   if(compareOn) parts.push(`<strong>${B.name}</strong> (<em>${B.latin || "–"}</em>) – ${B.hint || ""}`);
 
   info.innerHTML =
-    `Aktuell: ${compareOn ? "A & B (Bild 1)" : "A (Bild 1)"} – ${parts.join(" &nbsp;|&nbsp; ")}`;
+    `Current: ${compareOn ? "A & B (Image 1)" : "A (Image 1)"} - ${parts.join(" &nbsp;|&nbsp; ")}`;
 
   imgSingle.src = IMG_BASE + A.microscope;
   imgA.src = IMG_BASE + A.microscope;
@@ -2537,7 +2537,7 @@ function initLabeling(){
   if(!canLabel()){
     labelStatus.style.display="block";
     labelStatus.className="status bad";
-    labelStatus.textContent='Beschriftungsmodus ist für dieses Schema nicht verfügbar.';
+      labelStatus.textContent='Labelling mode is not available for this diagram.';
     return;
   }
 
@@ -2565,7 +2565,7 @@ function initLabeling(){
   posHotspots();
   labelStatus.style.display="block";
   labelStatus.className="status";
-  labelStatus.textContent="Ziehe die Begriffe (am blauen Punkt) auf die passenden Bereiche im Schema. Danach „Korrigieren“.";
+  labelStatus.textContent="Drag the labels (from the blue dot) to the matching areas in the diagram. Then click \"Check\".";
 }
 
 function checkLabeling(){
@@ -2601,32 +2601,31 @@ function checkLabeling(){
   labelStatus.style.display="block";
   if(ok===targets.length){
     labelStatus.className="status good";
-    labelStatus.textContent=`Korrektur: ${ok}/${targets.length} richtig. Sehr gut!`;
+    labelStatus.textContent=`Check: ${ok}/${targets.length} correct. Very good!`;
 
-    // Überraschungsfenster freischalten (pro Insekt)
+    // Unlock the surprise panel for this insect.
     try{
       surpriseUnlocked.add(current.id);
       updateSurprise(current);
     }catch(e){}
   }else{
     labelStatus.className="status bad";
-    labelStatus.textContent=`Korrektur: ${ok}/${targets.length} richtig. Korrigiere die rot markierten Begriffe.`;
+    labelStatus.textContent=`Check: ${ok}/${targets.length} correct. Correct the terms marked in red.`;
   }
 }
 
 function applyDetailView(){
-  // Vorschau (Bild 3) immer "eingepasst" anzeigen.
-  // Zoom/Pan werden weiterhin pro Insekt für die Großansicht gespeichert,
-  // sollen aber die kleine Detailansicht nicht verschieben.
+  // Always show the image 3 preview fitted to the frame.
+  // Zoom and pan are still stored per insect for the large view.
   if(!detailLayer) return;
   detailLayer.style.transform = `translate(-50%,-50%) scale(1)`;
 }
 
 function renderRight(){
-  // rechte Seite folgt immer Insekt A (auch im Vergleich)
+  // The right side always follows insect A, including comparison mode.
   current = A;
 
-  // Insekt-Info (A)
+  // Insect information (A)
   if(typeof insectInfoTitle!=="undefined" && insectInfoTitle){
     insectInfoTitle.textContent = `${A.name} (${A.latin || "–"})`;
   }
@@ -2634,8 +2633,8 @@ function renderRight(){
     insectInfoText.innerHTML = A.info || "–";
   updateSurprise(A);
   }
-  // Bild 2
-  schemaCap.textContent = `Bild 2: Schema – ${current.schemaLabel || "–"}`;
+  // Image 2
+  schemaCap.textContent = `Image 2: diagram - ${current.schemaLabel || "-"}`;
   const hasSchema = safeSetImg(schemaImg, schemaPh, current.schema);
   if(!hasSchema){
     if(labeling){ labeling=false; btnLabel.classList.remove("active"); btnCheck.style.display="none"; }
@@ -2644,21 +2643,21 @@ function renderRight(){
     if(labeling) initLabeling();
   }
 
-  // Bild 3
+  // Image 3
   const c = selectedCloseup();
   if(!c){
-    detailCap.textContent = "Bild 3: Detail –";
+    detailCap.textContent = "Image 3: detail -";
     safeSetImg(detailImg, detailPh, null);
     if(detailLayer) detailLayer.style.transform = `translate(-50%,-50%) scale(1)`;
     openDetail.setAttribute("aria-disabled","true");
     detailSel.innerHTML="";
   }else{
-    detailCap.textContent = `Bild 3: Detail – ${c.label}`;
+    detailCap.textContent = `Image 3: detail - ${c.label}`;
     safeSetImg(detailImg, detailPh, c.file);
     applyDetailView();
     openDetail.setAttribute("aria-disabled","false");
     modalImg.src = IMG_BASE + c.file;
-    modalTitle.textContent = `Detailbild (${c.label}) – ${current.name}`;
+    modalTitle.textContent = `Detail image (${c.label}) - ${current.name}`;
 
     const list = current.closeups || [];
     detailSel.innerHTML="";
@@ -2679,7 +2678,7 @@ function renderRight(){
 
   // Video
   const hasV = safeSetVideo(current.videoSource);
-  videoCap.textContent = `Video: ${current.videoTitle || "Funktion/Aufgabe des Beins"}`;
+  videoCap.textContent = `Video: ${current.videoTitle || "Function / role of the leg"}`;
 }
 
 function renderAll(){
@@ -2694,8 +2693,8 @@ function renderAll(){
    GLOBAL DRAWING (Pen/Eraser)
    =========================== */
 function updateExportAvailability(){
-  // Screenshot & Leeren sollen unabhängig vom Markiermodus verfügbar sein,
-  // aber nur, wenn das entsprechende Bild tatsächlich vorhanden ist.
+  // Screenshot and clear actions stay available outside marking mode,
+  // but only when the corresponding image exists.
   const has1 = !!(imgSingle.getAttribute("src") || imgA.getAttribute("src"));
   const has2 = !!schemaImg.getAttribute("src");
   const has3 = !!detailImg.getAttribute("src");
@@ -2712,13 +2711,13 @@ function updateExportAvailability(){
 
 function applyDrawUI(on){
   btnDraw.classList.toggle("active", on);
-  btnDraw.textContent = on ? "Markieren: An" : "Markieren: Aus";
+  btnDraw.textContent = on ? "Marking: On" : "Marking: Off";
 
-  // Stift/Radierer nur im Markiermodus aktiv
+  // Pen and eraser are only active in marking mode.
   enable(btnPen, on);
   enable(btnEraser, on);
 
-  // Screenshot/Leeren immer (falls Bild vorhanden)
+  // Screenshot/clear actions stay available when an image is present.
   updateExportAvailability();
 
   // activate canvases globally
@@ -2888,7 +2887,7 @@ function resizeAll(){
 }
 
 /* ===========================
-   SCREENSHOTS (Bild 1/2/3 + Modal)
+   SCREENSHOTS (Image 1/2/3 + Modal)
    Includes labels on Bild 2 if placed
    =========================== */
 function roundRect(ctx,x,y,w,h,r){
@@ -2989,18 +2988,18 @@ async function exportShot(frameEl, baseImg, overlayCanvas, labelsLayer, prefix){
 
   try{
     if(!navigator.clipboard || !window.ClipboardItem){
-      throw new Error("Clipboard API nicht verfügbar");
+      throw new Error("Clipboard API is not available");
     }
     const blob = await canvasToBlob(out);
     if(!blob) throw new Error("Konnte PNG nicht erzeugen");
 
     await navigator.clipboard.write([ new ClipboardItem({"image/png": blob}) ]);
-    showToast("In Zwischenkopie gespeichert");
+  showToast("Saved to clipboard");
   
 }catch(err){
   // Clipboard ist i.d.R. nur in „secure contexts“ verfügbar (https:// oder http://localhost).
   console.warn("Clipboard screenshot failed:", err);
-  showToast("Zwischenkopie nicht verfügbar. Bitte über http://localhost oder https:// öffnen.");
+  showToast("Clipboard not available. Please open via http://localhost or https://.");
 }
 }
 
@@ -3116,7 +3115,7 @@ btnDraw.addEventListener("click", ()=>setDraw(!drawMode));
 btnPen.addEventListener("click", ()=>setTool("pen"));
 btnEraser.addEventListener("click", ()=>setTool("eraser"));
 
-/* Bild 1 export/clear (wir leeren immer die aktive Ansicht: Single oder Compare A/B je nach Pick) */
+/* Image 1 export/clear (wir leeren immer die aktive Ansicht: Single oder Compare A/B je nach Pick) */
 btnClear1.addEventListener("click", ()=>{
   const ins = compareOn ? (pickSide==="A" ? A : B) : A;
   const c = compareOn ? (pickSide==="A" ? cMicA : cMicB) : cMicSingle;
@@ -3127,16 +3126,16 @@ btnShot1.addEventListener("click", ()=>{
   const t = compareOn
     ? (pickSide==="A" ? {img:imgA, can:cMicA} : {img:imgB, can:cMicB})
     : {img:imgSingle, can:cMicSingle};
-  exportShot(compareOn ? (pickSide==="A" ? scopeA : scopeB) : scopeSingle, t.img, t.can, null, "Screenshot_Bild_1");
+  exportShot(compareOn ? (pickSide==="A" ? scopeA : scopeB) : scopeSingle, t.img, t.can, null, "Screenshot_Image_1");
 });
 
 /* Bild 2 export/clear */
 btnClear2.addEventListener("click", ()=>{ cSchema.getContext("2d").clearRect(0,0,cSchema.width,cSchema.height); clearInk(current.id, "schema"); });
-btnShot2.addEventListener("click", ()=>exportShot(schemaFrame, schemaImg, cSchema, labels, "Screenshot_Bild_2"));
+btnShot2.addEventListener("click", ()=>exportShot(schemaFrame, schemaImg, cSchema, labels, "Screenshot_Image_2"));
 
 /* Bild 3 export/clear */
 btnClear3.addEventListener("click", ()=>{ cDetail.getContext("2d").clearRect(0,0,cDetail.width,cDetail.height); clearInk(current.id, "detail"); });
-btnShot3.addEventListener("click", ()=>exportShot(detailFrame, detailImg, cDetail, null, "Screenshot_Bild_3"));
+btnShot3.addEventListener("click", ()=>exportShot(detailFrame, detailImg, cDetail, null, "Screenshot_Image_3"));
 
 /* labeling */
 btnLabel.addEventListener("click", ()=>{
@@ -3318,11 +3317,11 @@ renderAll();
 (function(){
   document.addEventListener('DOMContentLoaded',function(){
     var el=document.getElementById('introModal');
-    var worksheetFile='AB_Insektenforschung.pdf';
+    var worksheetFile='AB_Insektenforschung_EN.pdf';
     function downloadWorksheet(){
       var link=document.createElement('a');
       link.href=worksheetFile;
-      link.download='AB_Insektenforschung.pdf';
+      link.download='AB_Insektenforschung_EN.pdf';
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -3558,11 +3557,11 @@ renderAll();
 
 
 
-<!-- Schwimmkäfer: Überraschungsfenster (Instagram 4 Beiträge) -->
+<!-- Diving beetle: surprise panel (Instagram 4 posts) -->
 <template id="tplSurpriseSchwimmkaefer">
   <div class="surpriseHeader">
-    <div class="surpriseTitle">Überraschungsfenster</div>
-    <div class="surpriseMeta">Instagram (4 Beiträge)</div>
+    <div class="surpriseTitle">Surprise panel</div>
+    <div class="surpriseMeta">Instagram (4 posts)</div>
   </div>
 
   <div class="instaGrid">
@@ -3585,21 +3584,21 @@ renderAll();
 <div id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle">
   <div class="im-card">
     <div class="im-head">
-      <h2 id="introModalTitle" class="im-title">Erforschung des Insektenbeines</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+      <h2 id="introModalTitle" class="im-title">Investigating the Insect Leg</h2>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Close">×</button>
     </div>
-    <p class="im-grade">Jahrgangsstufe: 9</p>
+    <p class="im-grade">Grade level: 9</p>
     <div class="im-desc">
-      Diese Simulation zeigt den Aufbau und die Angepasstheit von Insektenbeinen an unterschiedliche Lebensweisen. Untersuche verschiedene Insektentypen und vergleiche deren Beinstrukturen – von Laufbeinen über Sprungbeine bis hin zu Grabbeinen. Entdecke, wie Beinform und Funktion an den jeweiligen Lebensraum angepasst sind.
+      This simulation shows how insect legs are structured and adapted to different ways of life. Examine different insect types and compare their leg structures - from walking legs to jumping legs and digging legs. Discover how leg shape and function are adapted to each habitat.
     </div>
     <div class="im-btn-row">
-      <button id="introModalWorksheetBtn" class="im-worksheet-btn" type="button">Arbeitsblatt</button>
-      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
+      <button id="introModalWorksheetBtn" class="im-worksheet-btn" type="button">Worksheet</button>
+      <button id="introModalStartBtn" class="im-start-btn" type="button">Start simulation →</button>
     </div>
   </div>
 </div>
-<!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<!-- === IMAGE SOURCES === -->
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -3623,28 +3622,28 @@ renderAll();
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Wenn nicht anders angegeben, sind alle Abbildungen mittels KI erstellt worden.</li>
-      <li><strong>Standardbein:</strong><br>
-        Siga (2007): <em>Procerus middle leg.</em> Wikimedia Commons, Public Domain, bearbeitet.</li>
-      <li><strong>Laufbein:</strong><br>
-        Siga: <em>Cicindela sp. hind leg.</em> Wikimedia Commons, Public Domain, bearbeitet.</li>
-      <li><strong>Grabbein:</strong><br>
-        Siga: <em>Gryllotalpa sp. front leg.</em> Wikimedia Commons, Public Domain, bearbeitet.</li>
-      <li><strong>Schwimmbein:</strong><br>
-        Siga: <em>Dytiscus marginalis hind leg.</em> Wikimedia Commons, Public Domain, bearbeitet.<br>
-        Siga: <em>Hydrous piceus hind leg.</em> Wikimedia Commons, Public Domain, bearbeitet.</li>
-      <li><strong>Sprungbein:</strong><br>
-        Siga: <em>Acridae hind leg.</em> Wikimedia Commons, Public Domain, bearbeitet.</li>
-      <li><strong>Sammelbein:</strong><br>
-        Siga: <em>Honey bee hind leg from inside.</em> Wikimedia Commons, Public Domain, bearbeitet.</li>
-      <li><strong>Fangbein:</strong><br>
-        Siga: <em>Gryllotalpa sp. front leg.</em> Wikimedia Commons, Public Domain, bearbeitet.<br>
-        Eduardo Marabuto: <em>Miomantis caffra – Detail of inner part of forelegs.</em>
-        Wikimedia Commons, CC BY-SA 4.0, bearbeitet.</li>
-      <li><strong>Laufkäfer Hauptbild:</strong><br>
-        Tortuosa: <em>Carabus problematicus.</em> Wikimedia Commons, CC BY-SA 3.0, bearbeitet.</li>
+      <li>Unless otherwise stated, all illustrations were created with AI.</li>
+      <li><strong>Standard leg:</strong><br>
+        Siga (2007): <em>Procerus middle leg.</em> Wikimedia Commons, Public Domain, edited.</li>
+      <li><strong>Walking leg:</strong><br>
+        Siga: <em>Cicindela sp. hind leg.</em> Wikimedia Commons, Public Domain, edited.</li>
+      <li><strong>Digging leg:</strong><br>
+        Siga: <em>Gryllotalpa sp. front leg.</em> Wikimedia Commons, Public Domain, edited.</li>
+      <li><strong>Swimming leg:</strong><br>
+        Siga: <em>Dytiscus marginalis hind leg.</em> Wikimedia Commons, Public Domain, edited.<br>
+        Siga: <em>Hydrous piceus hind leg.</em> Wikimedia Commons, Public Domain, edited.</li>
+      <li><strong>Jumping leg:</strong><br>
+        Siga: <em>Acridae hind leg.</em> Wikimedia Commons, Public Domain, edited.</li>
+      <li><strong>Collecting leg:</strong><br>
+        Siga: <em>Honey bee hind leg from inside.</em> Wikimedia Commons, Public Domain, edited.</li>
+      <li><strong>Raptorial leg:</strong><br>
+        Siga: <em>Gryllotalpa sp. front leg.</em> Wikimedia Commons, Public Domain, edited.<br>
+        Eduardo Marabuto: <em>Miomantis caffra - Detail of inner part of forelegs.</em>
+        Wikimedia Commons, CC BY-SA 4.0, edited.</li>
+      <li><strong>Ground beetle main image:</strong><br>
+        Tortuosa: <em>Carabus problematicus.</em> Wikimedia Commons, CC BY-SA 3.0, edited.</li>
     </ul>
   </div>
 </div>

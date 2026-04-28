@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Geografische Artbildung – Simulation</title>
+<title>Geographic Speciation – Simulation</title>
 <style>
   :root {
     --bg:#07100c; --panel:rgba(6,16,11,.64); --border:rgba(129,170,118,.26);
@@ -504,24 +504,24 @@
 <body>
 <div class="app">
   <div class="panel" id="leftPanel">
-    <h2>Optionen</h2>
+    <h2>Options</h2>
 
     <div class="row" style="margin-top:2px;">
       <button id="btnStart" class="btn-primary">Start</button>
       <button id="btnPause" class="btn-warn" disabled>Pause</button>
       <button id="btnReset">Reset</button></div>
 
-    <button id="btnExportEnd" style="display:none; width:100%; margin-top:8px;">Diagramme exportieren</button>
+    <button id="btnExportEnd" style="display:none; width:100%; margin-top:8px;">Export charts</button>
 
     <input id="startRed" type="hidden" value="20"/>
     <input id="startPurple" type="hidden" value="20"/>
 
     <details id="optPredRepro" class="optDetails">
-      <summary>Jäger &amp; Reproduktion</summary>
+      <summary>Predators &amp; Reproduction</summary>
       <div class="detailsBody">
-        <label for="predCount">Jäger (gesamt) <span class="muted">(wirkt sofort)</span></label>
+        <label for="predCount">Predators (total) <span class="muted">(takes effect immediately)</span></label>
         <input id="predCount" type="number" min="0" max="50" value="12"/>
-        <label for="reproPerMin">Reproduktion pro Minute (pro Echse) <span class="muted">(wirkt sofort)</span></label>
+        <label for="reproPerMin">Reproduction per minute (per lizard) <span class="muted">(takes effect immediately)</span></label>
         <input id="reproPerMin" type="number" min="0" max="5" step="0.05" value="2.25"/>
       </div>
     </details>
@@ -531,23 +531,23 @@
     <hr class="sep"/>
 
     <details id="optDisplayStats" class="optDetails" open>
-      <summary>Anzeige</summary>
+      <summary>Display</summary>
       <div class="detailsBody">
-        <div class="statLine"><span>Echsen linkes Habitat</span><span class="kpi" id="kRed">0</span></div>
-        <div class="statLine"><span>Echsen rechtes Habitat</span><span class="kpi" id="kPurple">0</span></div>
-        <div class="statLine"><span>Jäger (Wiesel / Fuchs)</span><span class="kpi" id="kPred">0 / 0</span></div>
-        <div class="statLine"><span>Zeit</span><span class="kpi" id="kTime">Tag · 00:00</span></div>
-        <div class="statLine"><span>Abgeschlossene Zyklen</span><span class="kpi" id="kCycles">0</span></div>
+        <div class="statLine"><span>Lizards in left habitat</span><span class="kpi" id="kRed">0</span></div>
+        <div class="statLine"><span>Lizards in right habitat</span><span class="kpi" id="kPurple">0</span></div>
+        <div class="statLine"><span>Predators (weasels / foxes)</span><span class="kpi" id="kPred">0 / 0</span></div>
+        <div class="statLine"><span>Time</span><span class="kpi" id="kTime">Day · 00:00</span></div>
+        <div class="statLine"><span>Completed cycles</span><span class="kpi" id="kCycles">0</span></div>
       </div>
     </details>
 
     <details id="optLizardDistance" class="optDetails" open>
-      <summary>Zurückgelegte Distanz (Echsen)</summary>
+      <summary>Distance travelled (lizards)</summary>
       <div class="detailsBody">
-        <div class="statLine"><span>Links tagsüber</span><span class="kpi" id="kDistRedDay">0 m</span></div>
-        <div class="statLine"><span>Links nachts</span><span class="kpi" id="kDistRedNight">0 m</span></div>
-        <div class="statLine"><span>Rechts tagsüber</span><span class="kpi" id="kDistPurpleDay">0 m</span></div>
-        <div class="statLine"><span>Rechts nachts</span><span class="kpi" id="kDistPurpleNight">0 m</span></div>
+        <div class="statLine"><span>Left during the day</span><span class="kpi" id="kDistRedDay">0 m</span></div>
+        <div class="statLine"><span>Left at night</span><span class="kpi" id="kDistRedNight">0 m</span></div>
+        <div class="statLine"><span>Right during the day</span><span class="kpi" id="kDistPurpleDay">0 m</span></div>
+        <div class="statLine"><span>Right at night</span><span class="kpi" id="kDistPurpleNight">0 m</span></div>
       </div>
     </details>
 
@@ -557,8 +557,8 @@
 <div class="panel" style="padding:0" id="centerPanel">
 
   <div class="rhythmWrap" id="rhythmWrap" aria-hidden="true">
-    <img id="rhythmImage" src="Bilder/Rythmus.png" alt="Rhythmus"/>
-    <img id="rhythmBright" src="Bilder/Rythmus.png" alt="" aria-hidden="true"/> 
+    <img id="rhythmImage" src="Bilder/Rythmus_EN.png" alt="Daily rhythm"/>
+    <img id="rhythmBright" src="Bilder/Rythmus_EN.png" alt="" aria-hidden="true"/> 
 <div id="rhythmIndicator"></div>
     <div id="rhythmCursor"></div>
   </div>
@@ -569,9 +569,9 @@
       <div id="zoneTintPurple" class="zoneTint"></div>
       <div id="spriteLayer"></div>
   
-      <img id="rainOverlay" class="overlay" src="GIFs/Regen.gif" alt="Regen" />
-      <img id="fireOverlay" class="overlay" src="GIFs/Feuer.gif" alt="Feuer" />
-      <img id="lightningOverlay" class="overlay" src="GIFs/Gewitter.gif" alt="Blitze" />
+      <img id="rainOverlay" class="overlay" src="GIFs/Regen.gif" alt="Rain" />
+      <img id="fireOverlay" class="overlay" src="GIFs/Feuer.gif" alt="Fire" />
+      <img id="lightningOverlay" class="overlay" src="GIFs/Gewitter.gif" alt="Lightning" />
       <div id="firePatchLayer"></div>
 </div>
 </div>
@@ -579,20 +579,20 @@
 
 
   <div class="panel" id="rightPanel" style="overflow:hidden;">
-    <h2>Diagramme</h2>
+    <h2>Charts</h2>
     <div class="chartsCol">
       <div class="chartCard">
-        <div class="chartTitle">Population (Habitat links = rot; Habitat rechts = lila)</div>
+      <div class="chartTitle">Population (left habitat = red; right habitat = purple)</div>
         <canvas id="chartLine" class="chartCanvas"></canvas>
       </div>
 
       <div class="chartCard">
-        <div class="chartTitle">Habitat (links): Echsentypen</div>
+      <div class="chartTitle">Habitat (left): lizard types</div>
         <canvas id="chartZoneTypesRed" class="chartCanvas"></canvas>
       </div>
 
       <div class="chartCard">
-        <div class="chartTitle">Habitat (rechts): Echsentypen</div>
+      <div class="chartTitle">Habitat (right): lizard types</div>
         <canvas id="chartZoneTypesPurple" class="chartCanvas"></canvas>
       </div>
     </div>
@@ -600,24 +600,24 @@
 
 </div>
 
-<!-- Start-Popup mit Szenario-Erklärung -->
+<!-- Start popup with scenario explanation -->
 <div id="introBackdrop" class="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="introTitle" aria-describedby="introStory">
   <div class="modalCard">
     <div class="modalHeader">
       <div>
-        <div class="modalTitle" id="introTitle">Ausgangssituation der Simulation</div>
-        <img class="storyThumb" src="Bilder/Anfangsbild.png" alt="Ausgangshabitat der Echsen"/>
+        <div class="modalTitle" id="introTitle">Initial situation of the simulation</div>
+        <img class="storyThumb" src="Bilder/Anfangsbild.png" alt="Initial lizard habitat"/>
         <div class="modalSmall" id="introStory">
-          Zu Beginn leben verschiedene Echsen gemeinsam in einem zusammenhängenden Habitat. In der Nacht gehen F&uuml;chse auf Jagd, w&auml;hrend Marder tags&uuml;ber nach Beute suchen. So wirken unterschiedliche J&auml;ger zu verschiedenen Tageszeiten auf die Population ein. Im Verlauf der Simulation treten au&szlig;erdem Wetterereignisse auf, die das Habitat dauerhaft ver&auml;ndern k&ouml;nnen. Beobachte, wie sich dadurch Lebensraum und Zusammensetzung der Population Schritt f&uuml;r Schritt ver&auml;ndern.
+          At the beginning, different lizards live together in one continuous habitat. At night foxes go hunting, while weasels search for prey during the day. Different predators therefore affect the population at different times of day. During the simulation, weather events can also occur that permanently change the habitat. Observe how this gradually changes the habitat and the composition of the population.
         </div>
         <div class="modalSmall" style="margin-top:10px;">
-          <strong>Arbeitsauftrag:</strong> Beobachte die Entwicklung der Echsenpopulation im Verlauf der Simulation. Achte darauf, wie sich Jäger, Tageszeiten und Wetterereignisse auf die beiden Habitate und auf die Zusammensetzung der Population auswirken. Exportiere hierzu am Ende das Ergebnis der Simulation und Werte die Diagramme aus.
+          <strong>Task:</strong> Observe how the lizard population develops over the course of the simulation. Pay attention to how predators, times of day, and weather events affect the two habitats and the composition of the population. At the end, export the simulation result and analyse the charts.
         </div>
       </div>
     </div>
 
     <div class="modalSmall" style="margin-top:10px;">
-      Klicke auf <strong>Start</strong>, um die Simulation zu beginnen.
+Click <strong>Start</strong> to begin the simulation.
     </div>
 
     <div class="row" style="margin-top:12px; justify-content:flex-end;">
@@ -626,107 +626,107 @@
   </div>
 </div>
 
-<!-- Story-Entscheidung: Gewitter vs. Waldbrand (erscheint automatisch nach Zeitplan) -->
+<!-- Story decision: thunderstorm vs. wildfire (appears automatically according to the timeline) -->
 <div id="choiceBackdrop" class="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="choiceTitle" aria-describedby="choiceStory">
   <div class="modalCard">
     <div class="modalHeader">
       <div>
-        <div class="modalTitle" id="choiceTitle">Entscheidung: Was passiert als Nächstes?</div>
+        <div class="modalTitle" id="choiceTitle">Decision: what happens next?</div>
         <div class="modalSmall" id="choiceStory">
-          Nach mehreren stabilen Zyklen spitzt sich die Lage zu. Du entscheidest, welches Ereignis die Umgebung dauerhaft verändert.
+          After several stable cycles, the situation becomes more critical. You decide which event permanently changes the environment.
         </div>
       </div>
     </div>
 
     <div class="modalGrid">
       <div class="choiceBox">
-        <div class="choiceTitle">Schweres Gewitter</div>
-        <img class="choiceThumb" src="Bilder/Gewitter.png" alt="Gewitter-Szene"/>
+        <div class="choiceTitle">Severe thunderstorm</div>
+        <img class="choiceThumb" src="Bilder/Gewitter.png" alt="Thunderstorm scene"/>
         <div class="choiceText">
-          Dunkle Wolken, Starkregen und Blitze: Das Gebiet wird umgeformt, Geröll wird freigelegt – die Bedingungen ändern sich abrupt.
+          Dark clouds, heavy rain, and lightning: the area is reshaped, scree is exposed, and the conditions change abruptly.
         </div>
-        <button id="choiceStormBtn" class="btn-warn">Gewitter</button>
+        <button id="choiceStormBtn" class="btn-warn">Thunderstorm</button>
       </div>
 
       <div class="choiceBox">
-        <div class="choiceTitle">Waldbrand</div>
-        <img class="choiceThumb" src="Bilder/Feuer.png" alt="Waldbrand-Szene"/>
+        <div class="choiceTitle">Wildfire</div>
+        <img class="choiceThumb" src="Bilder/Feuer.png" alt="Wildfire scene"/>
         <div class="choiceText">
-          Trockene Vegetation entzündet sich: Feuer breitet sich aus wodurch die Landschaft verkohlt und langfristig dunkel bleibt.
+          Dry vegetation catches fire: the fire spreads, charring the landscape and leaving it dark in the long term.
         </div>
-        <button id="choiceFireBtn" class="btn-warn">Feuer</button>
+        <button id="choiceFireBtn" class="btn-warn">Fire</button>
       </div>
     </div>
 
-    <div class="modalSmall">Die Simulation pausiert, bis du auswählst.</div>
+    <div class="modalSmall">The simulation pauses until you make a choice.</div>
   </div>
 
 </div>
 
-<!-- Story-Info vor Regen (erscheint automatisch vor der Flut/Flussbildung) -->
+<!-- Story information before rain (appears automatically before flooding/river formation) -->
 <div id="rainIntroBackdrop" class="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="rainIntroTitle" aria-describedby="rainIntroStory">
   <div class="modalCard">
     <div class="modalHeader">
       <div>
-        <div class="modalTitle" id="rainIntroTitle">Eine Sturzflut</div>
-        <img class="storyThumb" src="Bilder/Regen.png" alt="Starker Regen und Flussbildung"/>
+        <div class="modalTitle" id="rainIntroTitle">A flash flood</div>
+        <img class="storyThumb" src="Bilder/Regen.png" alt="Heavy rain and river formation"/>
         <div class="modalSmall" id="rainIntroStory">
-          Durch den Klimawandel schmelzen Eisflächen schneller. Mehr Schmelzwasser und stärkere Regenereignisse lassen einen Fluss entstehen.
-          Das bisher zusammenhängende Habitat wird dadurch in zwei getrennte Habitate aufgeteilt.
+          Because of climate change, ice surfaces melt faster. More meltwater and heavier rainfall create a river.
+          The previously continuous habitat is split into two separate habitats.
         </div>
       </div>
     </div>
 
     <div class="modalSmall" style="margin-top:10px;">
-      Klicke auf <strong>Regen</strong>, um das Ereignis auszulösen.
+      Click <strong>Rain</strong> to trigger the event.
     </div>
 
     <div class="row" style="margin-top:12px; justify-content:flex-end;">
-      <button id="rainIntroStartBtn" class="btn-warn" type="button">Regen</button>
+      <button id="rainIntroStartBtn" class="btn-warn" type="button">Rain</button>
     </div>
   </div>
 </div>
 
-<!-- Ende-Popup mit Export-Hinweis -->
+<!-- End popup with export note -->
 <div id="endRunBackdrop" class="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="endRunTitle" aria-describedby="endRunStory">
   <div class="modalCard">
     <div class="modalHeader">
       <div>
-        <div class="modalTitle" id="endRunTitle">Simulation beendet – Ergebnisse sichern</div>
+        <div class="modalTitle" id="endRunTitle">Simulation complete - save results</div>
         <div class="modalSmall" id="endRunStory">
-          Du kannst jetzt die Ergebnisse exportieren. Bitte exportiere die Diagramme, starte danach einen weiteren Durchlauf mit einem anderen Wettereignis als in Durchlauf&nbsp;1 und vergleiche anschließend die Ergebnisse beider Durchläufe.
+          You can now export the results. Please export the charts, then start another run with a different weather event than in run&nbsp;1 and compare the results of both runs.
         </div>
       </div>
-      <button id="endRunCloseBtn" type="button">Schließen</button>
+      <button id="endRunCloseBtn" type="button">Close</button>
     </div>
 
     <div class="row" style="margin-top:12px; justify-content:flex-end;">
-      <button id="endRunExportBtn" class="btn-primary" type="button">Daten exportieren</button>
+      <button id="endRunExportBtn" class="btn-primary" type="button">Export data</button>
     </div>
   </div>
 </div>
 
-<!-- Hidden tracking charts (nicht sichtbar; werden nur für den Export gerendert) -->
+<!-- Hidden tracking charts (not visible; only rendered for export) -->
 <canvas id="chartHiddenPopulation" width="1600" height="520" style="position:fixed; left:-12000px; top:-11000px;"></canvas>
 <canvas id="chartHiddenTypesRed" width="1400" height="520" style="position:fixed; left:-12000px; top:-12000px;"></canvas>
 <canvas id="chartHiddenTypesPurple" width="1400" height="520" style="position:fixed; left:-12000px; top:-13000px;"></canvas>
 
-<!-- Export-Vorschau (nur wenn Kopieren in die Zwischenablage blockiert wird) -->
+<!-- Export preview (only if copying to the clipboard is blocked) -->
 <div id="exportBackdrop" class="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
   <div class="modalCard">
     <div class="modalHeader">
       <div>
         <div class="modalTitle" id="exportTitle">Export</div>
         <div class="modalSmall" id="exportSubtitle">
-          Falls das Kopieren in die Zwischenablage (z.&nbsp;B. im Datei-Modus) blockiert wird, kannst du das Bild hier manuell kopieren oder als PNG speichern.
+          If copying to the clipboard is blocked (for example in file mode), you can copy the image manually here or save it as a PNG.
         </div>
       </div>
-      <button id="exportCloseBtn" type="button">Schließen</button>
+      <button id="exportCloseBtn" type="button">Close</button>
     </div>
     <div style="margin-top:12px;">
-      <img id="exportPreview" alt="Exportvorschau" style="width:100%; border-radius:12px; border:1px solid rgba(148,163,184,.18); background:rgba(2,6,23,.35);" />
+      <img id="exportPreview" alt="Export preview" style="width:100%; border-radius:12px; border:1px solid rgba(148,163,184,.18); background:rgba(2,6,23,.35);" />
       <div class="row" style="margin-top:10px; justify-content:flex-end;">
-        <button id="exportDownloadBtn" type="button">PNG herunterladen</button>
+        <button id="exportDownloadBtn" type="button">Download PNG</button>
       </div>
     </div>
   </div>
@@ -737,16 +737,27 @@
   "use strict";
 
   const MAPS = ["Hintergrund_Geroell1","Hintergrund_Geroell2","Hintergrund_Geroell3","Hintergrund_Normal","Hintergrund_Trocken","Hintergrund_Ueberschwemmung","Hintergrund_Verbrannt1","Hintergrund_Verbrannt2"];
+  const MAP_LABEL = {
+    "Hintergrund_Geroell1": "Scree habitat 1",
+    "Hintergrund_Geroell2": "Scree habitat 2",
+    "Hintergrund_Geroell3": "Scree habitat 3",
+    "Hintergrund_Normal": "Normal habitat",
+    "Hintergrund_Trocken": "Dry habitat",
+    "Hintergrund_Ueberschwemmung": "Flooded habitat",
+    "Hintergrund_Verbrannt": "Burned habitat",
+    "Hintergrund_Verbrannt1": "Burned habitat 1",
+    "Hintergrund_Verbrannt2": "Burned habitat 2"
+  };
   const LIZARD_GIFS = ["Echse_Base","Echse_Dunkel","Echse_Grau","Echse_Gruen1","Echse_Gruen2","Echse_Hellbraun","Echse_Hellgrau","Echse_Sandfarben"];
   const LIZARD_LABEL = {
-    "Echse_Dunkel": "Dunkel",
-    "Echse_Grau": "Grau",
-    "Echse_Hellgrau": "Hellgrau",
-    "Echse_Hellbraun": "Hellbraun",
+    "Echse_Dunkel": "Dark",
+    "Echse_Grau": "Gray",
+    "Echse_Hellgrau": "Light gray",
+    "Echse_Hellbraun": "Light brown",
     "Echse_Sandfarben": "Sand",
     "Echse_Base": "Base",
-    "Echse_Gruen1": "Grün1",
-    "Echse_Gruen2": "Grün2"
+    "Echse_Gruen1": "Green 1",
+    "Echse_Gruen2": "Green 2"
   };
 
   // Farben für die Hintergrund-Tracking-Liniendiagramme (didaktisch, gut unterscheidbar)
@@ -761,6 +772,7 @@
     "Echse_Gruen2": "#86efac"
   };
   const PRED_GIFS = {"fox":"Fuchs","weasel":"Wiesel"};
+  const PRED_LABEL = {"fox":"fox","weasel":"weasel"};
   const MUTATION_RATE = 0.50; // Wahrscheinlichkeit pro Geburt (50%)
   const MUTATION_MAP = {
     "Echse_Base": ["Echse_Grau","Echse_Dunkel","Echse_Gruen1"],
@@ -927,7 +939,7 @@ const MIGRATION_SPEED_MULT = 12.0; // Speed-Multiplikator während der Flut-Migr
     }
   }
 
-  // Jägeranzahl während laufender Simulation dynamisch anpassen (wirkt sofort)
+  // Jägeranzahl während laufender Simulation dynamisch anpassen (takes effect immediately)
   function syncPredators(){
     const desired = clamp(parseInt(document.getElementById("predCount").value,10)||0, 0, 50);
     const alivePreds = state.agents.filter(a=>a.alive && a.kind==="pred");
@@ -1071,7 +1083,7 @@ const MIGRATION_SPEED_MULT = 12.0; // Speed-Multiplikator während der Flut-Migr
       l.turnVel *= 0.5;
     }
 
-    // Geschwindigkeit variiert leicht (Echsen beschleunigen und bremsen)
+    // Speed variiert leicht (Echsen beschleunigen und bremsen)
     const speedMult = 0.6 + Math.random() * 0.8; // 60%-140% der Basisgeschwindigkeit
 
     // Tag/Nacht-Speed (nur Verbrannt & Geröll; rot/lila entgegengesetzt)
@@ -1443,7 +1455,7 @@ effectTimer:null,
 
   if (btnExportEnd) btnExportEnd.addEventListener("click", ()=>{ exportEndChartsToClipboard(); });
 
-  // Blitz-GIF Fallback: falls "Blitze.gif" im Ordner GIFs nicht existiert, wird automatisch "Gewitter.gif" verwendet.
+  // Lightning effect: use the existing storm GIF without changing the asset filename.
   function setGifSrcWithFallback(imgEl, candidates){
     let i = 0;
     const trySet = ()=>{
@@ -1454,15 +1466,12 @@ effectTimer:null,
       if (i < candidates.length){
         trySet();
       } else {
-        console.warn("Kein gültiges Blitz-GIF gefunden. Erwartet eine der Dateien:", candidates);
+        console.warn("No valid lightning GIF found. Expected one of these files:", candidates);
       }
     };
     trySet();
   }
   setGifSrcWithFallback(lightningOverlay, [
-    "GIFs/Blitze.gif",
-    "GIFs/blitze.gif",
-    "GIFs/Blitze.GIF",
     "GIFs/Gewitter.gif",
     "GIFs/Gewitter.GIF"
   ]);
@@ -1497,11 +1506,11 @@ if (introStartBtn) introStartBtn.addEventListener("click", ()=>{
 
 function openEndRunModal(){
   if (!endRunBackdrop) return;
-  const chosen = (state.timelineBranch === "fire") ? "Waldbrand" : (state.timelineBranch === "storm") ? "Gewitter" : null;
+  const chosen = (state.timelineBranch === "fire") ? "wildfire" : (state.timelineBranch === "storm") ? "thunderstorm" : null;
   if (endRunStory){
     endRunStory.innerHTML = chosen
-      ? `Du kannst jetzt die Ergebnisse exportieren. In Durchlauf&nbsp;1 wurde das Wettereignis <strong>${chosen}</strong> gewählt. Bitte exportiere die Diagramme, starte danach einen weiteren Durchlauf mit dem <strong>anderen</strong> Wettereignis und vergleiche anschließend die Ergebnisse beider Durchläufe.`
-      : 'Du kannst jetzt die Ergebnisse exportieren. Bitte exportiere die Diagramme, starte danach einen weiteren Durchlauf mit einem anderen Wettereignis als in Durchlauf&nbsp;1 und vergleiche anschließend die Ergebnisse beider Durchläufe.';
+      ? `You can now export the results. In run&nbsp;1, the weather event <strong>${chosen}</strong> was selected. Please export the charts, then start another run with the <strong>other</strong> weather event and compare the results of both runs.`
+      : 'You can now export the results. Please export the charts, then start another run with a different weather event than in run&nbsp;1 and compare the results of both runs.';
   }
   endRunBackdrop.style.display = "flex";
 }
@@ -1555,9 +1564,9 @@ function runTimelinePending(){
 
 function endSimulation(message){
   state.running = false;
-  setStatus("Simulation beendet");
+  setStatus("Simulation complete");
   const hint = document.getElementById("kHint");
-  if (hint) hint.textContent = message || "Simulation beendet. Bitte Reset, um neu zu starten.";
+  if (hint) hint.textContent = message || "Simulation complete. Please reset to start again.";
   if (btnExportEnd) btnExportEnd.style.display = "block";
   openEndRunModal();
 }
@@ -1707,7 +1716,7 @@ function drawTypeHistoryChart(canvas, series, title){
 
   // Axis labels
   cctx.fillStyle = "rgba(203,213,225,.85)";
-  cctx.fillText("Zyklus", x0 + w - 44, plotY0 + plotH + 36);
+  cctx.fillText("Cycle", x0 + w - 44, plotY0 + plotH + 36);
 
   // Lines
   const xAt = (i)=>{
@@ -1772,10 +1781,10 @@ function drawTypeHistoryChart(canvas, series, title){
 function drawHiddenTypeCharts(){
   // Nur rendern, wenn Daten vorhanden sind (und Canvas existiert)
   if (state.typeHistoryRed && state.typeHistoryRed.length){
-    drawTypeHistoryChart(chartHiddenTypesRed, state.typeHistoryRed, "Habitat (links): Echsentypen über Zyklen");
+drawTypeHistoryChart(chartHiddenTypesRed, state.typeHistoryRed, "Habitat (left): lizard types over time");
   }
   if (state.typeHistoryPurple && state.typeHistoryPurple.length){
-    drawTypeHistoryChart(chartHiddenTypesPurple, state.typeHistoryPurple, "Habitat (rechts): Echsentypen über Zyklen");
+drawTypeHistoryChart(chartHiddenTypesPurple, state.typeHistoryPurple, "Habitat (right): lizard types over time");
   }
 }
 
@@ -1788,7 +1797,7 @@ function openExportModal(dataUrl){
     exportDownloadBtn.onclick = ()=>{
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = "diagramme.png";
+    a.download = "charts.png";
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -1802,18 +1811,18 @@ function closeExportModal(){
 if (exportCloseBtn) exportCloseBtn.addEventListener("click", closeExportModal);
 
 async function copyPngToClipboard(blob){
-  if (!blob) throw new Error("Kein Bild-Blob erzeugt.");
-  if (!navigator.clipboard || !window.ClipboardItem) throw new Error("Clipboard API nicht verfügbar.");
+  if (!blob) throw new Error("No image blob was created.");
+  if (!navigator.clipboard || !window.ClipboardItem) throw new Error("Clipboard API is not available.");
   const item = new ClipboardItem({ "image/png": blob });
   await navigator.clipboard.write([item]);
 }
 
 function getDistanceExportRows(){
   const rows = [
-    ["Links tagsüber", document.getElementById("kDistRedDay")?.textContent || "-"],
-    ["Links nachts", document.getElementById("kDistRedNight")?.textContent || "-"],
-    ["Rechts tagsüber", document.getElementById("kDistPurpleDay")?.textContent || "-"],
-    ["Rechts nachts", document.getElementById("kDistPurpleNight")?.textContent || "-"]
+    ["Left during the day", document.getElementById("kDistRedDay")?.textContent || "-"],
+    ["Left at night", document.getElementById("kDistRedNight")?.textContent || "-"],
+    ["Right during the day", document.getElementById("kDistPurpleDay")?.textContent || "-"],
+    ["Right at night", document.getElementById("kDistPurpleNight")?.textContent || "-"]
   ];
   return rows.map(([k,v])=>[String(k||""), String(v||"-").trim() || "-"]);
 }
@@ -1824,9 +1833,9 @@ async function exportEndChartsToClipboard(){
 
   const pop = chartHiddenPopulation || document.getElementById("chartLine");
   if (!pop || !chartHiddenTypesRed || !chartHiddenTypesPurple){
-    setStatus("Export nicht möglich");
+    setStatus("Export not possible");
     const hint = document.getElementById("kHint");
-    if (hint) hint.textContent = "Export fehlgeschlagen: Diagramm-Canvas fehlt.";
+    if (hint) hint.textContent = "Export failed: chart canvas is missing.";
     return;
   }
 
@@ -1856,15 +1865,15 @@ async function exportEndChartsToClipboard(){
         bmp2 = await createImageBitmap(chartHiddenTypesRed);
         bmp3 = await createImageBitmap(chartHiddenTypesPurple);
       } catch (_e2){
-        setStatus("Exportfehler");
+        setStatus("Export error");
         const hint = document.getElementById("kHint");
-        if (hint) hint.textContent = "Export fehlgeschlagen (Canvas-Bild konnte nicht erzeugt werden).";
+        if (hint) hint.textContent = "Export failed (the canvas image could not be created).";
         return;
       }
     } else {
-      setStatus("Exportfehler");
+      setStatus("Export error");
       const hint = document.getElementById("kHint");
-      if (hint) hint.textContent = "Export fehlgeschlagen (Canvas-Bild konnte nicht erzeugt werden).";
+      if (hint) hint.textContent = "Export failed (the canvas image could not be created).";
       return;
     }
   }
@@ -1875,7 +1884,7 @@ async function exportEndChartsToClipboard(){
   const titleH = 34;
   const gap = 26;
   const chartW = outCssW - pad*2;
-  const taskText = "Arbeitsauftrag: Beobachte die Entwicklung der Echsenpopulation im Verlauf der Simulation. Achte darauf, wie sich Jäger, Tageszeiten und Wetterereignisse auf die beiden Habitate und auf die Zusammensetzung der Population auswirken. Exportiere hierzu am Ende das Ergebnis der Simulation und Werte die Diagramme aus.";
+  const taskText = "Task: Observe how the lizard population develops over the course of the simulation. Pay attention to how predators, times of day, and weather events affect the two habitats and the composition of the population. At the end, export the simulation result and analyse the charts.";
   const taskPadX = 18;
   const taskPadY = 18;
   const taskLineH = 24;
@@ -1973,14 +1982,14 @@ async function exportEndChartsToClipboard(){
 
   drawTaskBlock(); y += gap;
 
-  drawBlock("Population (gesamter zeitlicher Verlauf; Habitat links = rot; Habitat rechts = lila)", bmp1, h1); y += gap;
-  drawBlock("Habitat (links): Echsentypen über Zyklen", bmp2, h2); y += gap;
-  drawBlock("Habitat (rechts): Echsentypen über Zyklen", bmp3, h3); y += gap;
+  drawBlock("Population (full timeline; left habitat = red; right habitat = purple)", bmp1, h1); y += gap;
+drawBlock("Habitat (left): lizard types over time", bmp2, h2); y += gap;
+drawBlock("Habitat (right): lizard types over time", bmp3, h3); y += gap;
 
   // Distanzangaben (aus der linken Infobox)
   octx.fillStyle = "#e2e8f0";
   octx.font = "800 18px system-ui,-apple-system,Segoe UI,Roboto,Arial";
-  octx.fillText("Zurückgelegte Distanz (Echsen)", pad, y);
+  octx.fillText("Distance travelled (lizards)", pad, y);
   y += distTitleH;
 
   const cardX = pad;
@@ -2039,21 +2048,21 @@ async function exportEndChartsToClipboard(){
   octx.fillStyle = "rgba(203,213,225,.65)";
   octx.font = "12px system-ui,-apple-system,Segoe UI,Roboto,Arial";
   const branch = state.timelineBranch ? ` · Branch: ${state.timelineBranch}` : "";
-  octx.fillText(`Zyklen: ${state.cycleCount ?? 0}${branch}`, pad, outCssH - 16);
+  octx.fillText(`Cycles: ${state.cycleCount ?? 0}${branch}`, pad, outCssH - 16);
 
   const blob = await new Promise(res=>out.toBlob(res, "image/png", 0.95));
   const dataUrl = out.toDataURL("image/png");
 
   try {
     await copyPngToClipboard(blob);
-    setStatus("Exportiert");
+    setStatus("Exported");
     const hint = document.getElementById("kHint");
-    if (hint) hint.textContent = popExportUsesIcons ? "Diagramme wurden als Bild in die Zwischenablage kopiert." : "Diagramme wurden als Bild in die Zwischenablage kopiert (Export-Fallback ohne Spawn-Icons im Populationsdiagramm).";
+    if (hint) hint.textContent = popExportUsesIcons ? "Charts were copied to the clipboard as an image." : "Charts were copied to the clipboard as an image (export fallback without spawn icons in the population chart).";
   } catch (e){
     // Fallback (typisch bei file://): Vorschau anzeigen, damit man manuell kopieren/herunterladen kann
     setStatus("Export (Fallback)");
     const hint = document.getElementById("kHint");
-    if (hint) hint.textContent = popExportUsesIcons ? "Kopieren in die Zwischenablage wurde vom Browser blockiert. Vorschau geöffnet (manuell kopieren oder PNG herunterladen)." : "Kopieren in die Zwischenablage wurde vom Browser blockiert. Vorschau geöffnet (manuell kopieren oder PNG herunterladen). Hinweis: Export-Fallback ohne Spawn-Icons im Populationsdiagramm wurde verwendet.";
+    if (hint) hint.textContent = popExportUsesIcons ? "Copying to the clipboard was blocked by the browser. Preview opened (copy manually or download the PNG)." : "Copying to the clipboard was blocked by the browser. Preview opened (copy manually or download the PNG). Note: an export fallback without spawn icons in the population chart was used.";
     openExportModal(dataUrl);
   }
 }
@@ -2138,8 +2147,8 @@ function timelineOnCycle(){
       state.timelineStage = 6;
       queueTimelineAction(()=>{
         const msg = (state.timelineBranch === "fire")
-          ? "Ende: Nach dem Waldbrand bleibt die Umgebung dauerhaft verbrannt. (Reset, um neu zu starten.)"
-          : "Ende: Nach dem Gewitter bleibt die Umgebung in Geroell3. (Reset, um neu zu starten.)";
+          ? "End: after the wildfire, the environment remains permanently burned. (Reset to start again.)"
+          : "End: after the thunderstorm, the environment remains in scree habitat 3. (Reset to start again.)";
         endSimulation(msg);
       });
     }
@@ -2340,7 +2349,7 @@ function preyPriorityRank(habitat, morph, mapName){
     enforceAgentsToZone(false);
   }
 
-  const RHYTHM_LABELS = ["Morgen","Tag","Abend","Nacht"];
+  const RHYTHM_LABELS = ["Morning","Day","Evening","Night"];
 
   // Echsen-Speed-Anpassung nach Hintergrund + Tag/Nacht (nur Verbrannt1/2 und Geröll1/2/3)
   const LIZARD_SPEED_DAYNIGHT_MAPS = new Set([
@@ -2420,7 +2429,7 @@ function preyPriorityRank(habitat, morph, mapName){
     }
   }
 
-  // Robustheit: wenn Bilder/Rythmus.png nicht existiert, versuche lokale Datei Rythmus.png (für beide Layer)
+  // Robustness: keep both rhythm layers on the existing image path.
 (function(){
   const base = document.getElementById("rhythmImage");
   const bright = document.getElementById("rhythmBright");
@@ -2430,8 +2439,8 @@ function preyPriorityRank(habitat, morph, mapName){
   function applyFallback(){
     if (wrap.dataset.fallback) return;
     wrap.dataset.fallback = "1";
-    base.src = "Rythmus.png";
-    bright.src = "Rythmus.png";
+    base.src = "Bilder/Rythmus_EN.png";
+    bright.src = "Bilder/Rythmus_EN.png";
   }
 
   base.addEventListener("error", applyFallback);
@@ -2442,14 +2451,14 @@ function updateTopBar(){
     const mm = Math.floor(state.t/60).toString().padStart(2,"0");
     const ss = Math.floor(state.t%60).toString().padStart(2,"0");
     const mapEl = document.getElementById("uiMap");
-    if (mapEl) mapEl.textContent = state.mapName;
+    if (mapEl) mapEl.textContent = MAP_LABEL[state.mapName] || state.mapName;
     const phaseEl = document.getElementById("uiPhase");
-    if (phaseEl) phaseEl.textContent = state.day ? "Tag" : "Nacht";
+    if (phaseEl) phaseEl.textContent = state.day ? "Day" : "Night";
     const clockEl = document.getElementById("uiClock");
     if (clockEl) clockEl.textContent = `${mm}:${ss}`;
 
     const timeEl = document.getElementById("kTime");
-    if (timeEl) timeEl.textContent = `${state.day ? "Tag" : "Nacht"} · ${mm}:${ss}`;
+    if (timeEl) timeEl.textContent = `${state.day ? "Day" : "Night"} · ${mm}:${ss}`;
     const cycEl = document.getElementById("kCycles");
     if (cycEl) cycEl.textContent = String(state.cycleCount ?? 0);
   }
@@ -2459,7 +2468,7 @@ function updateTopBar(){
     if (!btn) return;
     const enabled = !!(state.zone && state.zone.fireEnabled);
     btn.disabled = !enabled;
-    btn.title = enabled ? "" : "Feuer ist auf dieser Karte deaktiviert.";
+    btn.title = enabled ? "" : "Fire is disabled on this map.";
   }
 
   // Hintergrund-Cache (wichtig auf Tablets/file://, damit Morph-Zielbilder vorab geladen sind)
@@ -2519,7 +2528,7 @@ function updateTopBar(){
         try { if (typeof img.decode === "function") await img.decode(); } catch(_) {}
         resolve(img);
       };
-      img.onerror = ()=>reject(new Error("Asset-Preload fehlgeschlagen: " + src));
+      img.onerror = ()=>reject(new Error("Asset preload failed: " + src));
       img.src = src;
     });
     // Fehler nicht global cachen (bei erneutem Versuch neu probieren dürfen)
@@ -2690,40 +2699,40 @@ function updateTopBar(){
     ];
 
     for (const mapName of allMaps){
-      addTask(`Karte laden: ${mapName.replace("Hintergrund_","")}`, ()=>loadBackground(mapName));
+      addTask(`Loading map: ${MAP_LABEL[mapName] || mapName.replace("Hintergrund_","")}`, ()=>loadBackground(mapName));
     }
 
     // Dekor-/Popupbilder
     for (const src of [
       "Bilder/Background.png",
       "Bilder/Rand.png",
+      "Bilder/Rythmus_EN.png",
       "Bilder/Regen.png",
       "Bilder/Gewitter.png",
       "Bilder/Feuer.png"
     ]){
-      addTask(`Bild puffern: ${src.split("/").pop()}`, ()=>preloadAsset(src));
+      addTask(`Preloading image: ${src.split("/").pop()}`, ()=>preloadAsset(src));
     }
 
     // Effekt-GIFs (inkl. Blitz-Fallback-Kandidaten)
     for (const src of [
       "GIFs/Regen.gif",
       "GIFs/Feuer.gif",
-      "GIFs/Blitze.gif",
       "GIFs/Gewitter.gif"
     ]){
-      addTask(`Effekt puffern: ${src.split("/").pop()}`, ()=>preloadAsset(src));
+      addTask(`Preloading effect: ${src.split("/").pop()}`, ()=>preloadAsset(src));
     }
 
-    // Echsen- und Jäger-Sprites
+    // Lizard and predator sprites
     for (const morph of LIZARD_GIFS){
-      addTask(`Echsen-Sprite puffern: ${morph}`, ()=>preloadAsset(`GIFs/${morph}.gif`));
+      addTask(`Preloading lizard sprite: ${LIZARD_LABEL[morph] || morph}`, ()=>preloadAsset(`GIFs/${morph}.gif`));
     }
-    addTask(`Jäger-Sprite puffern: ${PRED_GIFS.fox}`, ()=>preloadAsset(`GIFs/${PRED_GIFS.fox}.gif`));
-    addTask(`Jäger-Sprite puffern: ${PRED_GIFS.weasel}`, ()=>preloadAsset(`GIFs/${PRED_GIFS.weasel}.gif`));
+    addTask(`Preloading predator sprite: ${PRED_LABEL.fox}`, ()=>preloadAsset(`GIFs/${PRED_GIFS.fox}.gif`));
+    addTask(`Preloading predator sprite: ${PRED_LABEL.weasel}`, ()=>preloadAsset(`GIFs/${PRED_GIFS.weasel}.gif`));
 
     // Spawn-Icons (Diagramm)
-    addTask("Spawn-Icon puffern: Fuchs", ()=>waitForSpawnIconWarm("foxSpawn"));
-    addTask("Spawn-Icon puffern: Wiesel", ()=>waitForSpawnIconWarm("weaselSpawn"));
+    addTask("Preloading spawn icon: fox", ()=>waitForSpawnIconWarm("foxSpawn"));
+    addTask("Preloading spawn icon: weasel", ()=>waitForSpawnIconWarm("weaselSpawn"));
 
     return tasks;
   }
@@ -3992,7 +4001,7 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
 
     const d = state.lizardDist || { red:{day:0,night:0}, purple:{day:0,night:0} };
     const active = !!state.lizardDistanceTrackActive;
-    const waiting = "ab 2. Wetterereignis";
+    const waiting = "from the 2nd weather event";
     const elRD = document.getElementById("kDistRedDay");
     const elRN = document.getElementById("kDistRedNight");
     const elPD = document.getElementById("kDistPurpleDay");
@@ -4197,7 +4206,7 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
       if (k==="fire") return "rgba(251,146,60,.92)";
       return "rgba(167,139,250,.92)"; // storm
     };
-    const weatherLabel = (k)=> (k==="rain") ? "R" : (k==="fire") ? "F" : "G";
+    const weatherLabel = (k)=> (k==="rain") ? "R" : (k==="fire") ? "F" : "S";
 
     // Jäger-Spawnmarker (obere Kante)
     const isSpawnEvent = (k)=> (k==="foxSpawn" || k==="weaselSpawn");
@@ -4295,7 +4304,7 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
         g.lineTo(x, H-padB);
         g.stroke();
 
-        const txt = `Z${ci}`;
+        const txt = `C${ci}`;
         const tw = g.measureText(txt).width;
         const tx = x + 4*DPR;
         const ty = padT + 2*DPR;
@@ -4478,7 +4487,7 @@ function drawZoneTypeBarsHorizontal(canvasId, zoneKey, counts){
   const maxV = Math.max(1, ...rows.map(r => r.v));
   const total = rows.reduce((s,r)=>s+r.v,0);
 
-  const zLabel = (zoneKey === "red") ? "Habitat (links)" : "Habitat (rechts)";
+  const zLabel = (zoneKey === "red") ? "Habitat (left)" : "Habitat (right)";
   const col = (zoneKey === "red") ? "rgba(239,68,68,.85)" : "rgba(168,85,247,.85)";
 
   // kompakte Ränder, damit wenig Scroll nötig ist (noch kompakter, damit alle 8 Typen sichtbar bleiben)
@@ -4492,7 +4501,7 @@ g.fillStyle = "rgba(226,232,240,.92)";
 g.font = `${10*DPR}px system-ui,-apple-system,Segoe UI,Roboto,Arial`;
 g.textBaseline = "top";
 g.textAlign = "left";
-g.fillText(`Gesamtzahl = ${total}`, 10*DPR, 6*DPR);
+g.fillText(`Total = ${total}`, 10*DPR, 6*DPR);
 
 const innerX0 = padL;
 const innerY0 = padT + 10*DPR;
@@ -4600,7 +4609,7 @@ function safeDrawAllCharts(){
     while (imgs.length < n){
       const img = document.createElement("img");
       img.className = "firePatch";
-      img.alt = "Feuer";
+      img.alt = "Fire";
       img.src = "GIFs/Feuer.gif";
       firePatchLayer.appendChild(img);
       imgs.push(img);
@@ -4779,7 +4788,7 @@ function safeDrawAllCharts(){
   function startEffect(kind){
     if (state.morphActive) return; // keine parallelen Ereignisse
     if (kind==="fire" && !(state.zone && state.zone.fireEnabled)) {
-      setStatus("Feuer deaktiviert");
+      setStatus("Fire disabled");
       return;
     }
 
@@ -5390,7 +5399,7 @@ updateTopBar();
 })();
 </script>
 <!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -5414,9 +5423,9 @@ updateTopBar();
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Alle Abbildungen in dieser Simulation sind vollständig KI-generiert.</li>
+      <li>All illustrations in this simulation are fully AI-generated.</li>
     </ul>
   </div>
 </div>

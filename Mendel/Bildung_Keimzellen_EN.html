@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
@@ -146,7 +146,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
 <div class="wrap">
 <div class="row">
 <div class="card canvasWrap">
-<canvas aria-label="Meiose Simulation" height="760" id="c" width="980"></canvas>
+<canvas aria-label="Meiosis simulation" height="760" id="c" width="980"></canvas>
 </div>
 <div class="card side">
 <!-- Aktuelle Phase (ausgeblendet, da redundant) -->
@@ -165,7 +165,7 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
 <button id="btnReset">Reset</button>
 </div>
 <div class="kv">
-<div class="label">Geschwindigkeit</div>
+<div class="label">Speed</div>
 <div class="tiny mono"><span id="speedVal">1.0</span>x</div>
 <input id="speed" max="2.5" min="0.25" step="0.05" style="grid-column:1 / -1;" type="range" value="1.0"/>
 </div>
@@ -173,8 +173,8 @@ h1{font-size:27px; margin:0 0 10px 0; font-weight:650;}
 <div>
 <div class="label">Erbgang</div>
 <select id="nSelect">
-<option selected="" value="1">Monohybrider Erbgang</option>
-<option value="2">Dihybrider Erbgang</option>
+<option selected="" value="1">Monohybrid cross</option>
+<option value="2">Dihybrid cross</option>
 </select>
 </div>
 </div>
@@ -661,9 +661,9 @@ function appendRunSnapshot(runNo){
   const cap = document.createElement('figcaption');
 
   if (runNo === 1){
-    cap.textContent = 'Endergebnis Möglichkeit 1';
+        cap.textContent = 'Final result possibility 1';
   } else {
-    cap.textContent = 'Endergebnis Möglichkeit 2';
+        cap.textContent = 'Final result possibility 2';
   }
 
   const snap = document.createElement('canvas');
@@ -2244,7 +2244,7 @@ if (idx === 7 && tel2){
     }
 
 
-    // Monohybrider Erbgang: Am Ende (Telophase II) die zwei einzigartigen Keimzellen im
+    // Monohybrid cross: Am Ende (Telophase II) die zwei einzigartigen Keimzellen im
     // Simulationsbereich markieren (oben links & unten rechts), wie in der Referenz.
     if (nPairs === 1 && idx === 7 && local >= 0.999){
       const lay = telophase2LayoutForCanvas(canvas.width, canvas.height);
@@ -2347,7 +2347,7 @@ nSelect.addEventListener('change', () => {
   <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="errorModalTitle">
     <div class="modalHeader">
       <div id="errorModalTitle" class="modalTitle">Fehler</div>
-      <button id="errorModalClose" class="modalClose" aria-label="Schließen">×</button>
+      <button id="errorModalClose" class="modalClose" aria-label="Close">×</button>
     </div>
     <div id="errorModalMsg" class="modalMsg"></div>
     <div class="modalActions">
@@ -2362,9 +2362,9 @@ nSelect.addEventListener('change', () => {
   <div class="im-card">
     <div class="im-head">
       <h2 id="introModalTitle" class="im-title">Bildung der Keimzellen – Meiose I und II</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Close">×</button>
     </div>
-    <p class="im-grade">Jahrgangsstufe: 12</p>
+    <p class="im-grade">Grade level: 12</p>
     <div class="im-desc">
       Diese Simulation zeigt die zwei Phasen der Meiose: Reduktions- (Meiose I) und Äquationsteilung (Meiose II). Verfolge, wie aus einer diploiden Ausgangszelle durch Meiose vier haploide Keimzellen entstehen, und verstehe die Bedeutung für die Weitergabe genetischer Information.
     </div>

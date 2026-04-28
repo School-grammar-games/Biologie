@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -1020,16 +1020,16 @@ nav a.nav-worksheet-link:hover{
 
 <body>
 <header>
-  <h1>Simulation: Meselson–Stahl-Versuch</h1>
+  <h1>Simulation: Meselson-Stahl experiment</h1>
   <p>
-    Führe den Versuch von Mendelson und Stahl durch um herauszufinden, nach welchem Modell die Replikation der DNA verläuft.
+    Carry out the Meselson-Stahl experiment to find out which model best describes DNA replication.
   </p>
 </header>
 
 <nav>
-  <a href="#kontext">Historischer Kontext &amp; Modelle</a>
+  <a href="#kontext">Historical context &amp; models</a>
   <a href="#simulation">Simulation</a>
-  <a href="AB_Meselson_Stahl.pdf" class="nav-worksheet-link" data-worksheet-download>Arbeitsblatt</a>
+  <a href="AB_Meselson_Stahl_EN.pdf" class="nav-worksheet-link" data-worksheet-download>Worksheet</a>
 </nav>
 
 <main>
@@ -1037,7 +1037,7 @@ nav a.nav-worksheet-link:hover{
     <details class="kontextDetails" id="kontextDetails" open>
       <summary class="kontextSummary">
         <span class="kontextLeft">
-  <span class="kontextTitle">Historischer Kontext &amp; Replikationsmodelle</span>
+  <span class="kontextTitle">Historical context &amp; replication models</span>
 </span>
 <span class="kontextActions">
   <span class="kontextChevron" aria-hidden="true"></span>
@@ -1047,27 +1047,27 @@ nav a.nav-worksheet-link:hover{
       <div class="kontextBody">
 <div class="grid2">
       <div class="card">
-        <h3>Diskussion in den 1950er Jahren</h3>
+        <h3>Debate in the 1950s</h3>
         <p class="small">
-          Nach der Strukturhypothese der DNA war klar, dass die Erbinformation bei Zellteilungen zuverlässig verdoppelt werden muss.
-          Umstritten war, <strong>wie</strong> die beiden Stränge der Doppelhelix bei der Replikation verteilt werden.
+          After the DNA structure model had been proposed, it became clear that genetic information had to be duplicated reliably during cell division.
+          What remained controversial was <strong>how</strong> the two strands of the double helix were distributed during replication.
         </p>
         <p class="small" style="margin-top:10px;">
-          Parallel liefen zentrale Arbeiten zur <strong>Struktur</strong> und <strong>Funktion</strong> der DNA: die Bedeutung komplementärer Basenpaarung,
-          Hypothesen zur „Vorlage“-Funktion der Stränge sowie frühe biochemische Ansätze, die Replikation als enzymkatalysierten Prozess zu verstehen.
-          In diesem Kontext konkurrierten mehrere plausible Replikationsmodelle, die experimentell schwer zu unterscheiden waren.
+          At the same time, key work was being done on the <strong>structure</strong> and <strong>function</strong> of DNA: the role of complementary base pairing,
+          ideas about the strands acting as templates, and early biochemical approaches that described replication as an enzyme-driven process.
+          In this context, several plausible replication models competed with one another and were difficult to distinguish experimentally.
         </p>
       </div>
 
       <div class="card">
-        <h3>Experimentelle Idee (Markierung &amp; Dichte)</h3>
+        <h3>Experimental idea (labeling &amp; density)</h3>
         <p class="small">
-          DNA wird durch Wachstum in <span class="mono">¹⁵N</span>-Medium „schwer“ markiert und nach Transfer in <span class="mono">¹⁴N</span>-Medium weiter repliziert. Ein Isotop (¹⁵N bzw. ¹⁴N)  ist eine Variante desselben Stoffes (z. B. Stickstoff). Die Atome sind etwas schwerer oder leichter, weil sie im Kern unterschiedlich viele Neutronen haben. Im Versuch werden die Bakterien alle 20ig Minuten zentrifugiert und die Dichte der DNA gemessen. Die 20ig Minuten entsprechen einem Generationszyklus der Bakterien.
+          DNA is labeled as "heavy" by growing bacteria in <span class="mono">¹⁵N</span> medium and then allowed to replicate further after transfer to <span class="mono">¹⁴N</span> medium. An isotope (such as ¹⁵N or ¹⁴N) is a variant of the same element, here nitrogen, with a different number of neutrons and therefore a slightly different mass. In the experiment, the bacteria are centrifuged every 20 minutes and the density of the DNA is measured. Those 20 minutes correspond to one bacterial generation.
           <br><br>
-          <strong>Prinzip der Dichtegradientenzentrifugation:</strong> In einer konzentrierten Salzlösung erzeugt die Zentrifugation
-          einen stabilen Dichtegradienten. DNA-Moleküle wandern im Gradienten so lange, bis ihre <em>Auftriebsdichte</em> der Dichte des umgebenden Mediums entspricht
-          . Schwer markierte DNA (<span class="mono">¹⁵N</span>) hat eine höhere Dichte und bildet eine Bande weiter <strong>unten</strong> als leichte DNA (<span class="mono">¹⁴N</span>);
-          Hybrid-DNA liegt <strong>dazwischen</strong>.
+          <strong>Principle of density-gradient centrifugation:</strong> In a concentrated salt solution, centrifugation creates
+          a stable density gradient. DNA molecules move through that gradient until their <em>buoyant density</em> matches the density of the surrounding medium.
+          Heavily labeled DNA (<span class="mono">¹⁵N</span>) has a higher density and forms a band farther <strong>down</strong> than light DNA (<span class="mono">¹⁴N</span>);
+          hybrid DNA appears <strong>in between</strong>.
         </p>
         <div class="legend" style="margin-top:10px;">
         </div>
@@ -1079,50 +1079,50 @@ nav a.nav-worksheet-link:hover{
     <div class="modelPairs">
       <div class="modelPair">
         <div class="card modelText">
-          <h3>Modell 1: Konservativ</h3>
+          <h3>Model 1: Conservative</h3>
           <p class="small">
-            Bei der konservativen Replikation bleibt die ursprüngliche Doppelhelix als vollständige Einheit erhalten.
-            Die neu synthetisierte DNA bildet eine zweite, komplett neue Doppelhelix.
-            Damit entstehen nach jeder Replikationsrunde zwei Populationen: eine unveränderte „alte“ und eine vollständig „neue“ DNA.
+            In conservative replication, the original double helix remains intact as a complete unit.
+            Newly synthesized DNA forms a second, entirely new double helix.
+            After each round of replication, two populations therefore exist: unchanged "old" DNA and completely "new" DNA.
           </p>
         </div>
         <div class="card modelFig">
           <div class="figure">
-            <div class="cap"><span>Schematische Darstellung der Replikation</span></div>
-            <img class="labImg wide modelImg" src="Laborbilder/Konservativ.png" alt="Konservatives Replikationsmodell">
+            <div class="cap"><span>Schematic representation of replication</span></div>
+            <img class="labImg wide modelImg" src="Laborbilder/Konservativ.png" alt="Conservative replication model">
           </div>
         </div>
       </div>
 
       <div class="modelPair">
         <div class="card modelText">
-          <h3>Modell 2: Semikonservativ</h3>
+          <h3>Model 2: Semiconservative</h3>
           <p class="small">
-            Bei der semikonservativen Replikation trennen sich die beiden Stränge der Eltern-DNA und dienen jeweils als Vorlage für die Synthese eines komplementären neuen Strangs.
-            Jede Tochter-Doppelhelix enthält deshalb genau einen alten und einen neu gebildeten Strang.
+            In semiconservative replication, the two strands of the parent DNA separate and each serves as a template for the synthesis of a complementary new strand.
+            Each daughter double helix therefore contains exactly one old strand and one newly formed strand.
           </p>
         </div>
         <div class="card modelFig">
           <div class="figure">
-            <div class="cap"><span>Schematische Darstellung der Replikation</span></div>
-            <img class="labImg wide modelImg" src="Laborbilder/Semikonservativ.png" alt="Semikonservatives Replikationsmodell">
+            <div class="cap"><span>Schematic representation of replication</span></div>
+            <img class="labImg wide modelImg" src="Laborbilder/Semikonservativ.png" alt="Semiconservative replication model">
           </div>
         </div>
       </div>
 
       <div class="modelPair">
         <div class="card modelText">
-          <h3>Modell 3: Dispersiv</h3>
+          <h3>Model 3: Dispersive</h3>
           <p class="small">
-            Beim dispersiven Modell entstehen nach der Replikation keine klar getrennten „alten“ und „neuen“ Stränge.
-            Stattdessen sind innerhalb jedes Stranges Abschnitte elterlicher DNA mit neu synthetisierten Abschnitten mosaikartig durchmischt.
-            Mit jeder Replikationsrunde nimmt der Anteil neu gebildeter Segmente zu, die alten Segmente werden dabei über viele Moleküle verteilt.
+            In the dispersive model, replication does not produce clearly separated "old" and "new" strands.
+            Instead, segments of parental DNA are mixed in a mosaic pattern with newly synthesized segments within each strand.
+            With every round of replication, the proportion of newly formed segments increases while the old segments become distributed across many molecules.
           </p>
         </div>
         <div class="card modelFig">
           <div class="figure">
-            <div class="cap"><span>Schematische Darstellung der Replikation</span></div>
-            <img class="labImg wide modelImg" src="Laborbilder/Dispersiv.png" alt="Dispersives Replikationsmodell">
+            <div class="cap"><span>Schematic representation of replication</span></div>
+            <img class="labImg wide modelImg" src="Laborbilder/Dispersiv.png" alt="Dispersive replication model">
           </div>
         </div>
       </div>
@@ -1133,9 +1133,9 @@ nav a.nav-worksheet-link:hover{
 
   <section id="simulation">
     <div class="simHeaderRow">
-      <h2>Simulation des Meselson–Stahl-Versuchs</h2>
-      <label class="toggleWrap" title="Blendet Schritt-für-Schritt-Hinweise und Hervorhebungen ein/aus">
-        <span class="small">Unterstützungsmodus: Schritte anzeigen</span>
+      <h2>Meselson-Stahl experiment simulation</h2>
+      <label class="toggleWrap" title="Shows or hides step-by-step hints and highlights">
+        <span class="small">Support mode: show steps</span>
         <input type="checkbox" id="toggleHelp">
         <span class="toggle"></span>
       </label>
@@ -1147,7 +1147,7 @@ nav a.nav-worksheet-link:hover{
 
     <div class="stepBar card" id="helpBar">
       <div class="statusPanel">
-        <div class="statusLine" id="status">Start: Ziehen Sie die Bakterien in ¹⁵N-Medium.</div>
+        <div class="statusLine" id="status">Start: drag the bacteria into the ¹⁵N medium.</div>
 </div>
       
     </div>
@@ -1156,13 +1156,13 @@ nav a.nav-worksheet-link:hover{
       <div class="labBenchV2">
         <div class="benchTop">
           <!-- Bacteria token home -->
-          <div class="station" aria-label="Bakterien">
-            <h3>Bakterien <span class="badge">Drag</span></h3>
+          <div class="station" aria-label="Bacteria">
+            <h3>Bacteria <span class="badge">Drag</span></h3>
             <div id="bacteriaHome" class="dropzone" data-drop="home">
-              <div id="bacteria" class="token" draggable="true" aria-label="Bakterienkultur">
-                <img class="labImg" src="Laborbilder/Bakterien.png" alt="Bakterien">
+              <div id="bacteria" class="token" draggable="true" aria-label="Bacterial culture">
+                <img class="labImg" src="Laborbilder/Bakterien.png" alt="Bacteria">
                 <div class="tokenInfo">
-                  <div class="tTitle">Bakterienkultur</div>
+                  <div class="tTitle">Bacterial culture</div>
                   <div class="tMeta">DNA: <span class="mono" id="dnaTag">—</span></div>
                   <div class="chipRow">
                     <span class="chip" id="chipMedium">Medium: —</span>
@@ -1170,34 +1170,34 @@ nav a.nav-worksheet-link:hover{
                   </div>
                 </div>
               </div>
-              <div class="dzHint">Token ziehen und ablegen.</div>
+              <div class="dzHint">Drag and drop the token.</div>
             </div>
           </div>
 
           <!-- N15 tube -->
-          <div class="station" aria-label="Reagenzglas 15N">
+          <div class="station" aria-label="15N test tube">
             <h3>¹⁵N-Medium <span class="badge">Drop</span></h3>
             <div class="dropzone mediumDrop" id="dzN15" data-drop="N15">
               <div class="mediumStage">
-              <div class="mediumSlot" id="slotN15" aria-label="Probe hier ablegen"></div>
+              <div class="mediumSlot" id="slotN15" aria-label="Drop sample here"></div>
               <div class="mediumWrap">
-                <img class="labImg tube tiny" src="Laborbilder/N 15 Medium.png" alt="Reagenzglas ¹⁵N-Medium">
-                <div class="mediumOverlay" aria-hidden="true"><span>Probe hier<br>ablegen</span></div>
+                <img class="labImg tube tiny" src="Laborbilder/N 15 Medium.png" alt="¹⁵N medium test tube">
+                <div class="mediumOverlay" aria-hidden="true"><span>Drop sample<br>here</span></div>
               </div>
             </div>
-            <div class="dzHint">Drop: Bakterien in ¹⁵N</div>
+            <div class="dzHint">Drop: bacteria into ¹⁵N</div>
             </div>
           </div>
 
           <!-- N14 tube -->
-          <div class="station" aria-label="Reagenzglas 14N">
+          <div class="station" aria-label="14N test tube">
             <h3>¹⁴N-Medium <span class="badge">Drop</span></h3>
             <div class="dropzone mediumDrop" id="dzN14" data-drop="N14">
               <div class="mediumStage">
-              <div class="mediumSlot" id="slotN14" aria-label="Probe hier ablegen"></div>
+              <div class="mediumSlot" id="slotN14" aria-label="Drop sample here"></div>
               <div class="mediumWrap">
-                <img class="labImg tube tiny" src="Laborbilder/N 14 Medium.png" alt="Reagenzglas ¹⁴N-Medium">
-                <div class="mediumOverlay" aria-hidden="true"><span>Probe hier<br>ablegen</span></div>
+                <img class="labImg tube tiny" src="Laborbilder/N 14 Medium.png" alt="¹⁴N medium test tube">
+                <div class="mediumOverlay" aria-hidden="true"><span>Drop sample<br>here</span></div>
               </div>
             </div>
             <div class="dzHint">Drop: Shift in ¹⁴N</div>
@@ -1207,41 +1207,41 @@ nav a.nav-worksheet-link:hover{
 
         <div class="benchBottom">
           <!-- Incubator: action panel -->
-          <div class="station" aria-label="Inkubator Anzeige">
-            <h3>Inkubator <span class="badge">Klick</span></h3>
+          <div class="station" aria-label="Incubator display">
+            <h3>Incubator <span class="badge">Click</span></h3>
             <div class="panelZone">
               <div class="equipWrap">
-              <img id="incubatorImg" class="labImg wide" src="Laborbilder/Inkubator.png" alt="Inkubator">
-              <div class="dropzone overlayDropzone" id="dzIncubator" data-drop="incubator" aria-label="Probe in Inkubator ablegen">
+              <img id="incubatorImg" class="labImg wide" src="Laborbilder/Inkubator.png" alt="Incubator">
+              <div class="dropzone overlayDropzone" id="dzIncubator" data-drop="incubator" aria-label="Drop sample into incubator">
                 <div class="mediumStage equipStage">
-                  <div class="mediumSlot equipSlot" id="incubatorSlot" aria-label="Probe hier ablegen"></div>
-                  <div class="mediumOverlay equipOverlay" aria-hidden="true"><span>Probe hier<br>ablegen</span></div>
+                  <div class="mediumSlot equipSlot" id="incubatorSlot" aria-label="Drop sample here"></div>
+                  <div class="mediumOverlay equipOverlay" aria-hidden="true"><span>Drop sample<br>here</span></div>
                 </div>
               </div>
             </div>
-              <div class="dzHint">Inkubation im aktuellen Medium</div>
+              <div class="dzHint">Incubation in the current medium</div>
               <div class="actionBtnRow">
-                <button class="primary" id="btnIncubate" disabled>20&nbsp;Min inkubieren</button>
+                <button class="primary" id="btnIncubate" disabled>Incubate 20&nbsp;min</button>
               </div>
             </div>
           </div>
 
           <!-- Centrifuge: action panel -->
-          <div class="station" aria-label="Zentrifuge Anzeige">
-            <h3>Zentrifuge <span class="badge">Klick</span></h3>
+          <div class="station" aria-label="Centrifuge display">
+            <h3>Centrifuge <span class="badge">Click</span></h3>
             <div class="panelZone">
               <div class="equipWrap">
-              <img id="centrifugeImg" class="labImg wide" src="Laborbilder/Zentrifuge.png" alt="Zentrifuge">
-              <div class="dropzone overlayDropzone" id="dzCentrifuge" data-drop="centrifuge" aria-label="Probe in Zentrifuge ablegen">
+              <img id="centrifugeImg" class="labImg wide" src="Laborbilder/Zentrifuge.png" alt="Centrifuge">
+              <div class="dropzone overlayDropzone" id="dzCentrifuge" data-drop="centrifuge" aria-label="Drop sample into centrifuge">
                 <div class="mediumStage equipStage">
-                  <div class="mediumSlot equipSlot" id="centrifugeSlot" aria-label="Probe hier ablegen"></div>
-                  <div class="mediumOverlay equipOverlay" aria-hidden="true"><span>Probe hier<br>ablegen</span></div>
+                  <div class="mediumSlot equipSlot" id="centrifugeSlot" aria-label="Drop sample here"></div>
+                  <div class="mediumOverlay equipOverlay" aria-hidden="true"><span>Drop sample<br>here</span></div>
                 </div>
               </div>
             </div>
-              <div class="dzHint">Probe ablegen, dann zentrifugieren</div>
+              <div class="dzHint">Drop the sample, then centrifuge</div>
               <div class="actionBtnRow">
-                <button id="btnSpin" disabled>Zentrifugieren</button>
+                <button id="btnSpin" disabled>Centrifuge</button>
               </div>
             </div>
           </div>
@@ -1249,18 +1249,18 @@ nav a.nav-worksheet-link:hover{
       </div>
 
       <div class="legend">
-        <span><span class="dot" style="background: rgba(255,211,106,.85)"></span>schwer (¹⁵N)</span>
+        <span><span class="dot" style="background: rgba(255,211,106,.85)"></span>heavy (¹⁵N)</span>
         <span><span class="dot" style="background: rgba(232,236,255,.80)"></span>hybrid</span>
-        <span><span class="dot" style="background: rgba(124,255,197,.85)"></span>leicht (¹⁴N)</span>
-        <strong>;</strong><strong>Gen</strong> = Anzahl der Generationen <em>nach dem Shift in</em> <span class="mono">¹⁴N</span> (Gen&nbsp;1 = erste Replikationsrunde in <span class="mono">¹⁴N</span>).
+        <span><span class="dot" style="background: rgba(124,255,197,.85)"></span>light (¹⁴N)</span>
+        <strong>;</strong><strong>Gen</strong> = number of generations <em>after the shift into</em> <span class="mono">¹⁴N</span> (Gen&nbsp;1 = first replication round in <span class="mono">¹⁴N</span>).
       </div>
     </div>
 
     <div class="analysisRow">
       <div class="analysisLeft">
-        <h3>Auswertung <span class="badge">Hauptanzeige</span></h3>
+        <h3>Evaluation <span class="badge">Main display</span></h3>
         <div class="bigTube">
-          <svg id="gradientSvg" viewBox="0 0 260 560" width="100%" height="460" role="img" aria-label="CsCl-Gradient mit DNA-Banden (Hauptanzeige)">
+          <svg id="gradientSvg" viewBox="0 0 260 560" width="100%" height="460" role="img" aria-label="CsCl gradient with DNA bands (main display)">
             <defs>
               <linearGradient id="gradMain" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" stop-color="rgba(124,255,197,.18)"/>
@@ -1271,8 +1271,8 @@ nav a.nav-worksheet-link:hover{
             <rect x="88" y="28" width="84" height="460" rx="42" fill="url(#gradMain)" stroke="rgba(255,255,255,.18)"/>
             <rect x="98" y="56" width="10" height="404" rx="5" fill="rgba(255,255,255,.08)"/>
 
-            <text x="130" y="18" text-anchor="middle" fill="rgba(232,236,255,.75)" font-size="12">oben: leicht</text>
-            <text x="130" y="540" text-anchor="middle" fill="rgba(232,236,255,.75)" font-size="12">unten: schwer</text>
+            <text x="130" y="18" text-anchor="middle" fill="rgba(232,236,255,.75)" font-size="12">top: light</text>
+            <text x="130" y="540" text-anchor="middle" fill="rgba(232,236,255,.75)" font-size="12">bottom: heavy</text>
 
             <g id="bandsMain"></g>
 
@@ -1281,26 +1281,26 @@ nav a.nav-worksheet-link:hover{
               <line x1="80" y1="268" x2="88" y2="268"/>
               <line x1="80" y1="420" x2="88" y2="420"/>
             </g>
-            <text x="74" y="120" text-anchor="end" fill="rgba(232,236,255,.55)" font-size="11">leicht</text>
+            <text x="74" y="120" text-anchor="end" fill="rgba(232,236,255,.55)" font-size="11">light</text>
             <text x="74" y="272" text-anchor="end" fill="rgba(232,236,255,.55)" font-size="11">hybrid</text>
-            <text x="74" y="424" text-anchor="end" fill="rgba(232,236,255,.55)" font-size="11">schwer</text>
+            <text x="74" y="424" text-anchor="end" fill="rgba(232,236,255,.55)" font-size="11">heavy</text>
           </svg>
         </div>
         <div class="small" id="prediction" style="margin-top:8px;">
-          Noch keine Messung. Führen Sie eine Zentrifugation durch.
+          No measurement yet. Carry out a centrifugation.
         </div>
       </div>
 
       <div class="analysisRight">
-        <h3>Zentrifugierergebnisse <span class="badge">Historie</span></h3>
+        <h3>Centrifugation results <span class="badge">History</span></h3>
         <div style="margin:8px 0 10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-          <button class="primary" id="btnExportMini" style="padding:8px 10px; font-size:.9rem;">Screenshot kopieren</button>
-          <span class="small" id="exportHint" style="opacity:.85;">Kopiert den Bereich „Zentrifugierergebnisse (verkleinert)“ in die Zwischenablage.</span>
+          <button class="primary" id="btnExportMini" style="padding:8px 10px; font-size:.9rem;">Copy screenshot</button>
+          <span class="small" id="exportHint" style="opacity:.85;">Copies the "Centrifugation results (mini)" area to the clipboard.</span>
         </div>
         <div class="miniGrid" id="miniResults">
           <div class="miniCard" id="miniPlaceholder">
-            <div class="cap"><span>—</span><span class="mono">leer</span></div>
-            <div class="small">Ergebnisse erscheinen nach „Zentrifugieren“.</div>
+            <div class="cap"><span>—</span><span class="mono">empty</span></div>
+            <div class="small">Results appear after clicking "Centrifuge".</div>
           </div>
         </div>
       </div>
@@ -1312,20 +1312,20 @@ nav a.nav-worksheet-link:hover{
 
 <div class="modalBackdrop" id="finishModal" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="finishTitle">
-    <h3 id="finishTitle">Auswertung: Ergebnisse vergleichen</h3>
+    <h3 id="finishTitle">Evaluation: compare the results</h3>
     <p class="small" style="margin-top:8px;">
-      Sie haben jetzt <strong>vier Zentrifugationsergebnisse</strong> gesammelt.
-      Vergleichen Sie die Bandenmuster (Position und Banddicke) der vier Proben.
-      Begründen Sie anschließend, <strong>welches Replikationsmodell</strong> diese Muster am besten erklärt.
+      You have now collected <strong>four centrifugation results</strong>.
+      Compare the band patterns (position and band thickness) of the four samples.
+      Then explain <strong>which replication model</strong> best accounts for these patterns.
     </p>
     <ul class="small" style="margin:10px 0 0 18px; line-height:1.5;">
-      <li>Welche Bande(n) sieht man nach Gen&nbsp;1, Gen&nbsp;2, Gen&nbsp;3 …?</li>
-      <li>Wie verändert sich der Anteil Hybrid- vs. Leicht-DNA?</li>
-      <li>Welche Modelle würden andere Muster erwarten lassen?</li>
+      <li>Which band(s) appear after Gen&nbsp;1, Gen&nbsp;2, Gen&nbsp;3 ...?</li>
+      <li>How does the proportion of hybrid vs. light DNA change?</li>
+      <li>Which models would predict different patterns?</li>
     </ul>
     <div class="modalActions">
-      <button class="primary" id="btnModalExport">Screenshot kopieren</button>
-      <button class="danger" id="btnModalClose">Schließen</button>
+      <button class="primary" id="btnModalExport">Copy screenshot</button>
+      <button class="danger" id="btnModalClose">Close</button>
     </div>
     <div class="small" id="modalNote" style="margin-top:10px; opacity:.85;"></div>
   </div>
@@ -1686,7 +1686,7 @@ function callout(el){
   // Semiconservative prediction only
   function predictBandsSemiconservative(gen){
     if(gen === 0){
-      return [{ y: Y_HEAVY, color: 'rgba(255,211,106,0.90)', alpha: 0.95, amt: 1, label: 'schwer' }];
+      return [{ y: Y_HEAVY, color: 'rgba(255,211,106,0.90)', alpha: 0.95, amt: 1, label: 'heavy' }];
     }
     if(gen === 1){
       // After 1 generation in 14N: all DNA is hybrid (no light-only band yet)
@@ -1696,7 +1696,7 @@ function callout(el){
     const lightFrac = 1 - hybridFrac;
     return [
       { y: Y_HYBRID, color: 'rgba(232,236,255,0.88)', alpha: 0.35 + 0.60*hybridFrac, amt: hybridFrac, label: 'hybrid' },
-      { y: Y_LIGHT,  color: 'rgba(124,255,197,0.90)', alpha: 0.35 + 0.60*lightFrac,  amt: lightFrac,  label: 'leicht' }
+      { y: Y_LIGHT,  color: 'rgba(124,255,197,0.90)', alpha: 0.35 + 0.60*lightFrac,  amt: lightFrac,  label: 'light' }
     ];
   }
 
@@ -1787,7 +1787,7 @@ function callout(el){
     const cap = document.createElement('div');
     cap.className = 'cap';
     const pid = probeIdForResult || state.sampleId || '—';
-    cap.innerHTML = `<span>${metaLabel}</span><span class="mono">Probe ${pid} · ${state.shifted ? 'Gen '+state.genAfterShift : '¹⁵N'}</span>`;
+      cap.innerHTML = `<span>${metaLabel}</span><span class="mono">Sample ${pid} · ${state.shifted ? 'Gen '+state.genAfterShift : '¹⁵N'}</span>`;
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'miniSvg');
@@ -1846,11 +1846,11 @@ function callout(el){
     if(!state.finished && resultsCount >= 4){
       state.finished = true;
       document.body.classList.add('isFinished');
-      setStatus('Vier Ergebnisse gesammelt. Vergleichen Sie die Muster und begründen Sie das Replikationsmodell.');
+      setStatus('Four results collected. Compare the patterns and justify the replication model.');
       updateTokenChips();
       updateButtons();
       updateGuidance();
-      showFinishModal('Tipp: Nutzen Sie „Screenshot kopieren“, um die Historie zu sichern.');
+      showFinishModal('Tip: use "Copy screenshot" to save the history.');
     }
   }
 
@@ -1859,7 +1859,7 @@ function callout(el){
   async function exportMiniResultsToClipboard(){
     const cards = Array.from(miniResults.querySelectorAll('.miniCard')).filter(c => c.id !== 'miniPlaceholder');
     if(cards.length === 0){
-      const msg = 'Noch keine Ergebnisse zum Exportieren.';
+        const msg = 'No results available to export yet.';
       if(exportHint) exportHint.textContent = msg;
       if(modalNote) modalNote.textContent = msg;
       return;
@@ -1977,7 +1977,7 @@ function callout(el){
 
       // header text from cap
       const cap = card.querySelector('.cap');
-      const left = cap?.querySelector('span')?.textContent?.trim() || 'Zentrifugation';
+    const left = cap?.querySelector('span')?.textContent?.trim() || 'Centrifugation';
       const spans = cap ? cap.querySelectorAll('span') : [];
       const right = spans && spans.length>1 ? spans[1].textContent.trim() : '';
 
@@ -2048,7 +2048,7 @@ function callout(el){
 
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
     if(!blob){
-      const msg = 'Export fehlgeschlagen (Canvas).';
+      const msg = 'Export failed (canvas).';
       if(exportHint) exportHint.textContent = msg;
       if(modalNote) modalNote.textContent = msg;
       return;
@@ -2058,20 +2058,20 @@ function callout(el){
     try{
       if(!window.isSecureContext) throw new Error('not_secure_context');
       await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-      const msg = 'Screenshot in die Zwischenablage kopiert.';
+      const msg = 'Screenshot copied to the clipboard.';
       if(exportHint) exportHint.textContent = msg;
       if(modalNote) modalNote.textContent = msg;
     } catch(err){
       // fallback: download
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'zentrifugierergebnisse.png';
+      a.download = 'centrifugation_results.png';
       document.body.appendChild(a);
       a.click();
       a.remove();
       setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
 
-      const msg = 'Zwischenablage-Export nicht verfügbar (Browser/Sicherheitskontext). PNG wurde heruntergeladen.';
+      const msg = 'Clipboard export is not available in this browser/security context. The PNG was downloaded.';
       if(exportHint) exportHint.textContent = msg;
       if(modalNote) modalNote.textContent = msg;
     }
@@ -2084,61 +2084,61 @@ function callout(el){
   function updateGuidance(){
     if(document.body.classList.contains('helpOff')) return;
     if(state.finished){
-      setNextAction('Simulation beendet: Vergleichen Sie die vier Zentrifugationsergebnisse und argumentieren Sie für ein Replikationsmodell.');
+      setNextAction('Simulation finished: compare the four centrifugation results and argue for one replication model.');
       return;
     }
     // Determine next action and highlight relevant dropzone
     if(state.location === 'home'){
-      setNextAction(`Bakterien → <span class="mono">¹⁵N</span> (Drop).`);
+      setNextAction(`Bacteria -> <span class="mono">¹⁵N</span> (drop).`);
       callout(dzN15);
       return;
     }
 
     // In medium tubes: next is move to incubator (DnD)
     if(state.location === 'N15' && !state.incubated){
-      setNextAction(`Probe → <strong>Inkubator</strong> (Drop), dann <strong>20&nbsp;Min inkubieren</strong>.`);
+      setNextAction(`Sample -> <strong>Incubator</strong> (drop), then <strong>incubate for 20&nbsp;min</strong>.`);
       callout(dzIncubator);
       return;
     }
 
     if(state.location === 'N15' && state.incubated){
-      setNextAction(`Optional: Baseline messen → Probe → <strong>Zentrifuge</strong> (Drop) → <strong>Zentrifugieren</strong>. Oder: Shift → <span class="mono">¹⁴N</span> (Drop).`);
+      setNextAction(`Optional: measure a baseline -> sample -> <strong>Centrifuge</strong> (drop) -> <strong>Centrifuge</strong>. Or: shift -> <span class="mono">¹⁴N</span> (drop).`);
       callout(dzN14);
       return;
     }
 
     if(state.location === 'N14' && !state.incubated){
-      setNextAction(`Probe → <strong>Inkubator</strong> (Drop), dann <strong>20&nbsp;Min inkubieren</strong> → Gen +1.`);
+      setNextAction(`Sample -> <strong>Incubator</strong> (drop), then <strong>incubate for 20&nbsp;min</strong> -> Gen +1.`);
       callout(dzIncubator);
       return;
     }
 
     if(state.location === 'N14' && state.incubated){
-      setNextAction(`Probe → <strong>Zentrifuge</strong> (Drop), dann <strong>Zentrifugieren</strong>.`);
+      setNextAction(`Sample -> <strong>Centrifuge</strong> (drop), then <strong>Centrifuge</strong>.`);
       callout(dzCentrifuge);
       return;
     }
 
     if(state.location === 'incubator' && !state.incubated){
-      setNextAction(`<strong>20&nbsp;Min inkubieren</strong> (Klick).`);
+      setNextAction(`<strong>Incubate for 20&nbsp;min</strong> (click).`);
       callout(dzIncubator);
       return;
     }
 
     if(state.location === 'incubator' && state.incubated){
-      setNextAction(`Probe → <strong>Zentrifuge</strong> (Drop) zum Messen oder → <span class="mono">¹⁴N</span> (Drop) für Shift.`);
+      setNextAction(`Sample -> <strong>Centrifuge</strong> (drop) to measure, or -> <span class="mono">¹⁴N</span> (drop) for the shift.`);
       callout(dzCentrifuge);
       return;
     }
 
     if(state.location === 'centrifuge' && !state.incubated){
-      setNextAction(`Für neue Messung: Probe zurück in Medium → Inkubator → inkubieren.`);
+      setNextAction(`For a new measurement: sample back into medium -> incubator -> incubate.`);
       callout(dzN14);
       return;
     }
 
     if(state.location === 'centrifuge' && state.incubated){
-      setNextAction(`<strong>Zentrifugieren</strong> (Klick).`);
+      setNextAction(`<strong>Centrifuge</strong> (click).`);
       callout(dzCentrifuge);
       return;
     }
@@ -2252,7 +2252,7 @@ function handleDrop(targetEl){
       state.centrifuged = false;
       // If N14 is not locked, show the default token artwork at home.
       if(!state.n14Locked) setTokenImgMode('default');
-      setStatus('Bakterien auf der Bank. Ziehen Sie sie in ¹⁵N.');
+      setStatus('Bacteria are on the bench. Drag them into ¹⁵N.');
     }
 
     if(target === 'N15'){
@@ -2260,17 +2260,17 @@ function handleDrop(targetEl){
       state.sampleMedium = 'N15';
       if(!state.sampleId){
         state.sampleId = newSampleId();
-        logProtocol(`Bakterienkultur angelegt (Start in ¹⁵N).`);
+        logProtocol(`Bacterial culture created (start in ¹⁵N).`);
       } else {
-        logProtocol(`In ¹⁵N-Medium gelegt.`);
+        logProtocol(`Placed into ¹⁵N medium.`);
       }
-      state.dnaLabel = state.heavyLabeled ? 'schwer (¹⁵N)' : 'nicht markiert';
+      state.dnaLabel = state.heavyLabeled ? 'heavy (¹⁵N)' : 'not labeled';
       state.incubated = false;
       state.centrifuged = false;
       state.centrifuged = false;
       // Show tube-style token artwork while the sample is in ¹⁵N (unless N14 is permanently locked).
       if(!state.n14Locked) setTokenImgMode('n15');
-      setStatus('Probe in ¹⁵N-Medium. Nächster Schritt: Probe in den Inkubator ziehen und 20 Minuten inkubieren.');
+      setStatus('Sample in ¹⁵N medium. Next step: drag the sample into the incubator and incubate for 20 minutes.');
     }
 
     if(target === 'N14'){
@@ -2281,7 +2281,7 @@ function handleDrop(targetEl){
         if(!state.shifted){
           logProtocol(`Shift in ¹⁴N (Gen 0).`);
         } else {
-          logProtocol(`Zurück in ¹⁴N (Gen ${state.genAfterShift}).`);
+          logProtocol(`Back into ¹⁴N (Gen ${state.genAfterShift}).`);
         }
       }
       state.incubated = false;
@@ -2293,39 +2293,39 @@ function handleDrop(targetEl){
       if(!state.n14Locked) setTokenImgMode('n14');
 
       if(!state.heavyLabeled){
-        setStatus('Hinweis: Typisch ist vorherige vollständige ¹⁵N-Markierung (Inkubation in ¹⁵N).');
+        setStatus('Hint: a complete ¹⁵N labeling step beforehand (incubation in ¹⁵N) is typical.');
       }
 
       if(!state.shifted){
         state.shifted = true;
         state.genAfterShift = 0;
-        state.dnaLabel = 'Markiert';
-        setStatus('Shift in ¹⁴N gestartet. Gen 0: vor Replikation in ¹⁴N. Ziehen Sie die Probe in den Inkubator und inkubieren Sie 20 Minuten für Gen 1.');
+        state.dnaLabel = 'Labeled';
+        setStatus('Shift into ¹⁴N started. Gen 0: before replication in ¹⁴N. Drag the sample into the incubator and incubate for 20 minutes for Gen 1.');
       } else {
-        if(state.genAfterShift === 0) state.dnaLabel = 'Markiert';
-        setStatus(`Probe in ¹⁴N. Aktuell: Gen ${state.genAfterShift}. Ziehen Sie die Probe in den Inkubator und inkubieren Sie 20 Minuten für die nächste Generation.`);
+        if(state.genAfterShift === 0) state.dnaLabel = 'Labeled';
+        setStatus(`Sample in ¹⁴N. Current: Gen ${state.genAfterShift}. Drag the sample into the incubator and incubate for 20 minutes for the next generation.`);
       }
     }
 
     if(target === 'incubator'){
       state.location = 'incubator';
-      logProtocol(`In Inkubator gestellt.`);
+      logProtocol(`Placed in the incubator.`);
       state.incubated = false; // require incubation explicitly after placing into incubator
       state.centrifuged = false;
       if(!state.sampleMedium){
-        setStatus('Probe im Inkubator, aber noch kein Medium gewählt. Ziehen Sie die Probe zuerst in ¹⁵N oder ¹⁴N.');
+        setStatus('Sample is in the incubator, but no medium has been selected yet. Drag the sample into ¹⁵N or ¹⁴N first.');
       } else {
-        setStatus(`Probe im Inkubator (${state.sampleMedium}). Klicken Sie „20 Min inkubieren“.`);
+        setStatus(`Sample in the incubator (${state.sampleMedium}). Click "Incubate 20 min".`);
       }
     }
 
     if(target === 'centrifuge'){
       state.location = 'centrifuge';
-      logProtocol(`In Zentrifuge gestellt.`);
+      logProtocol(`Placed in the centrifuge.`);
       if(!state.incubated){
-        setStatus('Probe in der Zentrifuge. Hinweis: Für eine Messung muss zuvor (im Inkubator) inkubiert worden sein.');
+        setStatus('Sample is in the centrifuge. Hint: it must have been incubated first before you can measure it.');
       } else {
-        setStatus('Probe in der Zentrifuge. Zentrifugieren Sie jetzt.');
+        setStatus('Sample in the centrifuge. Centrifuge now.');
       }
     }
 
@@ -2467,18 +2467,18 @@ function handleDrop(targetEl){
 
     if(state.sampleMedium === 'N15'){
       state.heavyLabeled = true;
-      state.dnaLabel = 'schwer (¹⁵N)';
-      logProtocol(`Inkubiert in ¹⁵N → DNA schwer (¹⁵N).`);
-      setStatus('Inkubation in ¹⁵N abgeschlossen: DNA ist schwer markiert. Bakterienkultur in die Zentrifuge stellen und Zentrifugieren klicken.');
+      state.dnaLabel = 'heavy (¹⁵N)';
+      logProtocol(`Incubated in ¹⁵N -> DNA heavy (¹⁵N).`);
+      setStatus('Incubation in ¹⁵N completed: the DNA is heavily labeled. Place the bacterial culture in the centrifuge and click Centrifuge.');
     } else {
       if(!state.shifted){
         state.shifted = true;
         state.genAfterShift = 0;
       }
       state.genAfterShift += 1;
-      state.dnaLabel = 'Repliziert ✓';
-      logProtocol(`Inkubiert in ¹⁴N → Gen ${state.genAfterShift} repliziert ✓.`);
-      setStatus(`Inkubation in ¹⁴N abgeschlossen: Gen ${state.genAfterShift}. Ziehen Sie die Probe in die Zentrifuge und zentrifugieren Sie.`);
+      state.dnaLabel = 'Replicated ✓';
+      logProtocol(`Incubated in ¹⁴N -> Gen ${state.genAfterShift} replicated ✓.`);
+        setStatus(`Incubation in ¹⁴N completed: Gen ${state.genAfterShift}. Drag the sample into the centrifuge and spin it.`);
     }
 
     updateTokenChips();
@@ -2497,7 +2497,7 @@ function handleDrop(targetEl){
     updateButtons();
 
     try{
-      await runActionTimer(btnIncubate, 3, 'Inkubieren');
+      await runActionTimer(btnIncubate, 3, 'Incubate');
     } finally {
       if(incubatorImg) incubatorImg.classList.remove('heating');
       state.busy = false;
@@ -2520,35 +2520,35 @@ function handleDrop(targetEl){
       resultProbeId = state.sampleId;
     } else {
       resultProbeId = newSampleId();
-      logProtocol(`Probe ${resultProbeId} erzeugt (Aliquot für Zentrifugation).`);
+      logProtocol(`Sample ${resultProbeId} created (aliquot for centrifugation).`);
     }
 
     if(!state.shifted){
       // baseline (N15 heavy)
       renderBandsInto(bandsMain, [{ y: Y_HEAVY, color: 'rgba(255,211,106,0.90)', alpha: 1 }], 1.0);
-      predictionEl.textContent = 'Zentrifugation: nur schwere DNA (¹⁵N) → Bande unten.';
-      addMiniResult('Zentrifugation', resultProbeId);
-      setStatus('Zentrifugation abgeschlossen. Für den eigentlichen Versuch: Shift in ¹⁴N und weitere Inkubationen.');
+      predictionEl.textContent = 'Centrifugation: only heavy DNA (¹⁵N) -> band at the bottom.';
+      addMiniResult('Centrifugation', resultProbeId);
+        setStatus('Centrifugation completed. For the actual experiment, perform the shift into ¹⁴N and continue with further incubations.');
     } else {
       const bands = predictBandsSemiconservative(state.genAfterShift);
       renderBandsInto(bandsMain, bands, 1.0);
 
       if(state.genAfterShift === 1){
-        predictionEl.textContent = 'Zentrifugation (Gen 1 nach Shift): nur Hybrid-Bande (intermediär).';
+          predictionEl.textContent = 'Centrifugation (Gen 1 after shift): only a hybrid band (intermediate).';
       } else if(state.genAfterShift === 2){
-        predictionEl.textContent = 'Zentrifugation (Gen 2 nach Shift): Hybrid + leichte Bande.';
+          predictionEl.textContent = 'Centrifugation (Gen 2 after shift): hybrid band + light band.';
       } else {
-        predictionEl.textContent = `Zentrifugation (Gen ${state.genAfterShift} nach Shift): Hybrid-Anteil nimmt ab, leichte Bande nimmt zu.`;
+          predictionEl.textContent = `Centrifugation (Gen ${state.genAfterShift} after shift): the hybrid fraction decreases while the light band increases.`;
       }
 
-      addMiniResult('Zentrifugation', resultProbeId);
-      setStatus('Zentrifugation abgeschlossen. Für nächste Messung: weitere 20 Min inkubieren (nächste Generation) und erneut zentrifugieren.');
+      addMiniResult('Centrifugation', resultProbeId);
+        setStatus('Centrifugation completed. For the next measurement, incubate for another 20 minutes (next generation) and centrifuge again.');
     }
 
     // mark that a centrifugation has been performed (shown in the token label)
     state.centrifuged = true;
-    state.dnaLabel = 'Zentrifugiert ✓';
-    logProtocol(`Probe ${resultProbeId}: Zentrifugiert ✓ (Gen ${state.shifted ? state.genAfterShift : '—'}).`, {bold:true});
+    state.dnaLabel = 'Centrifuged ✓';
+    logProtocol(`Sample ${resultProbeId}: centrifuged ✓ (Gen ${state.shifted ? state.genAfterShift : '—'}).`, {bold:true});
 
     // require new incubation for next measurement
     state.incubated = false;
@@ -2568,7 +2568,7 @@ function handleDrop(targetEl){
     updateButtons();
 
     try{
-      await runActionTimer(btnSpin, 3, 'Zentrifugieren');
+      await runActionTimer(btnSpin, 3, 'Centrifuge');
     } finally {
       if(centrifugeImg) centrifugeImg.classList.remove('spinning');
       state.busy = false;
@@ -2613,14 +2613,14 @@ function handleDrop(targetEl){
 
     clearSlotFilled();
     clearMainBands();
-    predictionEl.textContent = 'Noch keine Messung. Führen Sie eine Zentrifugation durch.';
+    predictionEl.textContent = 'No measurement yet. Carry out a centrifugation.';
     miniResults.innerHTML = `
       <div class="miniCard" id="miniPlaceholder">
-        <div class="cap"><span>—</span><span class="mono">leer</span></div>
-        <div class="small">Ergebnisse erscheinen nach „Zentrifugieren“.</div>
+        <div class="cap"><span>—</span><span class="mono">empty</span></div>
+        <div class="small">Results appear after clicking "Centrifuge".</div>
       </div>`;
 
-    setStatus('Start: Ziehen Sie die Bakterien in ¹⁵N-Medium.');
+    setStatus('Start: drag the bacteria into the ¹⁵N medium.');
     updateTokenChips();
     updateButtons();
     updateGuidance();
@@ -2656,12 +2656,12 @@ function handleDrop(targetEl){
     var el=document.getElementById('introModal');
     if(!el)return;
 
-    var WORKSHEET_FILE = 'AB_Meselson_Stahl.pdf';
+    var WORKSHEET_FILE = 'AB_Meselson_Stahl_EN.pdf';
 
     function downloadWorksheet(){
       var a = document.createElement('a');
       a.href = WORKSHEET_FILE;
-      a.download = 'AB_Meselson_Stahl.pdf';
+      a.download = 'AB_Meselson_Stahl_EN.pdf';
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -2690,20 +2690,20 @@ function handleDrop(targetEl){
   <div class="im-card">
     <div class="im-head">
       <h2 id="introModalTitle" class="im-title">Meselson-Stahl-Experiment</h2>
-      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Schließen">×</button>
+      <button id="introModalCloseX" class="im-close-x" type="button" aria-label="Close">×</button>
     </div>
-    <p class="im-grade">Jahrgangsstufe: 9 · 12</p>
+    <p class="im-grade">Grade level: 9 · 12</p>
     <div class="im-desc">
-      Diese Simulation rekonstruiert den historischen Meselson-Stahl-Versuch, der das Modell der Replikation der DNA bewiesen hat. Verfolge, wie sich DNA-Stränge mit schweren (¹⁵N) und leichten (¹⁴N) Isotopen nach mehreren Replikationsrunden auf Dichtegradienten verteilen.
+      This simulation reconstructs the historic Meselson-Stahl experiment that demonstrated the model of DNA replication. Follow how DNA strands labeled with heavy (¹⁵N) and light (¹⁴N) isotopes distribute in density gradients after several rounds of replication.
     </div>
     <div class="im-btn-row">
-      <button id="introModalWorksheetBtn" class="im-start-btn im-worksheet-btn" type="button" data-worksheet-download>Arbeitsblatt</button>
-      <button id="introModalStartBtn" class="im-start-btn" type="button">Simulation starten →</button>
+      <button id="introModalWorksheetBtn" class="im-start-btn im-worksheet-btn" type="button" data-worksheet-download>Worksheet</button>
+      <button id="introModalStartBtn" class="im-start-btn" type="button">Start simulation →</button>
     </div>
   </div>
 </div>
 <!-- === QUELLENANGABE === -->
-<button id="quellenBtn" title="Bildquellen"
+<button id="quellenBtn" title="Image sources"
   onclick="document.getElementById('quellenModal').style.display='flex'"
   style="position:fixed; bottom:16px; right:16px; z-index:9998;
          background:#fff; border:1px solid #aaa; border-radius:50%;
@@ -2727,12 +2727,12 @@ function handleDrop(targetEl){
     <button onclick="document.getElementById('quellenModal').style.display='none'"
       style="position:absolute; top:10px; right:14px; background:none;
              border:none; font-size:22px; cursor:pointer; color:#555; line-height:1;">×</button>
-    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Bildquellen</h3>
+    <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1em; color:#333;">Image sources</h3>
     <ul style="padding-left:18px; line-height:1.7; font-size:0.9em; color:#333; margin:0;">
-      <li>Wenn nicht anders angegeben, sind alle Abbildungen mittels KI erstellt worden.</li>
-      <li><strong>Replikationsmodelle:</strong><br>
+      <li>Unless otherwise stated, all images were created with AI.</li>
+      <li><strong>Replication models:</strong><br>
         Mike Jones (Adenosine): <em>DNAreplicationModes.</em>
-        Wikimedia Commons, CC BY-SA 2.5, bearbeitet.</li>
+        Wikimedia Commons, CC BY-SA 2.5, adapted.</li>
     </ul>
   </div>
 </div>
