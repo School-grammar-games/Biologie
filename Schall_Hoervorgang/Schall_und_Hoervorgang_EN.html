@@ -1838,7 +1838,7 @@ button.btn-export{
 
         <div class="row">
           <label for="freqSlider">
-            <span>Pitch</span>
+            <span>Pitch (Frequency)</span>
             <strong id="freqValue">440 Hz</strong>
           </label>
           <input id="freqSlider" type="range" min="120" max="1200" value="440" step="1">
@@ -1846,7 +1846,7 @@ button.btn-export{
 
         <div class="row">
           <label for="ampSlider">
-            <span>Volume</span>
+            <span>Volume (Amplitude)</span>
             <strong id="ampValue">50 %</strong>
           </label>
           <input id="ampSlider" type="range" min="5" max="100" value="50" step="1">
@@ -3837,14 +3837,14 @@ if(btnDoExportChoice){
   }
 
   function freqLabel(f) {
-    if (f < 300) return 'niedrig';
-    if (f < 700) return 'mittel';
-    return 'hoch';
+    if (f < 300) return 'low';
+    if (f < 700) return 'medium';
+    return 'high';
   }
   function ampLabel(a) {
-    if (a < 0.33) return 'leise';
-    if (a < 0.66) return 'mittel';
-    return 'laut';
+    if (a < 0.33) return 'quiet';
+    if (a < 0.66) return 'medium';
+    return 'loud';
   }
 
   function updateSoundUI() {
@@ -3852,9 +3852,9 @@ if(btnDoExportChoice){
     ampValue.textContent = `${Math.round(soundState.amp * 100)} %`;
     qualFreq.textContent = freqLabel(soundState.freq);
     qualAmp.textContent = ampLabel(soundState.amp);
-    btnToggleTone.textContent = soundState.isToneOn ? 'Ton deaktivieren' : 'Ton aktivieren';
+    btnToggleTone.textContent = soundState.isToneOn ? 'Disable tone' : 'Enable tone';
     if (signalModeToggle) signalModeToggle.checked = (soundState.signalMode === 'single');
-    if (signalModeLabel) signalModeLabel.textContent = (soundState.signalMode === 'single') ? 'Einzelimpuls' : 'Dauerimpuls';
+    if (signalModeLabel) signalModeLabel.textContent = (soundState.signalMode === 'single') ? 'Single pulse' : 'Continuous pulse';
     btnPulse.classList.toggle('hidden', soundState.signalMode !== 'single');
     if (soundViewToggle) soundViewToggle.checked = (soundState.view === 'particles');
     if (btnViewWave) btnViewWave.classList.toggle('active', soundState.view === 'wave');
@@ -4053,7 +4053,7 @@ if(btnDoExportChoice){
     if (hz >= 9000)  return 'ca. 46–55 Jahre';
     if (hz >= 7000)  return 'ca. 56–65 Jahre';
     if (hz >= 5000)  return 'ca. 66–75 Jahre';
-    return 'über 75 Jahre (sehr grob)';
+    return 'over 75 years (very rough estimate)';
   }
 
   function renderSweep() {
@@ -4240,7 +4240,7 @@ if(btnDoExportChoice){
       ctx.fillStyle = '#334155';
       ctx.font = '12px system-ui, sans-serif';
       ctx.fillText('Sound source (subwoofer)', source.x - 42, source.y + 34);
-      ctx.fillText('Mikrofon', mic.x - 22, mic.y + 38);
+      ctx.fillText('Microphone', mic.x - 28, mic.y + 38);
     }
   }
 
@@ -4457,7 +4457,7 @@ if(btnDoExportChoice){
         ctx.fillStyle = `rgba(37,99,235,${(0.06 + amp * 0.12).toFixed(3)})`;
         ctx.fillRect(x - bandHalfW, 66, bandHalfW * 2, 288);
         ctx.fillStyle = '#1d4ed8';
-        ctx.fillText('Verdichtung', x - 28, 368);
+        ctx.fillText('Compression', x - 31, 368);
       }
     } else {
       // Einzelimpuls-Markierung: genau *eine* wandernde Verdichtungszone (synchron zum Partikelzentrum)
@@ -4479,7 +4479,7 @@ if(btnDoExportChoice){
         ctx.fillRect(x - bandHalfW, 66, bandHalfW * 2, 288);
 
         ctx.fillStyle = '#1d4ed8';
-        ctx.fillText('Verdichtung', x - 28, 368);
+        ctx.fillText('Compression', x - 31, 368);
       }
       // Keine statische Verdichtung anzeigen, wenn kein Einzelimpuls aktiv ist.
     }
@@ -4531,8 +4531,8 @@ if(btnDoExportChoice){
 
     ctx.fillStyle = '#334155';
     ctx.font = '12px system-ui, sans-serif';
-    ctx.fillText('Auslenkung am Mikrofon', 10, 16);
-    ctx.fillText('Zeit →', px0 + pw - 42, h - 10);
+    ctx.fillText('Displacement at microphone', 10, 16);
+    ctx.fillText('Time →', px0 + pw - 42, h - 10);
 
     // stylized microphone signal (didactic)
     const dist = soundState.mic.x - soundState.source.x;
@@ -4617,7 +4617,7 @@ if(btnDoExportChoice){
     const segLen = maxSeg * (1 - tBar) + minSeg * tBar;
 
     const freqLabelY = py0 + 32;
-    const freqLabel = 'Schwingungsabstand (Frequenz)';
+    const freqLabel = 'Wave spacing (frequency)';
 
     const segX1 = px0;               // linksbündig mit Diagrammfläche
     const barX2 = segX1 + segLen;    // Balkenende
@@ -6976,7 +6976,7 @@ if (p === null) {
       ctx.fill();
       ctx.fillStyle = '#64748b';
       ctx.font = '14px system-ui, sans-serif';
-      ctx.fillText('Anatomie lädt…', dx + 12, dy + 24);
+      ctx.fillText('Loading anatomy...', dx + 12, dy + 24);
       return;
     }
 
