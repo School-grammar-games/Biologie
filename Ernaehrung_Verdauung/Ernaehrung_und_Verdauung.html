@@ -24,6 +24,15 @@
   }
   </script>
   <!-- /SEO =================================================== -->
+  <!-- Google Analytics ======================================= -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-70L30QV3G6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-70L30QV3G6');
+  </script>
+  <!-- /Google Analytics ====================================== -->
 
   <meta name="description" content="Interaktive Simulation zu Mund, Magen, D&uuml;nndarm und Dickdarm: mechanische und chemische Verdauung, Enzyme, Aufnahme von N&auml;hrstoffen und Wasser." />
   <link rel="icon" href="data:," />
@@ -132,7 +141,7 @@
     }
     .tab-btn.active .ico{background:rgba(255,255,255,.18)}
 
-    .layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(330px,.75fr);gap:12px;align-items:start}
+    .layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(330px,.75fr);gap:12px;align-items:stretch}
     .panel{
       background:var(--panel);
       border:1px solid rgba(255,255,255,.72);
@@ -140,7 +149,7 @@
       box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .stage-panel{padding:10px}
+    .stage-panel{padding:10px;display:flex;flex-direction:column}
     .stage-head{
       display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
       padding:3px 4px 10px;
@@ -164,6 +173,8 @@
       background:linear-gradient(180deg,#f9fbff,#edf4ef);
       overflow:hidden;
       position:relative;
+      flex:1;
+      min-height:560px;
     }
     .stage-bg{
       position:absolute;
@@ -177,7 +188,7 @@
     canvas{
       display:block;
       width:100%;
-      height:auto;
+      height:100%;
       touch-action:none;
       position:relative;
       z-index:1;
@@ -231,6 +242,7 @@
     }
 
     .media-card{padding:14px}
+    .media-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .media-frame{
       margin:10px 0 0;
       padding:10px;
@@ -257,6 +269,44 @@
       line-height:1.35;
     }
     .media-frame figcaption:empty{display:none}
+    .molecular-frame canvas{
+      display:block;
+      width:100%;
+      height:auto;
+      aspect-ratio:4 / 3;
+      border-radius:11px;
+      background:#fff;
+      border:1px solid rgba(24,32,51,.10);
+    }
+    .expand-btn{
+      min-height:34px;
+      padding:7px 10px;
+      border-radius:10px;
+      box-shadow:none;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .info-figure{
+      margin:16px 0 4px;
+      padding:10px;
+      border:1px solid rgba(24,32,51,.12);
+      border-radius:12px;
+      background:#f8fafc;
+    }
+    .info-figure img{
+      display:block;
+      width:100%;
+      max-height:360px;
+      object-fit:contain;
+      border-radius:9px;
+      background:#fff;
+    }
+    .info-figure figcaption{
+      margin-top:7px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
 
     .meal-controls{padding:14px}
     .meal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -419,6 +469,28 @@
       width:34px;height:34px;min-height:34px;padding:0;border:none;box-shadow:none;
       background:transparent;color:#555;font-size:24px;line-height:1;
     }
+    .molecular-modal{
+      position:fixed;inset:0;z-index:98;display:none;
+      align-items:center;justify-content:center;
+      background:rgba(0,0,0,.45);padding:18px;
+    }
+    .molecular-modal.open{display:flex}
+    .molecular-card{
+      width:min(980px,100%);max-height:88vh;overflow:auto;
+      background:#fff;border-radius:14px;border:1px solid rgba(24,32,51,.14);
+      box-shadow:0 18px 56px rgba(0,0,0,.34);
+      padding:18px;position:relative;
+    }
+    .molecular-card h3{margin:0 42px 12px 0;font-size:20px}
+    .molecular-card canvas{
+      display:block;width:100%;height:auto;aspect-ratio:16 / 9;
+      border-radius:12px;border:1px solid rgba(24,32,51,.12);background:#fff;
+    }
+    .molecular-close{
+      position:absolute;right:10px;top:8px;
+      width:34px;height:34px;min-height:34px;padding:0;border:none;box-shadow:none;
+      background:transparent;color:#555;font-size:24px;line-height:1;
+    }
 
     @media (max-width:1040px){
       .layout{grid-template-columns:1fr}
@@ -486,10 +558,13 @@
 
       <aside class="side" aria-label="Informationen und Steuerung">
         <section class="panel media-card">
-          <h3>Passendes Bild</h3>
-          <figure class="media-frame">
-            <img id="moduleImage" src="Bilder/Chewing.gif" alt="Animation zum Kauvorgang und zur Zerkleinerung der Nahrung" />
-            <figcaption id="moduleImageCredit"></figcaption>
+          <div class="media-head">
+            <h3>Molekulare Ebene</h3>
+            <button class="expand-btn" id="molecularExpand" type="button">Vergr&ouml;&szlig;ern</button>
+          </div>
+          <figure class="media-frame molecular-frame">
+            <canvas id="molecularCanvas" width="620" height="465" aria-label="Molekulare Simulation des aktuellen Verdauungsabschnitts"></canvas>
+            <figcaption id="molecularCaption">Speichel-Amylase bindet St&auml;rke, bildet kurzzeitig einen Enzym-Substrat-Komplex und spaltet kleinere Zuckerketten ab.</figcaption>
           </figure>
         </section>
 
@@ -587,9 +662,21 @@
     </div>
   </div>
 
+  <div id="molecularModal" class="molecular-modal" aria-hidden="true">
+    <div class="molecular-card" role="dialog" aria-modal="true" aria-labelledby="molecularModalTitle">
+      <button id="molecularClose" class="molecular-close" type="button" aria-label="Molekulare Ebene schliessen">&times;</button>
+      <h3 id="molecularModalTitle">Molekulare Ebene</h3>
+      <canvas id="molecularLargeCanvas" width="960" height="540" aria-label="Vergroesserte molekulare Simulation"></canvas>
+    </div>
+  </div>
+
   <script>
     const canvas = document.getElementById("sim");
     const ctx = canvas.getContext("2d");
+    const molecularCanvas = document.getElementById("molecularCanvas");
+    const molecularCtx = molecularCanvas.getContext("2d");
+    const molecularLargeCanvas = document.getElementById("molecularLargeCanvas");
+    const molecularLargeCtx = molecularLargeCanvas.getContext("2d");
     const stageBg = document.getElementById("stageBg");
     const backgroundSources = {
       mouth:"Bilder/Hintergrundbild_Mund.gif",
@@ -783,6 +870,12 @@
       small:["carbs","protein","fat"],
       large:["fiber"]
     };
+    const molecularCaptions = {
+      mouth:"Amylase bindet Staerke, bildet einen Enzym-Substrat-Komplex und setzt kleinere Zuckerketten frei.",
+      stomach:"Pepsinogen wird in der Magenschleimhaut gebildet, im sauren Milieu zu Pepsin aktiviert und spaltet Proteine in Peptide.",
+      small:"Falten, Darmzotten und Mikrovilli vergroessern die Oberflaeche; resorbierbare Teilchen gelangen in Blutkapillaren oder Lymphgefaesse.",
+      large:"Im Dickdarm wird Wasser aus dem Darminhalt resorbiert; Bakterien verwerten Ballaststoffe und der Inhalt wird eingedickt."
+    };
     const sliders = {
       carbs:document.getElementById("carbs"),
       protein:document.getElementById("protein"),
@@ -801,8 +894,8 @@
       infoSummary:document.getElementById("infoSummary"),
       infoModalTitle:document.getElementById("infoModalTitle"),
       infoModalBody:document.getElementById("infoModalBody"),
-      moduleImage:document.getElementById("moduleImage"),
-      moduleImageCredit:document.getElementById("moduleImageCredit"),
+      molecularCaption:document.getElementById("molecularCaption"),
+      molecularModalTitle:document.getElementById("molecularModalTitle"),
       mealFeedback:document.getElementById("mealFeedback"),
       digestionMeter:document.getElementById("digestionMeter"),
       matchTask:document.getElementById("matchTask"),
@@ -824,6 +917,16 @@
       return a;
     }
 
+    function infoMediaHtml(m){
+      const credit = m.image.credit ? `<figcaption>${esc(m.image.credit)}</figcaption>` : "";
+      return `
+        <figure class="info-figure">
+          <img src="${esc(m.image.src)}" alt="${esc(m.image.alt)}" />
+          ${credit}
+        </figure>
+      `;
+    }
+
     function renderModule(){
       const m = modules[activeKey];
       setBackgroundForModule();
@@ -833,10 +936,9 @@
       els.moduleTitle.textContent = m.name;
       els.infoSummary.innerHTML = `<strong>Arbeitsauftr&auml;ge:</strong>${m.assignments.map((task, i) => `<span class="assignment-line"><span class="assignment-label">Aufgabe ${i + 1}:</span> ${esc(task)}</span>`).join("")}`;
       els.infoModalTitle.textContent = "Informationstext: " + m.name;
-      els.infoModalBody.innerHTML = m.infoHtml;
-      els.moduleImage.src = m.image.src;
-      els.moduleImage.alt = m.image.alt;
-      els.moduleImageCredit.textContent = m.image.credit;
+      els.infoModalBody.innerHTML = m.infoHtml + infoMediaHtml(m);
+      els.molecularCaption.textContent = molecularCaptions[activeKey];
+      els.molecularModalTitle.textContent = "Molekulare Ebene: " + m.name;
       renderMatch();
       renderSort();
       updateMeal();
@@ -1102,6 +1204,20 @@
       if(ev.target === infoModal) setInfoOpen(false);
     });
 
+    const molecularExpand = document.getElementById("molecularExpand");
+    const molecularModal = document.getElementById("molecularModal");
+    const molecularClose = document.getElementById("molecularClose");
+    function setMolecularOpen(open){
+      molecularModal.classList.toggle("open", open);
+      molecularModal.setAttribute("aria-hidden", open ? "false" : "true");
+      drawMolecularScene(molecularLargeCtx, molecularLargeCanvas, time);
+    }
+    molecularExpand.addEventListener("click", () => setMolecularOpen(true));
+    molecularClose.addEventListener("click", () => setMolecularOpen(false));
+    molecularModal.addEventListener("click", ev => {
+      if(ev.target === molecularModal) setMolecularOpen(false);
+    });
+
     const sourcesBtn = document.getElementById("sourcesBtn");
     const sourcesModal = document.getElementById("sourcesModal");
     const sourcesClose = document.getElementById("sourcesClose");
@@ -1117,6 +1233,7 @@
     document.addEventListener("keydown", ev => {
       if(ev.key === "Escape") setInfoOpen(false);
       if(ev.key === "Escape") setSourcesOpen(false);
+      if(ev.key === "Escape") setMolecularOpen(false);
     });
 
     function worldToScreen(x,y){
@@ -1275,125 +1392,4 @@
       const s = worldToScreen(x,y);
       ctx.save();
       ctx.globalAlpha = alpha == null ? .92 : alpha;
-      ctx.fillStyle = color;
-      ctx.strokeStyle = "rgba(255,255,255,.82)";
-      ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      ctx.arc(s.x,s.y,size * camera.zoom,0,Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    function isFocusedNutrient(key){
-      return (digestionFocus[activeKey] || []).includes(key);
-    }
-
-    function drawParticles(dt){
-      const m = modules[activeKey];
-      const carbs = Number(sliders.carbs.value);
-      const protein = Number(sliders.protein.value);
-      const fat = Number(sliders.fat.value);
-      const fiber = Number(sliders.fiber.value);
-      const colors = [
-        ["carbs", nutrientColors.carbs, carbs],
-        ["protein", nutrientColors.protein, protein],
-        ["fat", nutrientColors.fat, fat],
-        ["fiber", nutrientColors.fiber, fiber]
-      ].filter(x => x[2] > 0);
-      if(!colors.length) return;
-
-      const total = Math.max(5, Math.min(11, Math.round((carbs + protein + fat + fiber) / 42)));
-      for(let i = 0; i < total; i++){
-        const nutrient = colors[i % colors.length][0];
-        const col = colors[i % colors.length][1];
-        const focused = isFocusedNutrient(nutrient);
-        const offset = i / total;
-        let x, y, size = 4.5 + (i % 3);
-
-        if(activeKey === "mouth"){
-          const chewPhase = Math.sin(time * 2.0 + i * .35);
-          const angle = offset * Math.PI * 2 + time * .45;
-          x = 444 + Math.cos(angle) * 34 + Math.sin(time * 1.8 + i) * 4;
-          y = 288 + Math.sin(angle) * 14 + chewPhase * 6;
-          size *= .85;
-        }else if(activeKey === "stomach"){
-          const angle = time * .32 + offset * Math.PI * 2;
-          const pulse = 1 + Math.sin(time * .55 + i) * .06;
-          x = 713 + Math.cos(angle) * 42 * pulse + Math.sin(angle * 2) * 8;
-          y = 812 + Math.sin(angle) * 54 + Math.cos(angle * 1.4) * 7;
-          size += 1;
-        }else if(activeKey === "small"){
-          const smallPath = [[488,1088],[568,1074],[648,1108],[634,1170],[558,1210],[488,1178],[486,1120],[560,1110],[622,1145],[574,1188],[520,1160],[556,1128]];
-          const p = pointOnPath(smallPath, time * .020 + offset);
-          x = p.x + Math.sin(time * 1.2 + i) * 5;
-          y = p.y + Math.cos(time * 1.0 + i) * 4;
-          size *= .72;
-
-          if(i % 3 === 0){
-            const end = worldToScreen(x + 16 + Math.sin(i) * 10, y - 18);
-            const start = worldToScreen(x,y);
-            ctx.save();
-            ctx.strokeStyle = col;
-            ctx.globalAlpha = .12 + .07 * Math.sin(time * 1.1 + i);
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(start.x,start.y);
-            ctx.lineTo(end.x,end.y);
-            ctx.stroke();
-            ctx.restore();
-          }
-        }else if(activeKey === "large"){
-          const largePath = [[417,1255],[397,1220],[386,1170],[384,1110],[386,1056],[410,1018],[456,1000],[520,1000],[585,1004],[648,1010],[700,1032],[733,1072],[745,1128],[744,1190],[730,1243],[700,1280],[656,1302],[615,1318],[590,1346],[575,1386]];
-          const p = pointOnPath(largePath, time * .016 + offset);
-          x = p.x + Math.sin(time * .55 + i) * 2.5;
-          y = p.y + Math.cos(time * .50 + i) * 2.5;
-          if(col === nutrientColors.fiber) size *= 1.35;
-        }
-        drawNutrientDot(x,y,col,focused ? size * 1.35 : size * .72, focused ? .96 : .34);
-      }
-    }
-
-    function drawMicroscopeOverlay(){
-      return;
-    }
-
-    function roundRect(x,y,w,h,r){
-      ctx.beginPath();
-      ctx.moveTo(x + r,y);
-      ctx.lineTo(x + w - r,y);
-      ctx.quadraticCurveTo(x + w,y,x + w,y + r);
-      ctx.lineTo(x + w,y + h - r);
-      ctx.quadraticCurveTo(x + w,y + h,x + w - r,y + h);
-      ctx.lineTo(x + r,y + h);
-      ctx.quadraticCurveTo(x,y + h,x,y + h - r);
-      ctx.lineTo(x,y + r);
-      ctx.quadraticCurveTo(x,y,x + r,y);
-    }
-
-    function drawScene(now){
-      const dt = now - last;
-      last = now;
-      if(playing) time += dt / 1000;
-      const target = modules[activeKey].focus;
-      const cameraEase = 1 - Math.exp(-dt / 760);
-      camera.x += (target.x - camera.x) * cameraEase;
-      camera.y += (target.y - camera.y) * cameraEase;
-      camera.zoom += (target.zoom - camera.zoom) * cameraEase;
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      drawBackgroundImage();
-      drawOrganHighlights();
-      drawParticles(dt);
-      drawMicroscopeOverlay();
-      requestAnimationFrame(drawScene);
-    }
-
-    updateLockUi();
-    balanceMeal();
-    renderModule();
-    requestAnimationFrame(drawScene);
-  </script>
-  <script data-goatcounter="https://biologie-simulationen.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
-</body>
-</html>
+ 
