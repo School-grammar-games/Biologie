@@ -1302,8 +1302,13 @@ function buildIndexedMediaCandidates(sim, folder, exts, maxIndex) {
 }
 
 function buildQrCodeCandidates(sim) {
+  var exactQrCodeMap = {
+    schall: ['QR-Codes/Schall_und_H\u00f6rvorgang.png', 'QR-Codes/Schall_und_Hoervorgang.png', 'QR-Codes/Schall_Hoervorgang.png'],
+    kaeferspiel: ['QR-Codes/K\u00e4fer under Pressure.png', 'QR-Codes/Evolution_Kaeferspiel.png', 'QR-Codes/Kaefer_under_Pressure.png']
+  };
   return uniqueList(
-    buildMediaCandidates(sim, 'QR-Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif'])
+    (exactQrCodeMap[sim.id] || [])
+      .concat(buildMediaCandidates(sim, 'QR-Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
       .concat(buildMediaCandidates(sim, 'QR Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
       .concat(buildMediaCandidates(sim, 'QRCode', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
       .concat(buildMediaCandidates(sim, 'QR_Code', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
