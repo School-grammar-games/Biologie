@@ -1453,10 +1453,10 @@ function buildIndexedMediaCandidates(sim, folder, exts, maxIndex) {
 
 function buildQrCodeCandidates(sim) {
   return uniqueList(
-    buildMediaCandidates(sim, 'QR-Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif'])
-      .concat(buildMediaCandidates(sim, 'QR Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
-      .concat(buildMediaCandidates(sim, 'QRCode', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
-      .concat(buildMediaCandidates(sim, 'QR_Code', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
+    buildMediaCandidates(sim, 'QR-Codes_EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif'])
+      .concat(buildMediaCandidates(sim, 'QR Codes EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
+      .concat(buildMediaCandidates(sim, 'QRCode_EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
+      .concat(buildMediaCandidates(sim, 'QR_Code_EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
   );
 }
 
