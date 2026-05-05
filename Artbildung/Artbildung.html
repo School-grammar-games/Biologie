@@ -747,7 +747,7 @@
       <button id="exportCloseBtn" type="button">Schließen</button>
     </div>
     <div style="margin-top:12px;">
-      <img id="exportPreview" alt="Exportvorschau" style="width:100%; border-radius:12px; border:1px solid rgba(148,163,184,.18); background:rgba(2,6,23,.35);" />
+      <img id="exportPreview" alt="Exportvorschau" style="width:100%; border-radius:12px; border:1px solid rgba(148,163,184,.28); background:#ffffff;" />
       <div class="row" style="margin-top:10px; justify-content:flex-end;">
         <button id="exportDownloadBtn" type="button">PNG herunterladen</button>
       </div>
@@ -1647,11 +1647,11 @@ function drawTypeHistoryChart(canvas, series, title){
 
   // Background
   cctx.clearRect(0,0,cssW,cssH);
-  cctx.fillStyle = "rgba(2,6,23,1)";
+  cctx.fillStyle = "#ffffff";
   cctx.fillRect(0,0,cssW,cssH);
 
   // Title
-  cctx.fillStyle = "#e2e8f0";
+  cctx.fillStyle = "#111827";
   cctx.font = "800 18px system-ui,-apple-system,Segoe UI,Roboto,Arial";
   cctx.fillText(title, 18, 28);
 
@@ -1661,9 +1661,9 @@ function drawTypeHistoryChart(canvas, series, title){
   const h = cssH - padT - padB;
 
   // Frame
-  cctx.fillStyle = "rgba(2,6,23,.35)";
+  cctx.fillStyle = "#ffffff";
   cctx.fillRect(x0, y0, w, h);
-  cctx.strokeStyle = "rgba(148,163,184,.22)";
+  cctx.strokeStyle = "rgba(100,116,139,.38)";
   cctx.lineWidth = 1;
   cctx.strokeRect(x0 + 0.5, y0 + 0.5, w - 1, h - 1);
 
@@ -1705,14 +1705,14 @@ function drawTypeHistoryChart(canvas, series, title){
   for (let i=0;i<=yTicks;i++){
     const t = i / yTicks;
     const yy = plotY0 + plotH - t*plotH;
-    cctx.strokeStyle = "rgba(148,163,184,.12)";
+    cctx.strokeStyle = "rgba(148,163,184,.24)";
     cctx.beginPath();
     cctx.moveTo(x0, yy);
     cctx.lineTo(x0 + w, yy);
     cctx.stroke();
 
     const val = Math.round(t * yMax);
-    cctx.fillStyle = "rgba(203,213,225,.85)";
+    cctx.fillStyle = "#475569";
     cctx.fillText(String(val), 16, yy + 4);
   }
 
@@ -1720,7 +1720,7 @@ function drawTypeHistoryChart(canvas, series, title){
   if (N >= 2){
     for (let i=0;i<N;i++){
       const xx = x0 + (i/(N-1))*w;
-      cctx.strokeStyle = "rgba(148,163,184,.08)";
+      cctx.strokeStyle = "rgba(148,163,184,.18)";
       cctx.beginPath();
       cctx.moveTo(xx, plotY0);
       cctx.lineTo(xx, plotY0 + plotH);
@@ -1729,7 +1729,7 @@ function drawTypeHistoryChart(canvas, series, title){
   }
 
   // Axis labels
-  cctx.fillStyle = "rgba(203,213,225,.85)";
+  cctx.fillStyle = "#475569";
   cctx.fillText("Zyklus", x0 + w - 44, plotY0 + plotH + 36);
 
   // Lines
@@ -1772,7 +1772,7 @@ function drawTypeHistoryChart(canvas, series, title){
     for (let i=0;i<N;i+=step){
       const cyc = series[i]?.cycle ?? i;
       const xx = xAt(i);
-      cctx.fillStyle = "rgba(203,213,225,.75)";
+      cctx.fillStyle = "#64748b";
       cctx.fillText(String(cyc), xx - 5, plotY0 + plotH + 20);
     }
   }
@@ -1787,7 +1787,7 @@ function drawTypeHistoryChart(canvas, series, title){
     const ly = legY + row * legendRowH;
     cctx.fillStyle = LIZARD_COLOR[m] || "#fff";
     cctx.fillRect(lx, ly, legendBox, legendBox);
-    cctx.fillStyle = "rgba(226,232,240,.92)";
+    cctx.fillStyle = "#111827";
     cctx.fillText(LIZARD_LABEL[m] || m, lx + legendBox + 8, ly + 10);
   });
 }
@@ -1949,10 +1949,10 @@ async function exportEndChartsToClipboard(){
   octx.setTransform(dpr,0,0,dpr,0,0);
 
   // Background
-  octx.fillStyle = "rgba(2,6,23,1)";
+  octx.fillStyle = "#ffffff";
   octx.fillRect(0,0,outCssW,outCssH);
 
-  octx.fillStyle = "#e2e8f0";
+  octx.fillStyle = "#111827";
   octx.font = "800 18px system-ui,-apple-system,Segoe UI,Roboto,Arial";
 
   let y = pad;
@@ -1962,8 +1962,8 @@ async function exportEndChartsToClipboard(){
     const cardY = y;
     const cardW = chartW;
     const cardH = taskBlockH;
-    octx.fillStyle = "rgba(2,6,23,.45)";
-    octx.strokeStyle = "rgba(148,163,184,.22)";
+    octx.fillStyle = "#f8fafc";
+    octx.strokeStyle = "rgba(100,116,139,.35)";
     octx.lineWidth = 1;
     if (octx.roundRect){
       octx.beginPath();
@@ -1975,7 +1975,7 @@ async function exportEndChartsToClipboard(){
       octx.strokeRect(cardX + 0.5, cardY + 0.5, cardW - 1, cardH - 1);
     }
 
-    octx.fillStyle = "#e2e8f0";
+    octx.fillStyle = "#111827";
     octx.font = "600 15px system-ui,-apple-system,Segoe UI,Roboto,Arial";
     taskLines.forEach((line, idx)=>{
       octx.fillText(line, cardX + taskPadX, cardY + taskPadY + idx * taskLineH + 14);
@@ -1987,7 +1987,7 @@ async function exportEndChartsToClipboard(){
     octx.fillText(title, pad, y);
     y += titleH;
     // frame
-    octx.strokeStyle = "rgba(148,163,184,.22)";
+    octx.strokeStyle = "rgba(100,116,139,.35)";
     octx.lineWidth = 1;
     octx.strokeRect(pad + 0.5, y + 0.5, chartW - 1, h - 1);
     octx.drawImage(bmp, pad, y, chartW, h);
@@ -2001,7 +2001,7 @@ async function exportEndChartsToClipboard(){
   drawBlock("Habitat (rechts): Echsentypen über Zyklen", bmp3, h3); y += gap;
 
   // Distanzangaben (aus der linken Infobox)
-  octx.fillStyle = "#e2e8f0";
+  octx.fillStyle = "#111827";
   octx.font = "800 18px system-ui,-apple-system,Segoe UI,Roboto,Arial";
   octx.fillText("Zurückgelegte Distanz (Echsen)", pad, y);
   y += distTitleH;
@@ -2010,8 +2010,8 @@ async function exportEndChartsToClipboard(){
   const cardY = y;
   const cardW = chartW;
   const cardH = distBlockH - distTitleH;
-  octx.fillStyle = "rgba(2,6,23,.45)";
-  octx.strokeStyle = "rgba(148,163,184,.22)";
+  octx.fillStyle = "#f8fafc";
+  octx.strokeStyle = "rgba(100,116,139,.35)";
   octx.lineWidth = 1;
   if (octx.roundRect){
     octx.beginPath();
@@ -2033,16 +2033,16 @@ async function exportEndChartsToClipboard(){
   distRows.forEach((row, i)=>{
     const ry = innerY + i * distRowH;
     if (i > 0){
-      octx.strokeStyle = "rgba(148,163,184,.14)";
+      octx.strokeStyle = "rgba(148,163,184,.32)";
       octx.beginPath();
       octx.moveTo(innerX, ry - 8);
       octx.lineTo(cardX + cardW - distPad, ry - 8);
       octx.stroke();
     }
-    octx.fillStyle = "#cbd5e1";
+    octx.fillStyle = "#334155";
     octx.font = "13px system-ui,-apple-system,Segoe UI,Roboto,Arial";
     octx.fillText(row[0], innerX, ry + 14);
-    octx.fillStyle = "#f8fafc";
+    octx.fillStyle = "#111827";
     octx.font = "700 13px system-ui,-apple-system,Segoe UI,Roboto,Arial";
     const v = row[1];
     const maxW = cardX + cardW - distPad - rightColX;
@@ -2059,7 +2059,7 @@ async function exportEndChartsToClipboard(){
   y += cardH;
 
   // Footer (optional)
-  octx.fillStyle = "rgba(203,213,225,.65)";
+  octx.fillStyle = "#64748b";
   octx.font = "12px system-ui,-apple-system,Segoe UI,Roboto,Arial";
   const branch = state.timelineBranch ? ` · Branch: ${state.timelineBranch}` : "";
   octx.fillText(`Zyklen: ${state.cycleCount ?? 0}${branch}`, pad, outCssH - 16);
@@ -4142,9 +4142,33 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
     const DPR = (devicePixelRatio || 1);
     opts = opts || {};
     const useSpawnImageIcons = (opts.useSpawnImageIcons !== false);
+    const isExportLight = opts.theme === "light";
+    const chartColors = isExportLight ? {
+      bg: "#ffffff",
+      axis: "rgba(100,116,139,.55)",
+      grid: "rgba(148,163,184,.32)",
+      tick: "#64748b",
+      eventLine: "rgba(100,116,139,.35)",
+      band: "rgba(226,232,240,.55)",
+      cycleLine: "rgba(100,116,139,.52)",
+      cycleLabelBg: "rgba(255,255,255,.86)",
+      cycleLabel: "#334155",
+      spawnCount: "#111827"
+    } : {
+      bg: "rgba(2,6,23,.35)",
+      axis: "rgba(148,163,184,.25)",
+      grid: "rgba(148,163,184,.18)",
+      tick: "rgba(203,213,225,.75)",
+      eventLine: "rgba(148,163,184,.18)",
+      band: "rgba(148,163,184,.045)",
+      cycleLine: "rgba(148,163,184,.32)",
+      cycleLabelBg: "rgba(2,6,23,.78)",
+      cycleLabel: "rgba(226,232,240,.85)",
+      spawnCount: "rgba(226,232,240,.95)"
+    };
 
     g.clearRect(0,0,W,H);
-    g.fillStyle = "rgba(2,6,23,.35)";
+    g.fillStyle = chartColors.bg;
     g.fillRect(0,0,W,H);
 
     if (!hist || hist.length < 2) return;
@@ -4176,7 +4200,7 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
     };
 
     // Achsen
-    g.strokeStyle = "rgba(148,163,184,.25)";
+    g.strokeStyle = chartColors.axis;
     g.lineWidth = 1.2*DPR;
 
     g.beginPath();
@@ -4197,14 +4221,14 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
     };
 
     g.font = `${11*DPR}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-    g.fillStyle = "rgba(203,213,225,.75)";
+    g.fillStyle = chartColors.tick;
     g.textAlign = "center";
     g.textBaseline = "top";
 
     const first = Math.ceil(minX/step)*step;
     for (let tt = first; tt <= maxX + 1e-6; tt += step){
       const x = xScale(tt);
-      g.strokeStyle = "rgba(148,163,184,.18)";
+      g.strokeStyle = chartColors.grid;
       g.lineWidth = 1*DPR;
       g.beginPath();
       g.moveTo(x, H-padB); g.lineTo(x, H-padB + 5*DPR);
@@ -4257,7 +4281,7 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
       // Wettermarker
       g.save();
       g.setLineDash([4*DPR, 4*DPR]);
-      g.strokeStyle = "rgba(148,163,184,.18)";
+      g.strokeStyle = chartColors.eventLine;
       g.lineWidth = 1*DPR;
       g.beginPath();
       g.moveTo(x, padT); g.lineTo(x, H-padB);
@@ -4277,7 +4301,7 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
 
       g.font = `${11*DPR}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
       g.textBaseline = "top";
-      g.fillStyle = "rgba(203,213,225,.75)";
+      g.fillStyle = chartColors.tick;
     }
 
     const cycLenM = getCycleLen();
@@ -4296,14 +4320,14 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
         if (bi % 2 === 1){
           const x0b = xScale(t0);
           const x1b = xScale(t1);
-          g.fillStyle = "rgba(148,163,184,.045)";
+          g.fillStyle = chartColors.band;
           g.fillRect(x0b, padT, Math.max(1, x1b - x0b), H - padT - padB);
         }
       }
 
       g.save();
       g.setLineDash([]);
-      g.strokeStyle = "rgba(148,163,184,.32)";
+      g.strokeStyle = chartColors.cycleLine;
       g.lineWidth = 1.4*DPR;
       g.font = `${10*DPR}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
       g.textAlign = "left";
@@ -4322,9 +4346,9 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
         const tw = g.measureText(txt).width;
         const tx = x + 4*DPR;
         const ty = padT + 2*DPR;
-        g.fillStyle = "rgba(2,6,23,.78)";
+        g.fillStyle = chartColors.cycleLabelBg;
         g.fillRect(tx - 2*DPR, ty - 1*DPR, tw + 4*DPR, 12*DPR);
-        g.fillStyle = "rgba(226,232,240,.85)";
+        g.fillStyle = chartColors.cycleLabel;
         g.fillText(txt, tx, ty);
       }
       g.restore();
@@ -4409,7 +4433,7 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
         if (((ev.count|0) || 1) > 1){
           const txt = String(ev.count);
           g.font = `${8*DPR}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-          g.fillStyle = "rgba(226,232,240,.95)";
+          g.fillStyle = chartColors.spawnCount;
           g.fillText(txt, x + 12*DPR, y - 8*DPR);
         }
       }
@@ -4422,7 +4446,7 @@ if ((ddx*ddx + ddy*ddy) < killR*killR){
     const histFull = (state.historyAll && state.historyAll.length) ? state.historyAll : state.history;
     const evFull = (state.eventsAll && state.eventsAll.length) ? state.eventsAll : state.events;
     const useSpawnImageIcons = !(opts && opts.useSpawnImageIcons === false);
-    drawLineChartCore(chartHiddenPopulation, histFull, evFull, { useSpawnImageIcons });
+    drawLineChartCore(chartHiddenPopulation, histFull, evFull, { useSpawnImageIcons, theme:"light" });
   }
 
   function drawLineChart(){
