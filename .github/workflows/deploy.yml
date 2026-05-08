@@ -105,6 +105,7 @@ jobs:
           port: 21
           local-dir: ./deploy/
           server-dir: ${{ env.DEPLOY_FTP_SERVER_DIR }}
+          security: loose
           log-level: verbose
           timeout: 60000
           exclude: |
