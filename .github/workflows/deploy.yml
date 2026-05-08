@@ -11,6 +11,11 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_FTP_SERVER: ${{ secrets.NETCUP_FTP_SERVER || secrets.NETCUP_SERVER || secrets.FTP_SERVER || secrets.FTP_HOST || 'hosting240938.af92a.netcup.net' }}
+      DEPLOY_FTP_USERNAME: ${{ secrets.NETCUP_FTP_USERNAME || secrets.NETCUP_FTP_USER || secrets.NETCUP_USERNAME || secrets.NETCUP_USER || secrets.FTP_USERNAME || secrets.FTP_USER || 'hosting240938' }}
+      DEPLOY_FTP_PASSWORD: ${{ secrets.NETCUP_FTP_PASSWORD || secrets.NETCUP_FTP_PASS || secrets.NETCUP_PASSWORD || secrets.NETCUP_PASS || secrets.FTP_PASSWORD || secrets.FTP_PASS }}
+      DEPLOY_FTP_SERVER_DIR: ${{ secrets.NETCUP_FTP_SERVER_DIR || secrets.FTP_SERVER_DIR || 'edubiosim.de/httpdocs/' }}
 
     steps:
       - name: Repository auschecken
@@ -59,16 +64,47 @@ jobs:
           cp robots.txt deploy/robots.txt 2>/dev/null || true
           cp sitemap.xml deploy/sitemap.xml 2>/dev/null || true
 
+      - name: Netcup FTP-Zugang pruefen
+        run: |
+          set -euo pipefail
+
+          missing=0
+          if [ -z "${DEPLOY_FTP_SERVER}" ]; then
+            echo "::error::FTP-Server fehlt. Setze NETCUP_FTP_SERVER, FTP_SERVER oder FTP_HOST."
+            missing=1
+          fi
+          if [ -z "${DEPLOY_FTP_USERNAME}" ]; then
+            echo "::error::FTP-Benutzer fehlt. Setze NETCUP_FTP_USERNAME, NETCUP_FTP_USER, FTP_USERNAME oder FTP_USER."
+            missing=1
+          fi
+          if [ -z "${DEPLOY_FTP_PASSWORD}" ]; then
+            echo "::error::FTP-Passwort fehlt. Setze NETCUP_FTP_PASSWORD, NETCUP_FTP_PASS, FTP_PASSWORD oder FTP_PASS."
+            missing=1
+          fi
+          if [ -z "${DEPLOY_FTP_SERVER_DIR}" ]; then
+            echo "::error::FTP-Zielordner fehlt. Setze NETCUP_FTP_SERVER_DIR oder FTP_SERVER_DIR."
+            missing=1
+          fi
+
+          echo "FTP-Server: ${DEPLOY_FTP_SERVER}"
+          echo "FTP-Zielordner: ${DEPLOY_FTP_SERVER_DIR}"
+          echo "FTP-Benutzer konfiguriert: $([ -n "${DEPLOY_FTP_USERNAME}" ] && echo ja || echo nein)"
+          echo "FTP-Passwort konfiguriert: $([ -n "${DEPLOY_FTP_PASSWORD}" ] && echo ja || echo nein)"
+
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
       - name: Zu Netcup deployen
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
-          server: ${{ secrets.NETCUP_FTP_SERVER || secrets.FTP_SERVER }}
-          username: ${{ secrets.NETCUP_FTP_USERNAME || secrets.FTP_USERNAME }}
-          password: ${{ secrets.NETCUP_FTP_PASSWORD || secrets.FTP_PASSWORD }}
+          server: ${{ env.DEPLOY_FTP_SERVER }}
+          username: ${{ env.DEPLOY_FTP_USERNAME }}
+          password: ${{ env.DEPLOY_FTP_PASSWORD }}
           protocol: ftps
           port: 21
           local-dir: ./deploy/
-          server-dir: ./edubiosim.de/httpdocs/
+          server-dir: ${{ env.DEPLOY_FTP_SERVER_DIR }}
           exclude: |
             **/.git*
             **/.git*/**
