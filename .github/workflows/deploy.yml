@@ -12,9 +12,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      DEPLOY_FTP_SERVER: ${{ secrets.NETCUP_FTP_SERVER || secrets.NETCUP_SERVER || secrets.FTP_SERVER || secrets.FTP_HOST || 'hosting240938.af92a.netcup.net' }}
-      DEPLOY_FTP_USERNAME: ${{ secrets.NETCUP_FTP_USERNAME || secrets.NETCUP_FTP_USER || secrets.NETCUP_USERNAME || secrets.NETCUP_USER || secrets.FTP_USERNAME || secrets.FTP_USER || 'hosting240938' }}
-      DEPLOY_FTP_PASSWORD: ${{ secrets.NETCUP_FTP_PASSWORD || secrets.NETCUP_FTP_PASS || secrets.NETCUP_PASSWORD || secrets.NETCUP_PASS || secrets.FTP_PASSWORD || secrets.FTP_PASS }}
+      DEPLOY_FTP_SERVER: ${{ secrets.NETCUP_FTP_SERVER || 'hosting240938.af92a.netcup.net' }}
+      DEPLOY_FTP_USERNAME: ${{ secrets.NETCUP_FTP_USERNAME || secrets.NETCUP_FTP_USER || 'hosting240938' }}
+      DEPLOY_FTP_PASSWORD: ${{ secrets.NETCUP_FTP_PASSWORD || secrets.NETCUP_FTP_PASS || secrets.FTP_PASSWORD || secrets.FTP_PASS || secrets.NETCUP_PASSWORD || secrets.NETCUP_PASS }}
       DEPLOY_FTP_SERVER_DIR: ${{ secrets.NETCUP_FTP_SERVER_DIR || secrets.FTP_SERVER_DIR || 'edubiosim.de/httpdocs/' }}
 
     steps:
@@ -105,6 +105,8 @@ jobs:
           port: 21
           local-dir: ./deploy/
           server-dir: ${{ env.DEPLOY_FTP_SERVER_DIR }}
+          log-level: verbose
+          timeout: 60000
           exclude: |
             **/.git*
             **/.git*/**
