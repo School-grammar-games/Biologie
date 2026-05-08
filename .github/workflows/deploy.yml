@@ -12,8 +12,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      DEPLOY_FTP_SERVER: ${{ secrets.NETCUP_FTP_SERVER || 'hosting240938.af92a.netcup.net' }}
-      DEPLOY_FTP_USERNAME: ${{ secrets.NETCUP_FTP_USERNAME || secrets.NETCUP_FTP_USER || 'hosting240938' }}
+      DEPLOY_FTP_SERVER: hosting240938.af92a.netcup.net
+      DEPLOY_FTP_USERNAME: hosting240938
       DEPLOY_FTP_PASSWORD: ${{ secrets.NETCUP_FTP_PASSWORD || secrets.NETCUP_FTP_PASS || secrets.FTP_PASSWORD || secrets.FTP_PASS || secrets.NETCUP_PASSWORD || secrets.NETCUP_PASS }}
       DEPLOY_FTP_SERVER_DIR: ${{ secrets.NETCUP_FTP_SERVER_DIR || secrets.FTP_SERVER_DIR || 'edubiosim.de/httpdocs/' }}
 
