@@ -28,6 +28,13 @@ jobs:
           sed -i "s|path: '\.\./|path: '|g" deploy/index.html
           sed -i "s|path: '\.\./|path: '|g" deploy/index_EN.html
 
+          # language-toggle.js Pfad in index.html korrigieren (liegt jetzt im Root)
+          sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' deploy/index.html
+          sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' deploy/index_EN.html
+
+          # language-toggle.js ins Root kopieren
+          cp language-toggle.js deploy/language-toggle.js
+
           # Bilder und Videos der Hauptseite kopieren
           cp -r "Offizielle Webseite/Bilder" deploy/Bilder
           cp -r "Offizielle Webseite/Videos" deploy/Videos
@@ -41,14 +48,4 @@ jobs:
 
           # Konfigurationsdateien kopieren
           cp .htaccess deploy/.htaccess 2>/dev/null || true
-          cp robots.txt deploy/robots.txt 2>/dev/null || true
-          cp sitemap.xml deploy/sitemap.xml 2>/dev/null || true
-
-      - name: Per FTP auf Netcup hochladen
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: hosting240938.af92a.netcup.net
-          username: hosting240938
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy/
-          server-dir: /edubiosim.de/httpdocs/
+          cp robots.txt deploy/robots.txt 2>/dev/null || tr
