@@ -1,0 +1,54 @@
+name: Deploy to EduBioSim.de
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Deploy-Ordner vorbereiten
+        run: |
+          mkdir -p deploy
+
+          # Hauptseite kopieren und umbenennen
+          cp "Offizielle Webseite/Offizielle Webseite.html" deploy/index.html
+          cp "Offizielle Webseite/Offizielle_Webseite_EN.html" deploy/index_EN.html
+
+          # URLs auf neue Domain anpassen
+          sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html|https://www.EduBioSim.de|g' deploy/index.html
+          sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle_Webseite_EN.html|https://www.EduBioSim.de/index_EN.html|g' deploy/index_EN.html
+
+          # Simulations-Pfade anpassen (../ entfernen)
+          sed -i "s|path: '\.\./|path: '|g" deploy/index.html
+          sed -i "s|path: '\.\./|path: '|g" deploy/index_EN.html
+
+          # Bilder und Videos der Hauptseite kopieren
+          cp -r "Offizielle Webseite/Bilder" deploy/Bilder
+          cp -r "Offizielle Webseite/Videos" deploy/Videos
+
+          # Alle Simulations-Ordner kopieren
+          for dir in Schall_Hoervorgang Mitose_und_Meiose Mendel "Meselson-Stahl-Versuch" Artbildung Einflussfaktoren_Fotosynthese Evolution_Kaeferspiel Nervenzelle_und_Synapse Attrappenversuche Angepasstheit_Insekten Strahlengang_Akkommodation Ernaehrung_Verdauung; do
+            if [ -d "$dir" ]; then
+              cp -r "$dir" "deploy/$dir"
+            fi
+          done
+
+          # Konfigurationsdateien kopieren
+          cp .htaccess deploy/.htaccess 2>/dev/null || true
+          cp robots.txt deploy/robots.txt 2>/dev/null || true
+          cp sitemap.xml deploy/sitemap.xml 2>/dev/null || true
+
+      - name: Per FTP auf Netcup hochladen
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: hosting240938.af92a.netcup.net
+          username: hosting240938
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy/
+          server-dir: /edubiosim.de/httpdocs/
