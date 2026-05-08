@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /*_backup.html
 
-Sitemap: https://school-grammar-games.github.io/Biologie/sitemap.xml
+Sitemap: https://www.EduBioSim.de/sitemap.xml

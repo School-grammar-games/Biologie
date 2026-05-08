@@ -3,6 +3,10 @@ name: Deploy to EduBioSim.de
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
@@ -14,28 +18,32 @@ jobs:
 
       - name: Deploy-Ordner vorbereiten
         run: |
+          set -euo pipefail
+
+          rm -rf deploy
           mkdir -p deploy
 
-          # Hauptseite kopieren und umbenennen
-          cp "Offizielle Webseite/Offizielle Webseite.html" deploy/index.html
-          cp "Offizielle Webseite/Offizielle_Webseite_EN.html" deploy/index_EN.html
+          # Aktuelle Netcup-Root-Dateien als Webroot-Index bereitstellen
+          cp index.html deploy/index.html
+          cp index_EN.html deploy/index_EN.html
 
-          # URLs auf neue Domain anpassen
-          sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html|https://www.EduBioSim.de|g' deploy/index.html
-          sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle_Webseite_EN.html|https://www.EduBioSim.de/index_EN.html|g' deploy/index_EN.html
+          # URLs auf die offizielle Domain anpassen
+          sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html|https://www.edubiosim.de/|g' deploy/index.html deploy/index_EN.html
+          sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle_Webseite_EN.html|https://www.edubiosim.de/index_EN.html|g' deploy/index.html deploy/index_EN.html
+          sed -i 's|https://school-grammar-games.github.io/Biologie/|https://www.edubiosim.de/|g' deploy/index.html deploy/index_EN.html
+          sed -i 's|https://school-grammar-games.github.io/Biologie|https://www.edubiosim.de|g' deploy/index.html deploy/index_EN.html
+          sed -i 's|https://www.EduBioSim.de|https://www.edubiosim.de|g' deploy/index.html deploy/index_EN.html
 
           # Simulations-Pfade anpassen (../ entfernen)
           sed -i "s|path: '\.\./|path: '|g" deploy/index.html
           sed -i "s|path: '\.\./|path: '|g" deploy/index_EN.html
 
-          # language-toggle.js Pfad in index.html korrigieren (liegt jetzt im Root)
+          # language-toggle.js liegt im Webroot
           sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' deploy/index.html
           sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' deploy/index_EN.html
-
-          # language-toggle.js ins Root kopieren
           cp language-toggle.js deploy/language-toggle.js
 
-          # Bilder und Videos der Hauptseite kopieren
+          # Medien der Hauptseite kopieren
           cp -r "Offizielle Webseite/Bilder" deploy/Bilder
           cp -r "Offizielle Webseite/Videos" deploy/Videos
 
@@ -46,6 +54,22 @@ jobs:
             fi
           done
 
-          # Konfigurationsdateien kopieren
-          cp .htaccess deploy/.htaccess 2>/dev/null || true
-          cp robots.txt deploy/robots.txt 2>/dev/null || tr
+          # Konfigurationsdateien kopieren, falls lokal vorhanden
+          cp .htaccess deploy/.htaccess
+          cp robots.txt deploy/robots.txt 2>/dev/null || true
+          cp sitemap.xml deploy/sitemap.xml 2>/dev/null || true
+
+      - name: Zu Netcup deployen
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.NETCUP_FTP_SERVER || secrets.FTP_SERVER }}
+          username: ${{ secrets.NETCUP_FTP_USERNAME || secrets.FTP_USERNAME }}
+          password: ${{ secrets.NETCUP_FTP_PASSWORD || secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./deploy/
+          server-dir: ./edubiosim.de/httpdocs/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
