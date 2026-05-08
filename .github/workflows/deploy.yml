@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEPLOY_FTP_SERVER: hosting240938.af92a.netcup.net
-      DEPLOY_FTP_USERNAME: hosting240938
+      DEPLOY_FTP_USERNAME: edubiosim
       DEPLOY_FTP_PASSWORD: ${{ secrets.NETCUP_FTP_PASSWORD || secrets.NETCUP_FTP_PASS || secrets.FTP_PASSWORD || secrets.FTP_PASS || secrets.NETCUP_PASSWORD || secrets.NETCUP_PASS }}
-      DEPLOY_FTP_SERVER_DIR: ${{ secrets.NETCUP_FTP_SERVER_DIR || secrets.FTP_SERVER_DIR || 'edubiosim.de/httpdocs/' }}
+      DEPLOY_FTP_SERVER_DIR: httpdocs/
 
     steps:
       - name: Repository auschecken
@@ -98,19 +98,29 @@ jobs:
             exit 1
           fi
 
+      - name: lftp installieren
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
       - name: Zu Netcup deployen
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ env.DEPLOY_FTP_SERVER }}
-          username: ${{ env.DEPLOY_FTP_USERNAME }}
-          password: ${{ env.DEPLOY_FTP_PASSWORD }}
-          protocol: ftp
-          port: 21
-          local-dir: ./deploy/
-          server-dir: ${{ env.DEPLOY_FTP_SERVER_DIR }}
-          log-level: verbose
-          timeout: 60000
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
+        run: |
+          set -euo pipefail
+
+          remote_dir="${DEPLOY_FTP_SERVER_DIR%/}/"
+
+          lftp <<LFTP
+          set cmd:fail-exit yes
+          set ftp:passive-mode yes
+          set ftp:ssl-allow yes
+          set ftp:ssl-force no
+          set ftp:ssl-protect-data no
+          set net:timeout 30
+          set net:max-retries 3
+          set net:reconnect-interval-base 5
+          open -u "${DEPLOY_FTP_USERNAME}","${DEPLOY_FTP_PASSWORD}" "${DEPLOY_FTP_SERVER}"
+          mkdir -p "${remote_dir}"
+          mirror --reverse --verbose --only-newer --parallel=1 --exclude-glob ".git*" --exclude-glob "node_modules" ./deploy/ "${remote_dir}"
+          bye
+          LFTP
