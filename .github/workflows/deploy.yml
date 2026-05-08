@@ -116,6 +116,7 @@ jobs:
           set ftp:ssl-allow yes
           set ftp:ssl-force no
           set ftp:ssl-protect-data no
+          set ssl:verify-certificate no
           set net:timeout 30
           set net:max-retries 3
           set net:reconnect-interval-base 5
