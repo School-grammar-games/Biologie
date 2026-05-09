@@ -1,24 +1,31 @@
-﻿<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weiterleitung zu EduBioSim</title>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, follow">
+  <title>EduBioSim Weiterleitung</title>
   <script>
-    (function(){
-      var u = new URL(location.href);
-      u.protocol = 'https:';
-      u.hostname = 'www.edubiosim.de';
-      u.pathname = u.pathname.replace(/^\/Biologie\/?/, '/');
-      var p = decodeURIComponent(u.pathname);
-      if (p === '/' || p === '/index.html' || p === '/Offizielle Webseite/Offizielle Webseite.html') u.pathname = '/';
-      if (p === '/Offizielle Webseite/Offizielle_Webseite_EN.html') u.pathname = '/index_EN.html';
-      location.replace(u.toString());
-    })();
+    (function() {
+      var path = window.location.pathname.replace(/^\/Biologie\/?/, '');
+      var map = {
+        '': '',
+        'Offizielle%20Webseite/Offizielle%20Webseite.html': '',
+        'Offizielle%20Webseite/Offizielle_Webseite_EN.html': 'index_EN.html',
+        'Angepasstheit%20Insekten/Insektenforschung.html': 'Angepasstheit_Insekten/Insektenforschung.html',
+        'Einflussfaktoren%20Fotosynthese/Einfluss_Fotosynthese.html': 'Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese.html',
+        'Evolution_K%C3%A4ferspiel/Kafer_under_Pressure.html': 'Evolution_Kaeferspiel/Kaefer_under_Pressure.html',
+        'Mitose%20und%20Meiose/Mitose_Meiose.html': 'Mitose_und_Meiose/Mitose_Meiose.html',
+        'Nervenzelle%20und%20Synapse/Nervenzelle_und_Synapse_gepatcht_v3.html': 'Nervenzelle_und_Synapse/Neurobiologie.html',
+        'Schall_H%C3%B6rvorgang/Schall_und_H%C3%B6rvorgang.html': 'Schall_Hoervorgang/Schall_und_Hoervorgang.html',
+        'Strahlengang_Akkommodation/Strahlengang%20und%20Akkommodation.html': 'Strahlengang_Akkommodation/Strahlengang_und_Akkommodation.html'
+      };
+      var targetPath = Object.prototype.hasOwnProperty.call(map, path) ? map[path] : path;
+      var target = 'https://www.edubiosim.de/' + targetPath;
+      window.location.replace(target + window.location.search + window.location.hash);
+    }());
   </script>
 </head>
 <body>
-  <p>Diese Seite ist umgezogen: <a id="redirect-link" href="https://www.edubiosim.de/">www.edubiosim.de</a></p>
-  <script>document.getElementById('redirect-link').href = new URL(location.href.replace('https://school-grammar-games.github.io/Biologie', 'https://www.edubiosim.de')).toString();</script>
+  <p>Diese Seite ist zu <a href="https://www.edubiosim.de/">EduBioSim.de</a> umgezogen.</p>
 </body>
 </html>

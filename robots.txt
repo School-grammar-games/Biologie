@@ -1,4 +1,3 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://www.EduBioSim.de/sitemap.xml
+Disallow: /
+Sitemap: https://www.edubiosim.de/sitemap.xml

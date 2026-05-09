@@ -22,6 +22,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      DEPLOY_SOURCE: _netcup_deploy
+      SKIP_NETCUP: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[skip netcup]') }}
       DEPLOY_FTP_SERVER: hosting240938.af92a.netcup.net
       DEPLOY_FTP_USERNAME: edubiosim
       DEPLOY_FTP_PASSWORD: ${{ secrets.NETCUP_FTP_PASSWORD || secrets.NETCUP_FTP_PASS || secrets.FTP_PASSWORD || secrets.FTP_PASS || secrets.NETCUP_PASSWORD || secrets.NETCUP_PASS }}
@@ -44,6 +46,12 @@ jobs:
           : > changed-files.txt
           : > deploy-manifest.txt
 
+          if [ "${SKIP_NETCUP}" = "true" ]; then
+            echo "Commit ist mit [skip netcup] markiert; kein FTP-Deploy."
+            echo "deploy_needed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           add_if_exists() {
             local path="$1"
             if [ -f "$path" ]; then
@@ -53,28 +61,19 @@ jobs:
             fi
           }
 
+          if [ ! -d "${DEPLOY_SOURCE}" ]; then
+            echo "Deploy-Quelle ${DEPLOY_SOURCE} existiert nicht."
+            echo "deploy_needed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             case "${{ inputs.deploy_scope }}" in
               changed)
                 git diff --name-only HEAD^ HEAD > changed-files.txt
                 ;;
-              all-available)
-                add_if_exists "index.html"
-                add_if_exists "index_EN.html"
-                add_if_exists "language-toggle.js"
-                add_if_exists ".htaccess"
-                add_if_exists "robots.txt"
-                add_if_exists "sitemap.xml"
-                add_if_exists "Offizielle Webseite"
-                ;;
-              root-assets)
-                add_if_exists "index.html"
-                add_if_exists "index_EN.html"
-                add_if_exists "language-toggle.js"
-                add_if_exists ".htaccess"
-                add_if_exists "robots.txt"
-                add_if_exists "sitemap.xml"
-                add_if_exists "Offizielle Webseite"
+              all-available|root-assets)
+                add_if_exists "${DEPLOY_SOURCE}"
                 ;;
             esac
           elif [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
@@ -85,10 +84,7 @@ jobs:
 
           should_deploy_file() {
             case "$1" in
-              index.html|index_EN.html|language-toggle.js|.htaccess|robots.txt|sitemap.xml)
-                return 0
-                ;;
-              "Offizielle Webseite/"*)
+              "${DEPLOY_SOURCE}/"*)
                 return 0
                 ;;
               *)
@@ -110,9 +106,10 @@ jobs:
               continue
             fi
 
-            mkdir -p "deploy/$(dirname "$path")"
-            cp -p "$path" "deploy/$path"
-            printf '%s\n' "$path" >> deploy-manifest.txt
+            target="${path#${DEPLOY_SOURCE}/}"
+            mkdir -p "deploy/$(dirname "$target")"
+            cp -p "$path" "deploy/$target"
+            printf '%s\n' "$target" >> deploy-manifest.txt
           done < changed-files.txt
 
           for file in deploy/index.html deploy/index_EN.html; do
@@ -124,8 +121,6 @@ jobs:
             sed -i 's|https://school-grammar-games.github.io/Biologie/|https://www.edubiosim.de/|g' "$file"
             sed -i 's|https://school-grammar-games.github.io/Biologie|https://www.edubiosim.de|g' "$file"
             sed -i 's|https://www.EduBioSim.de|https://www.edubiosim.de|g' "$file"
-
-            # Root-Index liegt auf Netcup im Webroot.
             sed -i "s|path: '\.\./|path: '|g" "$file"
             sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' "$file"
           done
