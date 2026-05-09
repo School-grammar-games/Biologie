@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <script>/* edubiosim-redirect */(function(){if(location.hostname!=='school-grammar-games.github.io')return;var u=new URL(location.href);u.protocol='https:';u.hostname='www.edubiosim.de';u.pathname=u.pathname.replace(/^\/Biologie\/?/,'/');var p=decodeURIComponent(u.pathname);if(p==='/'||p==='/index.html'||p==='/Offizielle Webseite/Offizielle Webseite.html')u.pathname='/';if(p==='/Offizielle Webseite/Offizielle_Webseite_EN.html')u.pathname='/index_EN.html';location.replace(u.toString());})();</script>
@@ -634,7 +634,9 @@
       padding: 2rem; text-align: center; color: var(--text-light); font-size: 0.8125rem;
     }
     .footer p + p { margin-top: 0.25rem; }
-
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; margin-bottom: 1rem; }
+    .footer-links a { color: var(--primary-dark); text-decoration: none; font-weight: 600; }
+    .footer-links a:hover { color: var(--primary); text-decoration: underline; }
     /* === MODALS === */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.45);
@@ -1010,7 +1012,9 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <p>&#169; 2026 EduBioSim &middot; Educational Biology Simulations</p>
+    
+    <nav class="footer-links" aria-label="Legal information and contact"><a href="impressum.html">Legal notice</a><a href="datenschutz.html">Privacy</a><a href="kontakt.html">Contact</a></nav>
+<p>&#169; 2026 EduBioSim &middot; Educational Biology Simulations</p>
     <p>All self-created simulations, texts, layouts, animations and code components of this website are protected by copyright. Use in school lessons is permitted. Commercial use, redistribution, modification, republication, embedding on other websites or provision on third-party platforms is not permitted without explicit permission.<br><br>Excluded from this are images and materials licensed under CC BY or CC BY-SA. For these, the respective license terms and source references apply.<br><br>Comments, suggestions or feedback are welcome at <a href="mailto:biologie-simulationen@web.de">biologie-simulationen@web.de</a>.</p>
   </footer>
 </div><!-- /view-landing -->

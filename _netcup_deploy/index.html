@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <script>/* edubiosim-redirect */(function(){if(location.hostname!=='school-grammar-games.github.io')return;var u=new URL(location.href);u.protocol='https:';u.hostname='www.edubiosim.de';u.pathname=u.pathname.replace(/^\/Biologie\/?/,'/');var p=decodeURIComponent(u.pathname);if(p==='/'||p==='/index.html'||p==='/Offizielle Webseite/Offizielle Webseite.html')u.pathname='/';if(p==='/Offizielle Webseite/Offizielle_Webseite_EN.html')u.pathname='/index_EN.html';location.replace(u.toString());})();</script>
@@ -570,7 +570,9 @@
       padding: 2rem; text-align: center; color: var(--text-light); font-size: 0.8125rem;
     }
     .footer p + p { margin-top: 0.25rem; }
-
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; margin-bottom: 1rem; }
+    .footer-links a { color: var(--primary-dark); text-decoration: none; font-weight: 600; }
+    .footer-links a:hover { color: var(--primary); text-decoration: underline; }
     /* === MODALS === */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.45);
@@ -879,7 +881,9 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <p>&#169; 2026 EduBioSim &middot; Educational Biology Simulations</p>
+    
+    <nav class="footer-links" aria-label="Rechtliches und Kontakt"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="kontakt.html">Kontakt</a></nav>
+<p>&#169; 2026 EduBioSim &middot; Educational Biology Simulations</p>
     <p>Alle selbst erstellten Simulationen, Texte, Layouts, Animationen und Codebestandteile dieser Website sind urheberrechtlich geschützt. Eine Nutzung im schulischen Unterricht ist gestattet. Eine kommerzielle Nutzung, Weiterverbreitung, Bearbeitung, erneute Veröffentlichung, Einbindung auf anderen Websites oder Bereitstellung auf fremden Plattformen ist ohne ausdrückliche Genehmigung nicht erlaubt.<br><br>Ausgenommen hiervon sind Abbildungen und Materialien, die unter CC BY oder CC BY-SA stehen. Für diese gelten die jeweils angegebenen Lizenzbedingungen und Quellenhinweise.<br><br>Hinweise, Anmerkungen oder Vorschläge können gerne an <a href="mailto:biologie-simulationen@web.de">biologie-simulationen@web.de</a> geschickt werden.</p>
   </footer>
 </div><!-- /view-landing -->
