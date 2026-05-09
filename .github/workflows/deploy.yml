@@ -4,6 +4,16 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      deploy_scope:
+        description: "Was soll manuell deployed werden?"
+        required: true
+        default: root-assets
+        type: choice
+        options:
+          - root-assets
+          - changed
+          - all-available
 
 permissions:
   contents: read
@@ -20,71 +30,157 @@ jobs:
     steps:
       - name: Repository auschecken
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Deploy-Ordner vorbereiten
+      - name: Deploy-Paket vorbereiten
+        id: prepare
+        shell: bash
         run: |
           set -euo pipefail
 
           rm -rf deploy
           mkdir -p deploy
+          : > changed-files.txt
+          : > deploy-manifest.txt
 
-          # Aktuelle Netcup-Root-Dateien als Webroot-Index bereitstellen
-          cp index.html deploy/index.html
-          cp index_EN.html deploy/index_EN.html
-
-          # URLs auf die offizielle Domain anpassen
-          sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html|https://www.edubiosim.de/|g' deploy/index.html deploy/index_EN.html
-          sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle_Webseite_EN.html|https://www.edubiosim.de/index_EN.html|g' deploy/index.html deploy/index_EN.html
-          sed -i 's|https://school-grammar-games.github.io/Biologie/|https://www.edubiosim.de/|g' deploy/index.html deploy/index_EN.html
-          sed -i 's|https://school-grammar-games.github.io/Biologie|https://www.edubiosim.de|g' deploy/index.html deploy/index_EN.html
-          sed -i 's|https://www.EduBioSim.de|https://www.edubiosim.de|g' deploy/index.html deploy/index_EN.html
-
-          # Simulations-Pfade anpassen (../ entfernen)
-          sed -i "s|path: '\.\./|path: '|g" deploy/index.html
-          sed -i "s|path: '\.\./|path: '|g" deploy/index_EN.html
-
-          # language-toggle.js liegt im Webroot
-          sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' deploy/index.html
-          sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' deploy/index_EN.html
-          cp language-toggle.js deploy/language-toggle.js
-
-          # Medien und QR-Codes der Hauptseite unter der urspruenglichen Struktur bereitstellen
-          cp -r "Offizielle Webseite" "deploy/Offizielle Webseite"
-
-          # Alle Simulations-Ordner kopieren
-          for dir in Schall_Hoervorgang Mitose_und_Meiose Mendel "Meselson-Stahl-Versuch" Artbildung Einflussfaktoren_Fotosynthese Evolution_Kaeferspiel Nervenzelle_und_Synapse Attrappenversuche Angepasstheit_Insekten Strahlengang_Akkommodation Ernaehrung_Verdauung; do
-            if [ -d "$dir" ]; then
-              cp -r "$dir" "deploy/$dir"
+          add_if_exists() {
+            local path="$1"
+            if [ -f "$path" ]; then
+              printf '%s\n' "$path" >> changed-files.txt
+            elif [ -d "$path" ]; then
+              find "$path" -type f -print >> changed-files.txt
             fi
+          }
+
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            case "${{ inputs.deploy_scope }}" in
+              changed)
+                git diff --name-only HEAD^ HEAD > changed-files.txt
+                ;;
+              all-available)
+                add_if_exists "index.html"
+                add_if_exists "index_EN.html"
+                add_if_exists "language-toggle.js"
+                add_if_exists ".htaccess"
+                add_if_exists "robots.txt"
+                add_if_exists "sitemap.xml"
+                add_if_exists "Offizielle Webseite"
+                for dir in \
+                  Angepasstheit_Insekten \
+                  Artbildung \
+                  Attrappenversuche \
+                  Einflussfaktoren_Fotosynthese \
+                  Evolution_Kaeferspiel \
+                  Mendel \
+                  Meselson-Stahl-Versuch \
+                  Mitose_und_Meiose \
+                  Nervenzelle_und_Synapse \
+                  Schall_Hoervorgang \
+                  Strahlengang_Akkommodation
+                do
+                  add_if_exists "$dir"
+                done
+                ;;
+              root-assets)
+                add_if_exists "index.html"
+                add_if_exists "index_EN.html"
+                add_if_exists "language-toggle.js"
+                add_if_exists ".htaccess"
+                add_if_exists "robots.txt"
+                add_if_exists "sitemap.xml"
+                add_if_exists "Offizielle Webseite"
+                ;;
+            esac
+          elif [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            git diff --name-only "${{ github.event.before }}" "${GITHUB_SHA}" > changed-files.txt || git diff --name-only HEAD^ HEAD > changed-files.txt
+          else
+            git diff --name-only HEAD^ HEAD > changed-files.txt
+          fi
+
+          should_deploy_file() {
+            case "$1" in
+              Angepasstheit_Insekten/Videos/*)
+                return 1
+                ;;
+              index.html|index_EN.html|language-toggle.js|.htaccess|robots.txt|sitemap.xml)
+                return 0
+                ;;
+              "Offizielle Webseite/"*)
+                return 0
+                ;;
+              Angepasstheit_Insekten/*|Artbildung/*|Attrappenversuche/*|Einflussfaktoren_Fotosynthese/*|Evolution_Kaeferspiel/*|Mendel/*|Meselson-Stahl-Versuch/*|Mitose_und_Meiose/*|Nervenzelle_und_Synapse/*|Schall_Hoervorgang/*|Strahlengang_Akkommodation/*)
+                return 0
+                ;;
+              *)
+                return 1
+                ;;
+            esac
+          }
+
+          while IFS= read -r path; do
+            [ -n "$path" ] || continue
+
+            if ! should_deploy_file "$path"; then
+              echo "Ueberspringe nicht produktiven Pfad: $path"
+              continue
+            fi
+
+            if [ ! -f "$path" ]; then
+              echo "Ueberspringe geloeschten/nicht vorhandenen Pfad: $path"
+              continue
+            fi
+
+            mkdir -p "deploy/$(dirname "$path")"
+            cp -p "$path" "deploy/$path"
+            printf '%s\n' "$path" >> deploy-manifest.txt
+          done < changed-files.txt
+
+          for file in deploy/index.html deploy/index_EN.html; do
+            [ -f "$file" ] || continue
+
+            # Alte GitHub-Pages-Ziele auf die offizielle Domain normalisieren.
+            sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle%20Webseite.html|https://www.edubiosim.de/|g' "$file"
+            sed -i 's|https://school-grammar-games.github.io/Biologie/Offizielle%20Webseite/Offizielle_Webseite_EN.html|https://www.edubiosim.de/index_EN.html|g' "$file"
+            sed -i 's|https://school-grammar-games.github.io/Biologie/|https://www.edubiosim.de/|g' "$file"
+            sed -i 's|https://school-grammar-games.github.io/Biologie|https://www.edubiosim.de|g' "$file"
+            sed -i 's|https://www.EduBioSim.de|https://www.edubiosim.de|g' "$file"
+
+            # Root-Index liegt auf Netcup im Webroot.
+            sed -i "s|path: '\.\./|path: '|g" "$file"
+            sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' "$file"
           done
 
-          # Alte lokale Video-Kopien der Insekten-Simulation nicht mehr deployen.
-          rm -rf "deploy/Angepasstheit_Insekten/Videos"
+          if [ ! -s deploy-manifest.txt ]; then
+            echo "Keine relevanten Deploy-Dateien gefunden."
+            echo "deploy_needed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
-          # Konfigurationsdateien kopieren, falls lokal vorhanden
-          cp .htaccess deploy/.htaccess
-          cp robots.txt deploy/robots.txt 2>/dev/null || true
-          cp sitemap.xml deploy/sitemap.xml 2>/dev/null || true
+          echo "Folgende Dateien werden deployed:"
+          cat deploy-manifest.txt
+          echo "deploy_needed=true" >> "$GITHUB_OUTPUT"
 
       - name: Netcup FTP-Zugang pruefen
+        if: steps.prepare.outputs.deploy_needed == 'true'
         run: |
           set -euo pipefail
 
           missing=0
           if [ -z "${DEPLOY_FTP_SERVER}" ]; then
-            echo "::error::FTP-Server fehlt. Setze NETCUP_FTP_SERVER, FTP_SERVER oder FTP_HOST."
+            echo "::error::FTP-Server fehlt."
             missing=1
           fi
           if [ -z "${DEPLOY_FTP_USERNAME}" ]; then
-            echo "::error::FTP-Benutzer fehlt. Setze NETCUP_FTP_USERNAME, NETCUP_FTP_USER, FTP_USERNAME oder FTP_USER."
+            echo "::error::FTP-Benutzer fehlt."
             missing=1
           fi
           if [ -z "${DEPLOY_FTP_PASSWORD}" ]; then
-            echo "::error::FTP-Passwort fehlt. Setze NETCUP_FTP_PASSWORD, NETCUP_FTP_PASS, FTP_PASSWORD oder FTP_PASS."
+            echo "::error::FTP-Passwort fehlt."
             missing=1
           fi
           if [ -z "${DEPLOY_FTP_SERVER_DIR}" ]; then
-            echo "::error::FTP-Zielordner fehlt. Setze NETCUP_FTP_SERVER_DIR oder FTP_SERVER_DIR."
+            echo "::error::FTP-Zielordner fehlt."
             missing=1
           fi
 
@@ -98,12 +194,14 @@ jobs:
           fi
 
       - name: lftp installieren
+        if: steps.prepare.outputs.deploy_needed == 'true'
         run: |
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y lftp
 
       - name: Zu Netcup deployen
+        if: steps.prepare.outputs.deploy_needed == 'true'
         run: |
           set -euo pipefail
 
@@ -121,6 +219,6 @@ jobs:
           set net:reconnect-interval-base 5
           open -u "${DEPLOY_FTP_USERNAME}","${DEPLOY_FTP_PASSWORD}" "${DEPLOY_FTP_SERVER}"
           mkdir -p "${remote_dir}"
-          mirror --reverse --verbose --only-newer --parallel=1 --exclude-glob ".git*" --exclude-glob "node_modules" ./deploy/ "${remote_dir}"
+          mirror --reverse --verbose --parallel=1 --exclude-glob ".git*" --exclude-glob "node_modules" ./deploy/ "${remote_dir}"
           bye
           LFTP
