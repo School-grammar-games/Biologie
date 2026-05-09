@@ -66,21 +66,6 @@ jobs:
                 add_if_exists "robots.txt"
                 add_if_exists "sitemap.xml"
                 add_if_exists "Offizielle Webseite"
-                for dir in \
-                  Angepasstheit_Insekten \
-                  Artbildung \
-                  Attrappenversuche \
-                  Einflussfaktoren_Fotosynthese \
-                  Evolution_Kaeferspiel \
-                  Mendel \
-                  Meselson-Stahl-Versuch \
-                  Mitose_und_Meiose \
-                  Nervenzelle_und_Synapse \
-                  Schall_Hoervorgang \
-                  Strahlengang_Akkommodation
-                do
-                  add_if_exists "$dir"
-                done
                 ;;
               root-assets)
                 add_if_exists "index.html"
@@ -100,16 +85,10 @@ jobs:
 
           should_deploy_file() {
             case "$1" in
-              Angepasstheit_Insekten/Videos/*)
-                return 1
-                ;;
               index.html|index_EN.html|language-toggle.js|.htaccess|robots.txt|sitemap.xml)
                 return 0
                 ;;
               "Offizielle Webseite/"*)
-                return 0
-                ;;
-              Angepasstheit_Insekten/*|Artbildung/*|Attrappenversuche/*|Einflussfaktoren_Fotosynthese/*|Evolution_Kaeferspiel/*|Mendel/*|Meselson-Stahl-Versuch/*|Mitose_und_Meiose/*|Nervenzelle_und_Synapse/*|Schall_Hoervorgang/*|Strahlengang_Akkommodation/*)
                 return 0
                 ;;
               *)
