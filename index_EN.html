@@ -1463,8 +1463,22 @@ function buildIndexedMediaCandidates(sim, folder, exts, maxIndex) {
 }
 
 function buildQrCodeCandidates(sim) {
+  var exactQrCodeMap = {
+    schall: ['Offizielle Webseite/QR-Codes_EN/Schall_und_Hoervorgang_EN.png'],
+    mitose: ['Offizielle Webseite/QR-Codes_EN/Mitose_Meiose_EN.png'],
+    mendel: ['Offizielle Webseite/QR-Codes_EN/Simulation_Mendel_EN.png'],
+    meselson: ['Offizielle Webseite/QR-Codes_EN/Meselson_Stahl_EN.png'],
+    artbildung: ['Offizielle Webseite/QR-Codes_EN/Artbildung_EN.png'],
+    fotosynthese: ['Offizielle Webseite/QR-Codes_EN/Einflussfaktoren_Fotosynthese_EN.png'],
+    kaeferspiel: ['Offizielle Webseite/QR-Codes_EN/Kaefer_under_Pressure_EN.png'],
+    nerv: ['Offizielle Webseite/QR-Codes_EN/Neurobiologie_EN.png'],
+    attrappen: ['Offizielle Webseite/QR-Codes_EN/Attrappenversuche_EN.png'],
+    insekten: ['Offizielle Webseite/QR-Codes_EN/Insektenforschung_EN.png'],
+    auge: ['Offizielle Webseite/QR-Codes_EN/Strahlengang_und_Akkommodation_EN.png']
+  };
   return uniqueList(
-    buildMediaCandidates(sim, 'Offizielle Webseite/QR-Codes_EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif'])
+    (exactQrCodeMap[sim.id] || [])
+      .concat(buildMediaCandidates(sim, 'Offizielle Webseite/QR-Codes_EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
       .concat(buildMediaCandidates(sim, 'Offizielle Webseite/QR Codes EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
       .concat(buildMediaCandidates(sim, 'Offizielle Webseite/QRCode_EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
       .concat(buildMediaCandidates(sim, 'Offizielle Webseite/QR_Code_EN', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
@@ -2142,6 +2156,19 @@ function startCurrentSimulation() {
   openSimDirect(currentDetailSim, 'detail');
 }
 
+function sanitizeDownloadFilename(name) {
+  return (name || 'QR-Code').replace(/[\\/:*?"<>|]+/g, '-').trim() || 'QR-Code';
+}
+
+function triggerDownload(href, filename) {
+  var link = document.createElement('a');
+  link.href = href;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
 function downloadCurrentQrCode() {
   if (!currentDetailSim) return;
   resolveFirstExistingSource(currentDetailSim.qrCodeCandidates || [], function(foundSrc) {
@@ -2149,12 +2176,24 @@ function downloadCurrentQrCode() {
       showToast('No QR code found for this simulation.', 'error');
       return;
     }
-    var link = document.createElement('a');
-    link.href = foundSrc;
-    link.download = (currentDetailSim.title || 'QR-Code') + '.png';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    var filename = sanitizeDownloadFilename(currentDetailSim.title || 'QR-Code') + '.png';
+    if (window.fetch && window.URL && URL.createObjectURL) {
+      fetch(foundSrc)
+        .then(function(response) {
+          if (!response.ok) throw new Error('QR code could not be loaded.');
+          return response.blob();
+        })
+        .then(function(blob) {
+          var objectUrl = URL.createObjectURL(blob);
+          triggerDownload(objectUrl, filename);
+          setTimeout(function() { URL.revokeObjectURL(objectUrl); }, 1000);
+        })
+        .catch(function() {
+          triggerDownload(foundSrc, filename);
+        });
+    } else {
+      triggerDownload(foundSrc, filename);
+    }
     showToast('QR code download started.', 'success');
   });
 }

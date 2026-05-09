@@ -1305,7 +1305,16 @@ function buildIndexedMediaCandidates(sim, folder, exts, maxIndex) {
 function buildQrCodeCandidates(sim) {
   var exactQrCodeMap = {
     schall: ['Offizielle Webseite/QR-Codes/Schall_und_H\u00f6rvorgang.png', 'Offizielle Webseite/QR-Codes/Schall_und_Hoervorgang.png', 'Offizielle Webseite/QR-Codes/Schall_Hoervorgang.png'],
-    kaeferspiel: ['Offizielle Webseite/QR-Codes/K\u00e4fer under Pressure.png', 'Offizielle Webseite/QR-Codes/Evolution_Kaeferspiel.png', 'Offizielle Webseite/QR-Codes/Kaefer_under_Pressure.png']
+    mitose: ['Offizielle Webseite/QR-Codes/Mitose_Meiose.png'],
+    mendel: ['Offizielle Webseite/QR-Codes/Simulation_Mendel.png'],
+    meselson: ['Offizielle Webseite/QR-Codes/Meselson_Stahl.png'],
+    artbildung: ['Offizielle Webseite/QR-Codes/Artbildung.png'],
+    fotosynthese: ['Offizielle Webseite/QR-Codes/Einflussfaktoren_Fotosynthese.png'],
+    kaeferspiel: ['Offizielle Webseite/QR-Codes/Kaefer_under_Pressure.png', 'Offizielle Webseite/QR-Codes/K\u00e4fer under Pressure.png', 'Offizielle Webseite/QR-Codes/Evolution_Kaeferspiel.png'],
+    nerv: ['Offizielle Webseite/QR-Codes/Neurobiologie.png'],
+    attrappen: ['Offizielle Webseite/QR-Codes/Attrappenversuche.png'],
+    insekten: ['Offizielle Webseite/QR-Codes/Insektenforschung.png'],
+    auge: ['Offizielle Webseite/QR-Codes/Strahlengang und Akkommodation.png']
   };
   return uniqueList(
     (exactQrCodeMap[sim.id] || [])
@@ -1421,9 +1430,23 @@ const EXACT_SCREENSHOT_MAP = {
   ]
 };
 
+const EXACT_VIDEO_MAP = {
+  schall: ['Offizielle Webseite/Videos/Schall_und_Hörvorgang.mp4'],
+  mitose: ['Offizielle Webseite/Videos/Mitose_Meiose.mp4'],
+  mendel: ['Offizielle Webseite/Videos/Simulation_Mendel.mp4'],
+  meselson: ['Offizielle Webseite/Videos/Meselson_Stahl.mp4'],
+  artbildung: ['Offizielle Webseite/Videos/Artbildung.mp4'],
+  fotosynthese: ['Offizielle Webseite/Videos/Einflussfaktoren_Fotosynthese.mp4'],
+  kaeferspiel: ['Offizielle Webseite/Videos/Käfer under Pressure.mp4'],
+  nerv: ['Offizielle Webseite/Videos/Neurobiologie.mp4'],
+  attrappen: ['Offizielle Webseite/Videos/Attrappenversuche.mp4'],
+  insekten: ['Offizielle Webseite/Videos/Insektenforschung.mp4'],
+  auge: ['Offizielle Webseite/Videos/Strahlengang und Akkommodation.mp4']
+};
+
 SIMS.forEach(function(sim) {
   sim.imageCandidates = (EXACT_SCREENSHOT_MAP[sim.id] || []).slice();
-  sim.videoCandidates = buildMediaCandidates(sim, 'Offizielle Webseite/Videos', ['.mp4', '.webm', '.mov', '.m4v']);
+  sim.videoCandidates = uniqueList((EXACT_VIDEO_MAP[sim.id] || []).concat(buildMediaCandidates(sim, 'Offizielle Webseite/Videos', ['.mp4', '.webm', '.mov', '.m4v'])));
   sim.qrCodeCandidates = buildQrCodeCandidates(sim);
 });
 
@@ -1973,6 +1996,19 @@ function startCurrentSimulation() {
   openSimDirect(currentDetailSim, 'detail');
 }
 
+function sanitizeDownloadFilename(name) {
+  return (name || 'QR-Code').replace(/[\\/:*?"<>|]+/g, '-').trim() || 'QR-Code';
+}
+
+function triggerDownload(href, filename) {
+  var link = document.createElement('a');
+  link.href = href;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
 function downloadCurrentQrCode() {
   if (!currentDetailSim) return;
   resolveFirstExistingSource(currentDetailSim.qrCodeCandidates || [], function(foundSrc) {
@@ -1980,12 +2016,24 @@ function downloadCurrentQrCode() {
       showToast('Kein QR-Code für diese Simulation gefunden.', 'error');
       return;
     }
-    var link = document.createElement('a');
-    link.href = foundSrc;
-    link.download = (currentDetailSim.title || 'QR-Code') + '.png';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    var filename = sanitizeDownloadFilename(currentDetailSim.title || 'QR-Code') + '.png';
+    if (window.fetch && window.URL && URL.createObjectURL) {
+      fetch(foundSrc)
+        .then(function(response) {
+          if (!response.ok) throw new Error('QR-Code konnte nicht geladen werden.');
+          return response.blob();
+        })
+        .then(function(blob) {
+          var objectUrl = URL.createObjectURL(blob);
+          triggerDownload(objectUrl, filename);
+          setTimeout(function() { URL.revokeObjectURL(objectUrl); }, 1000);
+        })
+        .catch(function() {
+          triggerDownload(foundSrc, filename);
+        });
+    } else {
+      triggerDownload(foundSrc, filename);
+    }
     showToast('QR-Code wird heruntergeladen.', 'success');
   });
 }
