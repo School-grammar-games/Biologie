@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEPLOY_SOURCE: _netcup_deploy
+      REMOTE_DELETE_MANIFEST: _netcup_remote_delete.txt
       SKIP_NETCUP: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[skip netcup]') }}
       DEPLOY_FTP_SERVER: hosting240938.af92a.netcup.net
       DEPLOY_FTP_USERNAME: edubiosim
@@ -45,6 +46,7 @@ jobs:
           mkdir -p deploy
           : > changed-files.txt
           : > deploy-manifest.txt
+          : > remote-delete-manifest.txt
 
           if [ "${SKIP_NETCUP}" = "true" ]; then
             echo "Commit ist mit [skip netcup] markiert; kein FTP-Deploy."
@@ -61,25 +63,37 @@ jobs:
             fi
           }
 
-          if [ ! -d "${DEPLOY_SOURCE}" ]; then
-            echo "Deploy-Quelle ${DEPLOY_SOURCE} existiert nicht."
-            echo "deploy_needed=false" >> "$GITHUB_OUTPUT"
-            exit 0
+          if [ -f "${REMOTE_DELETE_MANIFEST}" ]; then
+            while IFS= read -r path || [ -n "$path" ]; do
+              path="${path%$'\r'}"
+              [ -n "$path" ] || continue
+              case "$path" in
+                /*|*..*|*\**|*\"*|*\\*)
+                  echo "::error::Unsicherer Remote-Loeschpfad: $path"
+                  exit 1
+                  ;;
+              esac
+              printf '%s\n' "$path" >> remote-delete-manifest.txt
+            done < "${REMOTE_DELETE_MANIFEST}"
           fi
 
-          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
-            case "${{ inputs.deploy_scope }}" in
-              changed)
-                git diff --name-only HEAD^ HEAD > changed-files.txt
-                ;;
-              all-available|root-assets)
-                add_if_exists "${DEPLOY_SOURCE}"
-                ;;
-            esac
-          elif [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
-            git diff --name-only "${{ github.event.before }}" "${GITHUB_SHA}" > changed-files.txt || git diff --name-only HEAD^ HEAD > changed-files.txt
+          if [ ! -d "${DEPLOY_SOURCE}" ]; then
+            echo "Deploy-Quelle ${DEPLOY_SOURCE} existiert nicht."
           else
-            git diff --name-only HEAD^ HEAD > changed-files.txt
+            if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+              case "${{ inputs.deploy_scope }}" in
+                changed)
+                  git diff --name-only HEAD^ HEAD > changed-files.txt
+                  ;;
+                all-available|root-assets)
+                  add_if_exists "${DEPLOY_SOURCE}"
+                  ;;
+              esac
+            elif [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+              git diff --name-only "${{ github.event.before }}" "${GITHUB_SHA}" > changed-files.txt || git diff --name-only HEAD^ HEAD > changed-files.txt
+            else
+              git diff --name-only HEAD^ HEAD > changed-files.txt
+            fi
           fi
 
           should_deploy_file() {
@@ -125,14 +139,20 @@ jobs:
             sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' "$file"
           done
 
-          if [ ! -s deploy-manifest.txt ]; then
+          if [ ! -s deploy-manifest.txt ] && [ ! -s remote-delete-manifest.txt ]; then
             echo "Keine relevanten Deploy-Dateien gefunden."
             echo "deploy_needed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          echo "Folgende Dateien werden deployed:"
-          cat deploy-manifest.txt
+          if [ -s deploy-manifest.txt ]; then
+            echo "Folgende Dateien werden deployed:"
+            cat deploy-manifest.txt
+          fi
+          if [ -s remote-delete-manifest.txt ]; then
+            echo "Folgende Dateien werden auf Netcup geloescht:"
+            cat remote-delete-manifest.txt
+          fi
           echo "deploy_needed=true" >> "$GITHUB_OUTPUT"
 
       - name: Netcup FTP-Zugang pruefen
@@ -180,6 +200,33 @@ jobs:
           set -euo pipefail
 
           remote_dir="${DEPLOY_FTP_SERVER_DIR%/}/"
+
+          if [ -s remote-delete-manifest.txt ]; then
+            {
+              echo 'set cmd:fail-exit yes'
+              echo 'set ftp:passive-mode yes'
+              echo 'set ftp:ssl-allow yes'
+              echo 'set ftp:ssl-force no'
+              echo 'set ftp:ssl-protect-data no'
+              echo 'set ssl:verify-certificate no'
+              echo 'set net:timeout 30'
+              echo 'set net:max-retries 3'
+              echo 'set net:reconnect-interval-base 5'
+              printf 'open -u "%s","%s" "%s"\n' "${DEPLOY_FTP_USERNAME}" "${DEPLOY_FTP_PASSWORD}" "${DEPLOY_FTP_SERVER}"
+              while IFS= read -r path || [ -n "$path" ]; do
+                path="${path%$'\r'}"
+                [ -n "$path" ] || continue
+                printf 'rm -f "%s%s"\n' "${remote_dir}" "$path"
+              done < remote-delete-manifest.txt
+              echo 'bye'
+            } > delete-commands.lftp
+            lftp -f delete-commands.lftp
+          fi
+
+          if [ ! -s deploy-manifest.txt ]; then
+            echo "Nur Remote-Loeschungen auszufuehren; kein Upload-Paket."
+            exit 0
+          fi
 
           lftp <<LFTP
           set cmd:fail-exit yes
