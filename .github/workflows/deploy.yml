@@ -48,9 +48,8 @@ jobs:
           sed -i 's|src="../language-toggle.js"|src="language-toggle.js"|g' deploy/index_EN.html
           cp language-toggle.js deploy/language-toggle.js
 
-          # Medien der Hauptseite kopieren
-          cp -r "Offizielle Webseite/Bilder" deploy/Bilder
-          cp -r "Offizielle Webseite/Videos" deploy/Videos
+          # Medien und QR-Codes der Hauptseite unter der urspruenglichen Struktur bereitstellen
+          cp -r "Offizielle Webseite" "deploy/Offizielle Webseite"
 
           # Alle Simulations-Ordner kopieren
           for dir in Schall_Hoervorgang Mitose_und_Meiose Mendel "Meselson-Stahl-Versuch" Artbildung Einflussfaktoren_Fotosynthese Evolution_Kaeferspiel Nervenzelle_und_Synapse Attrappenversuche Angepasstheit_Insekten Strahlengang_Akkommodation Ernaehrung_Verdauung; do

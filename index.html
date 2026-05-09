@@ -7,11 +7,11 @@
   <title>EduBioSim: Interaktive Biologie-Simulationen für den digitalen Unterricht</title>
   <meta name="description" content="EduBioSim bietet interaktive Biologie-Simulationen für den digitalen Unterricht. Entdecke browserbasierte Lernumgebungen zu Genetik, Evolution, Neurobiologie, Fotosynthese und weiteren Themen." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <link rel="canonical" href="https://www.EduBioSim.de">
+  <link rel="canonical" href="https://www.edubiosim.de">
   <meta property="og:title" content="EduBioSim: Interaktive Biologie-Simulationen für den digitalen Unterricht">
   <meta property="og:description" content="Von einer Lehrkraft entwickelte, browserbasierte Biologie-Simulationen für Schule und Unterricht." />
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.EduBioSim.de">
+  <meta property="og:url" content="https://www.edubiosim.de">
   <style>
     /* === CSS VARIABLEN === */
     :root {
@@ -802,7 +802,7 @@
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Bilder/feature-export.webp" alt="Export-Funktion" loading="lazy" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-export.webp" alt="Export-Funktion" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
           <h3>Export für OneNote &amp; GoodNotes</h3>
@@ -812,7 +812,7 @@
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Bilder/feature-parameter.webp" alt="Interaktive Parameter" loading="lazy" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-parameter.webp" alt="Interaktive Parameter" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
           <h3>Interaktive Parameter</h3>
@@ -822,7 +822,7 @@
 
       <div class="feature-card">
         <div class="feature-img-wrap" style="height:220px">
-          <img class="feature-img" src="Bilder/feature-tablets.webp" alt="Für Tablets optimiert" loading="lazy" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-tablets.webp" alt="Für Tablets optimiert" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
           <h3>Für Tablets optimiert</h3>
@@ -833,7 +833,7 @@
       <div class="feature-card">
         <div class="feature-img-wrap feature-video-wrap" style="height:220px">
           <video class="feature-video" muted autoplay loop playsinline preload="metadata" aria-label="Animierte Abläufe vergrößert anzeigen">
-            <source src="Videos/Animation.mp4" type="video/mp4">
+            <source src="Offizielle Webseite/Videos/Animation.mp4" type="video/mp4">
           </video>
         </div>
         <div class="feature-body">
@@ -844,7 +844,7 @@
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Bilder/feature-lehrplan.webp" alt="An den Lehrplan angepasst" loading="lazy" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-lehrplan.webp" alt="An den Lehrplan angepasst" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
           <h3>An den Lehrplan angepasst</h3>
@@ -854,7 +854,7 @@
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Bilder/feature-qr-code.webp" alt="Einfach teilen" loading="lazy" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-qr-code.webp" alt="Einfach teilen" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
           <h3>Einfach teilen</h3>
@@ -1304,15 +1304,15 @@ function buildIndexedMediaCandidates(sim, folder, exts, maxIndex) {
 
 function buildQrCodeCandidates(sim) {
   var exactQrCodeMap = {
-    schall: ['QR-Codes/Schall_und_H\u00f6rvorgang.png', 'QR-Codes/Schall_und_Hoervorgang.png', 'QR-Codes/Schall_Hoervorgang.png'],
-    kaeferspiel: ['QR-Codes/K\u00e4fer under Pressure.png', 'QR-Codes/Evolution_Kaeferspiel.png', 'QR-Codes/Kaefer_under_Pressure.png']
+    schall: ['Offizielle Webseite/QR-Codes/Schall_und_H\u00f6rvorgang.png', 'Offizielle Webseite/QR-Codes/Schall_und_Hoervorgang.png', 'Offizielle Webseite/QR-Codes/Schall_Hoervorgang.png'],
+    kaeferspiel: ['Offizielle Webseite/QR-Codes/K\u00e4fer under Pressure.png', 'Offizielle Webseite/QR-Codes/Evolution_Kaeferspiel.png', 'Offizielle Webseite/QR-Codes/Kaefer_under_Pressure.png']
   };
   return uniqueList(
     (exactQrCodeMap[sim.id] || [])
-      .concat(buildMediaCandidates(sim, 'QR-Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
-      .concat(buildMediaCandidates(sim, 'QR Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
-      .concat(buildMediaCandidates(sim, 'QRCode', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
-      .concat(buildMediaCandidates(sim, 'QR_Code', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
+      .concat(buildMediaCandidates(sim, 'Offizielle Webseite/QR-Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
+      .concat(buildMediaCandidates(sim, 'Offizielle Webseite/QR Codes', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
+      .concat(buildMediaCandidates(sim, 'Offizielle Webseite/QRCode', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
+      .concat(buildMediaCandidates(sim, 'Offizielle Webseite/QR_Code', ['.png', '.jpg', '.jpeg', '.webp', '.gif']))
   );
 }
 
@@ -1336,94 +1336,94 @@ function resolveFirstExistingSource(candidates, callback) {
 
 const EXACT_SCREENSHOT_MAP = {
   schall: [
-    'Bilder/schall-und-hoervorgang-1.webp',
-    'Bilder/schall-und-hoervorgang-2.webp',
-    'Bilder/schall-und-hoervorgang-3.webp',
-    'Bilder/schall-und-hoervorgang-4.webp',
-    'Bilder/schall-und-hoervorgang-5.webp',
-    'Bilder/schall-und-hoervorgang-6.webp'
+    'Offizielle Webseite/Bilder/schall-und-hoervorgang-1.webp',
+    'Offizielle Webseite/Bilder/schall-und-hoervorgang-2.webp',
+    'Offizielle Webseite/Bilder/schall-und-hoervorgang-3.webp',
+    'Offizielle Webseite/Bilder/schall-und-hoervorgang-4.webp',
+    'Offizielle Webseite/Bilder/schall-und-hoervorgang-5.webp',
+    'Offizielle Webseite/Bilder/schall-und-hoervorgang-6.webp'
   ],
   mitose: [
-    'Bilder/mitose-meiose-1.webp',
-    'Bilder/mitose-meiose-2.webp',
-    'Bilder/mitose-meiose-3.webp',
-    'Bilder/mitose-meiose-4.webp',
-    'Bilder/mitose-meiose-5.webp'
+    'Offizielle Webseite/Bilder/mitose-meiose-1.webp',
+    'Offizielle Webseite/Bilder/mitose-meiose-2.webp',
+    'Offizielle Webseite/Bilder/mitose-meiose-3.webp',
+    'Offizielle Webseite/Bilder/mitose-meiose-4.webp',
+    'Offizielle Webseite/Bilder/mitose-meiose-5.webp'
   ],
   mendel: [
-    'Bilder/mendelsche-regeln-1.webp',
-    'Bilder/mendelsche-regeln-2.webp',
-    'Bilder/mendelsche-regeln-3.webp',
-    'Bilder/mendelsche-regeln-4.webp',
-    'Bilder/mendelsche-regeln-5.webp',
-    'Bilder/mendelsche-regeln-6.webp',
-    'Bilder/mendelsche-regeln-7.webp'
+    'Offizielle Webseite/Bilder/mendelsche-regeln-1.webp',
+    'Offizielle Webseite/Bilder/mendelsche-regeln-2.webp',
+    'Offizielle Webseite/Bilder/mendelsche-regeln-3.webp',
+    'Offizielle Webseite/Bilder/mendelsche-regeln-4.webp',
+    'Offizielle Webseite/Bilder/mendelsche-regeln-5.webp',
+    'Offizielle Webseite/Bilder/mendelsche-regeln-6.webp',
+    'Offizielle Webseite/Bilder/mendelsche-regeln-7.webp'
   ],
   meselson: [
-    'Bilder/meselson-stahl-1.webp',
-    'Bilder/meselson-stahl-2.webp',
-    'Bilder/meselson-stahl-3.webp',
-    'Bilder/meselson-stahl-4.webp'
+    'Offizielle Webseite/Bilder/meselson-stahl-1.webp',
+    'Offizielle Webseite/Bilder/meselson-stahl-2.webp',
+    'Offizielle Webseite/Bilder/meselson-stahl-3.webp',
+    'Offizielle Webseite/Bilder/meselson-stahl-4.webp'
   ],
   artbildung: [
-    'Bilder/artbildung-1.webp',
-    'Bilder/artbildung-2.webp',
-    'Bilder/artbildung-3.webp',
-    'Bilder/artbildung-4.webp',
-    'Bilder/artbildung-5.webp',
-    'Bilder/artbildung-6.webp'
+    'Offizielle Webseite/Bilder/artbildung-1.webp',
+    'Offizielle Webseite/Bilder/artbildung-2.webp',
+    'Offizielle Webseite/Bilder/artbildung-3.webp',
+    'Offizielle Webseite/Bilder/artbildung-4.webp',
+    'Offizielle Webseite/Bilder/artbildung-5.webp',
+    'Offizielle Webseite/Bilder/artbildung-6.webp'
   ],
   fotosynthese: [
-    'Bilder/einflussfaktoren-fotosynthese-1.webp',
-    'Bilder/einflussfaktoren-fotosynthese-2.webp',
-    'Bilder/einflussfaktoren-fotosynthese-3.webp',
-    'Bilder/einflussfaktoren-fotosynthese-4.webp'
+    'Offizielle Webseite/Bilder/einflussfaktoren-fotosynthese-1.webp',
+    'Offizielle Webseite/Bilder/einflussfaktoren-fotosynthese-2.webp',
+    'Offizielle Webseite/Bilder/einflussfaktoren-fotosynthese-3.webp',
+    'Offizielle Webseite/Bilder/einflussfaktoren-fotosynthese-4.webp'
   ],
   kaeferspiel: [
-    'Bilder/evolution-kaeferspiel-1.webp',
-    'Bilder/evolution-kaeferspiel-2.webp',
-    'Bilder/evolution-kaeferspiel-3.webp',
-    'Bilder/evolution-kaeferspiel-4.webp'
+    'Offizielle Webseite/Bilder/evolution-kaeferspiel-1.webp',
+    'Offizielle Webseite/Bilder/evolution-kaeferspiel-2.webp',
+    'Offizielle Webseite/Bilder/evolution-kaeferspiel-3.webp',
+    'Offizielle Webseite/Bilder/evolution-kaeferspiel-4.webp'
   ],
   nerv: [
-    'Bilder/neurobiologie-1.webp',
-    'Bilder/neurobiologie-2.webp',
-    'Bilder/neurobiologie-3.webp',
-    'Bilder/neurobiologie-4.webp',
-    'Bilder/neurobiologie-5.webp',
-    'Bilder/neurobiologie-6.webp',
-    'Bilder/neurobiologie-7.webp',
-    'Bilder/neurobiologie-8.webp'
+    'Offizielle Webseite/Bilder/neurobiologie-1.webp',
+    'Offizielle Webseite/Bilder/neurobiologie-2.webp',
+    'Offizielle Webseite/Bilder/neurobiologie-3.webp',
+    'Offizielle Webseite/Bilder/neurobiologie-4.webp',
+    'Offizielle Webseite/Bilder/neurobiologie-5.webp',
+    'Offizielle Webseite/Bilder/neurobiologie-6.webp',
+    'Offizielle Webseite/Bilder/neurobiologie-7.webp',
+    'Offizielle Webseite/Bilder/neurobiologie-8.webp'
   ],
   attrappen: [
-    'Bilder/attrappenversuche-1.webp',
-    'Bilder/attrappenversuche-2.webp',
-    'Bilder/attrappenversuche-3.webp',
-    'Bilder/attrappenversuche-4.webp'
+    'Offizielle Webseite/Bilder/attrappenversuche-1.webp',
+    'Offizielle Webseite/Bilder/attrappenversuche-2.webp',
+    'Offizielle Webseite/Bilder/attrappenversuche-3.webp',
+    'Offizielle Webseite/Bilder/attrappenversuche-4.webp'
   ],
   insekten: [
-    'Bilder/angepasstheit-insekten-1.webp',
-    'Bilder/angepasstheit-insekten-2.webp',
-    'Bilder/angepasstheit-insekten-3.webp',
-    'Bilder/angepasstheit-insekten-4.webp',
-    'Bilder/angepasstheit-insekten-5.webp',
-    'Bilder/angepasstheit-insekten-6.webp',
-    'Bilder/angepasstheit-insekten-7.webp'
+    'Offizielle Webseite/Bilder/angepasstheit-insekten-1.webp',
+    'Offizielle Webseite/Bilder/angepasstheit-insekten-2.webp',
+    'Offizielle Webseite/Bilder/angepasstheit-insekten-3.webp',
+    'Offizielle Webseite/Bilder/angepasstheit-insekten-4.webp',
+    'Offizielle Webseite/Bilder/angepasstheit-insekten-5.webp',
+    'Offizielle Webseite/Bilder/angepasstheit-insekten-6.webp',
+    'Offizielle Webseite/Bilder/angepasstheit-insekten-7.webp'
   ],
   auge: [
-    'Bilder/strahlengang-und-akkommodation-1.webp',
-    'Bilder/strahlengang-und-akkommodation-2.webp',
-    'Bilder/strahlengang-und-akkommodation-3.webp',
-    'Bilder/strahlengang-und-akkommodation-4.webp',
-    'Bilder/strahlengang-und-akkommodation-5.webp',
-    'Bilder/strahlengang-und-akkommodation-6.webp',
-    'Bilder/strahlengang-und-akkommodation-7.webp'
+    'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-1.webp',
+    'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-2.webp',
+    'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-3.webp',
+    'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-4.webp',
+    'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-5.webp',
+    'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-6.webp',
+    'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-7.webp'
   ]
 };
 
 SIMS.forEach(function(sim) {
   sim.imageCandidates = (EXACT_SCREENSHOT_MAP[sim.id] || []).slice();
-  sim.videoCandidates = buildMediaCandidates(sim, 'Videos', ['.mp4', '.webm', '.mov', '.m4v']);
+  sim.videoCandidates = buildMediaCandidates(sim, 'Offizielle Webseite/Videos', ['.mp4', '.webm', '.mov', '.m4v']);
   sim.qrCodeCandidates = buildQrCodeCandidates(sim);
 });
 
