@@ -637,6 +637,7 @@
     }
     .viewer-title { font-weight: 600; font-size: 0.9375rem; flex: 1; }
     .viewer-frame { width: 100%; height: calc(100vh - 64px - 52px); border: none; display: block; }
+    body.viewer-active .edu-language-toggle { display: none !important; }
 
     /* === ADMIN === */
     .admin-tabs {
@@ -1469,6 +1470,7 @@ function showView(name) {
   });
   var active = document.getElementById('view-' + name);
   if (active) active.classList.remove('hidden');
+  document.body.classList.toggle('viewer-active', name === 'viewer');
   window.scrollTo(0,0);
   if (name === 'dashboard') renderDashboard();
 }
