@@ -57,7 +57,7 @@
         "@type": "EducationalOrganization",
         "name": "EduBioSim",
         "url": "https://www.edubiosim.de/index_EN.html",
-        "description": "EduBioSim provides free interactive biology simulations for secondary school students and teachers. Topics include genetics (Mendel), evolution, mitosis, meiosis, photosynthesis, neurobiology, DNA replication, and sensory biology.",
+        "description": "EduBioSim provides free interactive biology simulations for secondary school students and teachers. Topics include genetics (Mendel), evolution, mitosis, meiosis, photosynthesis, neurobiology, digestion, DNA replication, and sensory biology.",
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Biology Simulations",
@@ -67,7 +67,8 @@
             { "@type": "Course", "name": "Mitosis & Meiosis", "url": "https://www.edubiosim.de/Mitose_und_Meiose/Mitose_Meiose_EN.html", "description": "Animated cell division simulation" },
             { "@type": "Course", "name": "Photosynthesis", "url": "https://www.edubiosim.de/Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese_EN.html", "description": "Factors affecting photosynthesis" },
             { "@type": "Course", "name": "Neurobiology & Synapse", "url": "https://www.edubiosim.de/Nervenzelle_und_Synapse/Neurobiologie_EN.html", "description": "Nerve impulse and synapse simulation" },
-            { "@type": "Course", "name": "DNA Replication – Meselson-Stahl", "url": "https://www.edubiosim.de/Meselson-Stahl-Versuch/Meselson_Stahl_EN.html", "description": "DNA replication experiment simulation" }
+            { "@type": "Course", "name": "DNA Replication – Meselson-Stahl", "url": "https://www.edubiosim.de/Meselson-Stahl-Versuch/Meselson_Stahl_EN.html", "description": "DNA replication experiment simulation" },
+            { "@type": "Course", "name": "Digestion and Nutrient Uptake", "url": "https://www.edubiosim.de/Verdauung/Verdauung_EN.html", "description": "Interactive simulation on digestion, nutrient uptake, and pH-dependent enzyme activity" }
           ]
         }
       }
@@ -154,184 +155,562 @@
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn:disabled:hover { transform: none; box-shadow: none; }
 
-    /* === LANDING – HERO === */
+    /* === LANDING – HOMEPAGE === */
     .hero {
-      background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 45%, #f0fdf4 100%);
-      padding: 4.5rem 2rem 4rem; position: relative; overflow: hidden;
+      background: #f6f8f6;
+      padding: 3.75rem 2rem 3.25rem;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
     }
     .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(46,125,50,0.07) 0%, transparent 70%);
+      content: '';
+      position: absolute;
+      left: max(2rem, calc((100vw - 1120px) / 2));
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(46,125,50,0.16);
       pointer-events: none;
     }
     .hero-inner {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      align-items: stretch;
+      grid-template-columns: minmax(0, 0.95fr) minmax(340px, 1.05fr);
+      align-items: center;
       gap: 3rem;
-      max-width: 1180px; margin: 0 auto; position: relative;
+      max-width: 1120px;
+      margin: 0 auto;
+      position: relative;
     }
     .hero-text {
       min-width: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-right: 0.25rem;
+      padding-left: 1.35rem;
     }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: white; color: var(--primary-dark);
-      border: 1px solid rgba(46,125,50,0.25);
-      padding: 0.4rem 1rem; border-radius: 99px;
-      font-size: 0.8125rem; font-weight: 500; margin-bottom: 1.75rem;
-      box-shadow: var(--shadow-sm);
-      width: fit-content;
+    .hero-kicker {
+      color: var(--primary-dark);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.05rem;
     }
     .hero h1 {
-      font-size: clamp(1.9rem, 3.8vw, 3.1rem); font-weight: 800; line-height: 1.1;
-      color: var(--text); margin-bottom: 1.25rem;
+      font-size: clamp(2rem, 4.3vw, 3.2rem);
+      font-weight: 760;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      color: var(--text);
+      margin-bottom: 1.15rem;
+      max-width: 680px;
     }
-    .hero h1 .highlight { color: var(--primary); }
+    .hero h1 .highlight { color: var(--primary-dark); }
     .hero-sub {
-      font-size: 1.0625rem; color: var(--text-mid);
-      max-width: 520px; margin: 0 0 2.5rem; line-height: 1.7;
+      font-size: 1.04rem;
+      color: #334155;
+      max-width: 620px;
+      margin: 0;
+      line-height: 1.72;
     }
-    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-    /* Right side: carousel */
+    .hero-note-list {
+      display: grid;
+      gap: 0.45rem;
+      margin: 1.35rem 0 1.65rem;
+      color: var(--text-mid);
+      font-size: 0.92rem;
+    }
+    .hero-note-list span {
+      display: flex;
+      gap: 0.55rem;
+      align-items: baseline;
+    }
+    .hero-note-list span::before {
+      content: '–';
+      color: var(--primary-dark);
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+    .hero-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; }
+
     .hero-preview {
       min-width: 0;
       position: relative;
-      padding-left: 2.25rem;
-      border-left: 1px solid rgba(46,125,50,0.18);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
     }
     .preview-stage-label {
-      font-size: 0.75rem;
+      font-size: 0.86rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--primary-dark);
-      margin-bottom: 0.875rem;
+      color: var(--text);
+      margin-bottom: 0.75rem;
     }
     .preview-carousel {
-      border-radius: 16px; overflow: hidden;
-      box-shadow: 0 24px 64px rgba(46,125,50,0.15), 0 4px 16px rgba(0,0,0,0.1);
-      aspect-ratio: 8 / 5; min-height: 360px; position: relative; background: var(--bg);
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      min-height: 0;
+      height: auto;
+      position: relative;
+      background: #f3f6f3;
+      border: 1px solid var(--border);
       isolation: isolate;
+      box-shadow: none;
     }
     .preview-slide {
-      position: absolute; inset: 0;
-      opacity: 0; transition: opacity 0.75s ease;
-      background: linear-gradient(180deg, #f8fafc 0%, #eef7f0 100%);
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+      background: #f3f6f3;
     }
     .preview-slide.active { opacity: 1; }
     .preview-live {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%; border: 0; display: block;
-      background: #f8fafc;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #f3f6f3;
       transform-origin: center center;
       pointer-events: none;
-      object-fit: cover;
+      object-fit: contain;
     }
-    .preview-slide.active .preview-live {
-      animation: none;
-    }
-    @keyframes previewLoop {
-      0%   { transform: scale(1) translate3d(0, 0, 0); }
-      25%  { transform: scale(1.02) translate3d(-1%, -0.75%, 0); }
-      50%  { transform: scale(1.035) translate3d(1%, -1.25%, 0); }
-      75%  { transform: scale(1.02) translate3d(-0.75%, 0.75%, 0); }
-      100% { transform: scale(1) translate3d(0, 0, 0); }
-    }
+    .preview-slide.active .preview-live { animation: none; }
     .preview-overlay {
-      position: absolute; inset: 0; pointer-events: none;
-      background: linear-gradient(180deg, rgba(15,23,42,0.08) 0%, rgba(15,23,42,0) 28%, rgba(15,23,42,0.04) 100%);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(15,23,42,0.05));
     }
-    .preview-badge-live {
-      position: absolute; top: 0.85rem; left: 0.85rem;
-      background: rgba(255,255,255,0.92); color: var(--primary-dark);
-      border: 1px solid rgba(46,125,50,0.18);
-      border-radius: 999px; padding: 0.35rem 0.65rem;
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;
-      box-shadow: var(--shadow-sm);
-      backdrop-filter: blur(4px);
-    }
+    .preview-badge-live { display: none; }
     .preview-caption {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(transparent, rgba(0,0,0,0.64));
-      color: white; padding: 2rem 1rem 0.75rem;
-      font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.01em;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15,23,42,0.76);
+      color: white;
+      padding: 0.62rem 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
       z-index: 2;
     }
     .preview-inds {
-      display: flex; justify-content: center; gap: 0.4rem; margin-top: 0.875rem;
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.45rem;
+      margin-top: 0.85rem;
     }
     .prev-ind {
-      width: 7px; height: 7px; border-radius: 99px;
-      background: var(--border); transition: all 0.35s ease; cursor: pointer; border: none;
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: #cbd5d2;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
     }
-    .prev-ind.active { background: var(--primary); width: 22px; }
-    @media (max-width: 960px) {
-      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-      .hero-text { text-align: center; padding-right: 0; }
-      .hero-badge { margin-left: auto; margin-right: auto; }
-      .hero-sub { margin: 0 auto 2rem; }
-      .hero-actions { justify-content: center; }
-      .hero-preview {
-        width: 100%; max-width: 620px; margin: 0 auto;
-        padding-left: 0; border-left: none; border-top: 1px solid rgba(46,125,50,0.18); padding-top: 1.5rem;
-      }
-      .preview-stage-label { text-align: center; }
-    }
+    .prev-ind.active { background: var(--primary-dark); width: 24px; }
 
-    /* === STATS BAR === */
-    .stats-bar {
-      background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      padding: 1.5rem 2rem; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;
+    /* === CONTEXT STRIP === */
+    .context-strip {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
     }
-    .stat-item { text-align: center; }
-    .stat-number { font-size: 1.875rem; font-weight: 800; color: var(--primary); }
-    .stat-label { font-size: 0.8125rem; color: var(--text-light); margin-top: 0.1rem; }
+    .context-strip-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .context-kicker {
+      color: var(--primary-dark);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding-top: 0.15rem;
+    }
+    .context-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+    }
+    .context-list div {
+      border-left: 1px solid var(--border);
+      padding: 0.1rem 1rem 0.2rem;
+    }
+    .context-list dt {
+      font-weight: 740;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.14rem;
+    }
+    .context-list dd {
+      color: var(--text-mid);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
 
     /* === SECTIONS === */
-    .section { padding: 5rem 2rem; max-width: 1180px; margin: 0 auto; }
-    .section-header { text-align: center; margin-bottom: 3rem; }
+    .section {
+      padding: 4rem 2rem;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .section-header {
+      text-align: left;
+      margin-bottom: 2rem;
+      max-width: 760px;
+    }
+    .section-header.centered {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
     .section-tag {
-      display: inline-block; background: var(--primary-bg); color: var(--primary);
-      font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em;
-      padding: 0.25rem 0.8rem; border-radius: 99px; margin-bottom: 0.75rem;
+      display: inline-block;
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.7rem;
     }
-    .section h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; margin-bottom: 0.6rem; }
-    .section-subtitle { color: var(--text-mid); font-size: 1.0625rem; max-width: 560px; margin: 0 auto; }
+    .section h2 {
+      font-size: clamp(1.45rem, 2.6vw, 2.1rem);
+      font-weight: 740;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.55rem;
+    }
+    .section-subtitle {
+      color: var(--text-mid);
+      font-size: 1rem;
+      max-width: 720px;
+      margin: 0;
+      line-height: 1.65;
+    }
 
-    /* === FEATURES GRID === */
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
-    .feature-card {
-      background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 0; overflow: hidden; transition: all 0.2s ease; display: flex; flex-direction: column;
+    /* === CLASSROOM USE === */
+    .teaching-section {
+      padding-top: 4.25rem;
+      padding-bottom: 4.25rem;
     }
-    .feature-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: rgba(46,125,50,0.25); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.4rem 1.6rem;
+    }
+    .feature-card {
+      background: transparent;
+      border: 0;
+      border-top: 1px solid var(--border);
+      border-radius: 0;
+      padding: 1rem 0;
+      overflow: visible;
+      transition: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      min-width: 0;
+    }
+    .feature-card:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border);
+    }
     .feature-img-wrap {
-      width: 100%; overflow: hidden; position: relative; height: 190px; flex-shrink: 0;
+      width: 148px;
+      height: 92px !important;
+      min-width: 148px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
       background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: zoom-in;
     }
     .feature-img {
-      width: 100%; height: 100%; object-fit: cover; object-position: top center;
-      display: block; transition: transform 0.35s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      transition: none;
     }
     .feature-video {
-      width: 100%; height: 100%; object-fit: cover; display: block; background: var(--bg);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: var(--bg);
+      cursor: zoom-in;
     }
     .feature-img-wrap video.feature-video { transform: none !important; }
-    .feature-img-wrap.feature-video-wrap,
-    .feature-video { cursor: zoom-in; }
-    .feature-card:hover .feature-img { transform: scale(1.03); }
-    .feature-body { padding: 1.5rem; flex: 1; }
+    .feature-card:hover .feature-img { transform: none; }
+    .feature-body {
+      padding: 0;
+      flex: 1;
+      min-width: 0;
+    }
     .feature-icon { display: none; }
-    .feature-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .feature-card p { font-size: 0.875rem; color: var(--text-mid); line-height: 1.65; }
+    .feature-card h3 {
+      font-size: 0.98rem;
+      font-weight: 740;
+      margin-bottom: 0.32rem;
+      color: var(--text);
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* === SIMULATION OVERVIEW === */
+    .sims-overview {
+      background: var(--white);
+      padding: 4rem 0 5rem;
+      border-top: 1px solid var(--border);
+    }
+    .sims-overview .section { padding-top: 0; padding-bottom: 0; }
+    .sims-overview .section-header { margin-bottom: 2rem; }
+    .sims-header {
+      max-width: none;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.15rem;
+    }
+    .sims-title-block { min-width: 0; }
+    .sims-main-title {
+      font-size: clamp(2.15rem, 4.2vw, 3.15rem) !important;
+      line-height: 1;
+      margin: 0 !important;
+      color: var(--text);
+      letter-spacing: -0.04em;
+    }
+    .sim-filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    .sim-filter-label {
+      display: grid;
+      gap: 0.32rem;
+      color: var(--text-mid);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .sim-filter-select {
+      min-width: 178px;
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background-color: var(--white);
+      background-image: linear-gradient(45deg, transparent 50%, var(--primary-dark) 50%), linear-gradient(135deg, var(--primary-dark) 50%, transparent 50%);
+      background-position: calc(100% - 17px) 53%, calc(100% - 11px) 53%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      color: var(--text);
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 0.62rem 2.1rem 0.62rem 0.75rem;
+      box-shadow: none;
+      cursor: pointer;
+    }
+    .sim-filter-select:focus {
+      outline: 2px solid rgba(46,125,50,0.22);
+      border-color: rgba(46,125,50,0.45);
+    }
+    .sim-filter-empty {
+      grid-column: 1 / -1;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      color: var(--text-mid);
+      background: #fafcfb;
+    }
+
+    /* === SIM CARDS === */
+    .sims-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.1rem;
+    }
+    .sim-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow 0.18s ease, border-color 0.18s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .sim-card:hover {
+      transform: none;
+      box-shadow: var(--shadow);
+      border-color: rgba(46,125,50,0.28);
+    }
+    .sim-card-link { color: inherit; text-decoration: none; }
+    .sim-card.locked { opacity: 0.72; }
+    .sim-card-header {
+      background: var(--white);
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sim-icon-wrap {
+      width: 52px;
+      height: 52px;
+      background: #f6f8f6;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      box-shadow: none;
+      flex-shrink: 0;
+    }
+    .sim-meta { flex: 1; min-width: 0; }
+    .sim-meta h3 {
+      font-size: 0.96rem;
+      font-weight: 740;
+      margin-bottom: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sim-grade { font-size: 0.75rem; color: var(--text-light); }
+    .sim-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 99px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .sim-badge-demo    { background: #fef3c7; color: #92400e; }
+    .sim-badge-locked  { background: #f1f5f9; color: #64748b; }
+    .sim-badge-open    { background: #dcfce7; color: #166534; }
+    .sim-card-body { padding: 1rem 1.25rem; flex: 1; }
+    .sim-description { font-size: 0.82rem; color: var(--text-mid); line-height: 1.62; margin-bottom: 0.85rem; }
+    .sim-topics { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem; }
+    .topic-tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      background: #eef6ef;
+      color: var(--primary-dark);
+      padding: 0.18rem 0.5rem;
+      border-radius: 5px;
+    }
+    .sim-features { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .sim-feature-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.68rem;
+      color: var(--text-light);
+      background: var(--bg);
+      padding: 0.16rem 0.45rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .sim-card-footer { padding: 0 1.25rem 1.15rem; }
+    .sim-card-preview {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      background: #f4f7f5;
+      border-bottom: 1px solid var(--border);
+    }
+    .sim-card-preview-img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      transition: none;
+      background: #f4f7f5;
+    }
+    .sim-card:hover .sim-card-preview-img { transform: none; }
+    .sim-card-preview-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      color: var(--primary);
+      background: #f4f7f5;
+    }
+
+    @media (min-width: 901px) and (max-width: 1080px) {
+      .hero {
+        padding: 3.25rem 1.65rem 3rem;
+      }
+      .hero-inner {
+        grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
+        gap: 1.85rem;
+      }
+      .hero-text { padding-left: 0.9rem; }
+      .hero h1 {
+        font-size: clamp(2rem, 3.55vw, 2.65rem);
+        max-width: 520px;
+      }
+      .hero-sub {
+        font-size: 0.98rem;
+        max-width: 500px;
+      }
+      .hero-note-list { font-size: 0.88rem; }
+      .hero-preview { padding: 0.9rem; }
+      .preview-carousel { aspect-ratio: 16 / 9; }
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .hero::before { display: none; }
+      .hero-text { padding-left: 0; }
+      .hero-preview { max-width: 720px; width: 100%; }
+      .context-strip-inner { grid-template-columns: 1fr; gap: 0.75rem; }
+      .context-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .features-grid { grid-template-columns: 1fr; }
+      .sims-header { grid-template-columns: 1fr; align-items: start; }
+      .sim-filter-controls { justify-content: flex-start; }
+    }
+
+    @media (max-width: 620px) {
+      .context-list { grid-template-columns: 1fr; }
+      .context-list div { padding-left: 0; border-left: 0; border-top: 1px solid var(--border); padding-top: 0.65rem; }
+      .feature-card { flex-direction: column; }
+      .feature-img-wrap { width: 100%; height: 150px !important; min-width: 0; }
+      .preview-caption { font-size: 0.76rem; padding: 0.5rem 0.65rem; }
+      .sim-filter-controls { display: grid; grid-template-columns: 1fr; width: 100%; }
+      .sim-filter-select { width: 100%; min-width: 0; }
+    }
 
     /* === LIGHTBOX === */
     .lightbox-overlay {
@@ -755,7 +1134,7 @@
     @media (max-width: 768px) {
       .dashboard-layout { grid-template-columns: 1fr; }
       .sidebar { display: none; }
-      .stats-bar { gap: 2rem; }
+      .context-strip { padding-left: 1.25rem; padding-right: 1.25rem; }
       .hero { padding: 4rem 1.25rem 3rem; }
       .section { padding: 3rem 1.25rem; }
       .navbar { padding: 0 1rem; }
@@ -764,7 +1143,82 @@
       .detail-actions { flex-direction: column; }
       .detail-actions .btn { width: 100%; }
     }
-  </style>
+  
+
+    /* === INFO & SEPARATE CONTENT PAGES === */
+    .content-page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4.5rem;
+    }
+    .content-back-link { margin-bottom: 1.25rem; }
+    .content-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: clamp(1.35rem, 3vw, 2.25rem);
+      box-shadow: var(--shadow-sm);
+    }
+    .content-card h1 {
+      font-size: clamp(1.8rem, 3vw, 2.45rem);
+      line-height: 1.14;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+    .content-card h2 {
+      font-size: 1.18rem;
+      margin: 1.75rem 0 0.55rem;
+      letter-spacing: -0.01em;
+    }
+    .content-card p {
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 0.85rem;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+    @media (max-width: 620px) {
+      .content-page { padding: 1.5rem 1rem 3.5rem; }
+    }
+
+    /* === FINAL ADJUSTMENTS: TAGS AND ABOUT PAGE === */
+    .sim-topics,
+    .sim-features {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.32rem;
+      margin-bottom: 0.75rem;
+      width: 100%;
+    }
+    .topic-tag,
+    .sim-feature-tag {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      min-height: 1.95rem;
+      padding: 0.26rem 0.24rem !important;
+      border-radius: 5px !important;
+      font-size: 0.62rem !important;
+      line-height: 1.15;
+      text-align: center;
+      white-space: normal;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+    .sim-description {
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: auto;
+    }
+    @media (max-width: 380px) {
+      .sim-topics,
+      .sim-features {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+</style>
   <script data-goatcounter="https://biologie-simulationen.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -789,52 +1243,49 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
-      <!-- Left: text -->
       <div class="hero-text">
-        <h1>Interactive biology<br><span class="highlight">simulations</span><br>for digital learning</h1>
-        <p class="hero-sub">Teacher-created, browser-based simulations that make complex biological processes visible and interactive on any device, without installation.</p>
+        <div class="hero-kicker">EduBioSim · Teaching materials</div>
+        <h1>Making biological processes visible — directly in the browser.</h1>
+        <p class="hero-sub">A freely accessible portal with interactive biology simulations for classroom use. The materials were developed from school practice and combine animation, tasks, and result documentation.</p>
+        <div class="hero-note-list" aria-label="Characteristics of the simulations">
+          <span>directly accessible, without registration and without installation</span>
+          <span>prepared for tablet use and digital notebooks</span>
+          <span>using subject-specific terminology suitable for biology lessons</span>
+        </div>
         <div class="hero-actions">
-          <button class="btn btn-primary btn-lg" onclick="scrollToSimulations()">&#128269; Explore simulations</button>
+          <button class="btn btn-primary btn-lg" onclick="scrollToSimulations()">Show simulations</button>
         </div>
       </div>
-      <!-- Right: simulation preview -->
       <div class="hero-preview">
-        <div class="preview-stage-label">Preview selected simulations</div>
         <div class="preview-carousel" id="heroCarousel">
           <div class="preview-slide active" data-sim-id="schall" data-sim-title="Sound and Hearing">
             <video class="preview-live" title="Video preview: Sound and Hearing" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live preview</div>
             <div class="preview-caption">Sound and Hearing</div>
           </div>
           <div class="preview-slide" data-sim-id="mitose" data-sim-title="Mitosis and Meiosis">
             <video class="preview-live" title="Video preview: Mitosis and Meiosis" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live preview</div>
             <div class="preview-caption">Mitosis and Meiosis</div>
           </div>
           <div class="preview-slide" data-sim-id="fotosynthese" data-sim-title="Factors Affecting Photosynthesis">
             <video class="preview-live" title="Video preview: Factors Affecting Photosynthesis" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live preview</div>
             <div class="preview-caption">Factors Affecting Photosynthesis</div>
           </div>
           <div class="preview-slide" data-sim-id="auge" data-sim-title="Light Paths &amp; Accommodation">
             <video class="preview-live" title="Video preview: Light Paths and Accommodation" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live preview</div>
             <div class="preview-caption">Light Paths &amp; Accommodation</div>
           </div>
           <div class="preview-slide" data-sim-id="artbildung" data-sim-title="Geographic Speciation">
             <video class="preview-live" title="Video preview: Geographic Speciation" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live preview</div>
             <div class="preview-caption">Geographic Speciation</div>
           </div>
           <div class="preview-slide" data-sim-id="meselson" data-sim-title="Meselson-Stahl Experiment">
             <video class="preview-live" title="Video preview: Meselson-Stahl Experiment" muted loop playsinline preload="none"></video>
             <div class="preview-overlay"></div>
-            <div class="preview-badge-live">Live preview</div>
             <div class="preview-caption">Meselson-Stahl Experiment</div>
           </div>
         </div>
@@ -850,50 +1301,55 @@
     </div>
   </section>
 
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-item"><div class="stat-number">11</div><div class="stat-label">Simulations</div></div>
-    <div class="stat-item"><div class="stat-number">6+</div><div class="stat-label">Topic areas</div></div>
-    <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Browser-based</div></div>
-    <div class="stat-item"><div class="stat-number">0</div><div class="stat-label">No installation</div></div>
-  </div>
+  <!-- SHORT OVERVIEW -->
+  <section class="context-strip" aria-label="Short overview of EduBioSim">
+    <div class="context-strip-inner">
+      <p class="context-kicker">Short overview</p>
+      <dl class="context-list">
+        <div><dt>11 simulations</dt><dd>Materials on genetics, evolution, neurobiology, sensory biology, and metabolism.</dd></div>
+        <div><dt>Browser-based</dt><dd>The simulations open directly via link or QR code.</dd></div>
+        <div><dt>Classroom-oriented</dt><dd>Tasks, information texts, and export functions are designed for use with digital notebooks.</dd></div>
+        <div><dt>Tablet-friendly</dt><dd>Interfaces and controls are prepared for touch input.</dd></div>
+      </dl>
+    </div>
+  </section>
 
-  <!-- FEATURES -->
-  <div class="section">
+  <!-- CLASSROOM USE -->
+  <section class="section teaching-section" id="classroom-use">
     <div class="section-header">
-      <div class="section-tag">Features</div>
-      <h2>Everything modern teaching needs</h2>
-      <p class="section-subtitle">Designed for digital classrooms, so tablets and other student devices create real instructional value instead of just replacing paper.</p>
+      <div class="section-tag">Classroom use</div>
+      <h2>What the simulations support in lessons</h2>
+      <p class="section-subtitle">The homepage presents the materials in a deliberately factual way: not as a product promise, but as a collection of directly usable learning environments for biological processes, models, and experiments.</p>
     </div>
     <div class="features-grid">
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-export.webp" alt="Export feature" loading="eager" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-export.webp" alt="Export feature" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Export for OneNote &amp; GoodNotes</h3>
-          <p>Results and views can be saved directly for further classroom work and transferred easily into digital note-taking and worksheet environments.</p>
+          <h3>Save results</h3>
+          <p>Selected views can be exported and then reused in OneNote, GoodNotes, or other digital notebooks.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-parameter.webp" alt="Interactive parameters" loading="eager" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-parameter.webp" alt="Interactive parameters" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Interactive parameters</h3>
-          <p>Students change parameters in real time and immediately observe the effects, enabling active learning through guided experimentation.</p>
+          <h3>Investigate parameters</h3>
+          <p>Students deliberately change settings and directly observe how biological processes or model states are affected.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap" style="height:220px">
-          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-tablets.webp" alt="Optimized for tablets" loading="eager" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-tablets.webp" alt="Optimized for tablets" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Optimized for tablets</h3>
-          <p>Large controls, clear interfaces, and touch-friendly interactions keep the simulations reliable and comfortable to use on tablets.</p>
+          <h3>Usable on tablets</h3>
+          <p>Large controls and clearly separated interface areas make the simulations suitable for lessons with digital devices.</p>
         </div>
       </div>
 
@@ -904,121 +1360,101 @@
           </video>
         </div>
         <div class="feature-body">
-          <h3>Animated processes</h3>
-          <p>Complex processes are not only described, but made visible through clear, didactically reduced animations that are easier to understand.</p>
+          <h3>Make processes visible</h3>
+          <p>Animations reduce complex processes to the subject-relevant steps and support observation, description, and evaluation.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-lehrplan.webp" alt="Aligned with the curriculum" loading="eager" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-lehrplan.webp" alt="Aligned with school terminology" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Aligned with the curriculum</h3>
-          <p>All content is aligned with the <strong>LehrplanPLUS</strong> biology curriculum. The technical terms used in the curriculum are applied consistently, avoiding confusion caused by differing terminology.</p>
+          <h3>Use terminology consistently</h3>
+          <p>The simulations follow school-level biological terminology and avoid unnecessary shifts in wording within a topic.</p>
         </div>
       </div>
 
       <div class="feature-card">
         <div class="feature-img-wrap">
-          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-qr-code.webp" alt="Easy to share" loading="eager" decoding="async">
+          <img class="feature-img" src="Offizielle Webseite/Bilder/feature-qr-code.webp" alt="Easy to share" loading="lazy" decoding="async">
         </div>
         <div class="feature-body">
-          <h3>Easy to share</h3>
-            <p>No download, no plugin: simply click the link or scan the QR code and open the simulation directly in the browser.</p>
+          <h3>Distribute materials quickly</h3>
+          <p>Links and QR codes allow direct access without distributing files or installing software.</p>
         </div>
       </div>
 
     </div>
-  </div>
+  </section>
 
   <!-- SIMULATION OVERVIEW -->
-  <div id="simulationen" style="background:var(--white);padding:5rem 0">
-    <div class="section" style="padding-top:0;padding-bottom:0">
-      <div class="section-header">
-        <div class="section-tag">Simulations</div>
-        <h2>11 topic areas at a glance</h2>
-
+  <div id="simulationen" class="sims-overview">
+    <div class="section">
+      <div class="section-header sims-header">
+        <div class="sims-title-block">
+          <h2 class="sims-main-title">Simulations</h2>
+        </div>
+        <div class="sim-filter-controls" aria-label="Filter simulations">
+          <label class="sim-filter-label" for="topic-filter">
+            Topic area
+            <select class="sim-filter-select" id="topic-filter" onchange="renderLandingGrid()">
+              <option value="all">All topic areas</option>
+              <option value="sensory">Sensory biology</option>
+              <option value="genetics">Genetics &amp; molecular biology</option>
+              <option value="evolution">Evolution &amp; ecology</option>
+              <option value="neurobiology">Neurobiology</option>
+              <option value="plant">Plant physiology</option>
+              <option value="behavior">Behavioral biology</option>
+              <option value="humanbiology">Human biology</option>
+            </select>
+          </label>
+          <label class="sim-filter-label" for="grade-filter">
+            Grade level
+            <select class="sim-filter-select" id="grade-filter" onchange="renderLandingGrid()">
+              <option value="all">All grade levels</option>
+              <option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option>
+              <option value="Grade 10">Grade 10</option>
+              <option value="Grade 12">Grade 12</option>
+              <option value="Grade 13">Grade 13</option>
+            </select>
+          </label>
+        </div>
       </div>
-      <div class="sims-grid" id="landing-sims-grid">
-        <a class="sim-card sim-card-link" href="Schall_Hoervorgang/Schall_und_Hoervorgang_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/schall-und-hoervorgang-1.webp" alt="Preview screenshot of Sound and Hearing"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Sound and Hearing</h3><div class="sim-grade">Three acoustics modules for exploring, organizing, and understanding &middot; Grade 8</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Explore sound waves, the hearing process, and sound localization in a comprehensive simulation with tasks, extra views, and export options.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Mitose_und_Meiose/Mitose_Meiose_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/mitose-meiose-1.webp" alt="Preview screenshot of Mitosis and Meiosis"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Mitosis and Meiosis</h3><div class="sim-grade">Interactive cell division for comparing, controlling, and understanding &middot; Grade 9 and 12</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Compare mitosis and meiosis in a controllable cell-division simulation with phase selection, crossing-over, and genetic special cases.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Mendel/Simulation_Mendel_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/mendelsche-regeln-1.webp" alt="Preview screenshot of Mendelian Laws"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Mendelian Laws</h3><div class="sim-grade">Interactive genetics for investigating, comparing, and explaining &middot; Grade 9 and 12</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Discover Mendelian laws in the garden lab and compare Punnett square, simulation, and analysis directly with one another.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Meselson-Stahl-Versuch/Meselson_Stahl_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/meselson-stahl-1.webp" alt="Preview screenshot of Meselson-Stahl Experiment"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Meselson-Stahl Experiment</h3><div class="sim-grade">Experimental molecular biology &middot; Grade 9 and 12</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Carry out the Meselson-Stahl experiment step by step and interpret the band patterns that reveal DNA replication.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Artbildung/Artbildung_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/artbildung-1.webp" alt="Preview screenshot of Geographic Speciation"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Geographic Speciation</h3><div class="sim-grade">Evolutionary biology &middot; Grade 9 and 12</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Observe how predators, weather events, and habitat separation change the composition of a lizard population.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/einflussfaktoren-fotosynthese-1.webp" alt="Preview screenshot of Factors Affecting Photosynthesis"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Factors Affecting Photosynthesis</h3><div class="sim-grade">Plant physiology &middot; Grade 13</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Investigate how light, CO2, and temperature affect photosynthesis in an Engelmann-style setup, and evaluate the results using charts.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Evolution_Kaeferspiel/Kaefer_under_Pressure_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/evolution-kaeferspiel-1.webp" alt="Preview screenshot of Evolution: Beetle Game"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Evolution: Beetle Game</h3><div class="sim-grade">Evolutionary biology &middot; Grade 9 and 12</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Remove beetles under changing conditions and observe how a population changes over several generations.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Nervenzelle_und_Synapse/Neurobiologie_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/neurobiologie-1.webp" alt="Preview screenshot of Neural Information Processing"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Neural Information Processing</h3><div class="sim-grade">Neurobiology &middot; Grade 8 and 13</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Choose grade 8 or 13 and work with an extensive simulation on neural information processing, from neuron structure to the synapse.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Attrappenversuche/Attrappenversuche_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/attrappenversuche-1.webp" alt="Preview screenshot of Dummy Experiments"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Dummy Experiments</h3><div class="sim-grade">Behavioral biology &middot; Grade 8</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Design four dummies, test their effect in the experiment, and evaluate the results directly in the chart.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Angepasstheit_Insekten/Insektenforschung_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/angepasstheit-insekten-1.webp" alt="Preview screenshot of Insect Adaptations"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Insect Adaptations</h3><div class="sim-grade">Ecology &amp; Evolution &middot; Grade 9</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Investigate insect legs with the digital microscope and compare different leg types in relation to habitat and way of life.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-        <a class="sim-card sim-card-link" href="Strahlengang_Akkommodation/Strahlengang_und_Akkommodation_EN.html">
-          <div class="sim-card-preview"><img class="sim-card-preview-img" src="Offizielle Webseite/Bilder/strahlengang-und-akkommodation-1.webp" alt="Preview screenshot of Light Paths and Accommodation"></div>
-          <div class="sim-card-header"><div class="sim-meta"><h3>Light Paths &amp; Accommodation</h3><div class="sim-grade">Five modules about the eye, lens, and retina &middot; Grade 8</div></div></div>
-          <div class="sim-card-body"><p class="sim-description">Explore the structure of the eye, light paths, accommodation, refractive errors, and the retina.</p></div>
-          <div class="sim-card-footer"><span class="btn btn-primary" style="width:100%">&#9654; Open simulation</span></div>
-        </a>
-      </div>
+      <div class="sims-grid" id="landing-sims-grid"></div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <footer class="footer">
-    
-    <nav class="footer-links" aria-label="Legal information and contact"><a href="impressum_EN.html">Legal notice</a><a href="datenschutz_EN.html">Privacy</a><a href="kontakt_EN.html">Contact</a></nav>
-<p>&#169; 2026 EduBioSim &middot; Educational Biology Simulations</p>
-    <p>All self-created simulations, texts, layouts, animations and code components of this website are protected by copyright. Use in school lessons is permitted. Commercial use, redistribution, modification, republication, embedding on other websites or provision on third-party platforms is not permitted without explicit permission.<br><br>Excluded from this are images and materials licensed under CC BY or CC BY-SA. For these, the respective license terms and source references apply.<br><br>Comments, suggestions or feedback are welcome at <a href="mailto:biologie-simulationen@web.de">biologie-simulationen@web.de</a>.</p>
+    <nav class="footer-links" aria-label="Legal information and contact"><a href="#about-edubiosim" onclick="event.preventDefault();showAbout()">About EduBioSim</a><a href="impressum_EN.html">Legal notice</a><a href="datenschutz_EN.html">Privacy</a><a href="kontakt_EN.html">Contact</a></nav>
+    <p>&#169; 2026 EduBioSim &middot; Educational Biology Simulations</p>
   </footer>
 </div><!-- /view-landing -->
+
+<!-- ===================== VIEW: ABOUT EDUBIOSIM ===================== -->
+<div id="view-about" class="hidden">
+  <main class="content-page">
+    <button class="btn btn-ghost btn-sm content-back-link" onclick="showLanding()">&#8592; Back to homepage</button>
+    <section class="content-card">
+      <div class="section-tag">About EduBioSim</div>
+      <h1>A school-oriented simulation project for biology lessons</h1>
+      <p>EduBioSim is designed as a collection of interactive biology simulations for classroom use. The materials are intended not only to describe biological processes, models, and experiments, but to make them visible, controllable, and evaluable.</p>
+      <p>All simulations were created by a teacher who works at a DSdZ school with open learning landscapes. DSdZ stands for “Digitale Schule der Zukunft” (“Digital School of the Future”), a Bavarian programme for the further development of school and teaching within a culture of digitality. One central element is the 1:1 provision of mobile devices for students, so that digitally supported learning formats can be used reliably in subject teaching.</p>
+      <p>The simulations emerge from this classroom practice. They are especially intended for learning environments in which learners work independently, cooperatively, and with digital devices. The focus is therefore not on as many effects as possible, but on subject-specific reduced models, understandable interfaces, tasks, and saving results in a digital notebook.</p>
+      <p>In terms of content, the materials are aligned with the Bavarian LehrplanPLUS for biology. The simulations therefore use terminology that connects as consistently as possible to the curriculum and address topics that are relevant in the corresponding grade levels of the Bavarian Gymnasium.</p>
+
+      <h2>Why simulations?</h2>
+      <p>Many biological topics are difficult to observe directly in class: processes in the eye, neural signal transmission, DNA replication, cell division, or evolutionary change are too fast, too slow, too small, or too abstract. Interactive simulations can make these processes visible as models and allow learners to change parameters, compare observations, and save results.</p>
+
+      <h2>Use in lessons</h2>
+      <p>The materials may be used for non-commercial educational purposes in school lessons. Legal information, contact options, and further details can be found on the pages linked in the footer.</p>
+    </section>
+  </main>
+</div>
+
+
 
 
 
@@ -1174,8 +1610,8 @@ In the sound localization module, the position of a sound source around the head
 The simulation is extended by accompanying information texts, worksheets for all three subtopics, and export functions. This makes the application suitable not only for exploration, but also for recording and extending classroom work.`,
         path: 'Schall_Hoervorgang/Schall_und_Hoervorgang_EN.html',
     icon: '\ud83d\udc42', grade: 'Grade 8',
-    topics: ['Sound waves','Inner ear','Auditory pathway','Acoustics'],
-    features: ['Export','Animation','Interactive'],
+    topics: ['Sensory biology','Sound waves','Hearing process','Sound localization'],
+    features: ['Worksheets','Exploration','Model comparison','With sound'],
     demo: true
   },
   {
@@ -1194,8 +1630,8 @@ The application combines model character with biological depth. Mitosis and meio
 When genome mutation is activated, the simulation goes beyond a simple process display. Additional runs and result views make it visible how non-disjunction can affect different stages of division. This makes the application suitable not only for reviewing phases, but also for a deeper exploration of recombination, chromosome missegregation, and the biological significance of meiotic processes.`,
         path: 'Mitose_und_Meiose/Mitose_Meiose_EN.html',
     icon: '\ud83e\uddec', grade: 'Grade 9 and 12',
-    topics: ['Mitosis','Meiosis','Cell cycle','Chromosomes'],
-    features: ['Export','Animation','Step by step'],
+    topics: ['Chromosomes','Genome mutations','Oogenesis'],
+    features: ['Phase control','Comparison','Extension','Animations'],
     demo: false
   },
   {
@@ -1214,8 +1650,8 @@ Analysis takes place on several levels. Phenotype distributions are shown graphi
 For deeper work, learners also have access to a lab journal, a notes area, export functions, and challenge cards. This makes the application suitable not only for a first understanding of Mendelian laws, but also for systematic analysis, documentation of observations, and inquiry-based work on genetics.`,
         path: 'Mendel/Simulation_Mendel_EN.html',
     icon: '\ud83fad', grade: 'Grade 9 and 12',
-    topics: ['Dominance','Segregation','Independent assortment','Inheritance'],
-    features: ['Export','Interactive','Chart'],
+    topics: ['Genetics','Inheritance','Cross diagram'],
+    features: ['Worksheet','Charts','Exploration','Challenges'],
     demo: false
   },
   {
@@ -1233,8 +1669,8 @@ The analysis works on two levels. In the main display, the DNA bands become visi
 Especially valuable is the connection between historical context and experimental reconstruction. The competing replication models, conservative, semiconservative, and dispersive, are introduced conceptually and can then be tested against the learner's own results. Support mode, undo, reset, and screenshot export make the simulation a well-structured tool for exploratory and analytical learning.`,
         path: 'Meselson-Stahl-Versuch/Meselson_Stahl_EN.html',
     icon: '\ud83e\uddea', grade: 'Grade 9 and 12',
-    topics: ['DNA replication','Semiconservative','Isotopes','Centrifugation'],
-    features: ['Animation','Step by step','Export'],
+    topics: ['Molecular biology','DNA replication','Isotope labelling','Centrifugation'],
+    features: ['Experimental sequence','Model comparison','Evaluation','Worksheet'],
     demo: false
   },
   {
@@ -1252,8 +1688,8 @@ Analysis takes place on several levels. In addition to the central simulation, c
 The application is complemented by a clear task orientation and export functions for the results. This makes the simulation suitable both as a motivating introduction to speciation and as a tool for targeted analysis and comparison of different developmental pathways in class.`,
         path: 'Artbildung/Artbildung_EN.html',
     icon: '\ud83c\udfd9\ufe0f', grade: 'Grade 9 and 12',
-    topics: ['Isolation','Selection','Drift','Speciation'],
-    features: ['Simulation','Interactive','Export'],
+    topics: ['Evolution','Isolation','Selection','Population change'],
+    features: ['Scenarios','Charts','Exploration'],
     demo: false
   },
   {
@@ -1271,8 +1707,8 @@ The application is suitable both for introducing limiting factors of photosynthe
     desc: 'Investigate the effects of light intensity, CO2 concentration, and temperature on the photosynthesis rate in real time.',
         path: 'Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese_EN.html',
     icon: '\ud83c\udf3f', grade: 'Grade 13',
-    topics: ['Light','CO2','Temperature','Limitation'],
-    features: ['Chart','Interactive','Export'],
+    topics: ['Plant physiology','Engelmann experiment','Environmental factors','Optimum curve'],
+    features: ['Parameter study','Charts','Evaluation','Worksheets'],
     demo: false
   },
   {
@@ -1292,8 +1728,8 @@ The game mechanic itself also contributes to the didactic value. After each gene
 Status displays, clear rules, touch-friendly controls, and export functions for the game view and chart make the simulation suitable both for a motivating introduction and for a first recording of observations. Overall, it offers an accessible but scientifically meaningful introduction to selection, adaptation, fitness, and evolutionary change.`,
         path: 'Evolution_Kaeferspiel/Kaefer_under_Pressure_EN.html',
     icon: '\ud83e\udeb2', grade: 'Grade 9 and 12',
-    topics: ['Selection','Population','Fitness','Adaptation'],
-    features: ['Game format','Animation','Export'],
+    topics: ['Evolution','Selection','Fitness','Population'],
+    features: ['Introduction','Game round','Charts'],
     demo: false
   },
   {
@@ -1303,8 +1739,8 @@ Status displays, clear rules, touch-friendly controls, and export functions for 
     desc: 'Choose grade 8 or 13 and work with an especially extensive simulation on neural information processing, from neuron structure to the synapse.',
         path: 'Nervenzelle_und_Synapse/Neurobiologie_EN.html',
     icon: '\u26a1', grade: 'Grade 8 and 13',
-    topics: ['Neuron','Signal transmission','Action potential','Synapse'],
-    features: ['Grade selection','Interactive','Export'],
+    topics: ['Neurobiology','Model work','Visual clarity','Teaching unit'],
+    features: ['Grade selection','Worksheets','Exploration','Extension'],
     demo: false,
     cardDesc: 'Choose grade 8 or 13 and explore an especially extensive simulation on neural information processing, from neuron structure to synaptic modulation.',
     detailDesc: `This simulation is designed as an especially extensive digital learning environment for neurobiology. It brings together several subtopics within one interface and leads from the structure of the neuron through membrane potentials and signal transmission to the chemical synapse. It is therefore suitable not only for individual lessons but also for longer teaching units with connected focal points.
@@ -1340,8 +1776,8 @@ The application combines experiment, observation, and analysis in a clear interf
 An extra discovery element adds further interest: one white butterfly has hidden internal properties that are not directly visible. This means the simulation is used not only to evaluate given features, but also as an inquiry task in which hypotheses are formed and tested through repeated trials.`,
         path: 'Attrappenversuche/Attrappenversuche_EN.html',
     icon: '\ud83e\udd8b', grade: 'Grade 8',
-    topics: ['Key stimulus','Dummy','Trigger','Instinct'],
-    features: ['Interactive','Export','Experiment'],
+    topics: ['Behavioral biology','Key stimulus','Dummy experiment','Instinctive behavior'],
+    features: ['Hypothesis building','Experiment','Charts','Worksheet'],
     demo: false
   },
   {
@@ -1361,8 +1797,27 @@ The simulation is also designed for active work. Labeling tasks on the diagram, 
 An additional discovery element comes from unlockable surprise windows for selected insects. Anyone who solves the labeling task correctly gains access to further material. The simulation therefore combines observation, comparison, scientific classification, and motivating extensions in one rich digital research environment.`,
         path: 'Angepasstheit_Insekten/Insektenforschung_EN.html',
     icon: '\ud83d\udc1d', grade: 'Grade 9',
-    topics: ['Adaptation','Morphology','Habitat','Research'],
-    features: ['Research','Interactive','Export'],
+    topics: ['Ecology','Adaptation','Morphology','Structure-function'],
+    features: ['Digital microscope','Comparison','Labeling','Videos'],
+    demo: false
+  },
+  {
+    id: 'verdauung',
+    title: 'Digestion and Nutrient Uptake',
+    subtitle: 'Interactive digestion from the mouth to the large intestine',
+    desc: 'Explore digestion, nutrient uptake, and enzyme activity in the mouth, stomach, small intestine, and large intestine with animations, tasks, information texts, and worksheets.',
+    cardDesc: 'Explore digestion step by step: from mechanical breakdown and enzyme action to nutrient uptake, intestinal flora, large-intestine processes, and pH-dependent enzyme activity.',
+    detailDesc: `The simulation Digestion and Nutrient Uptake guides learners through key stations of the human digestive system and combines clear animations with scientific information texts, task panels, and worksheets. Learners switch between the mouth, stomach, small intestine, and large intestine and can investigate each process in a focused way.
+
+The individual modes show typical processes such as chewing, mixing, enzyme action, neutralization, fat digestion, nutrient uptake, and water absorption in a traceable sequence. The composition of the meal can be changed so that it becomes visible how different nutrient groups are processed in different sections of the digestive tract.
+
+A final task extends the simulation with an interactive pH diagram for enzyme activity. Learners change the environmental pH, observe the activity maxima of different enzyme curves, and assign the correct enzyme labels by drag and drop.
+
+Labeling and ordering tasks support consolidation throughout the simulation. Export functions and prepared worksheets make it useful for exploration, review, and deeper classroom work.`,
+    path: 'Verdauung/Verdauung_EN.html',
+    icon: '\ud83c\udf7d\ufe0f', grade: 'Grade 10',
+    topics: ['Human biology','Enzymes','Nutrient uptake','Surface enlargement'],
+    features: ['Modules','Worksheets','Animations','Final task'],
     demo: false
   },
   {
@@ -1383,8 +1838,8 @@ The refractive error module explains how myopia and hyperopia arise and how corr
 Information texts, worksheets, labeling tasks, matching tasks, and export functions make the application a particularly versatile and extensive classroom simulation.`,
         path: 'Strahlengang_Akkommodation/Strahlengang_und_Akkommodation_EN.html',
     icon: '\ud83d\udc41\ufe0f', grade: 'Grade 8',
-    topics: ['Eye','Light path','Accommodation','Retina'],
-    features: ['Multiple modules','Tasks','Export'],
+    topics: ['Sensory biology','Visual clarity','Recognizing relationships'],
+    features: ['Modules','Worksheets','Exploration','Animations'],
     demo: false
   }
 ];
@@ -1479,6 +1934,7 @@ function buildQrCodeCandidates(sim) {
     nerv: ['Offizielle Webseite/QR-Codes_EN/Neurobiologie_EN.png'],
     attrappen: ['Offizielle Webseite/QR-Codes_EN/Attrappenversuche_EN.png'],
     insekten: ['Offizielle Webseite/QR-Codes_EN/Insektenforschung_EN.png'],
+    verdauung: ['Offizielle Webseite/QR-Codes_EN/Verdauung_EN.png'],
     auge: ['Offizielle Webseite/QR-Codes_EN/Strahlengang_und_Akkommodation_EN.png']
   };
   return uniqueList(
@@ -1584,6 +2040,13 @@ const EXACT_SCREENSHOT_MAP = {
     'Offizielle Webseite/Bilder/angepasstheit-insekten-6.webp',
     'Offizielle Webseite/Bilder/angepasstheit-insekten-7.webp'
   ],
+  verdauung: [
+    'Offizielle Webseite/Bilder/verdauung-1.webp',
+    'Offizielle Webseite/Bilder/verdauung-2.webp',
+    'Offizielle Webseite/Bilder/verdauung-3.webp',
+    'Offizielle Webseite/Bilder/verdauung-4.webp',
+    'Offizielle Webseite/Bilder/verdauung-5.webp'
+  ],
   auge: [
     'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-1.webp',
     'Offizielle Webseite/Bilder/strahlengang-und-akkommodation-2.webp',
@@ -1606,6 +2069,7 @@ const EXACT_VIDEO_MAP = {
   nerv: ['Offizielle Webseite/Videos/Neurobiologie.mp4'],
   attrappen: ['Offizielle Webseite/Videos/Attrappenversuche.mp4'],
   insekten: ['Offizielle Webseite/Videos/Insektenforschung.mp4'],
+  verdauung: ['Offizielle Webseite/Videos/Verdauung.mp4'],
   auge: ['Offizielle Webseite/Videos/Strahlengang und Akkommodation.mp4']
 };
 
@@ -1622,7 +2086,7 @@ var currentDetailSim = null;
 var viewerBackView = 'landing';
 
 // === VIEWS ===
-var ALL_VIEWS = ['landing','dashboard','detail','viewer','admin'];
+var ALL_VIEWS = ['landing','about','dashboard','detail','viewer','admin'];
 function showView(name) {
   ALL_VIEWS.forEach(function(v) {
     var view = document.getElementById('view-' + v);
@@ -1635,6 +2099,7 @@ function showView(name) {
   if (name === 'dashboard') renderDashboard();
 }
 function showLanding() { showView('landing'); }
+function showAbout() { showView('about'); }
 
 function getSimById(simId) {
   for (var i = 0; i < SIMS.length; i++) {
@@ -2015,7 +2480,7 @@ function buildSimCardHTML(sim) {
     '<div class="sim-card-body">' +
       '<p class="sim-description">' + (sim.cardDesc || sim.desc) + '</p>' +
       '<div class="sim-topics">' + sim.topics.map(function(t){ return '<span class="topic-tag">'+t+'</span>'; }).join('') + '</div>' +
-      '<div class="sim-features">' + sim.features.map(function(f){ return '<span class="sim-feature-tag">&#10003; '+f+'</span>'; }).join('') + '</div>' +
+      '<div class="sim-features">' + sim.features.map(function(f){ return '<span class="sim-feature-tag">'+f+'</span>'; }).join('') + '</div>' +
     '</div>' +
     '<div class="sim-card-footer">' +
       '<button class="btn btn-primary" style="width:100%" onclick=\"event.stopPropagation();openSimulation(\'' + sim.id + '\')\">&#9654; Open simulation</button>' +
@@ -2023,10 +2488,48 @@ function buildSimCardHTML(sim) {
   '</div>';
 }
 
+function getSimTopicArea(sim) {
+  var topicMap = {
+    schall: 'sensory',
+    auge: 'sensory',
+    verdauung: 'humanbiology',
+    mitose: 'genetics',
+    mendel: 'genetics',
+    meselson: 'genetics',
+    artbildung: 'evolution',
+    kaefer: 'evolution',
+    insekten: 'evolution',
+    neuro: 'neurobiology',
+    fotosynthese: 'plant',
+    attrappen: 'behavior'
+  };
+  return topicMap[sim.id] || 'all';
+}
+
+function simMatchesGrade(sim, selectedGrade) {
+  if (!selectedGrade || selectedGrade === 'all') return true;
+  return (sim.grade || '').indexOf(selectedGrade) !== -1;
+}
+
 function renderLandingGrid() {
   var container = document.getElementById('landing-sims-grid');
   if (!container) return;
-  container.innerHTML = SIMS.map(buildSimCardHTML).join('');
+  var topicSelect = document.getElementById('topic-filter');
+  var gradeSelect = document.getElementById('grade-filter');
+  var selectedTopic = topicSelect ? topicSelect.value : 'all';
+  var selectedGrade = gradeSelect ? gradeSelect.value : 'all';
+  var filtered = SIMS.filter(function(sim) {
+    var topicOk = selectedTopic === 'all' || getSimTopicArea(sim) === selectedTopic;
+    var gradeOk = simMatchesGrade(sim, selectedGrade);
+    return topicOk && gradeOk;
+  });
+
+  if (!filtered.length) {
+    container.innerHTML = '<div class="sim-filter-empty"><strong>No simulations found.</strong><br>Adjust the topic area or grade-level filter.</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(buildSimCardHTML).join('');
   initLandingPreviewImages();
 }
 
@@ -2070,7 +2573,7 @@ function renderDashboard() {
         '<div class="sim-card-body">' +
           '<p class="sim-description">' + sim.desc + '</p>' +
           '<div class="sim-topics">' + sim.topics.map(function(t){ return '<span class="topic-tag">'+t+'</span>'; }).join('') + '</div>' +
-          '<div class="sim-features">' + sim.features.map(function(f){ return '<span class="sim-feature-tag">&#10003; '+f+'</span>'; }).join('') + '</div>' +
+          '<div class="sim-features">' + sim.features.map(function(f){ return '<span class="sim-feature-tag">'+f+'</span>'; }).join('') + '</div>' +
         '</div>' +
         '<div class="sim-card-footer">' +
           '<button class="btn btn-primary" style="width:100%" onclick=\"event.stopPropagation();openSimulation(\'' + sim.id + '\')\">&#9654; Open simulation</button>' +
