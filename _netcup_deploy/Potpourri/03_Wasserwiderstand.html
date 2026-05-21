@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fallrohr – Wasserwiderstand</title>
+<style>
+:root{--bg:#0f1622;--panel:#172233;--panel2:#111a29;--line:#2b405d;--text:#e8eef7;--muted:#aebbd0;--accent:#72d0ff;--accent2:#8df0c8;--warn:#ffd37a;}
+*{box-sizing:border-box} body{margin:0;min-height:100vh;padding:20px;background:radial-gradient(circle at top,#1e293b 0,#0f172a 42%,#020617 100%);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--text)}.app{width:min(980px,100%);margin:0 auto}.sim-card{padding:10px;border:1px solid #2a3f5d;border-radius:22px;background:linear-gradient(180deg,rgba(17,24,39,.96),rgba(2,6,23,.98));box-shadow:0 20px 50px rgba(0,0,0,.35)}
+header{padding:6px 8px 10px;border-bottom:0;background:transparent;backdrop-filter:none}
+h1{margin:0;font-size:1rem;font-weight:760}.sub{display:none}.wrap{display:grid;grid-template-columns:248px minmax(0,1fr);gap:12px;padding:0;height:642px;min-height:0}
+.panel{background:linear-gradient(180deg,rgba(23,34,51,.96),rgba(15,24,38,.96));border:1px solid #2a3f5d;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.sim{border:1px solid rgba(148,163,184,.16);border-radius:20px;box-shadow:0 18px 40px rgba(0,0,0,.25);background:linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.025) 1px,transparent 1px),radial-gradient(circle at 60% 20%,rgba(56,189,248,.08),transparent 28%),rgba(2,6,23,.42);background-size:28px 28px,28px 28px,100% 100%,100% 100%}
+.panel{padding:10px;overflow:hidden}.sim{position:relative;padding:8px;display:grid;grid-template-rows:minmax(0,1fr) 178px;gap:8px;min-width:0;overflow:hidden}.row{display:grid;gap:5px;margin:7px 0}.row.inline{grid-template-columns:1fr 1fr;gap:8px}.label{font-size:.76rem;color:#c8d4e7;font-weight:650}.hint{font-size:.76rem;color:var(--muted);line-height:1.3}select,input[type=range],button{width:100%;border-radius:12px;border:1px solid #344c70;background:#0e1726;color:var(--text);padding:8px 10px;font:inherit}input[type=range]{padding:6px 0;accent-color:var(--accent)}button{cursor:pointer;font-weight:720;background:linear-gradient(180deg,#223b5a,#182b44)}button:hover{filter:brightness(1.1)}button.primary{background:linear-gradient(180deg,#1672a0,#115174)}button.ghost{background:#101b2b}.value{float:right;color:var(--accent);font-weight:750}
+canvas{width:100%;height:100%;min-height:0;border-radius:16px;background:transparent;border:1px solid rgba(148,163,184,.16);display:block}.stage{position:relative;min-height:0}.timerOverlay{position:absolute;left:auto;right:78px;top:50%;transform:translateY(-50%);z-index:10;pointer-events:none}.bigTimer{background:rgba(12,20,33,.94);border:1px solid #314b6d;border-radius:14px;text-align:center;padding:8px 12px;min-width:118px;box-shadow:0 10px 24px rgba(0,0,0,.26)}.bigTimer .time{font-size:1.35rem;font-variant-numeric:tabular-nums;font-weight:850;color:#dff7ff}.bigTimer .cap{font-size:.68rem;color:var(--muted)}.tbl{max-height:178px;overflow:auto;border:1px solid #2a3d5a;border-radius:12px}.tbl table{width:100%;border-collapse:collapse;font-size:.78rem}.tbl th,.tbl td{border-bottom:1px solid #263955;padding:6px;text-align:left}.tbl th{color:#bcd0e8;background:#111b2b;position:sticky;top:0}.switch{display:flex;gap:8px;align-items:center;font-size:.85rem;color:var(--muted)}.switch input{width:auto}.modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}.modal.show{display:flex}.dialog{width:min(760px,94vw);max-height:88vh;overflow:auto;background:#111b2b;border:1px solid #405a7d;border-radius:18px;padding:18px;box-shadow:0 26px 80px rgba(0,0,0,.55)}.dialog h2{margin-top:0}.dialog p,.dialog li{line-height:1.55;color:#dce7f5}.drawArea{display:grid;grid-template-columns:320px 1fr;gap:16px}.drawCanvas{width:320px!important;height:560px!important;min-height:560px;background:#0a1421;border:1px dashed #5d789d;touch-action:none}.windowToggle{position:absolute;top:14px;right:14px;z-index:12;width:auto;min-width:54px;padding:8px 12px;border-radius:999px;border:1px solid #314b6d;background:rgba(12,20,33,.92);color:#dff7ff;font-size:.76rem;font-weight:800;letter-spacing:.02em}.windowToggle:hover{filter:brightness(1.08)}.metricToggle{margin-top:0}.metricPanel{display:none;padding:10px 12px;border:1px solid #2a3d5a;border-radius:12px;background:#0f1827}.metricPanel.show{display:block}.metricRow{display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-size:.84rem;color:#dce7f5}.metricRow span:first-child{color:#c8d4e7}.metricRow strong{color:#8cd9ff}.wrap:fullscreen{grid-template-columns:248px minmax(0,1fr);height:100vh;padding:12px;background:#020617;align-items:stretch}.wrap:fullscreen .panel{overflow:hidden;align-self:stretch}.wrap:fullscreen .sim{align-self:stretch}.wrap:fullscreen .stage{height:calc(100vh - 132px)}.wrap:fullscreen .timerOverlay{right:210px}.wrap:fullscreen canvas{height:100%}.wrap:fullscreen .panel,.wrap:fullscreen .sim{border-radius:18px}.wrap:fullscreen .bigTimer{min-width:230px;padding:20px 26px;border-radius:22px}.wrap:fullscreen .bigTimer .time{font-size:3.1rem}.wrap:fullscreen .bigTimer .cap{font-size:.95rem}
+@media(max-width:900px){body{padding:14px}.wrap{grid-template-columns:1fr;height:auto}.sim{min-height:560px}.stage{min-height:456px}.drawArea{grid-template-columns:1fr}.panel{overflow:visible}canvas{min-height:0}.timerOverlay{right:18px;top:18px;transform:none}}
+
+    /* edubiosim-fullscreen styles */
+    .fullscreen-enter-btn,
+    .fullscreen-exit-btn{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:91;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.72);
+      background:rgba(255,255,255,.92);
+      color:#182033;
+      font-weight:900;
+      box-shadow:0 12px 30px rgba(0,0,0,.20);
+      backdrop-filter:blur(8px);
+    }
+    .fullscreen-enter-btn{left:16px;right:auto;display:inline-flex}
+    .fullscreen-exit-btn{left:16px;right:auto;display:none}
+    .fullscreen-enter-btn svg,
+    .fullscreen-exit-btn svg{width:22px;height:22px;display:block}
+    html:fullscreen .fullscreen-exit-btn,
+    html.fullscreen-active .fullscreen-exit-btn{display:inline-flex}
+    html:-webkit-full-screen .fullscreen-exit-btn{display:inline-flex}
+    html:fullscreen .fullscreen-enter-btn,
+    html.fullscreen-active .fullscreen-enter-btn{display:none}
+    html:-webkit-full-screen .fullscreen-enter-btn{display:none}
+    .fullscreen-enter-btn:hover,
+    .fullscreen-exit-btn:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,0,0,.24)}
+    .fullscreen-enter-btn:focus-visible,
+    .fullscreen-exit-btn:focus-visible{outline:3px solid rgba(21,135,123,.35);outline-offset:3px}
+</style>
+</head>
+<body>
+<main class="app">
+<section class="sim-card">
+<header><h1>Fallrohr: Wasserwiderstand und Körperform</h1><div class="sub">Minimalistische Vorführungssimulation mit deutlicher Wasserverdrängung und Wirbelbildung.</div></header>
+<div class="wrap">
+<aside class="panel">
+  <div class="row"><button id="infoBtn" class="ghost">Informationstext anzeigen</button></div>
+  <div class="row"><label class="label" for="shape">Form</label><select id="shape"><option value="sphere">Kugel</option><option value="cube">Würfel</option><option value="disc">Flache Scheibe</option><option value="drop">Tropfenform</option><option value="irregular">Unregelmäßiger Körper</option><option value="custom">Eigene Form</option></select></div>
+  <div class="row"><label class="label">Masse <span class="value" id="massVal">50</span> g</label><input id="mass" type="range" min="10" max="120" step="5" value="50"></div>
+  <div class="row"><label class="label">Größe/Oberfläche <span class="value" id="sizeVal">50</span></label><input id="size" type="range" min="25" max="80" step="5" value="50"></div>
+  <div class="row"><label class="label">Viskosität <span class="value" id="visVal">1.0</span></label><input id="vis" type="range" min="0.5" max="2.5" step="0.1" value="1.0"></div>
+  <div class="row"><label class="switch"><input type="checkbox" id="flowToggle" checked> Wasserteilchen und Wirbel anzeigen</label></div>
+  <div class="row"><label class="switch"><input type="checkbox" id="streamlineToggle"> Strömungslinien statt Wasserteilchen</label></div>
+  <div class="row inline"><button id="start" class="primary">Start</button><button id="reset">Zurücksetzen</button></div>
+  <div class="row"><button id="drawBtn" class="ghost">Eigene Form zeichnen</button></div>
+  <div class="row">
+    <button id="metricBtn" class="ghost metricToggle">Formwiderstand/ Fallzeit</button>
+    <div id="metricPanel" class="metricPanel">
+      <div class="metricRow"><span>Formwiderstand</span><strong id="dragInfo">1,00</strong></div>
+      <div class="metricRow"><span>berechnete Fallzeit</span><strong id="timeInfo">0,00 s</strong></div>
+    </div>
+  </div>
+</aside>
+<section class="sim">
+  <div class="stage">
+    <div class="timerOverlay"><div class="bigTimer"><div class="cap">Stoppuhr</div><div class="time" id="timer">0,00 s</div></div></div>
+    <button id="windowToggle" class="windowToggle" type="button" aria-label="Simulation maximieren">Max</button>
+    <canvas id="c" width="920" height="560"></canvas>
+  </div>
+  <div class="tbl"><table><thead><tr><th>Form</th><th>Masse</th><th>Größe</th><th>Viskosität</th><th>Fallzeit</th></tr></thead><tbody id="results"></tbody></table></div>
+</section>
+</div>
+</section>
+</main>
+<div class="modal" id="info"><div class="dialog"><h2>Informationstext</h2><p>Körper werden im Wasser durch den Wasserwiderstand gebremst. Wie stark dieser Widerstand ist, hängt im Modell vor allem von der momentan wirksamen Querschnittsbreite, der Formlage, der Masse, der Viskosität und möglichen Wasserstau-Effekten ab. Stromlinienförmige Körper leiten Wasser leichter seitlich vorbei. Breite, flache oder kantige Körper verdrängen mehr Wasser nach vorne und erzeugen stärkere Wirbel.</p><p><strong>Arbeitsaufträge:</strong></p><ol><li>Vergleiche zwei verschiedene Formen bei gleicher Masse, gleicher Größe und gleicher Viskosität.</li><li>Zeichne eine eigene möglichst strömungsgünstige Form und überprüfe die Fallzeit.</li><li>Erkläre, warum breite oder flache Formen im Wasser langsamer sinken als stromlinienförmige Formen.</li></ol><button onclick="closeModal('info')">Schließen</button></div></div>
+<div class="modal" id="drawModal"><div class="dialog"><h2>Eigene Form zeichnen</h2><div class="drawArea"><canvas id="drawCanvas" class="drawCanvas" width="320" height="560"></canvas><div><p>Zeichne eine geschlossene oder annähernd geschlossene Form. Die Zeichenfläche ist nun deutlich größer. Beim Übernehmen wird die Zeichnung proportional ins Fallrohr übertragen. Wenn die Form die Breite der Zeichenfläche nahezu ausfüllt, entspricht sie später auch fast der Breite des Fallrohrs. Die Form wird dabei aber so begrenzt, dass sie auch beim Rotieren vollständig im Fallrohr bleibt.</p><div class="row inline"><button id="clearDraw">Löschen</button><button id="useDraw" class="primary">Form übernehmen</button></div><button onclick="closeModal('drawModal')">Abbrechen</button></div></div></div></div>
+<script>
+const simEl=document.querySelector('.wrap'); const c=document.getElementById('c'), ctx=c.getContext('2d');
+const shapeSel=document.getElementById('shape'), mass=document.getElementById('mass'), size=document.getElementById('size'), vis=document.getElementById('vis');
+const timerEl=document.getElementById('timer'); const windowToggle=document.getElementById('windowToggle'); const metricBtn=document.getElementById('metricBtn'); const metricPanel=document.getElementById('metricPanel'); const dragInfo=document.getElementById('dragInfo'); const timeInfo=document.getElementById('timeInfo'); const flowToggle=document.getElementById('flowToggle'); const streamlineToggle=document.getElementById('streamlineToggle');
+let running=false,startTime=0,lastFrame=0,elapsedSeconds=0,fallProgress=0,objY=0,objAngle=0,particles=[],vortices=[],customPts=[];
+const tube={x:390,y:35,w:145,h:470};
+function fmt(n){return n.toFixed(2).replace('.',',')+' s'}
+function uiVals(){document.getElementById('massVal').textContent=mass.value;document.getElementById('sizeVal').textContent=size.value;document.getElementById('visVal').textContent=Number(vis.value).toFixed(1);updateMetrics()}
+[mass,size,vis].forEach(e=>e.addEventListener('input',()=>{uiVals(); if(!running) draw()})); shapeSel.addEventListener('change',()=>{if(shapeSel.value==='custom' && customPts.length===0) openDraw(); draw()}); flowToggle.addEventListener('change',draw); streamlineToggle.addEventListener('change',draw);
+function shapeData(){
+ const s=Number(size.value), m=Number(mass.value), v=Number(vis.value); let form=shapeSel.value;
+ const base={sphere:{name:'Kugel',w:.92,h:.92,drag:1.04,tilt:0,tiltMax:0,rotateFull:false,targetAngle:0},cube:{name:'Würfel',w:1,h:1,drag:1.18,tilt:0,tiltMax:0,rotateFull:false,targetAngle:0},disc:{name:'Flache Scheibe',w:1.85,h:.38,drag:1.82,tilt:0,tiltMax:0,rotateFull:false,targetAngle:0},drop:{name:'Tropfenform',w:.68,h:1.65,drag:.72,tilt:0,tiltMax:0,rotateFull:false,targetAngle:0},irregular:{name:'Unregelmäßiger Körper',w:1.25,h:.95,drag:1.43,tilt:-0.18,tiltMax:0.26,rotateFull:false,targetAngle:0},custom:{name:'Eigene Form',w:1,h:1,drag:1.25,tilt:0,tiltMax:Math.PI,rotateFull:false,targetAngle:0}}[form];
+ let width=s*base.w, height=s*base.h, drag=base.drag, tilt=base.tilt, tiltMax=base.tiltMax, rotateFull=base.rotateFull, targetAngle=base.targetAngle, hydroWidth=s*base.w, hydroPenalty=1, bottomFront=0, broadFacePenalty=0;
+ if(form==='custom' && customPts.length){
+   const a=analyzeCustom();
+   const scaleFactor = s/50;
+   drag=a.drag; tilt=a.tilt; tiltMax=a.tiltMax; rotateFull=a.rotateFull; targetAngle=a.targetAngle;
+
+   // Ausgangsgröße aus der Zeichnung ableiten
+   let desiredW=Math.min(tube.w*0.90, a.baseWidth*scaleFactor);
+   let desiredH=Math.min(tube.h*0.74, a.baseHeight*scaleFactor);
+
+   // Strengere Sicherheitsanpassung: Auch in der späteren Rotationslage
+   // muss die Form vollständig innerhalb des Fallrohrs bleiben.
+   const xs=customPts.map(p=>p.x), ys=customPts.map(p=>p.y);
+   const minx=Math.min(...xs), maxx=Math.max(...xs), miny=Math.min(...ys), maxy=Math.max(...ys);
+   const bw=maxx-minx||1, bh=maxy-miny||1;
+   const cx0=minx+bw/2, cy0=miny+bh/2;
+   const baseScale=Math.min(desiredW/bw, desiredH/bh);
+   const ang=rotateFull ? targetAngle : tilt;
+
+   let rMinX=Infinity, rMaxX=-Infinity, rMinY=Infinity, rMaxY=-Infinity;
+   customPts.forEach(p=>{
+     const x=(p.x-cx0)*baseScale;
+     const y=(p.y-cy0)*baseScale;
+     const rx=x*Math.cos(ang)-y*Math.sin(ang);
+     const ry=x*Math.sin(ang)+y*Math.cos(ang);
+     if(rx<rMinX) rMinX=rx;
+     if(rx>rMaxX) rMaxX=rx;
+     if(ry<rMinY) rMinY=ry;
+     if(ry>rMaxY) rMaxY=ry;
+   });
+
+   const rotW=Math.max(1,rMaxX-rMinX);
+   const rotH=Math.max(1,rMaxY-rMinY);
+
+   // Etwas Innenabstand lassen, damit bei der Animation nichts herausragt.
+   const fit=Math.min(1, (tube.w*0.82)/rotW, (tube.h*0.66)/rotH);
+
+   width=desiredW*fit;
+   height=desiredH*fit;
+   bottomFront=a.bottomFront||0;
+   broadFacePenalty=a.broadFacePenalty||0;
+   hydroPenalty=a.hydroPenalty||1;
+
+   // Für die Fallzeit zählt die wirksame Breite deutlich stärker als die reine Darstellungsbreite.
+   // Breite/stumpfe Formen werden daher langsamer, auch wenn sie sich beim Fallen teilweise drehen.
+   const frontWidth = width * Math.max(0.34, bottomFront);
+   const broadWidth = width * Math.min(1.12, 0.72 + broadFacePenalty);
+   hydroWidth=Math.max(width*0.72, rotW*fit, frontWidth, broadWidth);
+ }
+ const projected = Math.max(0.45, hydroWidth/50);
+ const dragFactor = Math.pow(Math.max(0.55, drag), 0.95);
+ const areaFactor = Math.pow(projected, 1.62);
+ const massFactor = Math.sqrt(50/Math.max(8,m));
+ const broadPenalty = 1 + Math.min(0.75, broadFacePenalty || 0);
+ const frontPenalty = 1 + Math.max(0, (bottomFront || 0) - 0.42) * 0.85;
+ let seconds = 2.55 * areaFactor * dragFactor * v * massFactor * hydroPenalty * broadPenalty * frontPenalty;
+ seconds = Math.max(0.85, Math.min(28.0, seconds));
+ return {...base,width,height,drag,tilt,tiltMax,rotateFull,targetAngle,seconds,mass:m,size:s,vis:v,form};
+}
+function updateMetrics(){
+ const d=shapeData();
+ dragInfo.textContent=d.drag.toFixed(2).replace('.',',');
+ timeInfo.textContent=fmt(d.seconds);
+}
+function analyzeCustom(){
+ let xs=customPts.map(p=>p.x), ys=customPts.map(p=>p.y);
+ let minx=Math.min(...xs), maxx=Math.max(...xs), miny=Math.min(...ys), maxy=Math.max(...ys);
+ let w=maxx-minx, h=maxy-miny;
+ let ratio=w/Math.max(h,1);
+
+ let jag=0;
+ for(let i=2;i<customPts.length;i+=3){
+   let a=customPts[i-2],b=customPts[i-1],d=customPts[i];
+   let ang=Math.abs(Math.atan2(d.y-b.y,d.x-b.x)-Math.atan2(b.y-a.y,b.x-a.x));
+   jag+=Math.min(ang,Math.PI);
+ }
+ jag=jag/Math.max(1,customPts.length/3);
+
+ function polygonCentroid(pts){
+   let area=0, cx=0, cy=0;
+   for(let i=0;i<pts.length;i++){
+     const p1=pts[i], p2=pts[(i+1)%pts.length];
+     const cross=p1.x*p2.y - p2.x*p1.y;
+     area += cross;
+     cx += (p1.x + p2.x) * cross;
+     cy += (p1.y + p2.y) * cross;
+   }
+   area *= 0.5;
+   if(Math.abs(area) < 1e-6){
+     const mx = pts.reduce((s,p)=>s+p.x,0)/pts.length;
+     const my = pts.reduce((s,p)=>s+p.y,0)/pts.length;
+     return {x:mx,y:my};
+   }
+   return {x:cx/(6*area), y:cy/(6*area)};
+ }
+
+ function widthAt(relY){
+   const target=miny+h*relY;
+   const tolerance=Math.max(8,h*0.08);
+   const band=customPts.filter(p=>Math.abs(p.y-target)<=tolerance);
+   if(band.length>=2){
+     const bxs=band.map(p=>p.x);
+     return Math.max(...bxs)-Math.min(...bxs);
+   }
+   const nearest=customPts.slice().sort((a,b)=>Math.abs(a.y-target)-Math.abs(b.y-target)).slice(0,Math.min(8,customPts.length));
+   const nxs=nearest.map(p=>p.x);
+   return Math.max(...nxs)-Math.min(...nxs);
+ }
+
+ function segmentsAtY(relY){
+   const y=miny+h*relY;
+   const xs=[];
+   for(let i=0;i<customPts.length;i++){
+     const a=customPts[i], b=customPts[(i+1)%customPts.length];
+     const minSegY=Math.min(a.y,b.y), maxSegY=Math.max(a.y,b.y);
+     if(y>=minSegY && y<=maxSegY && Math.abs(a.y-b.y)>1e-6){
+       const t=(y-a.y)/(b.y-a.y);
+       if(t>=0 && t<=1) xs.push(a.x + t*(b.x-a.x));
+     }
+   }
+   xs.sort((a,b)=>a-b);
+   const segs=[];
+   for(let i=0;i+1<xs.length;i+=2) segs.push({x1:xs[i],x2:xs[i+1]});
+   return segs;
+ }
+
+ function bottomCavityPenalty(){
+   const centerX=minx+w/2;
+   let penalty=0;
+   [0.84,0.88,0.92,0.96].forEach((relY,idx)=>{
+     const segs=segmentsAtY(relY);
+     if(segs.length>=2){
+       for(let i=0;i<segs.length-1;i++){
+         const left=segs[i], right=segs[i+1];
+         if(left.x2 <= centerX && right.x1 >= centerX){
+           const gap = right.x1 - left.x2;
+           const wall = Math.min(left.x2-left.x1, right.x2-right.x1);
+           const gapNorm = gap/Math.max(w,1);
+           const wallNorm = wall/Math.max(w,1);
+           const depthBoost = 1 + idx*0.15;
+           if(gapNorm>0.08 && wallNorm>0.08) penalty += Math.min(0.85, (gapNorm*1.25 + wallNorm*0.55) * depthBoost);
+         }
+       }
+     }
+   });
+   const lowerSegs = segmentsAtY(0.90);
+   const upperSegs = segmentsAtY(0.72);
+   if(lowerSegs.length>=2 && upperSegs.length<=1) penalty *= 1.18;
+   return Math.min(1.1, penalty);
+ }
+
+ function sideBias(){
+   const centerX=minx+w/2;
+   let accum=0, count=0;
+   [0.18,0.30,0.42,0.55,0.68,0.80].forEach(relY=>{
+     const segs=segmentsAtY(relY);
+     if(!segs.length) return;
+     let left=0, right=0;
+     segs.forEach(s=>{
+       const lx=s.x1-centerX, rx=s.x2-centerX;
+       if(lx<0) left += Math.abs(Math.min(s.x2,centerX)-s.x1);
+       if(rx>0) right += Math.abs(s.x2-Math.max(s.x1,centerX));
+     });
+     accum += (right-left)/Math.max(w,1);
+     count += 1;
+   });
+   return count ? accum/count : 0;
+ }
+
+ function normalizeAngle(a){
+   while(a > Math.PI) a -= Math.PI*2;
+   while(a < -Math.PI) a += Math.PI*2;
+   return a;
+ }
+
+ const centroid=polygonCentroid(customPts);
+ const centerX=minx + w/2;
+ const centerY=miny + h/2;
+ const xOffset=(centroid.x-centerX)/Math.max(w/2,1);
+ const yOffset=(centroid.y-centerY)/Math.max(h/2,1);
+ const sideAsym=sideBias();
+
+ const topWidth=widthAt(0.18);
+ const midWidth=widthAt(0.50);
+ const bottomWidth=widthAt(0.82);
+ const normTop=topWidth/Math.max(w,1);
+ const normMid=midWidth/Math.max(w,1);
+ const normBottom=bottomWidth/Math.max(w,1);
+
+ const pointDownBonus=Math.max(0,normTop-normBottom)*0.55;
+ const bluntBottomPenalty=Math.max(0,normBottom-normTop)*0.85;
+ const midStabilityPenalty=Math.max(0,normMid-0.82)*0.25;
+ const cavityPenalty = bottomCavityPenalty();
+
+ let drag=1.08
+   + Math.max(0,ratio-0.65)*0.38
+   + Math.min(.50,jag*.10)
+   + bluntBottomPenalty
+   + midStabilityPenalty
+   + cavityPenalty
+   - pointDownBonus;
+
+ drag=Math.max(0.62,Math.min(2.55,drag));
+
+ let tilt = xOffset*1.15 + sideAsym*0.95;
+ tilt *= (0.90 + Math.max(0,-yOffset)*0.12 + jag*0.06);
+ if(Math.abs(tilt) < 0.035) tilt = 0;
+ tilt = Math.max(-0.72, Math.min(0.72, tilt));
+
+ const comStrength = Math.hypot(xOffset, yOffset);
+ let rotateFull = comStrength > 0.10;
+ let targetAngle = 0;
+ if(rotateFull){
+   const centroidAngle = Math.atan2(yOffset, xOffset);
+   targetAngle = normalizeAngle(Math.PI/2 - centroidAngle);
+   if(Math.abs(targetAngle) < 0.06) rotateFull = false;
+ }
+
+ const bottomFront = normBottom;
+ const broadFacePenalty = Math.pow(Math.max(0, normMid - 0.55), 1.35) * 0.75
+   + Math.pow(Math.max(0, normBottom - 0.52), 1.25) * 0.95;
+ const hydroPenalty = 1
+   + cavityPenalty*0.52
+   + Math.min(0.32, Math.abs(sideAsym)*0.22)
+   + broadFacePenalty;
+
+ return {
+   wRatio:Math.max(.55,Math.min(1.8,ratio*1.0)),
+   hRatio:Math.max(.55,Math.min(1.7,1/Math.max(.55,ratio*.55))),
+   baseWidth: Math.max(18, Math.min(tube.w*0.92, w)),
+   baseHeight: Math.max(18, Math.min(tube.h*0.72, h)),
+   drag,
+   hydroPenalty,
+   bottomFront,
+   broadFacePenalty,
+   tilt,
+   tiltMax: rotateFull ? Math.PI : 0.72,
+   rotateFull,
+   targetAngle
+ };
+}
+function initParticles(){particles=[]; for(let i=0;i<180;i++){particles.push({x:tube.x+14+Math.random()*(tube.w-28),y:tube.y+20+Math.random()*(tube.h-45),r:1.2+Math.random()*1.8,phase:Math.random()*6,speed:.08+Math.random()*.12});}}
+function drawTube(){
+ const g=ctx.createLinearGradient(tube.x,tube.y,tube.x+tube.w,tube.y); g.addColorStop(0,'rgba(130,210,255,.22)');g.addColorStop(.5,'rgba(68,165,220,.12)');g.addColorStop(1,'rgba(160,230,255,.20)');
+ ctx.save(); ctx.beginPath(); ctx.roundRect(tube.x,tube.y,tube.w,tube.h,35); ctx.fillStyle=g; ctx.fill(); ctx.strokeStyle='rgba(190,230,255,.55)'; ctx.lineWidth=3; ctx.stroke();
+ ctx.strokeStyle='rgba(255,255,255,.14)'; ctx.lineWidth=8; ctx.beginPath(); ctx.moveTo(tube.x+12,tube.y+28);ctx.lineTo(tube.x+12,tube.y+tube.h-45);ctx.stroke();
+ ctx.strokeStyle='rgba(255,211,122,.8)'; ctx.setLineDash([8,8]); ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(tube.x+2,tube.y+tube.h-35);ctx.lineTo(tube.x+tube.w-2,tube.y+tube.h-35);ctx.stroke(); ctx.setLineDash([]);
+ ctx.restore(); }
+
+function worldToLocal(wx,wy,cx,cy,a){
+ const dx=wx-cx, dy=wy-cy, ca=Math.cos(-a), sa=Math.sin(-a);
+ return {x:dx*ca-dy*sa, y:dx*sa+dy*ca};
+}
+function localToWorld(lx,ly,cx,cy,a){
+ const ca=Math.cos(a), sa=Math.sin(a);
+ return {x:cx + lx*ca - ly*sa, y:cy + lx*sa + ly*ca};
+}
+function bezierPoint(p0,p1,p2,p3,t){
+ const u=1-t;
+ return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
+}
+function getShapePolygonLocal(data){
+ const w=data.width, h=data.height;
+ switch(data.form){
+  case 'cube':
+    return [{x:-w/2,y:-h/2},{x:w/2,y:-h/2},{x:w/2,y:h/2},{x:-w/2,y:h/2}];
+  case 'irregular':
+    return [
+      {x:-w*.45,y:-h*.2},{x:-w*.15,y:-h*.48},{x:w*.28,y:-h*.35},{x:w*.52,y:-h*.04},
+      {x:w*.35,y:h*.38},{x:-w*.05,y:h*.48},{x:-w*.45,y:h*.18},{x:-w*.55,y:-h*.05}
+    ];
+  case 'drop':{
+    const pts=[];
+    for(let i=0;i<=18;i++){
+      const t=i/18;
+      pts.push({
+        x:bezierPoint(0, w*.55, w*.32, 0, t),
+        y:bezierPoint(-h/2, -h*.1, h*.38, h/2, t)
+      });
+    }
+    for(let i=18;i>=0;i--){
+      const t=i/18;
+      pts.push({
+        x:bezierPoint(0, -w*.32, -w*.55, 0, t),
+        y:bezierPoint(h/2, h*.38, -h*.1, -h/2, 1-t)
+      });
+    }
+    return pts;
+  }
+  case 'custom':{
+    if(!customPts.length) return null;
+    const xs=customPts.map(p=>p.x), ys=customPts.map(p=>p.y);
+    const minx=Math.min(...xs), maxx=Math.max(...xs), miny=Math.min(...ys), maxy=Math.max(...ys);
+    const bw=maxx-minx||1, bh=maxy-miny||1, scale=Math.min(w/bw,h/bh);
+    return customPts.map(p=>({x:(p.x-(minx+bw/2))*scale, y:(p.y-(miny+bh/2))*scale}));
+  }
+  default:
+    return null;
+ }
+}
+function profileAtY(data, ly){
+ const hw=data.width/2, hh=data.height/2;
+ if(data.form==='sphere' || data.form==='disc'){
+   if(Math.abs(ly)>hh) return null;
+   const span=hw*Math.sqrt(Math.max(0,1-(ly*ly)/(hh*hh)));
+   return {minX:-span,maxX:span};
+ }
+ const poly=getShapePolygonLocal(data);
+ if(!poly || poly.length<2) return null;
+ const xs=[];
+ for(let i=0;i<poly.length;i++){
+   const a=poly[i], b=poly[(i+1)%poly.length];
+   if((ly>=Math.min(a.y,b.y) && ly<=Math.max(a.y,b.y)) && Math.abs(a.y-b.y)>1e-6){
+     const t=(ly-a.y)/(b.y-a.y);
+     if(t>=0 && t<=1){
+       xs.push(a.x + t*(b.x-a.x));
+     }
+   }
+ }
+ if(xs.length<2) return null;
+ xs.sort((a,b)=>a-b);
+ return {minX:xs[0], maxX:xs[xs.length-1]};
+}
+function rotatedBounds(data, angle){
+ const poly=getShapePolygonLocal(data);
+ if(!poly || poly.length<2){
+   return {w:data.width,h:data.height};
+ }
+ let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+ const ca=Math.cos(angle), sa=Math.sin(angle);
+ poly.forEach(p=>{
+   const x=p.x*ca-p.y*sa;
+   const y=p.x*sa+p.y*ca;
+   if(x<minX) minX=x;
+   if(x>maxX) maxX=x;
+   if(y<minY) minY=y;
+   if(y>maxY) maxY=y;
+ });
+ return {w:Math.max(1,maxX-minX),h:Math.max(1,maxY-minY)};
+}
+
+function dynamicSecondsForAngle(data, angle){
+ const m=Number(mass.value), v=Number(vis.value);
+
+ // Für Standardformen bleibt die bisherige Berechnung praktisch konstant.
+ if(data.form!=='custom'){
+   const projected=Math.max(0.45, data.width/50);
+   const dragFactor=Math.pow(Math.max(0.55,data.drag),0.95);
+   const areaFactor=Math.pow(projected,1.62);
+   const massFactor=Math.sqrt(50/Math.max(8,m));
+   return Math.max(0.85,Math.min(28.0,2.55*areaFactor*dragFactor*v*massFactor));
+ }
+
+ const b=rotatedBounds(data, angle);
+ const projected=Math.max(0.45, b.w/50);
+
+ // Je stärker die aktuelle Rotation die wirksame Breite verkleinert,
+ // desto stärker nimmt der zusätzliche Wasserstau-/Breitflächenanteil ab.
+ const neutralW=Math.max(1,data.width);
+ const widthRatio=Math.max(0.35,Math.min(1.35,b.w/neutralW));
+ const dynamicHydroPenalty=1+(Math.max(0,(data.hydroPenalty||1)-1)*Math.pow(widthRatio,1.35));
+
+ // In günstiger Endlage reduziert sich der effektive Formwiderstand deutlich,
+ // in ungünstiger Lage bleibt er hoch.
+ const dynamicDrag=Math.max(0.62,data.drag*(0.72+0.28*widthRatio));
+
+ const dragFactor=Math.pow(Math.max(0.55,dynamicDrag),0.95);
+ const areaFactor=Math.pow(projected,1.62);
+ const massFactor=Math.sqrt(50/Math.max(8,m));
+ const broadPenalty=1+Math.min(0.45,(data.broadFacePenalty||0)*Math.pow(widthRatio,1.2));
+ const frontPenalty=1+Math.max(0,(data.bottomFront||0)-0.42)*0.50*Math.pow(widthRatio,1.2);
+
+ return Math.max(0.85,Math.min(28.0,2.55*areaFactor*dragFactor*v*massFactor*dynamicHydroPenalty*broadPenalty*frontPenalty));
+}
+function drawStreamlines(data){
+ const cx=tube.x+tube.w/2, cy=objY, now=performance.now();
+ const left=tube.x+16, right=tube.x+tube.w-16;
+ const lineCount=13;
+ const baseXs=Array.from({length:lineCount},(_,i)=>left + i*(right-left)/(lineCount-1));
+
+ function pointAtLength(pts, targetLen){
+   let acc=0;
+   for(let i=1;i<pts.length;i++){
+     const a=pts[i-1], b=pts[i];
+     const seg=Math.hypot(b.x-a.x, b.y-a.y);
+     if(acc + seg >= targetLen){
+       const t=(targetLen-acc)/Math.max(seg,1e-6);
+       return {x:a.x + (b.x-a.x)*t, y:a.y + (b.y-a.y)*t};
+     }
+     acc += seg;
+   }
+   return pts[pts.length-1];
+ }
+
+ ctx.save();
+ ctx.lineCap='round';
+ ctx.lineJoin='round';
+
+ baseXs.forEach((baseX,idx)=>{
+   ctx.beginPath();
+   let started=false;
+   const pts=[];
+   for(let y=tube.y+14; y<=tube.y+tube.h-16; y+=5){
+     const local=worldToLocal(baseX,y,cx,cy,objAngle);
+     const profile=profileAtY(data, local.y);
+     let xLocal=local.x, yLocal=local.y;
+
+     const flowWave = running ? Math.sin(now/260 + y*0.03 + idx*0.55) * 0.8 : 0;
+     xLocal += flowWave * 0.35;
+
+     if(profile){
+       const side=(baseX>=cx)?1:-1;
+       const offsetFromBody = side>0 ? (xLocal - profile.maxX) : (profile.minX - xLocal);
+       const verticalInfluence=Math.max(0,1 - Math.abs(yLocal)/(data.height*1.15));
+       const lateralInfluence=Math.max(0,1 - Math.max(0,offsetFromBody)/34);
+       const foreAft = Math.max(0, 1 - Math.abs(yLocal)/(data.height*1.6));
+       const influence=verticalInfluence * lateralInfluence * foreAft;
+
+       if(xLocal>profile.minX-20 && xLocal<profile.maxX+20){
+         const target = side>0
+           ? Math.max(xLocal, profile.maxX + 18*influence + 8*verticalInfluence)
+           : Math.min(xLocal, profile.minX - 18*influence - 8*verticalInfluence);
+         xLocal = xLocal*(1-influence) + target*influence;
+       }
+     }
+
+     const world=localToWorld(xLocal,yLocal,cx,cy,objAngle);
+     pts.push(world);
+     if(!started){ ctx.moveTo(world.x, world.y); started=true; }
+     else ctx.lineTo(world.x, world.y);
+   }
+   ctx.strokeStyle = idx===Math.floor(lineCount/2) ? 'rgba(208,242,255,.48)' : 'rgba(170,223,255,.36)';
+   ctx.lineWidth = idx===Math.floor(lineCount/2) ? 1.8 : 1.3;
+   ctx.stroke();
+
+   // Gegenstrom-Animation: helle Impulse laufen von unten nach oben,
+   // aber nur solange sich die Form im Fallrohr bewegt.
+   if(running && pts.length > 2){
+     let totalLen=0;
+     for(let i=1;i<pts.length;i++) totalLen += Math.hypot(pts[i].x-pts[i-1].x, pts[i].y-pts[i-1].y);
+
+     const pulseCount = 2;
+     for(let p=0; p<pulseCount; p++){
+       const progress = (now*0.00024 + idx*0.065 + p*0.42) % 1;
+       const centerLen = (1-progress) * totalLen; // von unten nach oben
+       const segLen = 26;
+       const startLen = Math.max(0, centerLen - segLen/2);
+       const endLen = Math.min(totalLen, centerLen + segLen/2);
+       const startPt = pointAtLength(pts, startLen);
+       const endPt = pointAtLength(pts, endLen);
+
+       ctx.beginPath();
+       ctx.moveTo(startPt.x, startPt.y);
+       ctx.lineTo(endPt.x, endPt.y);
+       ctx.strokeStyle='rgba(240,250,255,.85)';
+       ctx.lineWidth=1.8;
+       ctx.stroke();
+
+       ctx.beginPath();
+       ctx.arc(endPt.x, endPt.y, 1.7, 0, Math.PI*2);
+       ctx.fillStyle='rgba(248,253,255,.9)';
+       ctx.fill();
+     }
+   }
+ });
+ ctx.restore();
+}
+function drawParticles(data){
+ if(!flowToggle.checked)return;
+ const cx=tube.x+tube.w/2, cy=objY, now=performance.now();
+
+ if(streamlineToggle.checked){
+   drawStreamlines(data);
+ }else{
+   particles.forEach((p,i)=>{
+     let dx=p.x-cx, dy=p.y-cy;
+     let dist=Math.sqrt(dx*dx+dy*dy);
+     let push=Math.max(0,1-dist/86);
+     let swirl=Math.sin(now/360 + p.phase + p.y*0.02) * 1.2;
+     let ox=dx/(dist||1)*push*28*data.drag + swirl*0.35;
+     let oy=(dy<0?-1:1)*push*10;
+     ctx.beginPath();
+     ctx.fillStyle='rgba(162,229,255,.72)';
+     ctx.arc(p.x+ox,p.y+oy,p.r,0,Math.PI*2);
+     ctx.fill();
+   });
+ }
+
+ if(!running || data.form==='sphere' || data.form==='drop') return;
+
+ function makeEllipsePolygon(w,h,n=36){
+   const pts=[];
+   for(let i=0;i<n;i++){
+     const a=(i/n)*Math.PI*2;
+     pts.push({x:Math.cos(a)*w/2, y:Math.sin(a)*h/2});
+   }
+   return pts;
+ }
+
+ function toWorldPoly(poly){
+   return poly.map((p,i)=>{
+     const wpt=localToWorld(p.x,p.y,cx,cy,objAngle);
+     return {...wpt,lx:p.x,ly:p.y,i};
+   });
+ }
+
+ function cornerStrength(poly,idx){
+   const prev=poly[(idx-1+poly.length)%poly.length];
+   const cur=poly[idx];
+   const next=poly[(idx+1)%poly.length];
+   const v1={x:prev.x-cur.x,y:prev.y-cur.y};
+   const v2={x:next.x-cur.x,y:next.y-cur.y};
+   const l1=Math.hypot(v1.x,v1.y)||1;
+   const l2=Math.hypot(v2.x,v2.y)||1;
+   const dot=(v1.x*v2.x+v1.y*v2.y)/(l1*l2);
+   const angle=Math.acos(Math.max(-1,Math.min(1,dot)));
+   return Math.max(0,1-angle/Math.PI);
+ }
+
+ function dynamicVortexAnchors(){
+   let localPoly=getShapePolygonLocal(data);
+
+   if(!localPoly && data.form==='disc'){
+     localPoly=makeEllipsePolygon(data.width,data.height,40);
+   }
+
+   if(!localPoly || localPoly.length<3){
+     return [];
+   }
+
+   const worldPoly=toWorldPoly(localPoly);
+   const minY=Math.min(...worldPoly.map(p=>p.y));
+   const band=Math.max(12, Math.min(42, Math.max(data.width,data.height)*0.42));
+   const candidates=worldPoly.filter(p=>p.y<=minY+band);
+
+   function pick(side){
+     const list=candidates.filter(p=>side<0 ? p.x<=cx : p.x>=cx);
+     if(!list.length) return null;
+
+     let best=null;
+     let bestScore=Infinity;
+     list.forEach(p=>{
+       const lateral=Math.abs(p.x-cx);
+       const sharp=cornerStrength(worldPoly,p.i);
+       const score=(p.y-minY)*1.2 - lateral*0.18 - sharp*8;
+       if(score<bestScore){
+         bestScore=score;
+         best=p;
+       }
+     });
+
+     if(!best) return null;
+     const sharp=cornerStrength(worldPoly,best.i);
+     return {
+       x:best.x,
+       y:best.y,
+       s:Math.max(.75, Math.min(1.55, .78 + data.drag*.18 + sharp*.62)),
+       d:side
+     };
+   }
+
+   const left=pick(-1);
+   const right=pick(1);
+   const anchors=[];
+   if(left) anchors.push(left);
+   if(right && (!left || Math.abs(right.x-left.x)>8 || Math.abs(right.y-left.y)>8)) anchors.push(right);
+   return anchors;
+ }
+
+ const anchors=dynamicVortexAnchors();
+ if(!anchors.length) return;
+
+ function drawSingleVortex(a, idx){
+   const baseR=10 + a.s*5.2;
+   const touchR=baseR*0.95 + 1.2;
+
+   // Der Wirbel wird in jedem Frame aus der aktuellen Formlage neu berechnet.
+   // Dadurch verschwinden alte Wirbel automatisch und neue entstehen an den jetzt oberen Kanten.
+   const cxV=a.x - a.d*touchR;
+   const cyV=a.y;
+
+   ctx.save();
+   ctx.translate(cxV,cyV);
+   ctx.rotate((now/820)*a.d + idx*0.20);
+
+   // äußerer Glow für stärkeres Highlight
+   ctx.beginPath();
+   const turns=2.32;
+   const maxAng=Math.PI*turns;
+   for(let ang=0; ang<=maxAng; ang+=0.15){
+     const t=ang/maxAng;
+     const r=baseR*(1-t)*0.95 + 1.2;
+     const px=a.d*Math.cos(ang)*r;
+     const py=-Math.sin(ang)*r*0.84;
+     if(ang===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+   }
+   ctx.strokeStyle='rgba(120,220,255,.22)';
+   ctx.lineWidth=4.8 + a.s*0.4;
+   ctx.lineCap='round';
+   ctx.lineJoin='round';
+   ctx.shadowColor='rgba(120,220,255,.40)';
+   ctx.shadowBlur=10;
+   ctx.stroke();
+
+   // Hauptspirale
+   ctx.beginPath();
+   for(let ang=0; ang<=maxAng; ang+=0.15){
+     const t=ang/maxAng;
+     const r=baseR*(1-t)*0.95 + 1.2;
+     const px=a.d*Math.cos(ang)*r;
+     const py=-Math.sin(ang)*r*0.84;
+     if(ang===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+   }
+   ctx.strokeStyle=`rgba(205,245,255,${0.88 + Math.min(.10,a.s*.04)})`;
+   ctx.lineWidth=2.25 + a.s*0.26;
+   ctx.shadowColor='rgba(180,235,255,.30)';
+   ctx.shadowBlur=4;
+   ctx.stroke();
+
+   // innere helle Spirale
+   ctx.beginPath();
+   for(let ang=0; ang<=Math.PI*1.72; ang+=0.16){
+     const t=ang/(Math.PI*1.72);
+     const r=(baseR*0.46)*(1-t) + .8;
+     const px=a.d*Math.cos(ang)*r;
+     const py=-Math.sin(ang)*r*0.82;
+     if(ang===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+   }
+   ctx.strokeStyle='rgba(255,255,255,.88)';
+   ctx.lineWidth=1.25;
+   ctx.shadowBlur=0;
+   ctx.stroke();
+
+   // Wirbelzentrum
+   ctx.beginPath();
+   ctx.arc(0,0,3.0 + a.s*0.34,0,Math.PI*2);
+   ctx.fillStyle='rgba(240,251,255,.72)';
+   ctx.fill();
+
+   ctx.beginPath();
+   ctx.arc(0,0,1.4 + a.s*0.18,0,Math.PI*2);
+   ctx.fillStyle='rgba(255,255,255,.96)';
+   ctx.fill();
+   ctx.restore();
+
+   // heller Kontaktpunkt direkt an der Kante
+   ctx.beginPath();
+   ctx.arc(a.x,a.y,3.2,0,Math.PI*2);
+   ctx.fillStyle='rgba(220,246,255,.72)';
+   ctx.fill();
+
+   ctx.beginPath();
+   ctx.arc(a.x,a.y,1.5,0,Math.PI*2);
+   ctx.fillStyle='rgba(255,255,255,.95)';
+   ctx.fill();
+ }
+
+ anchors.forEach(drawSingleVortex);
+}
+function shapePath(data,x,y){ctx.beginPath(); const w=data.width,h=data.height; switch(data.form){case 'sphere': ctx.ellipse(x,y,w/2,h/2,0,0,Math.PI*2);break;case 'cube': ctx.roundRect(x-w/2,y-h/2,w,h,6);break;case 'disc': ctx.ellipse(x,y,w/2,h/2,0,0,Math.PI*2);break;case 'drop': ctx.moveTo(x,y-h/2);ctx.bezierCurveTo(x+w*.55,y-h*.1,x+w*.32,y+h*.38,x,y+h/2);ctx.bezierCurveTo(x-w*.32,y+h*.38,x-w*.55,y-h*.1,x,y-h/2);break;case 'irregular': ctx.moveTo(x-w*.45,y-h*.2);ctx.lineTo(x-w*.15,y-h*.48);ctx.lineTo(x+w*.28,y-h*.35);ctx.lineTo(x+w*.52,y-h*.04);ctx.lineTo(x+w*.35,y+h*.38);ctx.lineTo(x-w*.05,y+h*.48);ctx.lineTo(x-w*.45,y+h*.18);ctx.lineTo(x-w*.55,y-h*.05);break;case 'custom': drawCustomPath(x,y,w,h);return;} ctx.closePath();}
+function drawCustomPath(x,y,w,h){ if(!customPts.length){ctx.ellipse(x,y,w/2,h/2,0,0,Math.PI*2);return;} let xs=customPts.map(p=>p.x),ys=customPts.map(p=>p.y), minx=Math.min(...xs), maxx=Math.max(...xs), miny=Math.min(...ys), maxy=Math.max(...ys); let bw=maxx-minx||1,bh=maxy-miny||1, scale=Math.min(w/bw,h/bh); ctx.beginPath(); customPts.forEach((p,i)=>{let px=x+(p.x-(minx+bw/2))*scale, py=y+(p.y-(miny+bh/2))*scale; if(i===0)ctx.moveTo(px,py); else ctx.lineTo(px,py);}); ctx.closePath();}
+function drawObject(data){
+ const x=tube.x+tube.w/2;
+ ctx.save();
+ ctx.translate(x,objY);
+ ctx.rotate(objAngle);
+ shapePath(data,0,0);
+ const grad=ctx.createLinearGradient(-data.width/2,-data.height/2,data.width/2,data.height/2);
+ grad.addColorStop(0,'#ffc982');
+ grad.addColorStop(1,'#b96e3a');
+ ctx.fillStyle=grad;
+ ctx.fill();
+ ctx.strokeStyle='rgba(255,235,195,.9)';
+ ctx.lineWidth=2;
+ ctx.stroke();
+ ctx.restore();
+}
+function draw(){ctx.clearRect(0,0,c.width,c.height); const data=shapeData(); drawTube(); drawParticles(data); drawObject(data); ctx.fillStyle='#b7c8dc';ctx.font='14px system-ui';ctx.fillText('Ziellinie',tube.x+tube.w+16,tube.y+tube.h-30); }
+function start(){
+ if(running)return;
+ const data=shapeData();
+ running=true;
+ setControls(true);
+ startTime=performance.now();
+ lastFrame=startTime;
+ elapsedSeconds=0;
+ fallProgress=0;
+ objY=tube.y+30+data.height/2;
+ objAngle=data.rotateFull ? data.targetAngle*0.04 : data.tilt*0.18;
+ requestAnimationFrame(loop);
+}
+function loop(t){
+ if(!running) return;
+ const d=shapeData();
+ const dt=Math.min(0.05,(t-lastFrame)/1000 || 0);
+ lastFrame=t;
+ elapsedSeconds += dt;
+
+ // Kippen wird über den bereits zurückgelegten Weg gesteuert.
+ const k=fallProgress;
+ if(d.rotateFull){
+   const settle = 1 - Math.exp(-5.4*k);
+   const wobble = Math.sin(k*11.0) * (1-k) * Math.min(0.10, Math.abs(d.targetAngle)*0.05);
+   objAngle = Math.max(-d.tiltMax, Math.min(d.tiltMax, d.targetAngle * settle + wobble));
+ }else{
+   const settle = 1 - Math.exp(-6.0*k);
+   const wobble = Math.sin(k*11.5) * (1-k) * Math.min(0.11, Math.abs(d.tilt)*0.34);
+   objAngle = Math.max(-d.tiltMax, Math.min(d.tiltMax, d.tilt * (0.18 + 0.82*settle) + wobble));
+ }
+
+ // Dynamische Fallgeschwindigkeit: Wenn die Form nach dem Kippen günstiger steht,
+ // wird die momentane Referenz-Fallzeit kleiner und die Form beschleunigt sichtbar.
+ const instantSeconds=dynamicSecondsForAngle(d,objAngle);
+ fallProgress=Math.min(1,fallProgress + dt/instantSeconds);
+ objY=tube.y+30+d.height/2 + fallProgress*(tube.h-70-d.height);
+
+ timerEl.textContent=fmt(elapsedSeconds);
+ draw();
+ if(fallProgress<1)requestAnimationFrame(loop);
+ else {
+   running=false;
+   timerEl.textContent=fmt(elapsedSeconds);
+   addResult({...d,seconds:elapsedSeconds});
+   setControls(false);
+ }
+}
+function reset(){running=false; timerEl.textContent='0,00 s'; elapsedSeconds=0; fallProgress=0; lastFrame=0; objY=tube.y+70; objAngle=0; setControls(false); draw()}
+function setControls(dis){[shapeSel,mass,size,vis,document.getElementById('start'),document.getElementById('drawBtn')].forEach(e=>e.disabled=dis)}
+function addResult(d){const tr=document.createElement('tr'); tr.innerHTML=`<td>${d.name}</td><td>${d.mass} g</td><td>${d.size}</td><td>${d.vis.toFixed(1)}</td><td>${fmt(d.seconds)}</td>`; document.getElementById('results').prepend(tr)}
+
+function updateWindowToggle(){const isFull=document.fullscreenElement===simEl; windowToggle.textContent=isFull?'Min':'Max'; windowToggle.setAttribute('aria-label',isFull?'Simulation verkleinern':'Simulation maximieren')}
+async function toggleWindow(){try{if(document.fullscreenElement===simEl){await document.exitFullscreen()}else{await simEl.requestFullscreen()}}catch(e){console.error(e)}}
+document.getElementById('start').onclick=start; document.getElementById('reset').onclick=reset; document.getElementById('infoBtn').onclick=()=>openModal('info'); document.getElementById('drawBtn').onclick=openDraw; metricBtn.onclick=()=>{metricPanel.classList.toggle('show');}; windowToggle.onclick=toggleWindow; document.addEventListener('fullscreenchange',updateWindowToggle);
+function openModal(id){document.getElementById(id).classList.add('show')}function closeModal(id){document.getElementById(id).classList.remove('show')}window.closeModal=closeModal;
+// Zeichnen
+const dc=document.getElementById('drawCanvas'), dctx=dc.getContext('2d'); let drawing=false, tmpPts=[];
+function openDraw(){openModal('drawModal'); setTimeout(drawBlank,50)} function drawBlank(){dctx.clearRect(0,0,dc.width,dc.height); dctx.fillStyle='#0a1421';dctx.fillRect(0,0,dc.width,dc.height); dctx.strokeStyle='#284463'; dctx.setLineDash([6,8]); dctx.strokeRect(20,20,dc.width-40,dc.height-40); dctx.setLineDash([]); if(tmpPts.length){dctx.strokeStyle='#ffd37a';dctx.lineWidth=4;dctx.beginPath();tmpPts.forEach((p,i)=>i?dctx.lineTo(p.x,p.y):dctx.moveTo(p.x,p.y));dctx.stroke();}}
+function ppos(e){const r=dc.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; return {x:(t.clientX-r.left)*dc.width/r.width,y:(t.clientY-r.top)*dc.height/r.height};}
+dc.addEventListener('pointerdown',e=>{drawing=true; tmpPts=[ppos(e)]; drawBlank()});dc.addEventListener('pointermove',e=>{if(!drawing)return; tmpPts.push(ppos(e)); drawBlank()});window.addEventListener('pointerup',()=>drawing=false);
+document.getElementById('clearDraw').onclick=()=>{tmpPts=[]; drawBlank()};document.getElementById('useDraw').onclick=()=>{if(tmpPts.length>4){const transferScale=tube.w/dc.width; customPts=tmpPts.map(p=>({x:p.x*transferScale,y:p.y*transferScale})); shapeSel.value='custom'; closeModal('drawModal'); uiVals(); draw();}};
+uiVals(); initParticles(); updateWindowToggle(); reset(); setInterval(()=>{particles.forEach(p=>{p.y+=p.speed; p.x += Math.sin(Date.now()/500 + p.phase)*0.08; if(p.y>tube.y+tube.h-20)p.y=tube.y+20; if(p.x<tube.x+14)p.x=tube.x+14; if(p.x>tube.x+tube.w-14)p.x=tube.x+tube.w-14}); if(!running)draw()},50);
+</script>
+
+  <!-- edubiosim-fullscreen -->  <button id="fullscreenExitBtn" class="fullscreen-exit-btn" type="button" aria-label="Vollbildmodus verlassen" title="Vollbildmodus verlassen">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M5 3.8h10.5c1 0 1.8.8 1.8 1.8v16.8c0 1-.8 1.8-1.8 1.8H5V3.8Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M15.2 14h8.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M20.2 9.4 24.8 14l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.2 13.7h.1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span>Exit</span>
+  </button>
+    <script>
+        // edubiosim-fullscreen
+    (() => {
+      const fullscreenEnterBtn = document.getElementById('fullscreenEnterBtn');
+      const fullscreenExitBtn = document.getElementById('fullscreenExitBtn');
+      const fullscreenRoot = document.documentElement;
+      const fullscreenInitialStartSelectors = [
+        '#startSimulationBtn',
+        '#startSimulation',
+        '#introStart',
+        '#introStartBtn',
+        '#introModalStartBtn',
+        '#startModal .start-btn',
+        '#startModal #startSimulationBtn',
+        '#startModal #startSimulation',
+        '#introModal .im-start-btn',
+        '#introOverlay #introStart',
+        '#introBackdrop #introStartBtn',
+        '#startMenu .btn-start',
+        '.menu-overlay .btn-start',
+        '.start-modal .start-btn',
+        '.intro-modal .intro-start',
+        '.intro-modal .start-btn',
+        '[data-initial-start]'
+      ];
+      let initialAutoFullscreenTried = false;
+      const isFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const syncFullscreenButton = () => fullscreenRoot.classList.toggle('fullscreen-active', isFullscreen());
+      const enterFullscreen = async () => {
+        if (isFullscreen()) return;
+        if (fullscreenRoot.requestFullscreen) await fullscreenRoot.requestFullscreen();
+        else if (fullscreenRoot.webkitRequestFullscreen) await fullscreenRoot.webkitRequestFullscreen();
+      };
+      const exitFullscreen = async () => {
+        if (!isFullscreen()) return;
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+      };
+      const bindInitialFullscreenStartTriggers = () => {
+        const candidates = new Set();
+        fullscreenInitialStartSelectors.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => candidates.add(el));
+        });
+        candidates.forEach(el => {
+          if (!el || el.dataset.fullscreenStartBound === '1') return;
+          el.dataset.fullscreenStartBound = '1';
+          el.addEventListener('click', () => {
+            if (initialAutoFullscreenTried) return;
+            initialAutoFullscreenTried = true;
+            enterFullscreen().catch(err => console.warn('Vollbild konnte nicht gestartet werden', err)).finally(syncFullscreenButton);
+          }, { capture: true });
+        });
+      };
+      fullscreenEnterBtn?.addEventListener('click', async () => {
+        try {
+          await enterFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht gestartet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      fullscreenExitBtn?.addEventListener('click', async () => {
+        try {
+          await exitFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht beendet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      document.addEventListener('fullscreenchange', syncFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindInitialFullscreenStartTriggers, { once: true });
+      } else {
+        bindInitialFullscreenStartTriggers();
+      }
+      syncFullscreenButton();
+    })();
+  </script>
+</body>
+</html>

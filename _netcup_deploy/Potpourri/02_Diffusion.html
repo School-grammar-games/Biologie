@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation: Diffusion von Tinte in Wasser</title>
+  <style>
+    :root{
+      --bg1:#0f172a;
+      --bg2:#020617;
+      --border:#334155;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --hot:#fb7185;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      padding:20px;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:radial-gradient(circle at top,#1e293b 0,var(--bg1) 42%,var(--bg2) 100%);
+    }
+    .app{ width:min(920px,100%); margin:0 auto; }
+    .sim-card{
+      position:relative;
+      padding:10px;
+      border:1px solid var(--border);
+      border-radius:22px;
+      background:linear-gradient(180deg,rgba(17,24,39,.96),rgba(2,6,23,.98));
+      box-shadow:0 20px 50px rgba(0,0,0,.35);
+    }
+    .sim-window{
+      position:relative;
+      min-height:520px;
+      border:1px solid rgba(148,163,184,.16);
+      border-radius:20px;
+      overflow:hidden;
+      background:
+        linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),
+        linear-gradient(0deg,rgba(255,255,255,.03) 1px,transparent 1px),
+        radial-gradient(circle at 58% 26%,rgba(125,211,252,.08),transparent 26%),
+        rgba(2,6,23,.42);
+      background-size:28px 28px,28px 28px,100% 100%,100% 100%;
+    }
+    .controls{
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:20;
+      width:210px;
+      padding:12px;
+      display:grid;
+      gap:10px;
+      border:1px solid rgba(148,163,184,.22);
+      border-radius:16px;
+      background:linear-gradient(180deg,rgba(17,24,39,.94),rgba(2,6,23,.96));
+      box-shadow:0 18px 36px rgba(0,0,0,.28);
+    }
+    .control-title{
+      margin:0 0 2px;
+      font-size:.86rem;
+      font-weight:800;
+      letter-spacing:.02em;
+      color:#f8fafc;
+    }
+
+    .timer-display{
+      margin:0 0 2px;
+      padding:7px 10px;
+      border:1px solid rgba(148,163,184,.22);
+      border-radius:13px;
+      background:rgba(15,23,42,.72);
+      color:#e5e7eb;
+      font-variant-numeric:tabular-nums;
+      font-size:.92rem;
+      font-weight:850;
+      text-align:center;
+      letter-spacing:.02em;
+    }
+    .temperature-row{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--muted);
+      font-size:.78rem;
+      font-weight:650;
+    }
+    .temp-value{
+      color:#f8fafc;
+      font-size:.92rem;
+      font-weight:850;
+    }
+    input[type="range"]{
+      width:100%;
+      accent-color:var(--hot);
+      cursor:pointer;
+    }
+    .temp-scale{
+      display:flex;
+      justify-content:space-between;
+      margin-top:-6px;
+      color:#64748b;
+      font-size:.68rem;
+      font-weight:650;
+    }
+    button{
+      border:0;
+      border-radius:14px;
+      padding:9px 11px;
+      min-height:39px;
+      font-size:.84rem;
+      font-weight:780;
+      color:#07111f;
+      cursor:pointer;
+      transition:transform .15s ease,filter .15s ease,opacity .15s ease;
+    }
+    button:hover:not(:disabled){ transform:translateY(-1px); filter:brightness(1.05); }
+    button:active:not(:disabled){ transform:translateY(0); }
+    button:disabled{ opacity:.45; cursor:not-allowed; }
+    .btn-ink{ background:linear-gradient(180deg,#e9d5ff,#a855f7); }
+    .btn-reset{ background:linear-gradient(180deg,#e5e7eb,#cbd5e1); }
+    canvas{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      display:block;
+    }
+    .window-toggle{
+      position:absolute;
+      right:18px;
+      top:16px;
+      z-index:30;
+      width:auto;
+      min-width:54px;
+      min-height:34px;
+      padding:7px 12px;
+      border:1px solid rgba(148,163,184,.22);
+      border-radius:999px;
+      background:rgba(15,23,42,.78);
+      color:#e5e7eb;
+      font-size:.76rem;
+      font-weight:800;
+      letter-spacing:.02em;
+      backdrop-filter:blur(8px);
+    }
+    .sim-window:fullscreen{
+      width:100vw;
+      height:100vh;
+      min-height:100vh;
+      border-radius:0;
+    }
+    .sim-window:fullscreen .controls{
+      left:22px;
+    }
+    .sim-window:fullscreen .window-toggle{
+      right:22px;
+      top:22px;
+    }
+    @media (max-width:760px){
+      body{ padding:14px; }
+      .sim-window{ min-height:650px; }
+      .controls{
+        left:14px;
+        right:14px;
+        top:auto;
+        bottom:14px;
+        transform:none;
+        width:auto;
+      }
+      .window-toggle{ right:14px; top:14px; }
+    }
+  
+    /* edubiosim-fullscreen styles */
+    .fullscreen-enter-btn,
+    .fullscreen-exit-btn{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:91;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.72);
+      background:rgba(255,255,255,.92);
+      color:#182033;
+      font-weight:900;
+      box-shadow:0 12px 30px rgba(0,0,0,.20);
+      backdrop-filter:blur(8px);
+    }
+    .fullscreen-enter-btn{left:16px;right:auto;display:inline-flex}
+    .fullscreen-exit-btn{left:16px;right:auto;display:none}
+    .fullscreen-enter-btn svg,
+    .fullscreen-exit-btn svg{width:22px;height:22px;display:block}
+    html:fullscreen .fullscreen-exit-btn,
+    html.fullscreen-active .fullscreen-exit-btn{display:inline-flex}
+    html:-webkit-full-screen .fullscreen-exit-btn{display:inline-flex}
+    html:fullscreen .fullscreen-enter-btn,
+    html.fullscreen-active .fullscreen-enter-btn{display:none}
+    html:-webkit-full-screen .fullscreen-enter-btn{display:none}
+    .fullscreen-enter-btn:hover,
+    .fullscreen-exit-btn:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,0,0,.24)}
+    .fullscreen-enter-btn:focus-visible,
+    .fullscreen-exit-btn:focus-visible{outline:3px solid rgba(21,135,123,.35);outline-offset:3px}
+</style>
+</head>
+<body>
+  <main class="app">
+    <section class="sim-card">
+      <div class="sim-window">
+        <section class="controls" aria-label="Bedienungsfenster">
+          <div id="timerDisplay" class="timer-display">00:00,0</div>
+          <p class="control-title">Diffusion</p>
+          <div>
+            <div class="temperature-row">
+              <span>Temperatur</span>
+              <span class="temp-value" id="tempValue">20 °C</span>
+            </div>
+            <input id="tempSlider" type="range" min="5" max="90" value="20" step="1" aria-label="Temperaturregler" />
+            <div class="temp-scale"><span>kalt</span><span>heiß</span></div>
+          </div>
+          <button id="addInk" class="btn-ink">Tinte hinzugeben</button>
+          <button id="reset" class="btn-reset">Zurücksetzen</button>
+        </section>
+        <button id="windowToggle" class="window-toggle" type="button" aria-label="Simulation maximieren">Max</button>
+        <canvas id="canvas" aria-label="Simulation der Diffusion von Tinte in Wasser"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const tempSlider = document.getElementById('tempSlider');
+    const tempValue = document.getElementById('tempValue');
+    const addInkButton = document.getElementById('addInk');
+    const resetButton = document.getElementById('reset');
+    const windowToggle = document.getElementById('windowToggle');
+    const timerDisplay = document.getElementById('timerDisplay');
+
+    const VIEW = { w: 760, h: 520 };
+    const beaker = { cx:455, topY:86, bottomY:400, topRx:126, topRy:18, bottomRx:96, bottomRy:24, waterY:142 };
+
+    const state = {
+      temp:20,
+      water:[],
+      ink:[],
+      lastTime:0,
+      injecting:false,
+      injectionStart:0,
+      pulses:0,
+      inkAdded:false,
+      timerRunning:false,
+      timerStart:0,
+      timerElapsed:0
+    };
+
+    function fitCanvas(){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.setTransform(canvas.width / VIEW.w, 0, 0, canvas.height / VIEW.h, 0, 0);
+    }
+
+    function rand(min,max){ return min + Math.random() * (max - min); }
+    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+    function tempFactor(){ return 0.35 + Math.pow((state.temp - 5) / 85, 1.25) * 2.85; }
+
+    function formatTime(ms){
+      const totalTenths = Math.floor(ms / 100);
+      const minutes = Math.floor(totalTenths / 600);
+      const seconds = Math.floor((totalTenths % 600) / 10);
+      const tenths = totalTenths % 10;
+      return `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')},${tenths}`;
+    }
+
+    function updateTimer(){
+      const elapsed = state.timerRunning ? performance.now() - state.timerStart : state.timerElapsed;
+      timerDisplay.textContent = formatTime(elapsed);
+    }
+
+    function startTimer(){
+      state.timerRunning = true;
+      state.timerStart = performance.now();
+      state.timerElapsed = 0;
+      updateTimer();
+    }
+
+    function stopAndResetTimer(){
+      state.timerRunning = false;
+      state.timerStart = 0;
+      state.timerElapsed = 0;
+      updateTimer();
+    }
+
+    function beakerWidthAt(y){
+      const t = clamp((y - beaker.topY) / (beaker.bottomY - beaker.topY), 0, 1);
+      return beaker.topRx - (beaker.topRx - beaker.bottomRx) * t;
+    }
+
+    function beakerBoundsAt(y, radius = 0){
+      const rx = beakerWidthAt(y);
+      return {
+        left: beaker.cx - rx + 14 + radius,
+        right: beaker.cx + rx - 14 - radius
+      };
+    }
+
+    function randomPointInWater(){
+      const y = rand(beaker.waterY + 12, beaker.bottomY - 30);
+      const b = beakerBoundsAt(y, 8);
+      return { x: rand(b.left, b.right), y };
+    }
+
+    function createWater(){
+      state.water.length = 0;
+      for(let i=0; i<105; i++){
+        const pos = randomPointInWater();
+        state.water.push({
+          x:pos.x,
+          y:pos.y,
+          r:rand(3.2,4.7),
+          vx:rand(-.25,.25),
+          vy:rand(-.25,.25)
+        });
+      }
+    }
+
+    function addInkPulse(){
+      const cx = beaker.cx;
+      const cy = beaker.waterY + 18;
+      for(let i=0; i<28; i++){
+        const angle = rand(0, Math.PI * 2);
+        const dist = Math.sqrt(Math.random()) * 18;
+        state.ink.push({
+          x: cx + Math.cos(angle) * dist,
+          y: cy + Math.sin(angle) * dist,
+          r: rand(4.1, 5.8),
+          vx: rand(-.55, .55),
+          vy: rand(-.15, .85)
+        });
+      }
+      state.inkAdded = true;
+    }
+
+    function reset(){
+      state.temp = 20;
+      tempSlider.value = '20';
+      tempValue.textContent = '20 °C';
+      state.ink.length = 0;
+      state.injecting = false;
+      state.injectionStart = 0;
+      state.pulses = 0;
+      state.inkAdded = false;
+      state.lastTime = 0;
+      addInkButton.disabled = false;
+      stopAndResetTimer();
+      createWater();
+    }
+
+    function startInjection(){
+      if(state.injecting) return;
+      state.injecting = true;
+      state.injectionStart = performance.now();
+      state.pulses = 0;
+      addInkButton.disabled = true;
+      startTimer();
+    }
+
+    function roundRect(x,y,w,h,r){
+      const rr = Math.min(r, w/2, h/2);
+      ctx.beginPath();
+      ctx.moveTo(x+rr,y);
+      ctx.lineTo(x+w-rr,y);
+      ctx.quadraticCurveTo(x+w,y,x+w,y+rr);
+      ctx.lineTo(x+w,y+h-rr);
+      ctx.quadraticCurveTo(x+w,y+h,x+w-rr,y+h);
+      ctx.lineTo(x+rr,y+h);
+      ctx.quadraticCurveTo(x,y+h,x,y+h-rr);
+      ctx.lineTo(x,y+rr);
+      ctx.quadraticCurveTo(x,y,x+rr,y);
+    }
+
+    function beakerOuterPath(){
+      const b = beaker;
+      ctx.beginPath();
+      ctx.moveTo(b.cx - b.topRx, b.topY);
+      ctx.lineTo(b.cx - b.bottomRx, b.bottomY - b.bottomRy);
+      ctx.quadraticCurveTo(b.cx - b.bottomRx + 6, b.bottomY + 2, b.cx - b.bottomRx + 34, b.bottomY + b.bottomRy * .35);
+      ctx.quadraticCurveTo(b.cx, b.bottomY + b.bottomRy, b.cx + b.bottomRx - 34, b.bottomY + b.bottomRy * .35);
+      ctx.quadraticCurveTo(b.cx + b.bottomRx - 6, b.bottomY + 2, b.cx + b.bottomRx, b.bottomY - b.bottomRy);
+      ctx.lineTo(b.cx + b.topRx, b.topY);
+    }
+
+    function beakerInnerWaterPath(){
+      const b = beaker;
+      const topRx = beakerWidthAt(b.waterY) - 12;
+      const bottomRx = b.bottomRx - 14;
+      ctx.beginPath();
+      ctx.moveTo(b.cx - topRx, b.waterY);
+      ctx.lineTo(b.cx - bottomRx, b.bottomY - 18);
+      ctx.quadraticCurveTo(b.cx - bottomRx + 10, b.bottomY + 4, b.cx - bottomRx + 40, b.bottomY + 10);
+      ctx.quadraticCurveTo(b.cx, b.bottomY + 22, b.cx + bottomRx - 40, b.bottomY + 10);
+      ctx.quadraticCurveTo(b.cx + bottomRx - 10, b.bottomY + 4, b.cx + bottomRx, b.bottomY - 18);
+      ctx.lineTo(b.cx + topRx, b.waterY);
+      ctx.closePath();
+    }
+
+    function drawBackground(){
+      ctx.clearRect(0,0,VIEW.w,VIEW.h);
+      const tempT = (state.temp - 5) / 85;
+
+      const glow = ctx.createRadialGradient(beaker.cx,432,20,beaker.cx,432,150);
+      glow.addColorStop(0, `rgba(251,113,133,${0.10 + tempT * 0.33})`);
+      glow.addColorStop(1, 'rgba(251,113,133,0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(270,300,370,180);
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,.35)';
+      ctx.shadowBlur = 18;
+      ctx.shadowOffsetY = 10;
+      roundRect(325,414,260,44,18);
+      ctx.fillStyle = 'rgba(15,23,42,.96)';
+      ctx.fill();
+      ctx.restore();
+
+      const plateGrad = ctx.createLinearGradient(330,414,585,458);
+      plateGrad.addColorStop(0, '#334155');
+      plateGrad.addColorStop(.5, '#111827');
+      plateGrad.addColorStop(1, '#020617');
+      roundRect(325,414,260,44,18);
+      ctx.fillStyle = plateGrad;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(226,232,240,.2)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(beaker.cx,434,82,16,0,0,Math.PI*2);
+      ctx.strokeStyle = `rgba(251,113,133,${0.25 + tempT * 0.58})`;
+      ctx.lineWidth = 5;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(beaker.cx,434,52,10,0,0,Math.PI*2);
+      ctx.strokeStyle = `rgba(248,113,113,${0.16 + tempT * 0.48})`;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+    }
+
+    function drawBeakerAndWater(){
+      const b = beaker;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(b.cx,b.bottomY+25,116,17,0,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(0,0,0,.20)';
+      ctx.fill();
+      ctx.restore();
+
+      ctx.save();
+      beakerInnerWaterPath();
+      ctx.clip();
+
+      const waterGrad = ctx.createLinearGradient(b.cx,b.waterY,b.cx,b.bottomY);
+      waterGrad.addColorStop(0, 'rgba(125,211,252,.42)');
+      waterGrad.addColorStop(1, 'rgba(14,165,233,.27)');
+      ctx.fillStyle = waterGrad;
+      ctx.fillRect(b.cx-b.topRx,b.waterY-2,b.topRx*2,b.bottomY-b.waterY+40);
+
+      ctx.beginPath();
+      ctx.ellipse(b.cx,b.waterY,beakerWidthAt(b.waterY)-12,13,0,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(191,219,254,.32)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(191,219,254,.45)';
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+
+      for(const p of state.water){
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(125,211,252,.82)';
+        ctx.fill();
+      }
+
+      for(const p of state.ink){
+        const radial = ctx.createRadialGradient(p.x-p.r*.35,p.y-p.r*.35,1,p.x,p.y,p.r*1.25);
+        radial.addColorStop(0, 'rgba(233,213,255,.95)');
+        radial.addColorStop(.38, 'rgba(168,85,247,.88)');
+        radial.addColorStop(1, 'rgba(88,28,135,.82)');
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = radial;
+        ctx.fill();
+      }
+      ctx.restore();
+
+      ctx.save();
+      beakerOuterPath();
+
+      const glassGrad = ctx.createLinearGradient(b.cx-b.topRx,b.topY,b.cx+b.topRx,b.topY);
+      glassGrad.addColorStop(0, 'rgba(255,255,255,.30)');
+      glassGrad.addColorStop(.18, 'rgba(255,255,255,.10)');
+      glassGrad.addColorStop(.52, 'rgba(255,255,255,.03)');
+      glassGrad.addColorStop(.82, 'rgba(255,255,255,.09)');
+      glassGrad.addColorStop(1, 'rgba(255,255,255,.28)');
+      ctx.fillStyle = glassGrad;
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(226,232,240,.78)';
+      ctx.lineWidth = 4;
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(b.cx,b.topY,b.topRx,b.topRy,0,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(148,163,184,.08)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(226,232,240,.90)';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(b.cx,b.topY,b.topRx-16,b.topRy-7,0,0,Math.PI*2);
+      ctx.strokeStyle = 'rgba(255,255,255,.20)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(b.cx-b.topRx+34,b.topY+40);
+      ctx.lineTo(b.cx-b.bottomRx+22,b.bottomY-42);
+      ctx.strokeStyle = 'rgba(255,255,255,.24)';
+      ctx.lineWidth = 7;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(b.cx+b.topRx-42,b.topY+44);
+      ctx.lineTo(b.cx+b.bottomRx-24,b.bottomY-62);
+      ctx.strokeStyle = 'rgba(255,255,255,.13)';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(b.cx,b.bottomY+2,b.bottomRx-8,b.bottomRy,0,0,Math.PI);
+      ctx.strokeStyle = 'rgba(226,232,240,.45)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function drawPipette(now){
+      if(!state.injecting) return;
+      const elapsed = now - state.injectionStart;
+      const duration = 2200;
+      const t = clamp(elapsed / duration, 0, 1);
+      const alpha = t < .12 ? t / .12 : t > .86 ? (1 - t) / .14 : 1;
+      const pipetteY = 46 + Math.sin(t * Math.PI) * 16;
+      const pipetteX = beaker.cx + 88;
+      const tipX = pipetteX - 94;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(pipetteX, pipetteY);
+      ctx.rotate(-0.12);
+
+      ctx.fillStyle = 'rgba(226,232,240,.9)';
+      roundRect(-42,-10,100,22,11);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,.38)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(-38,-5);
+      ctx.lineTo(-78,0);
+      ctx.lineTo(-38,5);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(226,232,240,.86)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(-78,0);
+      ctx.lineTo(-92,0);
+      ctx.strokeStyle = 'rgba(226,232,240,.95)';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      ctx.fillStyle = 'rgba(168,85,247,.78)';
+      roundRect(-24,-5,56,10,5);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(226,232,240,.92)';
+      roundRect(40,-12,28,24,10);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,.32)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
+
+      if(t > .22 && t < .72){
+        const dropT = (t - .22) / .5;
+        const dropY = 70 + (beaker.waterY - 70) * ((dropT % .34) / .34);
+        ctx.beginPath();
+        ctx.arc(tipX, dropY, 5.5, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(168,85,247,${alpha * .9})`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(tipX,70);
+        ctx.lineTo(tipX, Math.min(dropY, beaker.waterY - 5));
+        ctx.strokeStyle = `rgba(168,85,247,${alpha * .55})`;
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+
+      if(t > .29 && state.pulses === 0){ addInkPulse(); state.pulses = 1; }
+      if(t > .46 && state.pulses === 1){ addInkPulse(); state.pulses = 2; }
+      if(t > .62 && state.pulses === 2){ addInkPulse(); state.pulses = 3; }
+      if(t >= 1){
+        state.injecting = false;
+        addInkButton.disabled = false;
+      }
+    }
+
+    function updateParticles(dt){
+      const f = tempFactor();
+      const waterNoise = 9 * f;
+      const inkNoise = 18 * f;
+      const damping = Math.pow(.9, dt * 60);
+
+      for(const p of state.water){
+        p.vx = (p.vx + rand(-.05,.05) * f) * damping;
+        p.vy = (p.vy + rand(-.05,.05) * f) * damping;
+        p.x += p.vx * dt * 60 + rand(-1,1) * waterNoise * Math.sqrt(dt) * .12;
+        p.y += p.vy * dt * 60 + rand(-1,1) * waterNoise * Math.sqrt(dt) * .12;
+        bounce(p,.45);
+      }
+
+      for(const p of state.ink){
+        p.vx = (p.vx + rand(-.18,.18) * f) * damping;
+        p.vy = (p.vy + rand(-.18,.18) * f) * damping;
+        p.x += p.vx * dt * 60 + rand(-1,1) * inkNoise * Math.sqrt(dt) * .23;
+        p.y += p.vy * dt * 60 + rand(-1,1) * inkNoise * Math.sqrt(dt) * .23;
+        bounce(p,.62);
+      }
+    }
+
+    function bounce(p, loss){
+      const margin = p.r + 1;
+      const top = beaker.waterY + margin;
+      const bottom = beaker.bottomY - 10 - margin;
+      p.y = clamp(p.y, top, bottom);
+
+      const b = beakerBoundsAt(p.y, margin);
+      if(p.x < b.left){ p.x = b.left; p.vx = Math.abs(p.vx) * loss; }
+      if(p.x > b.right){ p.x = b.right; p.vx = -Math.abs(p.vx) * loss; }
+      if(p.y <= top){ p.vy = Math.abs(p.vy) * loss; }
+      if(p.y >= bottom){ p.vy = -Math.abs(p.vy) * loss; }
+    }
+
+    function draw(now){
+      if(!state.lastTime) state.lastTime = now;
+      const dt = Math.min(.04, (now - state.lastTime) / 1000);
+      state.lastTime = now;
+
+      updateTimer();
+      updateParticles(dt);
+      drawBackground();
+      drawBeakerAndWater();
+      drawPipette(now);
+      requestAnimationFrame(draw);
+    }
+
+    tempSlider.addEventListener('input', () => {
+      state.temp = Number(tempSlider.value);
+      tempValue.textContent = `${state.temp} °C`;
+    });
+
+    addInkButton.addEventListener('click', startInjection);
+    resetButton.addEventListener('click', reset);
+    function updateWindowToggle(){
+      const simWindow = document.querySelector('.sim-window');
+      const isFull = document.fullscreenElement === simWindow;
+      windowToggle.textContent = isFull ? 'Min' : 'Max';
+      windowToggle.setAttribute('aria-label', isFull ? 'Simulation verkleinern' : 'Simulation maximieren');
+      fitCanvas();
+    }
+
+    async function toggleWindow(){
+      const simWindow = document.querySelector('.sim-window');
+      try{
+        if(document.fullscreenElement === simWindow){
+          await document.exitFullscreen();
+        }else{
+          await simWindow.requestFullscreen();
+        }
+      }catch(err){
+        console.error(err);
+      }
+    }
+
+    windowToggle.addEventListener('click', toggleWindow);
+    document.addEventListener('fullscreenchange', updateWindowToggle);
+    window.addEventListener('resize', fitCanvas);
+
+    reset();
+    fitCanvas();
+    updateWindowToggle();
+    requestAnimationFrame(draw);
+  </script>
+
+  <!-- edubiosim-fullscreen -->  <button id="fullscreenExitBtn" class="fullscreen-exit-btn" type="button" aria-label="Vollbildmodus verlassen" title="Vollbildmodus verlassen">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M5 3.8h10.5c1 0 1.8.8 1.8 1.8v16.8c0 1-.8 1.8-1.8 1.8H5V3.8Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M15.2 14h8.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M20.2 9.4 24.8 14l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.2 13.7h.1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span>Exit</span>
+  </button>
+    <script>
+        // edubiosim-fullscreen
+    (() => {
+      const fullscreenEnterBtn = document.getElementById('fullscreenEnterBtn');
+      const fullscreenExitBtn = document.getElementById('fullscreenExitBtn');
+      const fullscreenRoot = document.documentElement;
+      const fullscreenInitialStartSelectors = [
+        '#startSimulationBtn',
+        '#startSimulation',
+        '#introStart',
+        '#introStartBtn',
+        '#introModalStartBtn',
+        '#startModal .start-btn',
+        '#startModal #startSimulationBtn',
+        '#startModal #startSimulation',
+        '#introModal .im-start-btn',
+        '#introOverlay #introStart',
+        '#introBackdrop #introStartBtn',
+        '#startMenu .btn-start',
+        '.menu-overlay .btn-start',
+        '.start-modal .start-btn',
+        '.intro-modal .intro-start',
+        '.intro-modal .start-btn',
+        '[data-initial-start]'
+      ];
+      let initialAutoFullscreenTried = false;
+      const isFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const syncFullscreenButton = () => fullscreenRoot.classList.toggle('fullscreen-active', isFullscreen());
+      const enterFullscreen = async () => {
+        if (isFullscreen()) return;
+        if (fullscreenRoot.requestFullscreen) await fullscreenRoot.requestFullscreen();
+        else if (fullscreenRoot.webkitRequestFullscreen) await fullscreenRoot.webkitRequestFullscreen();
+      };
+      const exitFullscreen = async () => {
+        if (!isFullscreen()) return;
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+      };
+      const bindInitialFullscreenStartTriggers = () => {
+        const candidates = new Set();
+        fullscreenInitialStartSelectors.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => candidates.add(el));
+        });
+        candidates.forEach(el => {
+          if (!el || el.dataset.fullscreenStartBound === '1') return;
+          el.dataset.fullscreenStartBound = '1';
+          el.addEventListener('click', () => {
+            if (initialAutoFullscreenTried) return;
+            initialAutoFullscreenTried = true;
+            enterFullscreen().catch(err => console.warn('Vollbild konnte nicht gestartet werden', err)).finally(syncFullscreenButton);
+          }, { capture: true });
+        });
+      };
+      fullscreenEnterBtn?.addEventListener('click', async () => {
+        try {
+          await enterFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht gestartet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      fullscreenExitBtn?.addEventListener('click', async () => {
+        try {
+          await exitFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht beendet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      document.addEventListener('fullscreenchange', syncFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindInitialFullscreenStartTriggers, { once: true });
+      } else {
+        bindInitialFullscreenStartTriggers();
+      }
+      syncFullscreenButton();
+    })();
+  </script>
+</body>
+</html>

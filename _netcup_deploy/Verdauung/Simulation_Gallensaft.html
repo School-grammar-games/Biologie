@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>/* edubiosim-redirect */if(location.hostname==='school-grammar-games.github.io'){var _p=decodeURIComponent(location.pathname);var _u=_p.indexOf('Offizielle')>-1&&_p.indexOf('_EN')>-1?'https://www.edubiosim.de/index_EN.html':_p.indexOf('Offizielle')>-1?'https://www.edubiosim.de/':location.href.replace('school-grammar-games.github.io/Biologie','www.edubiosim.de');location.replace(_u);}</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation: Emulgierende Wirkung von Spülmittel</title>
+  <style>
+    :root{
+      --bg1:#0f172a;
+      --bg2:#020617;
+      --panel:#111827;
+      --border:#334155;
+      --text:#e5e7eb;
+      --water:#4fb3ff;
+      --oil:#f5c84b;
+      --soap:#64e572;
+      --emulsion:#d7c875;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:radial-gradient(circle at top,#1e293b 0,var(--bg1) 45%,var(--bg2) 100%);
+      min-height:100vh;
+      padding:20px;
+    }
+
+    .app{
+      width:min(860px,100%);
+      margin:0 auto;
+    }
+
+    .controls,
+    .sim-card{
+      background:linear-gradient(180deg,rgba(17,24,39,.96),rgba(2,6,23,.98));
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:0 20px 50px rgba(0,0,0,.35);
+    }
+
+    .controls{
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      width:188px;
+      padding:11px;
+      display:grid;
+      gap:7px;
+      z-index:60;
+      background:linear-gradient(180deg,rgba(17,24,39,.94),rgba(2,6,23,.96));
+      border:1px solid rgba(148,163,184,.22);
+      border-radius:15px;
+      box-shadow:0 18px 36px rgba(0,0,0,.28);
+    }
+
+    button{
+      border:0;
+      border-radius:14px;
+      padding:8px 10px;
+      font-size:.84rem;
+      font-weight:750;
+      min-height:38px;
+      cursor:pointer;
+      transition:transform .15s ease,filter .15s ease,opacity .15s ease;
+      color:#07111f;
+    }
+
+    button:hover:not(:disabled){ transform:translateY(-1px); filter:brightness(1.04); }
+    button:active:not(:disabled){ transform:translateY(0); }
+    button:disabled{ opacity:.45; cursor:not-allowed; }
+
+    .btn-water{ background:linear-gradient(180deg,#93c5fd,#38bdf8); }
+    .btn-oil{ background:linear-gradient(180deg,#fde68a,#fbbf24); }
+    .btn-soap{ background:linear-gradient(180deg,#bbf7d0,#4ade80); }
+    .btn-shake{ background:linear-gradient(180deg,#fda4af,#fb7185); }
+    .btn-reset{ background:linear-gradient(180deg,#e5e7eb,#cbd5e1); }
+
+    .sim-card{ padding:10px; }
+
+    .sim-window{
+      position:relative;
+      height:470px;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid rgba(148,163,184,.16);
+      background:
+        linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),
+        linear-gradient(0deg,rgba(255,255,255,.03) 1px,transparent 1px),
+        radial-gradient(circle at 50% 28%,rgba(56,189,248,.08),transparent 28%),
+        rgba(2,6,23,.4);
+      background-size:28px 28px,28px 28px,100% 100%,100% 100%;
+    }
+
+    .bench{ display:none; }
+
+    .tube-wrap{
+      position:absolute;
+      left:68%;
+      top:58px;
+      width:112px;
+      height:360px;
+      transform:translateX(-50%);
+      transform-origin:50% 82%;
+      z-index:20;
+    }
+
+    .tube-wrap.shaking{
+      animation:shakeTube 1.5s ease-in-out 2;
+    }
+
+    @keyframes shakeTube{
+      0%{ transform:translateX(-50%) rotate(0deg); }
+      8%{ transform:translateX(-50%) rotate(-18deg) translateX(-14px); }
+      17%{ transform:translateX(-50%) rotate(17deg) translateX(14px); }
+      27%{ transform:translateX(-50%) rotate(-16deg) translateX(-13px); }
+      38%{ transform:translateX(-50%) rotate(16deg) translateX(13px); }
+      50%{ transform:translateX(-50%) rotate(-13deg) translateX(-8px); }
+      64%{ transform:translateX(-50%) rotate(12deg) translateX(8px); }
+      78%{ transform:translateX(-50%) rotate(-8deg) translateX(-3px); }
+      100%{ transform:translateX(-50%) rotate(0deg); }
+    }
+
+    .stopper{
+      position:absolute;
+      left:13px;
+      top:-110px;
+      width:94px;
+      height:110px;
+      z-index:45;
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(-20px);
+    }
+
+    .stopper.active{
+      animation:stopperIn 1s cubic-bezier(.22,.88,.24,1) forwards;
+    }
+
+    .stopper.active.removing{
+      animation:stopperOut .8s cubic-bezier(.45,0,.7,.2) forwards;
+    }
+
+    .stopper-grip{
+      position:absolute;
+      left:10px;
+      top:0;
+      width:74px;
+      height:20px;
+      border-radius:10px 10px 8px 8px;
+      background:linear-gradient(180deg,#c98d60,#8f542e);
+      border:1px solid rgba(255,255,255,.28);
+      box-shadow:0 6px 12px rgba(0,0,0,.35), inset 0 1px 2px rgba(255,255,255,.32);
+    }
+
+    .stopper-body{
+      position:absolute;
+      left:22px;
+      top:18px;
+      width:50px;
+      height:82px;
+      clip-path:polygon(8% 0,92% 0,76% 100%,24% 100%);
+      border-radius:8px;
+      background:
+        linear-gradient(90deg,rgba(255,255,255,.16),transparent 26%,rgba(0,0,0,.17) 80%),
+        linear-gradient(180deg,#d8a06a,#92542e);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:inset 0 0 10px rgba(0,0,0,.22);
+    }
+
+    @keyframes stopperIn{
+      0%{ opacity:0; transform:translateY(-20px) scale(.97); }
+      14%{ opacity:1; }
+      72%{ opacity:1; transform:translateY(84px) scale(1); }
+      84%{ transform:translateY(78px) scale(1); }
+      100%{ opacity:1; transform:translateY(80px) scale(1); }
+    }
+
+    @keyframes stopperOut{
+      0%{ opacity:1; transform:translateY(80px) scale(1); }
+      100%{ opacity:0; transform:translateY(-20px) scale(.97); }
+    }
+
+    .tube-mouth{
+      position:absolute;
+      left:11px;
+      top:-15px;
+      width:98px;
+      height:28px;
+      border-radius:50%;
+      border:4px solid rgba(226,232,240,.86);
+      background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));
+      box-shadow:0 2px 8px rgba(255,255,255,.12), 0 6px 12px rgba(0,0,0,.18);
+      z-index:14;
+    }
+
+    .tube-mouth::before{
+      content:"";
+      position:absolute;
+      left:9px;
+      right:9px;
+      top:3px;
+      bottom:4px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,.18);
+      background:radial-gradient(ellipse at 50% 30%,rgba(55,65,81,.88),rgba(17,24,39,.98));
+      box-shadow:inset 0 2px 6px rgba(255,255,255,.08);
+    }
+
+    .tube-mouth::after{
+      content:"";
+      position:absolute;
+      left:8px;
+      right:8px;
+      bottom:-6px;
+      height:12px;
+      border-radius:50%;
+      background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0));
+      filter:blur(1.1px);
+      opacity:.75;
+    }
+
+    .tube{
+      position:absolute;
+      left:24px;
+      top:8px;
+      width:72px;
+      height:344px;
+      border:4px solid rgba(226,232,240,.74);
+      border-top:0;
+      border-radius:0 0 38px 38px;
+      background:linear-gradient(90deg,rgba(255,255,255,.34),rgba(255,255,255,.08) 18%,rgba(255,255,255,.015) 48%,rgba(255,255,255,.14) 82%,rgba(255,255,255,.30));
+      box-shadow:inset 9px 0 18px rgba(255,255,255,.10),inset -8px 0 16px rgba(255,255,255,.12),0 22px 45px rgba(0,0,0,.32);
+      overflow:hidden;
+    }
+
+    .tube::before{
+      content:"";
+      position:absolute;
+      left:8px;
+      top:0;
+      bottom:20px;
+      width:8px;
+      border-radius:999px;
+      background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.02));
+      filter:blur(.4px);
+      z-index:20;
+    }
+
+    .contents{
+      position:absolute;
+      left:4px;
+      right:4px;
+      bottom:4px;
+      height:305px;
+      border-radius:0 0 30px 30px;
+      overflow:hidden;
+      z-index:3;
+    }
+
+    .phase{
+      position:absolute;
+      left:0;
+      right:0;
+      height:0;
+      overflow:hidden;
+      transition:height .22s linear,bottom .22s linear,opacity .22s linear,background .45s ease;
+      filter:blur(.45px);
+    }
+
+    .phase::after{
+      content:"";
+      position:absolute;
+      left:-6px;
+      right:-6px;
+      top:-8px;
+      height:18px;
+      border-radius:50%;
+      background:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.18),rgba(255,255,255,0) 68%);
+      opacity:.8;
+      animation:surfaceShift 4.2s ease-in-out infinite alternate;
+      filter:blur(1.2px);
+      pointer-events:none;
+    }
+
+    @keyframes surfaceShift{
+      0%{ transform:translateX(-2px) scaleX(.98); }
+      100%{ transform:translateX(2px) scaleX(1.02); }
+    }
+
+    .phase.water{
+      bottom:0;
+      background:linear-gradient(180deg,rgba(147,197,253,.94),rgba(59,130,246,.96));
+    }
+
+    .phase.oil{
+      bottom:0;
+      background:linear-gradient(180deg,rgba(254,240,138,.95),rgba(234,179,8,.95));
+    }
+
+    .phase.mixed{
+      bottom:0;
+      opacity:0;
+      z-index:8;
+      background:
+        radial-gradient(circle at 22% 18%,rgba(79,179,255,.62) 0 3px,transparent 4px),
+        radial-gradient(circle at 73% 24%,rgba(245,200,75,.76) 0 3px,transparent 4px),
+        radial-gradient(circle at 42% 58%,rgba(79,179,255,.56) 0 3px,transparent 4px),
+        radial-gradient(circle at 76% 74%,rgba(245,200,75,.72) 0 3px,transparent 4px),
+        linear-gradient(180deg,rgba(231,205,91,.88),rgba(70,158,230,.78));
+    }
+
+    .phase.emulsion{
+      bottom:0;
+      opacity:0;
+      z-index:7;
+      background:
+        radial-gradient(circle at 18% 23%,rgba(255,255,255,.32) 0 2px,transparent 3px),
+        radial-gradient(circle at 70% 28%,rgba(79,179,255,.38) 0 2px,transparent 3px),
+        radial-gradient(circle at 42% 58%,rgba(255,255,255,.26) 0 2px,transparent 3px),
+        radial-gradient(circle at 78% 72%,rgba(79,179,255,.34) 0 2px,transparent 3px),
+        linear-gradient(180deg,#e5d879,#c9b96a);
+    }
+
+    .phase.foam{
+      bottom:0;
+      opacity:0;
+      z-index:9;
+      background:
+        radial-gradient(circle at 18% 52%,rgba(255,255,255,.92) 0 4px,transparent 5px),
+        radial-gradient(circle at 38% 36%,rgba(255,255,255,.88) 0 3px,transparent 4px),
+        radial-gradient(circle at 65% 58%,rgba(255,255,255,.82) 0 4px,transparent 5px),
+        radial-gradient(circle at 82% 32%,rgba(255,255,255,.88) 0 3px,transparent 4px),
+        rgba(236,253,245,.42);
+    }
+
+    .meniscus{
+      position:absolute;
+      left:0;
+      right:0;
+      top:-2px;
+      height:14px;
+      border-radius:50%;
+      background:radial-gradient(ellipse at center,rgba(255,255,255,.2),rgba(255,255,255,0) 70%);
+      mix-blend-mode:screen;
+      filter:blur(1px);
+    }
+
+    .pour-stream{
+      position:absolute;
+      left:50%;
+      top:18px;
+      width:12px;
+      height:0;
+      transform:translateX(-50%);
+      border-radius:999px;
+      z-index:30;
+      opacity:0;
+    }
+
+    .pour-stream.water{
+      background:linear-gradient(180deg,rgba(186,230,253,.95),rgba(56,189,248,.72));
+    }
+
+    .pour-stream.oil{
+      background:linear-gradient(180deg,rgba(254,240,138,.95),rgba(234,179,8,.78));
+    }
+
+    .pour-stream.active{ animation:pour 1.1s ease-in-out; }
+
+    @keyframes pour{
+      0%{ height:0; opacity:0; }
+      14%{ height:230px; opacity:1; }
+      72%{ height:230px; opacity:1; }
+      100%{ height:0; opacity:0; }
+    }
+
+    .drop-layer{
+      position:absolute;
+      inset:0;
+      z-index:35;
+      pointer-events:none;
+    }
+
+    .drop{
+      position:absolute;
+      width:12px;
+      height:16px;
+      border-radius:60%;
+      background:linear-gradient(180deg,#bbf7d0,#22c55e);
+      opacity:0;
+      filter:drop-shadow(0 4px 5px rgba(0,0,0,.25));
+    }
+
+    .drop.fall{ animation:dropFall .9s ease-in forwards; }
+
+    @keyframes dropFall{
+      0%{ transform:translateY(0) scale(.7); opacity:0; }
+      16%{ opacity:1; }
+      84%{ opacity:1; }
+      100%{ transform:translateY(260px) scale(1); opacity:0; }
+    }
+
+    .droplet-field{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height:0;
+      overflow:hidden;
+      z-index:12;
+      pointer-events:none;
+      opacity:0;
+      transition:height .22s linear,bottom .22s linear,opacity .22s linear;
+      filter:blur(.25px);
+    }
+
+    .droplet-field.visible{ opacity:1; }
+
+    .mini-drop{
+      position:absolute;
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:rgba(245,200,75,.95);
+      box-shadow:0 0 8px rgba(255,255,255,.1);
+      animation:floatDrop 2.8s ease-in-out infinite;
+    }
+
+    .mini-drop.waterish{ background:rgba(79,179,255,.85); }
+
+    @keyframes floatDrop{
+      0%,100%{ transform:translateY(0) translateX(0); }
+      50%{ transform:translateY(-7px) translateX(3px); }
+    }
+
+    @media (max-width:900px){
+      body{ padding:14px; }
+      .sim-window{ height:500px; }
+      .controls{ width:180px; }
+    }
+
+    @media (max-width:560px){
+      .sim-window{ height:620px; }
+      .tube-wrap{ left:50%; top:70px; }
+      .controls{
+        left:16px;
+        right:16px;
+        top:auto;
+        bottom:16px;
+        transform:none;
+        width:auto;
+      }
+    }
+  
+    /* edubiosim-fullscreen styles */
+    .fullscreen-enter-btn,
+    .fullscreen-exit-btn{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:91;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.72);
+      background:rgba(255,255,255,.92);
+      color:#182033;
+      font-weight:900;
+      box-shadow:0 12px 30px rgba(0,0,0,.20);
+      backdrop-filter:blur(8px);
+    }
+    .fullscreen-enter-btn{left:16px;right:auto;display:inline-flex}
+    .fullscreen-exit-btn{left:16px;right:auto;display:none}
+    .fullscreen-enter-btn svg,
+    .fullscreen-exit-btn svg{width:22px;height:22px;display:block}
+    html:fullscreen .fullscreen-exit-btn,
+    html.fullscreen-active .fullscreen-exit-btn{display:inline-flex}
+    html:-webkit-full-screen .fullscreen-exit-btn{display:inline-flex}
+    html:fullscreen .fullscreen-enter-btn,
+    html.fullscreen-active .fullscreen-enter-btn{display:none}
+    html:-webkit-full-screen .fullscreen-enter-btn{display:none}
+    .fullscreen-enter-btn:hover,
+    .fullscreen-exit-btn:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,0,0,.24)}
+    .fullscreen-enter-btn:focus-visible,
+    .fullscreen-exit-btn:focus-visible{outline:3px solid rgba(21,135,123,.35);outline-offset:3px}
+</style>
+</head>
+<body>
+  <main class="app">
+    <section class="sim-card">
+      <div id="simWindow" class="sim-window">
+        <section class="controls" aria-label="Bedienungsfenster">
+          <button id="addWater" class="btn-water">Wasser einfüllen</button>
+          <button id="addOil" class="btn-oil">Öl einfüllen</button>
+          <button id="addSoap" class="btn-soap">Spülmittel ergänzen</button>
+          <button id="shake" class="btn-shake">Reagenzglas schütteln</button>
+          <button id="reset" class="btn-reset">Zurücksetzen</button>
+        </section>
+
+        <div id="tubeWrap" class="tube-wrap">
+          <div id="stopper" class="stopper" aria-hidden="true">
+            <div class="stopper-grip"></div>
+            <div class="stopper-body"></div>
+          </div>
+          <div class="tube-mouth"></div>
+          <div id="pourStream" class="pour-stream"></div>
+          <div id="dropLayer" class="drop-layer"></div>
+
+          <div class="tube">
+            <div class="contents">
+              <div id="waterPhase" class="phase water"><div class="meniscus"></div></div>
+              <div id="oilPhase" class="phase oil"><div class="meniscus"></div></div>
+              <div id="mixedPhase" class="phase mixed"></div>
+              <div id="emulsionPhase" class="phase emulsion"><div class="meniscus"></div></div>
+              <div id="foamPhase" class="phase foam"></div>
+              <div id="dropletField" class="droplet-field"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const LEVEL = 54;
+    const FOAM_LEVEL = 18;
+    const SHAKE_DURATION = 3000;
+    const SEPARATION_STEP_DURATION = 2000;
+
+    const state = {
+      water:false,
+      oil:false,
+      soap:false,
+      shaking:false,
+      stableEmulsion:false
+    };
+
+    const el = {
+      addWater:document.getElementById('addWater'),
+      addOil:document.getElementById('addOil'),
+      addSoap:document.getElementById('addSoap'),
+      shake:document.getElementById('shake'),
+      reset:document.getElementById('reset'),
+
+      tubeWrap:document.getElementById('tubeWrap'),
+      stopper:document.getElementById('stopper'),
+      pourStream:document.getElementById('pourStream'),
+      dropLayer:document.getElementById('dropLayer'),
+
+      water:document.getElementById('waterPhase'),
+      oil:document.getElementById('oilPhase'),
+      mixed:document.getElementById('mixedPhase'),
+      emulsion:document.getElementById('emulsionPhase'),
+      foam:document.getElementById('foamPhase'),
+      dropletField:document.getElementById('dropletField')
+    };
+
+    function wait(ms){
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function easeInOutCubic(t){
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function setMixBand(height, opacity){
+      const h = Math.max(0, height);
+      const bottom = Math.max(0, LEVEL - h / 2);
+      el.mixed.style.height = h + 'px';
+      el.mixed.style.bottom = bottom + 'px';
+      el.mixed.style.opacity = Math.max(0, opacity);
+      el.dropletField.style.height = h + 'px';
+      el.dropletField.style.bottom = bottom + 'px';
+    }
+
+    function setButtonsDisabled(disabled){
+      [el.addWater,el.addOil,el.addSoap,el.shake,el.reset].forEach(btn => btn.disabled = disabled);
+      if(!disabled) updateButtonAvailability();
+    }
+
+    function updateButtonAvailability(){
+      el.addWater.disabled = state.water || state.shaking;
+      el.addOil.disabled = state.oil || state.shaking;
+      el.addSoap.disabled = state.soap || state.shaking;
+      el.shake.disabled = state.shaking || !(state.water || state.oil || state.soap);
+      el.reset.disabled = state.shaking;
+    }
+
+    function clearVisualMixing(){
+      el.mixed.style.opacity = 0;
+      el.mixed.style.height = '0px';
+      el.mixed.style.bottom = '0px';
+      el.dropletField.classList.remove('visible');
+      el.dropletField.style.height = '0px';
+      el.dropletField.style.bottom = '0px';
+      el.dropletField.style.opacity = 0;
+      el.dropletField.innerHTML = '';
+    }
+
+    function updateNormalLayers(){
+      const waterH = state.water ? LEVEL : 0;
+      const oilH = state.oil ? LEVEL : 0;
+      const total = waterH + oilH;
+
+      el.water.style.height = waterH + 'px';
+      el.water.style.bottom = '0px';
+      el.water.style.opacity = 1;
+
+      el.oil.style.height = oilH + 'px';
+      el.oil.style.bottom = waterH + 'px';
+      el.oil.style.opacity = 1;
+
+      el.emulsion.style.height = '0px';
+      el.emulsion.style.opacity = 0;
+
+      el.foam.style.height = state.soap && total > 0 ? '14px' : '0px';
+      el.foam.style.bottom = total + 'px';
+      el.foam.style.opacity = state.soap && total > 0 ? .72 : 0;
+
+      clearVisualMixing();
+    }
+
+    function showStableEmulsion(){
+      const total = (state.water ? LEVEL : 0) + (state.oil ? LEVEL : 0);
+
+      el.water.style.height = '0px';
+      el.water.style.opacity = 0;
+      el.oil.style.height = '0px';
+      el.oil.style.opacity = 0;
+      el.mixed.style.opacity = 0;
+      el.mixed.style.height = '0px';
+      el.mixed.style.bottom = '0px';
+
+      el.emulsion.style.height = total + 'px';
+      el.emulsion.style.opacity = 1;
+
+      el.foam.style.height = FOAM_LEVEL + 'px';
+      el.foam.style.bottom = total + 'px';
+      el.foam.style.opacity = 1;
+
+      el.dropletField.style.height = total + 'px';
+      el.dropletField.style.bottom = '0px';
+      el.dropletField.style.opacity = 1;
+      el.dropletField.classList.add('visible');
+      createDroplets(true);
+    }
+
+    function createDroplets(stable){
+      el.dropletField.innerHTML = '';
+      const total = (state.water ? LEVEL : 0) + (state.oil ? LEVEL : 0);
+      const count = stable ? 42 : 28;
+
+      for(let i=0;i<count;i++){
+        const d = document.createElement('span');
+        d.className = 'mini-drop' + (!stable && i % 2 === 0 ? ' waterish' : '');
+        d.style.left = `${8 + Math.random()*48}px`;
+        d.style.bottom = `${5 + Math.random()*Math.max(30,total-10)}px`;
+        const size = stable ? 3 + Math.random()*4 : 5 + Math.random()*6;
+        d.style.width = `${size}px`;
+        d.style.height = `${size}px`;
+        d.style.animationDelay = `${Math.random()*1.8}s`;
+        d.style.animationDuration = `${2.1 + Math.random()*1.5}s`;
+        el.dropletField.appendChild(d);
+      }
+    }
+
+    function animatePour(kind){
+      return new Promise(resolve => {
+        el.pourStream.className = `pour-stream ${kind} active`;
+        setTimeout(() => {
+          el.pourStream.className = 'pour-stream';
+          resolve();
+        }, 1100);
+      });
+    }
+
+    function animateDrops(){
+      return new Promise(resolve => {
+        const positions = [39,50,61];
+        positions.forEach((x,i) => {
+          const d = document.createElement('div');
+          d.className = 'drop';
+          d.style.left = `${x}px`;
+          d.style.top = '2px';
+          d.style.animationDelay = `${i*.18}s`;
+          el.dropLayer.appendChild(d);
+          requestAnimationFrame(() => d.classList.add('fall'));
+          setTimeout(() => d.remove(), 1250 + i*160);
+        });
+        setTimeout(resolve, 1400);
+      });
+    }
+
+    async function addWater(){
+      if(state.water || state.shaking) return;
+      setButtonsDisabled(true);
+      state.stableEmulsion = false;
+      await animatePour('water');
+      state.water = true;
+      updateNormalLayers();
+      updateButtonAvailability();
+    }
+
+    async function addOil(){
+      if(state.oil || state.shaking) return;
+      setButtonsDisabled(true);
+      state.stableEmulsion = false;
+      await animatePour('oil');
+      state.oil = true;
+      updateNormalLayers();
+      updateButtonAvailability();
+    }
+
+    async function addSoap(){
+      if(state.soap || state.shaking) return;
+      setButtonsDisabled(true);
+      state.stableEmulsion = false;
+      await animateDrops();
+      state.soap = true;
+      updateNormalLayers();
+      updateButtonAvailability();
+    }
+
+    async function insertStopper(){
+      el.stopper.classList.remove('removing');
+      el.stopper.classList.remove('active');
+      void el.stopper.offsetWidth;
+      el.stopper.classList.add('active');
+      await wait(900);
+    }
+
+    async function removeStopper(){
+      el.stopper.classList.add('removing');
+      await wait(700);
+      el.stopper.classList.remove('active','removing');
+    }
+
+    async function showTemporaryMixing(){
+      const total = (state.water ? LEVEL : 0) + (state.oil ? LEVEL : 0);
+      const visibleHeight = Math.max(total, state.soap ? 45 : 0);
+
+      if(state.water){
+        el.water.style.height = LEVEL + 'px';
+        el.water.style.bottom = '0px';
+      }
+      if(state.oil){
+        el.oil.style.height = LEVEL + 'px';
+        el.oil.style.bottom = (state.water ? LEVEL : 0) + 'px';
+      }
+
+      el.water.style.opacity = .18;
+      el.oil.style.opacity = .18;
+      setMixBand(visibleHeight, total > 0 ? .96 : 0);
+
+      createDroplets(false);
+      el.dropletField.style.opacity = .96;
+      el.dropletField.classList.add('visible');
+      await wait(250);
+    }
+
+    async function animateSeparation(){
+      const total = LEVEL * 2;
+      const duration = 10000;
+      let lastRefresh = 0;
+
+      el.water.style.height = LEVEL + 'px';
+      el.water.style.bottom = '0px';
+      el.oil.style.height = LEVEL + 'px';
+      el.oil.style.bottom = LEVEL + 'px';
+      el.dropletField.classList.add('visible');
+      createDroplets(false);
+
+      await new Promise(resolve => {
+        const start = performance.now();
+        function frame(now){
+          const t = Math.min(1, (now - start) / duration);
+          const e = easeInOutCubic(t);
+          const bandHeight = total - (total - 10) * e;
+          const bandOpacity = 0.96 * (1 - e);
+          const liquidOpacity = 0.18 + 0.82 * e;
+
+          el.water.style.opacity = liquidOpacity;
+          el.oil.style.opacity = liquidOpacity;
+          setMixBand(bandHeight, bandOpacity);
+          el.dropletField.style.opacity = Math.max(0.08, bandOpacity);
+
+          if(now - lastRefresh > 260){
+            createDroplets(false);
+            lastRefresh = now;
+          }
+
+          if(t < 1){
+            requestAnimationFrame(frame);
+          } else {
+            resolve();
+          }
+        }
+        requestAnimationFrame(frame);
+      });
+
+      clearVisualMixing();
+      updateNormalLayers();
+    }
+
+    async function animateEmulsionFormation(duration = 3000){
+      const total = (state.water ? LEVEL : 0) + (state.oil ? LEVEL : 0);
+      let lastRefresh = 0;
+
+      el.emulsion.style.height = total + 'px';
+      el.emulsion.style.opacity = 0;
+      el.foam.style.height = '0px';
+      el.foam.style.bottom = total + 'px';
+      el.foam.style.opacity = 0;
+      el.dropletField.classList.add('visible');
+      createDroplets(false);
+
+      await new Promise(resolve => {
+        const start = performance.now();
+        function frame(now){
+          const t = Math.min(1, (now - start) / duration);
+          const e = easeInOutCubic(t);
+          const bandHeight = total - 22 * e;
+          const bandOpacity = 0.92 * (1 - e);
+
+          el.water.style.opacity = 0.18 * (1 - e);
+          el.oil.style.opacity = 0.18 * (1 - e);
+          el.emulsion.style.opacity = e;
+          el.foam.style.height = (FOAM_LEVEL * e) + 'px';
+          el.foam.style.opacity = 0.95 * e;
+
+          setMixBand(bandHeight, bandOpacity);
+          el.dropletField.style.height = total + 'px';
+          el.dropletField.style.bottom = '0px';
+          el.dropletField.style.opacity = 0.5 + 0.5 * e;
+
+          if(now - lastRefresh > 240){
+            createDroplets(e > 0.55);
+            lastRefresh = now;
+          }
+
+          if(t < 1){
+            requestAnimationFrame(frame);
+          } else {
+            resolve();
+          }
+        }
+        requestAnimationFrame(frame);
+      });
+
+      showStableEmulsion();
+    }
+
+    async function shake(){
+      if(state.shaking || !(state.water || state.oil || state.soap)) return;
+
+      setButtonsDisabled(true);
+      state.shaking = true;
+
+      await insertStopper();
+
+      el.tubeWrap.classList.add('shaking');
+      await showTemporaryMixing();
+
+      if(state.water && state.oil && state.soap){
+        state.stableEmulsion = true;
+        await animateEmulsionFormation(SHAKE_DURATION);
+      }else{
+        await wait(SHAKE_DURATION);
+      }
+
+      el.tubeWrap.classList.remove('shaking');
+      await removeStopper();
+
+      if(state.water && state.oil && state.soap){
+        showStableEmulsion();
+      }else if(state.water && state.oil){
+        state.stableEmulsion = false;
+        await animateSeparation();
+      }else{
+        updateNormalLayers();
+      }
+
+      state.shaking = false;
+      updateButtonAvailability();
+    }
+
+    function reset(){
+      state.water = false;
+      state.oil = false;
+      state.soap = false;
+      state.shaking = false;
+      state.stableEmulsion = false;
+
+      el.tubeWrap.classList.remove('shaking');
+      el.stopper.classList.remove('active','removing');
+
+      el.water.style.opacity = 1;
+      el.oil.style.opacity = 1;
+      el.water.style.height = '0px';
+      el.oil.style.height = '0px';
+      el.oil.style.bottom = '0px';
+
+      el.emulsion.style.height = '0px';
+      el.emulsion.style.opacity = 0;
+
+      el.foam.style.height = '0px';
+      el.foam.style.opacity = 0;
+      el.foam.style.bottom = '0px';
+
+      clearVisualMixing();
+      updateButtonAvailability();
+    }
+
+    el.addWater.addEventListener('click', addWater);
+    el.addOil.addEventListener('click', addOil);
+    el.addSoap.addEventListener('click', addSoap);
+    el.shake.addEventListener('click', shake);
+    el.reset.addEventListener('click', reset);
+
+    reset();
+  </script>
+
+  <!-- edubiosim-fullscreen -->  <button id="fullscreenEnterBtn" class="fullscreen-enter-btn" type="button" aria-label="Vollbildmodus starten" title="Vollbildmodus starten">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M6 11V6h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M17 6h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 17v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11 22H6v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Vollbild</span>
+  </button>  <button id="fullscreenExitBtn" class="fullscreen-exit-btn" type="button" aria-label="Vollbildmodus verlassen" title="Vollbildmodus verlassen">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M5 3.8h10.5c1 0 1.8.8 1.8 1.8v16.8c0 1-.8 1.8-1.8 1.8H5V3.8Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M15.2 14h8.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M20.2 9.4 24.8 14l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.2 13.7h.1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span>Exit</span>
+  </button>
+    <script>
+        // edubiosim-fullscreen
+    (() => {
+      const fullscreenEnterBtn = document.getElementById('fullscreenEnterBtn');
+      const fullscreenExitBtn = document.getElementById('fullscreenExitBtn');
+      const fullscreenRoot = document.documentElement;
+      const fullscreenInitialStartSelectors = [
+        '#startSimulationBtn',
+        '#startSimulation',
+        '#introStart',
+        '#introStartBtn',
+        '#introModalStartBtn',
+        '#startModal .start-btn',
+        '#startModal #startSimulationBtn',
+        '#startModal #startSimulation',
+        '#introModal .im-start-btn',
+        '#introOverlay #introStart',
+        '#introBackdrop #introStartBtn',
+        '#startMenu .btn-start',
+        '.menu-overlay .btn-start',
+        '.start-modal .start-btn',
+        '.intro-modal .intro-start',
+        '.intro-modal .start-btn',
+        '[data-initial-start]'
+      ];
+      let initialAutoFullscreenTried = false;
+      const isFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const syncFullscreenButton = () => fullscreenRoot.classList.toggle('fullscreen-active', isFullscreen());
+      const enterFullscreen = async () => {
+        if (isFullscreen()) return;
+        if (fullscreenRoot.requestFullscreen) await fullscreenRoot.requestFullscreen();
+        else if (fullscreenRoot.webkitRequestFullscreen) await fullscreenRoot.webkitRequestFullscreen();
+      };
+      const exitFullscreen = async () => {
+        if (!isFullscreen()) return;
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+      };
+      const bindInitialFullscreenStartTriggers = () => {
+        const candidates = new Set();
+        fullscreenInitialStartSelectors.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => candidates.add(el));
+        });
+        candidates.forEach(el => {
+          if (!el || el.dataset.fullscreenStartBound === '1') return;
+          el.dataset.fullscreenStartBound = '1';
+          el.addEventListener('click', () => {
+            if (initialAutoFullscreenTried) return;
+            initialAutoFullscreenTried = true;
+            enterFullscreen().catch(err => console.warn('Vollbild konnte nicht gestartet werden', err)).finally(syncFullscreenButton);
+          }, { capture: true });
+        });
+      };
+      fullscreenEnterBtn?.addEventListener('click', async () => {
+        try {
+          await enterFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht gestartet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      fullscreenExitBtn?.addEventListener('click', async () => {
+        try {
+          await exitFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht beendet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      document.addEventListener('fullscreenchange', syncFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindInitialFullscreenStartTriggers, { once: true });
+      } else {
+        bindInitialFullscreenStartTriggers();
+      }
+      syncFullscreenButton();
+    })();
+  </script>
+</body>
+</html>
