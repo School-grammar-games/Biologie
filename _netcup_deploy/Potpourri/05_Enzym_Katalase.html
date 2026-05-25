@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enzymsimulation – Katalase</title>
+<style>
+:root{
+  --bg:#0f1622;
+  --panel:#172233;
+  --text:#e8eef7;
+  --muted:#aebbd0;
+  --line:#2b405d;
+  --accent:#72d0ff;
+  --accent2:#8df0c8;
+  --warn:#ffd37a;
+  --danger:#fb7185;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:radial-gradient(circle at 18% -12%,#20324d 0,#0f1622 48%,#0a1019 100%);
+  font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+  color:var(--text);
+}
+header{
+  padding:14px 22px;
+  border-bottom:1px solid #263852;
+  background:rgba(10,16,25,.75);
+}
+h1{font-size:1.32rem;margin:0}
+.sub{color:var(--muted);font-size:.9rem}
+.wrap{
+  display:grid;
+  grid-template-columns:330px 1fr;
+  gap:16px;
+  padding:16px;
+  min-height:calc(100vh - 70px);
+}
+.panel,.sim{
+  background:linear-gradient(180deg,rgba(23,34,51,.96),rgba(15,24,38,.96));
+  border:1px solid #2a3f5d;
+  border-radius:18px;
+  box-shadow:0 18px 40px rgba(0,0,0,.25);
+}
+.panel{padding:13px}
+.sim{padding:14px;display:grid;grid-template-rows:1fr auto;gap:10px}
+.row{display:grid;gap:6px;margin:8px 0}
+.row.inline{grid-template-columns:1fr 1fr;gap:8px}
+.control-pair{display:grid;grid-template-columns:minmax(0,1fr) 118px;gap:8px;align-items:center}
+.control-pair.wide-action{grid-template-columns:1fr}
+.control-pair button{min-height:38px;padding:8px 9px;font-size:.78rem}
+.h2o2-main{min-height:54px;font-size:.94rem;font-weight:850;letter-spacing:.01em;margin-top:2px;border:1px solid rgba(148,163,184,.32);}
+.h2o2-main.ready{background:linear-gradient(180deg,#67e8f9,#0ea5e9);color:#042f45;border-color:rgba(125,211,252,.95);box-shadow:0 0 0 1px rgba(125,211,252,.28),0 0 24px rgba(14,165,233,.28);}
+.h2o2-main.ready:hover:not(:disabled){filter:brightness(1.08);box-shadow:0 0 0 1px rgba(186,230,253,.48),0 0 30px rgba(14,165,233,.38);}
+.label{font-size:.76rem;color:#c9d5e8;font-weight:700}
+.hint,.prep-status{font-size:.76rem;color:var(--muted);line-height:1.35}
+.prep-status{
+  border:1px solid rgba(114,208,255,.18);
+  border-radius:12px;
+  background:#101a2a;
+  padding:8px 9px;
+  margin-top:8px;
+}
+
+#potato{font-size:.86rem;}
+select,input[type=range],button{
+  width:100%;
+  border-radius:12px;
+  border:1px solid #344c70;
+  background:#0e1726;
+  color:var(--text);
+  padding:8px 10px;
+  font:inherit;
+}
+input[type=range]{padding:6px 0;accent-color:var(--accent)}
+button{
+  cursor:pointer;
+  font-weight:750;
+  background:linear-gradient(180deg,#223b5a,#182b44);
+  transition:transform .15s ease,filter .15s ease,opacity .15s ease;
+}
+button:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.05)}
+button:active:not(:disabled){transform:translateY(0)}
+button:disabled{opacity:.52;cursor:not-allowed;filter:saturate(.6)}
+button.primary{background:linear-gradient(180deg,#1672a0,#115174)}
+button.ghost{background:#101b2b}
+button.success{background:linear-gradient(180deg,#22c55e,#15803d);color:#052e16;border-color:#16a34a}
+button.locked{background:linear-gradient(180deg,#334155,#1e293b);color:#b6c4d9}
+.value{float:right;color:var(--accent);font-weight:800}
+.card{border:1px solid #2a405e;border-radius:14px;background:#101a2a;padding:10px;margin:8px 0}
+.card h3{margin:0 0 6px 0;font-size:.92rem}
+canvas{
+  width:100%;
+  height:100%;
+  min-height:520px;
+  border-radius:16px;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(0deg,rgba(255,255,255,.03) 1px,transparent 1px),
+    radial-gradient(circle at 58% 26%,rgba(125,211,252,.08),transparent 26%),
+    rgba(2,6,23,.42);
+  background-size:28px 28px,28px 28px,100% 100%,100% 100%;
+  border:1px solid rgba(148,163,184,.16);
+  display:block;
+}
+.tbl{max-height:145px;overflow:auto;border:1px solid #2a3d5a;border-radius:12px}
+.tbl table{width:100%;border-collapse:collapse;font-size:.77rem}
+.tbl th,.tbl td{border-bottom:1px solid #263955;padding:6px;text-align:left}
+.tbl th{color:#c0d4ea;background:#111b2b;position:sticky;top:0}
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.68);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  padding:20px;
+}
+.modal.show{display:flex}
+.dialog{
+  width:min(760px,94vw);
+  max-height:88vh;
+  overflow:auto;
+  background:linear-gradient(180deg,#142033,#0f1726);
+  border:1px solid #405a7d;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 28px 70px rgba(0,0,0,.42);
+}
+.dialog.start-dialog{width:min(820px,94vw);max-height:84vh;padding:15px}
+.dialog h2{margin:0 0 8px;font-size:1.16rem}
+.dialog h3{margin:11px 0 6px;font-size:.96rem;color:#d7e6fb}
+.dialog p,.dialog li{line-height:1.46;color:#dce7f5;font-size:.94rem}
+.dialog ul,.dialog ol{padding-left:1.25rem}
+.equation-task{
+  margin-top:10px;
+  padding:11px;
+  border:1px solid rgba(114,208,255,.23);
+  border-radius:16px;
+  background:rgba(9,16,28,.56);
+}
+.equation-line{
+  display:grid;
+  grid-template-columns:1fr auto 1fr auto 1fr;
+  align-items:center;
+  gap:10px;
+  margin:9px 0;
+}
+.eq-symbol{
+  color:#dbeafe;
+  font-weight:900;
+  font-size:1.2rem;
+  text-align:center;
+}
+.drop-slot{
+  min-height:48px;
+  border:2px dashed rgba(174,187,208,.45);
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px;
+  color:#90a4bc;
+  background:rgba(15,24,38,.72);
+  text-align:center;
+  font-weight:760;
+}
+.drop-slot.over{border-color:var(--accent);background:rgba(31,56,82,.72)}
+.drop-slot.correct{border-color:rgba(34,197,94,.8);background:rgba(20,83,45,.25);color:#dcfce7}
+.eq-tokens{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.eq-token{
+  width:auto;
+  min-width:150px;
+  border:1px solid rgba(148,163,184,.34);
+  background:linear-gradient(180deg,#1f3653,#14253b);
+  color:#eaf4ff;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.eq-token.pointer-dragging{opacity:.62}
+.touch-drag-ghost{
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:2000;
+  pointer-events:none;
+  min-width:150px;
+  padding:10px 14px;
+  border-radius:14px;
+  border:1px solid rgba(125,211,252,.72);
+  background:linear-gradient(180deg,#1f3653,#14253b);
+  color:#eaf4ff;
+  font:700 .86rem system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+  box-shadow:0 18px 36px rgba(0,0,0,.35),0 0 0 2px rgba(125,211,252,.18);
+  transform:translate(-50%,-50%);
+}
+.eq-token.selected{outline:2px solid var(--accent);outline-offset:2px}
+.eq-token.used{opacity:.42}
+.eq-feedback{
+  min-height:22px;
+  margin-top:8px;
+  color:#ffd37a;
+  font-size:.84rem;
+  font-weight:650;
+}
+.start-actions{display:grid;gap:8px;margin-top:12px}
+#startSimulation:disabled{background:linear-gradient(180deg,#334155,#1e293b);color:#9ca3af}
+
+@media (min-width:951px) and (max-width:1100px) and (max-height:820px){
+  header{padding:10px 16px}
+  h1{font-size:1.08rem}
+  .sub{font-size:.78rem}
+  .wrap{
+    grid-template-columns:300px minmax(0,1fr);
+    gap:10px;
+    padding:10px;
+    min-height:0;
+    align-items:stretch;
+  }
+  .panel{
+    padding:10px;
+    align-self:stretch;
+    height:auto;
+  }
+  .sim{
+    padding:10px;
+    gap:8px;
+    grid-template-rows:auto auto;
+    align-self:stretch;
+    height:auto;
+    align-content:start;
+  }
+  .card{padding:8px;margin:6px 0}
+  .card h3{font-size:.84rem;margin-bottom:5px}
+  .row{gap:4px;margin:5px 0}
+  .label,.hint,.prep-status{font-size:.69rem}
+  .prep-status{padding:6px 8px;margin-top:6px}
+  select,input[type=range],button{padding:6px 8px;border-radius:11px}
+  .control-pair{grid-template-columns:minmax(0,1fr) 102px;gap:6px}
+  .control-pair button{min-height:35px;padding:6px 7px;font-size:.69rem}
+  #potato{font-size:.72rem;padding-left:7px;padding-right:20px}
+  .h2o2-main{min-height:44px;font-size:.82rem}
+  .row.inline{gap:6px}
+  canvas{
+    height:auto;
+    min-height:0;
+    aspect-ratio:960 / 560;
+  }
+  .tbl{max-height:92px}
+  .tbl table{font-size:.68rem}
+  .tbl th,.tbl td{padding:4px 5px}
+  .dialog.start-dialog{width:min(760px,94vw);max-height:82vh;padding:12px}
+  .dialog{max-height:86vh;padding:12px}
+  .dialog h2{font-size:1.02rem}
+  .dialog h3{font-size:.88rem;margin:8px 0 5px}
+  .dialog p,.dialog li{font-size:.84rem;line-height:1.35}
+  .equation-task{padding:9px;margin-top:8px}
+  .equation-line{gap:7px;margin:7px 0}
+  .drop-slot{min-height:42px;font-size:.78rem;padding:6px}
+  .eq-token{min-width:126px;font-size:.78rem;padding:7px 9px}
+  .start-actions{margin-top:8px}
+}
+
+@media(max-width:520px){.control-pair{grid-template-columns:1fr}.control-pair button{min-height:40px}}
+@media(max-width:950px){.wrap{grid-template-columns:1fr}.panel{max-height:none}canvas{min-height:440px}}
+@media(max-width:720px){.equation-line{grid-template-columns:1fr}.eq-symbol{font-size:1rem}.eq-token{width:100%}}
+
+    /* edubiosim-fullscreen styles */
+    .fullscreen-enter-btn,
+    .fullscreen-exit-btn{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:91;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.72);
+      background:rgba(255,255,255,.92);
+      color:#182033;
+      font-weight:900;
+      box-shadow:0 12px 30px rgba(0,0,0,.20);
+      backdrop-filter:blur(8px);
+    }
+    .fullscreen-enter-btn{left:16px;right:auto;display:inline-flex}
+    .fullscreen-exit-btn{left:16px;right:auto;display:none}
+    .fullscreen-enter-btn svg,
+    .fullscreen-exit-btn svg{width:22px;height:22px;display:block}
+    html:fullscreen .fullscreen-exit-btn,
+    html.fullscreen-active .fullscreen-exit-btn{display:inline-flex}
+    html:-webkit-full-screen .fullscreen-exit-btn{display:inline-flex}
+    html:fullscreen .fullscreen-enter-btn,
+    html.fullscreen-active .fullscreen-enter-btn{display:none}
+    html:-webkit-full-screen .fullscreen-enter-btn{display:none}
+    .fullscreen-enter-btn:hover,
+    .fullscreen-exit-btn:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,0,0,.24)}
+    .fullscreen-enter-btn:focus-visible,
+    .fullscreen-exit-btn:focus-visible{outline:3px solid rgba(21,135,123,.35);outline-offset:3px}
+    html.apple-focus-device .fullscreen-enter-btn,
+    html.apple-focus-device .fullscreen-exit-btn{display:none !important;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Enzymsimulation: Kartoffel, Katalase und Wasserstoffperoxid</h1>
+</header>
+<div class="wrap">
+  <aside class="panel">
+    <div class="row">
+      <label class="label">aktives Reagenzglas</label>
+      <select id="tubeSel">
+        <option value="0">Reagenzglas 1</option>
+        <option value="1">Reagenzglas 2</option>
+        <option value="2">Reagenzglas 3</option>
+      </select>
+      <div id="prepStatus" class="prep-status">Vorbereitet: 0 / 3 Reagenzgläser</div>
+    </div>
+    <div class="card">
+      <h3>Einstellungen für aktives Reagenzglas</h3>
+      <div class="row">
+        <label class="label">Kartoffelprobe</label>
+        <div class="control-pair">
+          <select id="potato">
+            <option value="cube">großer Kartoffelwürfel</option>
+            <option value="pieces">mehrere kleine Stücke</option>
+            <option value="rasp">feine Kartoffelraspeln</option>
+          </select>
+          <button id="fillPotato">Kartoffel einfüllen</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="label">pH-Wert <span class="value" id="phVal">7</span></label>
+        <div class="control-pair">
+          <input id="ph" type="range" min="2" max="12" step="1" value="7">
+          <button id="setPH">pH anwenden</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="label">Temperatur <span class="value" id="tempVal">30</span> °C</label>
+        <div class="control-pair">
+          <input id="temp" type="range" min="10" max="70" step="5" value="30">
+          <button id="setTemp">Temperatur setzen</button>
+        </div>
+      </div>
+      <div class="row control-pair wide-action">
+        <button id="addH2O2" class="locked h2o2-main" title="Alle drei Reagenzgläser müssen zuerst vorbereitet werden.">🔒 H₂O₂ pipettieren</button>
+      </div>
+    </div>
+    <div class="row inline">
+      <button id="stop">Stopp</button>
+      <button id="reset">Zurücksetzen</button>
+    </div>
+    <div class="row">
+      <button id="infoBtn" class="ghost">Informationstext</button>
+    </div>
+  </aside>
+  <section class="sim">
+    <canvas id="c" aria-label="Simulation zur Katalaseaktivität in drei Reagenzgläsern"></canvas>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>RG</th><th>Kartoffelprobe</th><th>Temperatur</th><th>pH</th><th>H₂O₂</th><th>Bläschen/min</th></tr></thead>
+        <tbody id="results"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<div class="modal show" id="startModal" aria-modal="true" role="dialog">
+  <div class="dialog start-dialog">
+    <h2>Versuch: Einfluss von Bedingungen auf die Enzymaktivität</h2>
+    <p>In dieser Simulation untersuchst du, wie sich unterschiedliche Bedingungen auf die Aktivität eines Enzyms auswirken. In Kartoffelzellen kommt das Enzym Katalase vor. Du vergleichst drei Reagenzgläser und veränderst dabei gezielt pH-Wert, Temperatur und die Oberfläche der Kartoffelprobe.</p>
+    <p>Die Beobachtung erfolgt über die sichtbare Reaktion im Reagenzglas. Welche Einstellungen zu einer besonders starken oder schwachen Reaktion führen, sollst du selbst durch den Vergleich herausfinden.</p>
+
+    <div class="equation-task">
+      <h3>Vorbereitung: Reaktionsgleichung zusammensetzen</h3>
+      <p>Ordne die Bausteine in die Dropfelder ein. Erst danach kann die Simulation gestartet werden.</p>
+      <div class="equation-line" aria-label="Drag-and-Drop-Reaktionsgleichung">
+        <div class="drop-slot" data-slot="substrate">Ausgangsstoff</div>
+        <div class="eq-symbol">→</div>
+        <div class="drop-slot" data-slot="product1">Produkt</div>
+        <div class="eq-symbol">+</div>
+        <div class="drop-slot" data-slot="product2">Produkt</div>
+      </div>
+      <div class="eq-tokens" aria-label="Bausteine">
+        <button type="button" class="eq-token" draggable="true" data-value="Wasserstoffperoxid">Wasserstoffperoxid</button>
+        <button type="button" class="eq-token" draggable="true" data-value="Wasser">Wasser</button>
+        <button type="button" class="eq-token" draggable="true" data-value="Sauerstoff">Sauerstoff</button>
+      </div>
+      <div id="eqFeedback" class="eq-feedback">Ziehe oder tippe die Bausteine an und ordne sie den Dropfeldern zu.</div>
+    </div>
+
+    <h3>So verwendest du die Simulation</h3>
+    <ol>
+      <li>Wähle zuerst ein Reagenzglas aus.</li>
+      <li>Stelle für dieses Reagenzglas die Kartoffelprobe, den pH-Wert und die Temperatur ein. Nutze dafür die jeweiligen Anwenden-Buttons.</li>
+      <li>Bereite danach auch Reagenzglas 2 und Reagenzglas 3 vor.</li>
+      <li>Erst wenn alle drei Reagenzgläser vorbereitet sind, kann Wasserstoffperoxid in alle drei Reagenzgläser pipettiert werden.</li>
+      <li>Die Reaktion startet automatisch mit der Zugabe von Wasserstoffperoxid.</li>
+    </ol>
+    <div class="start-actions">
+      <button id="startSimulation" class="success" disabled>Simulation starten</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="info">
+  <div class="dialog">
+    <h2>Informationstext</h2>
+    <p>In Kartoffelzellen befindet sich das Enzym Katalase. Es beschleunigt die Zersetzung von Wasserstoffperoxid. Dabei entsteht Sauerstoff, der im Versuch als Bläschen sichtbar wird. Eine größere Oberfläche des Kartoffelmaterials ermöglicht mehr Kontakt zwischen Wasserstoffperoxid und Enzymquelle. Temperatur und pH-Wert beeinflussen die Aktivität der Katalase; extreme Bedingungen können die räumliche Struktur des Enzyms so verändern, dass das aktive Zentrum nicht mehr passend arbeitet.</p>
+    <p><strong>Arbeitsaufträge:</strong></p>
+    <ol>
+      <li>Vergleiche einen großen Kartoffelwürfel mit feinen Kartoffelraspeln bei gleicher Temperatur und gleichem pH-Wert.</li>
+      <li>Untersuche, bei welcher Temperatur die höchste Reaktionsrate erreicht wird.</li>
+      <li>Erkläre, warum die Reaktionsrate bei stark saurem oder stark basischem pH-Wert abnimmt.</li>
+    </ol>
+    <button onclick="closeModal('info')">Schließen</button>
+  </div>
+</div>
+
+<script>
+const c=document.getElementById('c');
+const ctx=c.getContext('2d');
+const tubeSel=document.getElementById('tubeSel');
+const potato=document.getElementById('potato');
+const ph=document.getElementById('ph');
+const temp=document.getElementById('temp');
+const addH2O2Btn=document.getElementById('addH2O2');
+const prepStatus=document.getElementById('prepStatus');
+const potatoTexture=new Image();
+let potatoTextureReady=false;
+const potatoTexturePaths=[
+  'Bilder/Kartoffel.png',
+  './Bilder/Kartoffel.png',
+  '../Bilder/Kartoffel.png',
+  'Kartoffel.png'
+];
+function loadPotatoTexture(index=0){
+  if(index>=potatoTexturePaths.length){
+    potatoTextureReady=false;
+    draw();
+    return;
+  }
+  potatoTexture.onload=()=>{
+    potatoTextureReady=true;
+    draw();
+  };
+  potatoTexture.onerror=()=>loadPotatoTexture(index+1);
+  potatoTexture.src=potatoTexturePaths[index];
+}
+loadPotatoTexture();
+const controlsToLock=[tubeSel,potato,ph,temp,document.getElementById('fillPotato'),document.getElementById('setPH'),document.getElementById('setTemp')];
+const VIEW={w:960,h:560};
+let running=false,last=0,elapsed=0,experimentHasStarted=false,resultRecorded=false;
+
+function makeRaspels(){
+  return Array.from({length:22},(_,k)=>({x:-28+Math.random()*56,y:340+Math.random()*46,r:k*.73,a:-1.2+Math.random()*2.4,l:12+Math.random()*8}));
+}
+function createTube(){
+  return {potato:'cube',ph:7,temp:30,prepared:{potato:false,ph:false,temp:false},hasPotato:false,h2o2:false,liquid:0,rate:0,bubbleCount:0,bubbles:[],spawnCarry:0,pipette:null,heaterPulse:0,raspels:makeRaspels()};
+}
+let tubes=[createTube(),createTube(),createTube()];
+
+function active(){return tubes[Number(tubeSel.value)]}
+function labels(){document.getElementById('phVal').textContent=ph.value;document.getElementById('tempVal').textContent=temp.value}
+function tubeX(i){return 210+i*250}
+function namePot(v){return {cube:'großer Würfel',pieces:'kleine Stücke',rasp:'Raspeln'}[v]}
+function allPrepared(){return tubes.every(t=>t.prepared.potato&&t.prepared.ph&&t.prepared.temp)}
+function preparedCount(){return tubes.filter(t=>t.prepared.potato&&t.prepared.ph&&t.prepared.temp).length}
+
+function updatePrepStatus(){
+  const count=preparedCount();
+  prepStatus.textContent=`Vorbereitet: ${count} / 3 Reagenzgläser`;
+  if(experimentHasStarted){
+    addH2O2Btn.disabled=true;
+    addH2O2Btn.classList.add('locked');
+    addH2O2Btn.classList.remove('ready');
+    addH2O2Btn.textContent='H₂O₂ wurde pipettiert';
+    addH2O2Btn.title='Der Versuch läuft oder wurde bereits durchgeführt. Nutze Zurücksetzen für einen neuen Durchgang.';
+    return;
+  }
+  const ready=allPrepared();
+  addH2O2Btn.disabled=!ready;
+  addH2O2Btn.classList.toggle('locked',!ready);
+  addH2O2Btn.classList.toggle('ready',ready);
+  addH2O2Btn.textContent=ready?'H₂O₂ pipettieren':'🔒 H₂O₂ pipettieren';
+  addH2O2Btn.title=ready?'Wasserstoffperoxid gleichzeitig in alle drei Reagenzgläser pipettieren.':'Alle drei Reagenzgläser müssen zuerst vorbereitet werden.';
+}
+
+function lockExperimentControls(locked){controlsToLock.forEach(el=>el.disabled=locked)}
+
+tubeSel.onchange=()=>{const t=active();potato.value=t.potato;ph.value=t.ph;temp.value=t.temp;labels();draw()};
+[ph,temp].forEach(e=>e.oninput=labels);
+potato.onchange=()=>{const t=active();t.potato=potato.value;t.prepared.potato=false;draw()};
+
+function activity(t){
+  if(!t.hasPotato||!t.h2o2)return 0;
+  const surf={cube:.55,pieces:.85,rasp:1.2}[t.potato];
+  const tempF=Math.exp(-Math.pow((t.temp-35)/18,2));
+  const heatDamage=t.temp>55?Math.max(.12,1-(t.temp-55)/18):1;
+  const phF=Math.exp(-Math.pow((t.ph-7)/2.7,2));
+  return Math.round(90*surf*tempF*heatDamage*phF);
+}
+function fillPotato(){
+  if(experimentHasStarted)return;
+  const t=active();
+  t.potato=potato.value;
+  t.hasPotato=true;
+  t.prepared.potato=true;
+  updatePrepStatus();
+  draw();
+}
+function setPH(){
+  if(experimentHasStarted)return;
+  const i=Number(tubeSel.value),t=tubes[i];
+  t.ph=Number(ph.value);
+  t.prepared.ph=true;
+  t.pipette={kind:t.ph<7?'Säure':t.ph>7?'Base':'neutral',start:performance.now(),x:tubeX(i)};
+  updatePrepStatus();
+  draw();
+}
+function setTemp(){
+  if(experimentHasStarted)return;
+  const t=active();
+  t.temp=Number(temp.value);
+  t.prepared.temp=true;
+  t.heaterPulse=1;
+  updatePrepStatus();
+  draw();
+}
+function addH2O2(){
+  if(!allPrepared()||experimentHasStarted)return;
+  experimentHasStarted=true;
+  resultRecorded=false;
+  lockExperimentControls(true);
+  const now=performance.now();
+  tubes.forEach((t,i)=>{
+    t.h2o2=true;
+    t.liquid=1;
+    t.bubbles=[];
+    t.bubbleCount=0;
+    t.spawnCarry=0;
+    t.rate=activity(t);
+    t.pipette={kind:'h2o2',start:now,x:tubeX(i)};
+  });
+  running=true;
+  elapsed=0;
+  last=now;
+  updatePrepStatus();
+}
+function reset(){
+  running=false;
+  elapsed=0;
+  experimentHasStarted=false;
+  resultRecorded=false;
+  tubes=[createTube(),createTube(),createTube()];
+  tubeSel.value=0;
+  potato.value='cube';
+  ph.value=7;
+  temp.value=30;
+  labels();
+  document.getElementById('results').innerHTML='';
+  lockExperimentControls(false);
+  updatePrepStatus();
+  draw();
+}
+function stop(){
+  if(!experimentHasStarted||resultRecorded)return;
+  running=false;
+  record();
+  resultRecorded=true;
+  updatePrepStatus();
+}
+function record(){
+  const tbody=document.getElementById('results');
+  tubes.forEach((t,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td>${namePot(t.potato)}</td><td>${t.temp} °C</td><td>${t.ph}</td><td>${t.h2o2?'ja':'nein'}</td><td>${activity(t)}</td>`;
+    tbody.prepend(tr);
+  });
+}
+function spawnBubbleForTube(t,i){
+  t.bubbleCount=(t.bubbleCount||0)+1;
+  t.bubbles.push({
+    x:tubeX(i)-22+Math.random()*44,
+    y:365,
+    r:2+Math.random()*4,
+    life:1,
+    drift:-10+Math.random()*20
+  });
+}
+function update(dt,now){
+  if(running){elapsed+=dt}
+  tubes.forEach((t,i)=>{
+    if(running&&t.rate>0){
+      const bubblesPerSecond=t.rate/60;
+      t.spawnCarry += bubblesPerSecond*dt;
+      while(t.spawnCarry>=1){
+        spawnBubbleForTube(t,i);
+        t.spawnCarry-=1;
+      }
+    }
+    if(running){
+      t.bubbles=t.bubbles.map(b=>({
+        ...b,
+        y:b.y-(38+Math.min(t.rate,120)*0.08)*dt,
+        x:b.x+(b.drift||0)*dt,
+        life:b.life-dt*.11
+      })).filter(b=>b.y>150&&b.life>0);
+    }
+    if(t.pipette&&now-t.pipette.start>1500)t.pipette=null;
+    t.heaterPulse=Math.max(0,t.heaterPulse-dt*.5);
+  });
+}
+function fitCanvas(){
+  const rect=c.getBoundingClientRect();
+  const dpr=Math.max(1,Math.min(window.devicePixelRatio||1,2.5));
+  c.width=Math.round(rect.width*dpr);
+  c.height=Math.round(rect.height*dpr);
+  ctx.setTransform(c.width/VIEW.w,0,0,c.height/VIEW.h,0,0);
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality='high';
+  draw();
+}
+function roundRectPath(x,y,w,h,r){
+  const rr=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+rr,y);
+  ctx.lineTo(x+w-rr,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+rr);
+  ctx.lineTo(x+w,y+h-rr);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-rr,y+h);
+  ctx.lineTo(x+rr,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-rr);
+  ctx.lineTo(x,y+rr);
+  ctx.quadraticCurveTo(x,y,x+rr,y);
+}
+function drawTubeBodyPath(){
+  ctx.beginPath();
+  ctx.moveTo(-36,78);
+  ctx.lineTo(-36,365);
+  ctx.quadraticCurveTo(-36,410,0,416);
+  ctx.quadraticCurveTo(36,410,36,365);
+  ctx.lineTo(36,78);
+}
+function drawTubeInnerPath(){
+  ctx.beginPath();
+  ctx.moveTo(-31,86);
+  ctx.lineTo(-31,364);
+  ctx.quadraticCurveTo(-31,402,0,407);
+  ctx.quadraticCurveTo(31,402,31,364);
+  ctx.lineTo(31,86);
+  ctx.closePath();
+}
+function drawTubeGlassOverlay(){
+  ctx.save();
+  drawTubeBodyPath();
+  const glassGrad=ctx.createLinearGradient(-42,82,42,82);
+  glassGrad.addColorStop(0,'rgba(255,255,255,.34)');
+  glassGrad.addColorStop(.18,'rgba(255,255,255,.10)');
+  glassGrad.addColorStop(.50,'rgba(255,255,255,.015)');
+  glassGrad.addColorStop(.82,'rgba(255,255,255,.13)');
+  glassGrad.addColorStop(1,'rgba(255,255,255,.30)');
+  ctx.fillStyle=glassGrad;
+  ctx.fill();
+  ctx.strokeStyle='rgba(226,232,240,.76)';
+  ctx.lineWidth=4;
+  ctx.lineJoin='round';
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(-27,98);
+  ctx.lineTo(-27,362);
+  ctx.strokeStyle='rgba(255,255,255,.22)';
+  ctx.lineWidth=7;
+  ctx.lineCap='round';
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(26,105);
+  ctx.lineTo(26,348);
+  ctx.strokeStyle='rgba(255,255,255,.12)';
+  ctx.lineWidth=5;
+  ctx.lineCap='round';
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(0,70,49,14,0,0,Math.PI*2);
+  const mouthGrad=ctx.createLinearGradient(0,56,0,84);
+  mouthGrad.addColorStop(0,'rgba(255,255,255,.24)');
+  mouthGrad.addColorStop(1,'rgba(255,255,255,.08)');
+  ctx.fillStyle=mouthGrad;
+  ctx.fill();
+  ctx.strokeStyle='rgba(226,232,240,.88)';
+  ctx.lineWidth=4;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(0,70,37,7,0,0,Math.PI*2);
+  ctx.fillStyle='rgba(17,24,39,.92)';
+  ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.18)';
+  ctx.lineWidth=2;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(0,77,40,6,0,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.13)';
+  ctx.filter='blur(1px)';
+  ctx.fill();
+  ctx.filter='none';
+  ctx.restore();
+}
+function drawTubeLiquid(t){
+  if(!t.liquid)return;
+  ctx.save();
+  drawTubeInnerPath();
+  ctx.clip();
+  const liquidTop=230;
+  const liquidBottom=407;
+  const liquidGrad=ctx.createLinearGradient(0,liquidTop,0,liquidBottom);
+  liquidGrad.addColorStop(0,'rgba(191,235,255,.40)');
+  liquidGrad.addColorStop(1,'rgba(125,211,252,.24)');
+  ctx.fillStyle=liquidGrad;
+  ctx.fillRect(-31,liquidTop,62,liquidBottom-liquidTop);
+  ctx.beginPath();
+  ctx.ellipse(0,liquidTop,31,6.5,0,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.16)';
+  ctx.fill();
+  ctx.strokeStyle='rgba(220,245,255,.48)';
+  ctx.lineWidth=1.4;
+  ctx.stroke();
+  ctx.restore();
+}
+function drawGlass(x,t,i){
+  ctx.save();
+  ctx.translate(x,0);
+  ctx.textAlign='center';
+  ctx.textBaseline='alphabetic';
+  ctx.fillStyle='#d7e4f3';
+  ctx.font='700 15px system-ui,-apple-system,Segoe UI,Arial,sans-serif';
+  ctx.fillText('Reagenzglas '+(i+1),0,38);
+  drawHeater(t.temp,t.heaterPulse);
+  drawTubeLiquid(t);
+  ctx.save();
+  drawTubeInnerPath();
+  ctx.clip();
+  if(t.hasPotato){drawPotato(t.potato,t)}
+  t.bubbles.forEach(b=>{
+    ctx.globalAlpha=Math.max(.25,b.life);
+    ctx.strokeStyle='rgba(202,240,255,.95)';
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.arc(b.x-x,b.y,b.r,0,Math.PI*2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(b.x-x-b.r*.22,b.y-b.r*.22,b.r*.22,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,.72)';
+    ctx.fill();
+    ctx.globalAlpha=1;
+  });
+  ctx.restore();
+  drawTubeGlassOverlay();
+  drawTubeReadout(t);
+  ctx.restore();
+}
+function drawTubeReadout(t){
+  const y=488;
+  ctx.save();
+  roundRectPath(-66,y,132,55,13);
+  ctx.fillStyle='rgba(8,13,22,.78)';
+  ctx.fill();
+  ctx.strokeStyle='rgba(148,163,184,.24)';
+  ctx.lineWidth=1;
+  ctx.stroke();
+  ctx.textAlign='center';
+  ctx.fillStyle='#bfcbda';
+  ctx.font='600 12.5px system-ui,-apple-system,Segoe UI,Arial,sans-serif';
+  ctx.fillText(`pH ${t.ph} · ${t.temp} °C`,0,y+20);
+  ctx.fillStyle='#f1f5f9';
+  ctx.font='800 14px system-ui,-apple-system,Segoe UI,Arial,sans-serif';
+  ctx.fillText(`${t.bubbleCount||0} Bläschen`,0,y+40);
+  ctx.restore();
+}
+function hasPotatoTexture(){return potatoTextureReady&&potatoTexture.complete&&potatoTexture.naturalWidth>0}
+function fillPotatoShape(pathBuilder,bounds,alpha=.82){
+  ctx.save();
+  pathBuilder();
+  ctx.fillStyle='#d7b061';
+  ctx.fill();
+
+  if(hasPotatoTexture()){
+    ctx.save();
+    pathBuilder();
+    ctx.clip();
+
+    // Die Textur wird aus einem Ausschnitt gezeichnet, statt das ganze Bild stark zu verkleinern.
+    // Dadurch bleibt die Kartoffelstruktur auch bei kleinen Stücken sichtbar.
+    const sw=Math.max(72,Math.min(potatoTexture.naturalWidth,Math.round(potatoTexture.naturalWidth*.46)));
+    const sh=Math.max(72,Math.min(potatoTexture.naturalHeight,Math.round(potatoTexture.naturalHeight*.46)));
+    const seed=Math.abs(Math.sin((bounds.x*12.9898+bounds.y*78.233))*43758.5453)%1;
+    const sx=Math.max(0,Math.min(potatoTexture.naturalWidth-sw,Math.round(seed*(potatoTexture.naturalWidth-sw))));
+    const sy=Math.max(0,Math.min(potatoTexture.naturalHeight-sh,Math.round((1-seed)*(potatoTexture.naturalHeight-sh))));
+
+    ctx.globalAlpha=alpha;
+    ctx.drawImage(potatoTexture,sx,sy,sw,sh,bounds.x-1,bounds.y-1,bounds.w+2,bounds.h+2);
+
+    // leichte Tonwert- und Glanzüberlagerung, damit die Kontur ruhig und gelblich bleibt
+    ctx.globalCompositeOperation='multiply';
+    ctx.globalAlpha=.18;
+    ctx.fillStyle='rgba(142,94,28,.65)';
+    ctx.fillRect(bounds.x,bounds.y,bounds.w,bounds.h);
+
+    ctx.globalCompositeOperation='screen';
+    ctx.globalAlpha=.20;
+    const highlight=ctx.createLinearGradient(bounds.x,bounds.y,bounds.x+bounds.w,bounds.y+bounds.h);
+    highlight.addColorStop(0,'rgba(255,245,190,.75)');
+    highlight.addColorStop(1,'rgba(255,245,190,0)');
+    ctx.fillStyle=highlight;
+    ctx.fillRect(bounds.x,bounds.y,bounds.w,bounds.h);
+    ctx.restore();
+  }else{
+    const shine=ctx.createLinearGradient(bounds.x,bounds.y,bounds.x+bounds.w,bounds.y+bounds.h);
+    shine.addColorStop(0,'rgba(255,246,185,.22)');
+    shine.addColorStop(1,'rgba(141,96,32,.12)');
+    pathBuilder();
+    ctx.fillStyle=shine;
+    ctx.fill();
+  }
+
+  pathBuilder();
+  ctx.strokeStyle='#8d6530';
+  ctx.lineWidth=1.45;
+  ctx.stroke();
+  ctx.restore();
+}
+function drawPotato(type,t){
+  if(type==='cube'){
+    fillPotatoShape(()=>{ctx.beginPath();ctx.roundRect(-20,342,40,38,6);},{x:-20,y:342,w:40,h:38},.62);
+  }else if(type==='pieces'){
+    for(let k=0;k<6;k++){
+      const x=-28+(k%3)*22;
+      const y=342+Math.floor(k/3)*20;
+      fillPotatoShape(()=>{ctx.beginPath();ctx.roundRect(x,y,16,15,4);},{x,y,w:16,h:15},.58);
+    }
+  }else{
+    t.raspels.forEach(r=>{
+      ctx.save();
+      ctx.translate(r.x,r.y);
+      ctx.rotate(r.a);
+      fillPotatoShape(()=>{ctx.beginPath();ctx.roundRect(-1.6,-r.l/2,3.6,r.l,1.8);},{x:-2,y:-r.l/2,w:9,h:r.l},.42);
+      ctx.restore();
+    });
+  }
+}
+function drawHeater(temp,pulse){
+  const tempT=Math.max(0,Math.min(1,(temp-10)/60));
+  const glow=Math.min(1,tempT+pulse*.45);
+  ctx.save();
+  const plateY=421,plateW=124,plateH=35;
+  const heatGlow=ctx.createRadialGradient(0,plateY+16,12,0,plateY+16,82);
+  heatGlow.addColorStop(0,`rgba(251,113,133,${0.08+glow*.33})`);
+  heatGlow.addColorStop(1,'rgba(251,113,133,0)');
+  ctx.fillStyle=heatGlow;
+  ctx.fillRect(-82,plateY-44,164,96);
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.35)';ctx.shadowBlur=14;ctx.shadowOffsetY=8;
+  ctx.beginPath();ctx.roundRect(-plateW/2,plateY,plateW,plateH,15);ctx.fillStyle='rgba(15,23,42,.96)';ctx.fill();
+  ctx.restore();
+  const plateGrad=ctx.createLinearGradient(-plateW/2,plateY,plateW/2,plateY+plateH);
+  plateGrad.addColorStop(0,'#334155');plateGrad.addColorStop(.5,'#111827');plateGrad.addColorStop(1,'#020617');
+  ctx.beginPath();ctx.roundRect(-plateW/2,plateY,plateW,plateH,15);ctx.fillStyle=plateGrad;ctx.fill();
+  ctx.strokeStyle='rgba(226,232,240,.20)';ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(0,plateY+17,39,9,0,0,Math.PI*2);
+  ctx.strokeStyle=`rgba(251,113,133,${0.22+glow*.58})`;ctx.lineWidth=4.2;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(0,plateY+17,24,5.5,0,0,Math.PI*2);
+  ctx.strokeStyle=`rgba(248,113,113,${0.14+glow*.50})`;ctx.lineWidth=3.2;ctx.stroke();
+  ctx.restore();
+}
+function drawPipette(x,t){
+  if(!t.pipette)return;
+  const k=Math.min(1,(performance.now()-t.pipette.start)/1500);
+  ctx.save();
+  ctx.translate(x-20+20*k,48+30*Math.sin(k*Math.PI));
+  ctx.rotate(-.22);
+  ctx.fillStyle='rgba(210,235,255,.88)';
+  ctx.strokeStyle='rgba(255,255,255,.8)';
+  ctx.lineWidth=2;
+  ctx.beginPath();ctx.roundRect(-12,-18,24,70,12);ctx.fill();ctx.stroke();
+  ctx.fillStyle=t.pipette.kind==='h2o2'?'rgba(180,225,255,.55)':t.pipette.kind==='Säure'?'rgba(255,180,120,.6)':t.pipette.kind==='Base'?'rgba(130,190,255,.6)':'rgba(210,240,255,.45)';
+  ctx.fillRect(-8,8,16,32);
+  ctx.beginPath();ctx.moveTo(-5,52);ctx.lineTo(0,92);ctx.lineTo(5,52);ctx.closePath();ctx.fill();
+  ctx.restore();
+  if(k>.35&&k<.95){
+    for(let j=0;j<3;j++){
+      const yy=125+(k-.35)*150-j*20;
+      ctx.fillStyle='rgba(195,235,255,.85)';
+      ctx.beginPath();ctx.arc(x,yy,4,0,Math.PI*2);ctx.fill();
+    }
+  }
+}
+function draw(){
+  ctx.clearRect(0,0,VIEW.w,VIEW.h);
+  tubes.forEach((t,i)=>{drawGlass(tubeX(i),t,i);drawPipette(tubeX(i),t)});
+}
+function animate(now){
+  if(!last)last=now;
+  const dt=Math.min(.04,(now-last)/1000);
+  last=now;
+  update(dt,now);
+  draw();
+  requestAnimationFrame(animate);
+}
+
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+window.closeModal=closeModal;
+
+document.getElementById('fillPotato').onclick=fillPotato;
+addH2O2Btn.onclick=addH2O2;
+document.getElementById('setPH').onclick=setPH;
+document.getElementById('setTemp').onclick=setTemp;
+document.getElementById('stop').onclick=stop;
+document.getElementById('reset').onclick=reset;
+document.getElementById('infoBtn').onclick=()=>openModal('info');
+window.addEventListener('resize',fitCanvas);
+
+const equationState={substrate:null,product1:null,product2:null};
+let selectedToken=null;
+let suppressTokenClickUntil=0;
+const slots=[...document.querySelectorAll('.drop-slot')];
+const tokens=[...document.querySelectorAll('.eq-token')];
+const startSimulation=document.getElementById('startSimulation');
+const eqFeedback=document.getElementById('eqFeedback');
+function tokenLabel(value){return value}
+function updateTokenUse(){
+  const used=new Set(Object.values(equationState).filter(Boolean));
+  tokens.forEach(t=>t.classList.toggle('used',used.has(t.dataset.value)));
+}
+function placeToken(value,slotName){
+  Object.keys(equationState).forEach(key=>{if(equationState[key]===value)equationState[key]=null});
+  equationState[slotName]=value;
+  renderEquation();
+}
+function isEquationCorrect(){
+  const products=[equationState.product1,equationState.product2].sort().join('|');
+  return equationState.substrate==='Wasserstoffperoxid'&&products==='Sauerstoff|Wasser';
+}
+function renderEquation(){
+  slots.forEach(slot=>{
+    const value=equationState[slot.dataset.slot];
+    slot.textContent=value|| (slot.dataset.slot==='substrate'?'Ausgangsstoff':'Produkt');
+    slot.classList.toggle('correct',Boolean(value));
+  });
+  updateTokenUse();
+  const correct=isEquationCorrect();
+  startSimulation.disabled=!correct;
+  eqFeedback.textContent=correct?'Gleichung korrekt. Du kannst die Simulation starten.':'Ordne alle Bausteine in die passenden Dropfelder ein.';
+  eqFeedback.style.color=correct?'#bbf7d0':'#ffd37a';
+}
+tokens.forEach(token=>{
+  token.addEventListener('dragstart',event=>{event.dataTransfer.setData('text/plain',token.dataset.value)});
+  token.addEventListener('click',()=>{
+    if(performance.now()<suppressTokenClickUntil)return;
+    tokens.forEach(t=>t.classList.remove('selected'));
+    selectedToken=token.dataset.value;
+    token.classList.add('selected');
+    eqFeedback.textContent='Wähle nun ein Dropfeld aus.';
+  });
+});
+slots.forEach(slot=>{
+  slot.addEventListener('dragover',event=>{event.preventDefault();slot.classList.add('over')});
+  slot.addEventListener('dragleave',()=>slot.classList.remove('over'));
+  slot.addEventListener('drop',event=>{
+    event.preventDefault();
+    slot.classList.remove('over');
+    const value=event.dataTransfer.getData('text/plain');
+    if(value)placeToken(value,slot.dataset.slot);
+  });
+  slot.addEventListener('click',()=>{
+    if(selectedToken){
+      placeToken(selectedToken,slot.dataset.slot);
+      selectedToken=null;
+      tokens.forEach(t=>t.classList.remove('selected'));
+    }else if(equationState[slot.dataset.slot]){
+      equationState[slot.dataset.slot]=null;
+      renderEquation();
+    }
+  });
+});
+
+function enablePointerDragForEquation(){
+  let drag=null;
+  const threshold=8;
+
+  function moveGhost(clientX,clientY){
+    if(drag&&drag.ghost){
+      drag.ghost.style.transform=`translate(${clientX}px,${clientY}px) translate(-50%,-50%)`;
+    }
+  }
+
+  function startVisualDrag(event){
+    if(!drag||drag.started)return;
+    drag.started=true;
+    drag.token.classList.add('pointer-dragging');
+    const ghost=document.createElement('div');
+    ghost.className='touch-drag-ghost';
+    ghost.textContent=drag.value;
+    document.body.appendChild(ghost);
+    drag.ghost=ghost;
+    moveGhost(event.clientX,event.clientY);
+  }
+
+  tokens.forEach(token=>{
+    token.addEventListener('pointerdown',event=>{
+      if(event.button!==undefined&&event.button!==0)return;
+      drag={
+        pointerId:event.pointerId,
+        token,
+        value:token.dataset.value,
+        startX:event.clientX,
+        startY:event.clientY,
+        started:false,
+        ghost:null
+      };
+      token.setPointerCapture?.(event.pointerId);
+    });
+
+    token.addEventListener('pointermove',event=>{
+      if(!drag||drag.pointerId!==event.pointerId)return;
+      const dx=event.clientX-drag.startX;
+      const dy=event.clientY-drag.startY;
+      if(!drag.started&&Math.hypot(dx,dy)>threshold){
+        startVisualDrag(event);
+      }
+      if(drag.started){
+        event.preventDefault();
+        moveGhost(event.clientX,event.clientY);
+        slots.forEach(slot=>slot.classList.remove('over'));
+        const el=document.elementFromPoint(event.clientX,event.clientY);
+        const slot=el?.closest?.('.drop-slot');
+        if(slot)slot.classList.add('over');
+      }
+    },{passive:false});
+
+    token.addEventListener('pointerup',event=>{
+      if(!drag||drag.pointerId!==event.pointerId)return;
+      const wasDragging=drag.started;
+      if(wasDragging){
+        event.preventDefault();
+        suppressTokenClickUntil=performance.now()+450;
+        slots.forEach(slot=>slot.classList.remove('over'));
+        const el=document.elementFromPoint(event.clientX,event.clientY);
+        const slot=el?.closest?.('.drop-slot');
+        if(slot)placeToken(drag.value,slot.dataset.slot);
+      }
+      drag.token.classList.remove('pointer-dragging');
+      drag.ghost?.remove();
+      drag=null;
+    },{passive:false});
+
+    token.addEventListener('pointercancel',()=>{
+      if(!drag)return;
+      drag.token.classList.remove('pointer-dragging');
+      drag.ghost?.remove();
+      slots.forEach(slot=>slot.classList.remove('over'));
+      drag=null;
+    });
+  });
+}
+enablePointerDragForEquation();
+
+startSimulation.addEventListener('click',()=>{
+  if(!isEquationCorrect())return;
+  closeModal('startModal');
+});
+
+labels();
+updatePrepStatus();
+renderEquation();
+fitCanvas();
+requestAnimationFrame(animate);
+</script>
+
+  <!-- edubiosim-fullscreen -->  <button id="fullscreenEnterBtn" class="fullscreen-enter-btn" type="button" aria-label="Vollbildmodus starten" title="Vollbildmodus starten">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M6 11V6h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M17 6h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 17v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11 22H6v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Vollbild</span>
+  </button>  <button id="fullscreenExitBtn" class="fullscreen-exit-btn" type="button" aria-label="Vollbildmodus verlassen" title="Vollbildmodus verlassen">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M5 3.8h10.5c1 0 1.8.8 1.8 1.8v16.8c0 1-.8 1.8-1.8 1.8H5V3.8Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M15.2 14h8.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M20.2 9.4 24.8 14l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.2 13.7h.1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span>Exit</span>
+  </button>
+    <script>
+        // edubiosim-fullscreen
+    (() => {
+      const fullscreenEnterBtn = document.getElementById('fullscreenEnterBtn');
+      const fullscreenExitBtn = document.getElementById('fullscreenExitBtn');
+      const fullscreenRoot = document.documentElement;
+      const isAppleTouchDevice = () => {
+        const ua = navigator.userAgent || '';
+        const platform = navigator.platform || '';
+        return /iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      };
+      const disableAppleFullscreen = isAppleTouchDevice();
+      if (disableAppleFullscreen) {
+        fullscreenRoot.classList.add('apple-focus-device');
+        fullscreenEnterBtn?.setAttribute('hidden', '');
+        fullscreenExitBtn?.setAttribute('hidden', '');
+      }
+      const fullscreenInitialStartSelectors = [
+        '#startSimulationBtn',
+        '#startSimulation',
+        '#introStart',
+        '#introStartBtn',
+        '#introModalStartBtn',
+        '#startModal .start-btn',
+        '#startModal #startSimulationBtn',
+        '#startModal #startSimulation',
+        '#introModal .im-start-btn',
+        '#introOverlay #introStart',
+        '#introBackdrop #introStartBtn',
+        '#startMenu .btn-start',
+        '.menu-overlay .btn-start',
+        '.start-modal .start-btn',
+        '.intro-modal .intro-start',
+        '.intro-modal .start-btn',
+        '[data-initial-start]'
+      ];
+      let initialAutoFullscreenTried = false;
+      const isFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const syncFullscreenButton = () => fullscreenRoot.classList.toggle('fullscreen-active', isFullscreen());
+      const enterFullscreen = async () => {
+        if (disableAppleFullscreen || isFullscreen()) return;
+        if (fullscreenRoot.requestFullscreen) await fullscreenRoot.requestFullscreen();
+        else if (fullscreenRoot.webkitRequestFullscreen) await fullscreenRoot.webkitRequestFullscreen();
+      };
+      const exitFullscreen = async () => {
+        if (!isFullscreen()) return;
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+      };
+      const bindInitialFullscreenStartTriggers = () => {
+        const candidates = new Set();
+        fullscreenInitialStartSelectors.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => candidates.add(el));
+        });
+        candidates.forEach(el => {
+          if (!el || el.dataset.fullscreenStartBound === '1') return;
+          el.dataset.fullscreenStartBound = '1';
+          el.addEventListener('click', () => {
+            if (disableAppleFullscreen || initialAutoFullscreenTried) return;
+            initialAutoFullscreenTried = true;
+            enterFullscreen().catch(err => console.warn('Vollbild konnte nicht gestartet werden', err)).finally(syncFullscreenButton);
+          }, { capture: true });
+        });
+      };
+      fullscreenEnterBtn?.addEventListener('click', async () => {
+        try {
+          await enterFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht gestartet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      fullscreenExitBtn?.addEventListener('click', async () => {
+        try {
+          await exitFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht beendet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      document.addEventListener('fullscreenchange', syncFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindInitialFullscreenStartTriggers, { once: true });
+      } else {
+        bindInitialFullscreenStartTriggers();
+      }
+      syncFullscreenButton();
+    })();
+  </script>
+</body>
+</html>

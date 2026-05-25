@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Samenverbreitung durch Wind</title><style>
+:root{--bg:#0f1622;--panel:#172233;--text:#e8eef7;--muted:#aebbd0;--line:#2b405d;--accent:#72d0ff;--accent2:#8df0c8;--warn:#ffd37a}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 18% -12%,#20324d 0,#0f1622 48%,#0a1019 100%);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--text)}header{padding:14px 22px;border-bottom:1px solid #263852;background:rgba(10,16,25,.75)}h1{font-size:1.32rem;margin:0}.sub{color:var(--muted);font-size:.9rem}.wrap{display:grid;grid-template-columns:330px 1fr;gap:16px;padding:16px;min-height:calc(100vh - 70px)}.panel,.sim{background:linear-gradient(180deg,rgba(23,34,51,.96),rgba(15,24,38,.96));border:1px solid #2a3f5d;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25)}.panel{padding:14px}.sim{padding:14px;display:grid;grid-template-rows:1fr auto;gap:10px}.row{display:grid;gap:7px;margin:10px 0}.row.inline{grid-template-columns:1fr 1fr;gap:8px}.label{font-size:.78rem;color:#c9d5e8;font-weight:700}.hint{font-size:.78rem;color:var(--muted);line-height:1.35}select,input[type=range],button{width:100%;border-radius:12px;border:1px solid #344c70;background:#0e1726;color:var(--text);padding:9px 10px;font:inherit}input[type=range]{padding:7px 0;accent-color:var(--accent)}button{cursor:pointer;font-weight:750;background:linear-gradient(180deg,#223b5a,#182b44)}button.primary{background:linear-gradient(180deg,#1672a0,#115174)}button.ghost{background:#101b2b}.value{float:right;color:var(--accent);font-weight:800}canvas{width:100%;height:100%;min-height:520px;border-radius:16px;background:#0c1420;border:1px solid #253957;display:block}.tbl{max-height:150px;overflow:auto;border:1px solid #2a3d5a;border-radius:12px}.tbl table{width:100%;border-collapse:collapse;font-size:.77rem}.tbl th,.tbl td{border-bottom:1px solid #263955;padding:6px;text-align:left}.tbl th{color:#c0d4ea;background:#111b2b;position:sticky;top:0}.modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;z-index:20;padding:20px}.modal.show{display:flex}.dialog{width:min(850px,94vw);max-height:88vh;overflow:auto;background:#111b2b;border:1px solid #405a7d;border-radius:18px;padding:18px}.dialog p,.dialog li{line-height:1.55;color:#dce7f5}.source li{margin-bottom:9px}@media(max-width:930px){.wrap{grid-template-columns:1fr}canvas{min-height:430px}}
+
+    /* edubiosim-fullscreen styles */
+    .fullscreen-enter-btn,
+    .fullscreen-exit-btn{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:91;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.72);
+      background:rgba(255,255,255,.92);
+      color:#182033;
+      font-weight:900;
+      box-shadow:0 12px 30px rgba(0,0,0,.20);
+      backdrop-filter:blur(8px);
+    }
+    .fullscreen-enter-btn{left:16px;right:auto;display:inline-flex}
+    .fullscreen-exit-btn{left:16px;right:auto;display:none}
+    .fullscreen-enter-btn svg,
+    .fullscreen-exit-btn svg{width:22px;height:22px;display:block}
+    html:fullscreen .fullscreen-exit-btn,
+    html.fullscreen-active .fullscreen-exit-btn{display:inline-flex}
+    html:-webkit-full-screen .fullscreen-exit-btn{display:inline-flex}
+    html:fullscreen .fullscreen-enter-btn,
+    html.fullscreen-active .fullscreen-enter-btn{display:none}
+    html:-webkit-full-screen .fullscreen-enter-btn{display:none}
+    .fullscreen-enter-btn:hover,
+    .fullscreen-exit-btn:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,0,0,.24)}
+    .fullscreen-enter-btn:focus-visible,
+    .fullscreen-exit-btn:focus-visible{outline:3px solid rgba(21,135,123,.35);outline-offset:3px}
+    html.apple-focus-device .fullscreen-enter-btn,
+    html.apple-focus-device .fullscreen-exit-btn{display:none !important;}
+</style></head><body><header><h1>Samenverbreitung durch Wind</h1><div class="sub">Echte lokale Samenabbildungen mit transparentem Hintergrund, saubere Messlinien und überarbeitete Pflanze.</div></header><div class="wrap"><aside class="panel"><div class="row"><label class="label">Samenform</label><select id="seed"><option value="round">schwerer runder Samen</option><option value="wing">Flugsamen mit Flügel</option><option value="parachute">Samen mit Fallschirmstruktur</option><option value="long">länglicher Samen</option></select></div><div class="row"><label class="label">Masse <span class="value" id="massVal">50</span></label><input id="mass" type="range" min="10" max="100" value="50"></div><div class="row"><label class="label">Oberfläche/Flügelfläche <span class="value" id="areaVal">50</span></label><input id="area" type="range" min="10" max="100" value="50"></div><div class="row"><label class="label">Windstärke <span class="value" id="windVal">3</span></label><input id="wind" type="range" min="0" max="8" value="3"></div><div class="row"><label class="label">Abwurfhöhe <span class="value" id="heightVal">8</span></label><input id="height" type="range" min="4" max="12" value="8"></div><div class="row inline"><button id="start" class="primary">Start</button><button id="reset">Zurücksetzen</button></div><div class="row inline"><button id="infoBtn" class="ghost">Informationstext</button><button id="srcBtn" class="ghost">Bildquellen</button></div><div class="hint">Die Bilder wurden lokal gespeichert und für die Simulation zugeschnitten/freigestellt. Falls ein Bild nicht lädt, wird automatisch eine schematische Ersatzform gezeichnet.</div></aside><section class="sim"><canvas id="c" width="960" height="560"></canvas><div class="tbl"><table><thead><tr><th>Samenform</th><th>Masse</th><th>Oberfläche</th><th>Wind</th><th>Fallzeit</th><th>Flugweite</th></tr></thead><tbody id="results"></tbody></table></div></section></div>
+<div class="modal" id="info"><div class="dialog"><h2>Informationstext</h2><p>Samen können durch Wind verbreitet werden. Wie weit ein Samen getragen wird, hängt unter anderem von seiner Masse, Oberfläche, Form und der Windstärke ab. Eine große Oberfläche erhöht den Luftwiderstand, verlängert die Fallzeit und ermöglicht eine größere horizontale Verdriftung.</p><p><strong>Arbeitsaufträge:</strong></p><ol><li>Vergleiche einen schweren runden Samen mit einem Samen mit Fallschirmstruktur.</li><li>Erkläre, warum eine große Oberfläche für Windverbreitung vorteilhaft sein kann.</li><li>Untersuche, wie sich die Windstärke auf die Flugweite auswirkt.</li></ol><button onclick="closeModal('info')">Schließen</button></div></div>
+<div class="modal" id="sources"><div class="dialog source"><h2>Bildquellen</h2><ul><li>Sanjay Acharya: <em>Green Mung Beans.jpg</em>. Wikimedia Commons, CC BY-SA 4.0, bearbeitet/freigestellt.</li><li>Kobako: <em>Maple-seed.jpg</em>. Wikimedia Commons, CC BY-SA 2.5, bearbeitet/freigestellt.</li><li>SaltySemanticSchmuck: <em>Dandelion seedhead with only a single seed still attached.jpg</em>. Wikimedia Commons, CC BY-SA 4.0, bearbeitet/freigestellt.</li><li>DesignbyNur: <em>Wheat seeds.jpg</em>. Wikimedia Commons, CC BY-SA 3.0, bearbeitet/freigestellt.</li></ul><button onclick="closeModal('sources')">Schließen</button></div></div>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d');const seed=document.getElementById('seed'),mass=document.getElementById('mass'),area=document.getElementById('area'),wind=document.getElementById('wind'),height=document.getElementById('height');let imgs={};const srcs={round:'Bilder/seed_round_transparent.png',wing:'Bilder/seed_maple_transparent.png',parachute:'Bilder/seed_dandelion_transparent.png',long:'Bilder/seed_wheat_transparent.png'};Object.keys(srcs).forEach(k=>{imgs[k]=new Image();imgs[k].src=srcs[k];imgs[k].onload=draw});let running=false,start=0,duration=2,flight=0,pos={x:180,y:120},path=[];
+function vals(){document.getElementById('massVal').textContent=mass.value;document.getElementById('areaVal').textContent=area.value;document.getElementById('windVal').textContent=wind.value;document.getElementById('heightVal').textContent=height.value;}[mass,area,wind,height].forEach(e=>e.oninput=()=>{vals();draw()});seed.onchange=draw;
+function params(){let base={round:{name:'runder Samen',m:1.25,a:.55,drift:.55},wing:{name:'Flugsamen',m:.75,a:1.05,drift:1.05},parachute:{name:'Fallschirmsamen',m:.45,a:1.65,drift:1.45},long:{name:'länglicher Samen',m:.85,a:.78,drift:.72}}[seed.value];let m=Number(mass.value)/50*base.m,a=Number(area.value)/50*base.a,w=Number(wind.value),h=Number(height.value);let fall=1.1+h*.23+a*.85-Math.sqrt(m)*.55;fall=Math.max(.9,Math.min(6.5,fall));let dist=Math.round((w*18*base.drift + a*18)/Math.sqrt(m)*fall/2);return {...base,mass:mass.value,area:area.value,wind:w,height:h,fall,dist};}
+function drawPlant(){ctx.save();ctx.translate(125,392);ctx.strokeStyle='#7fd69d';ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(8,-90,20,-190,40,-280);ctx.stroke();ctx.fillStyle='rgba(90,185,112,.9)';for(let i=0;i<5;i++){ctx.save();ctx.translate(18+i*8,-70-i*42);ctx.rotate(i%2?-.6:.7);ctx.beginPath();ctx.ellipse(0,0,36,13,0,0,Math.PI*2);ctx.fill();ctx.restore();}ctx.strokeStyle='#d8b25d';ctx.lineWidth=3;for(let a=-.8;a<=.8;a+=.4){ctx.beginPath();ctx.moveTo(40,-280);ctx.quadraticCurveTo(55+50*a,-305,74+70*a,-285+40*a);ctx.stroke();}ctx.fillStyle='#ffd37a';ctx.beginPath();ctx.arc(40,-280,9,0,Math.PI*2);ctx.fill();ctx.restore();}
+function drawSeedSprite(type,x,y,scale=1,angle=0){let img=imgs[type];ctx.save();ctx.translate(x,y);ctx.rotate(angle);if(img&&img.complete&&img.naturalWidth){let ratio=img.naturalWidth/img.naturalHeight;let h=type==='parachute'?70*scale:type==='wing'?78*scale:42*scale;let w=h*ratio;ctx.drawImage(img,-w/2,-h/2,w,h);if(type==='parachute'){ctx.fillStyle='#7b5435';ctx.beginPath();ctx.ellipse(26,14,7,12,.8,0,Math.PI*2);ctx.fill();}}else{ctx.fillStyle='#d9b46b';ctx.beginPath();ctx.ellipse(0,0,30*scale,15*scale,angle,0,Math.PI*2);ctx.fill();}ctx.restore();}
+function drawAxis(){const ground=460;ctx.strokeStyle='rgba(215,225,238,.45)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(70,ground);ctx.lineTo(890,ground);ctx.stroke();ctx.fillStyle='#aebbd0';ctx.font='12px system-ui';for(let i=0;i<=8;i++){let x=100+i*95;ctx.beginPath();ctx.moveTo(x,ground);ctx.lineTo(x,ground+8);ctx.stroke();ctx.fillText(i*25+' cm',x-16,ground+25);}return ground;}
+function drawWind(){ctx.strokeStyle='rgba(150,218,255,.35)';ctx.lineWidth=2;ctx.setLineDash([14,14]);for(let y=100;y<250;y+=36){ctx.beginPath();ctx.moveTo(230,y);ctx.lineTo(850,y);ctx.stroke();}ctx.setLineDash([]);}
+function draw(){ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='#0b1320';ctx.fillRect(0,0,c.width,c.height);drawWind();drawPlant();let ground=drawAxis(); if(path.length>1){ctx.strokeStyle='rgba(255,211,122,.75)';ctx.lineWidth=2;ctx.setLineDash([8,8]);ctx.beginPath();path.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();ctx.setLineDash([]);let end=path[path.length-1];ctx.strokeStyle='rgba(255,255,255,.45)';ctx.setLineDash([6,8]);ctx.beginPath();ctx.moveTo(end.x,end.y);ctx.lineTo(end.x,ground);ctx.stroke();ctx.setLineDash([]);}drawSeedSprite(seed.value,pos.x,pos.y,1,running?Math.sin(Date.now()/240)*.25:0);let p=params();ctx.fillStyle='#e8eef7';ctx.font='bold 16px system-ui';ctx.fillText('Fallzeit: '+p.fall.toFixed(2).replace('.',',')+' s · Flugweite: '+p.dist+' cm',28,36);}
+function run(){if(running)return;const p=params();duration=p.fall;flight=p.dist;running=true;start=performance.now();path=[];requestAnimationFrame(loop)}function loop(now){let k=Math.min(1,(now-start)/(duration*1000));let ground=460;let startX=170,startY=112;let endX=Math.min(870,startX+flight*3.2), endY=ground-20;pos.x=startX+(endX-startX)*k;pos.y=startY+(endY-startY)*(k*k);path.push({x:pos.x,y:pos.y});draw();if(k<1)requestAnimationFrame(loop);else{running=false;addResult(params());}}
+function reset(){running=false;pos={x:180,y:120};path=[];draw()}function addResult(p){const tr=document.createElement('tr');tr.innerHTML=`<td>${p.name}</td><td>${p.mass}</td><td>${p.area}</td><td>${p.wind}</td><td>${p.fall.toFixed(2).replace('.',',')} s</td><td>${p.dist} cm</td>`;document.getElementById('results').prepend(tr)}
+document.getElementById('start').onclick=run;document.getElementById('reset').onclick=reset;document.getElementById('infoBtn').onclick=()=>openModal('info');document.getElementById('srcBtn').onclick=()=>openModal('sources');function openModal(id){document.getElementById(id).classList.add('show')}function closeModal(id){document.getElementById(id).classList.remove('show')}window.closeModal=closeModal;vals();reset();setInterval(()=>{if(!running)draw()},500);
+</script>
+  <!-- edubiosim-fullscreen -->  <button id="fullscreenEnterBtn" class="fullscreen-enter-btn" type="button" aria-label="Vollbildmodus starten" title="Vollbildmodus starten">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M6 11V6h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M17 6h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 17v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11 22H6v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Vollbild</span>
+  </button>  <button id="fullscreenExitBtn" class="fullscreen-exit-btn" type="button" aria-label="Vollbildmodus verlassen" title="Vollbildmodus verlassen">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M5 3.8h10.5c1 0 1.8.8 1.8 1.8v16.8c0 1-.8 1.8-1.8 1.8H5V3.8Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M15.2 14h8.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M20.2 9.4 24.8 14l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.2 13.7h.1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span>Exit</span>
+  </button>
+    <script>
+        // edubiosim-fullscreen
+    (() => {
+      const fullscreenEnterBtn = document.getElementById('fullscreenEnterBtn');
+      const fullscreenExitBtn = document.getElementById('fullscreenExitBtn');
+      const fullscreenRoot = document.documentElement;
+      const isAppleTouchDevice = () => {
+        const ua = navigator.userAgent || '';
+        const platform = navigator.platform || '';
+        return /iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      };
+      const disableAppleFullscreen = isAppleTouchDevice();
+      if (disableAppleFullscreen) {
+        fullscreenRoot.classList.add('apple-focus-device');
+        fullscreenEnterBtn?.setAttribute('hidden', '');
+        fullscreenExitBtn?.setAttribute('hidden', '');
+      }
+      const fullscreenInitialStartSelectors = [
+        '#startSimulationBtn',
+        '#startSimulation',
+        '#introStart',
+        '#introStartBtn',
+        '#introModalStartBtn',
+        '#startModal .start-btn',
+        '#startModal #startSimulationBtn',
+        '#startModal #startSimulation',
+        '#introModal .im-start-btn',
+        '#introOverlay #introStart',
+        '#introBackdrop #introStartBtn',
+        '#startMenu .btn-start',
+        '.menu-overlay .btn-start',
+        '.start-modal .start-btn',
+        '.intro-modal .intro-start',
+        '.intro-modal .start-btn',
+        '[data-initial-start]'
+      ];
+      let initialAutoFullscreenTried = false;
+      const isFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const syncFullscreenButton = () => fullscreenRoot.classList.toggle('fullscreen-active', isFullscreen());
+      const enterFullscreen = async () => {
+        if (disableAppleFullscreen || isFullscreen()) return;
+        if (fullscreenRoot.requestFullscreen) await fullscreenRoot.requestFullscreen();
+        else if (fullscreenRoot.webkitRequestFullscreen) await fullscreenRoot.webkitRequestFullscreen();
+      };
+      const exitFullscreen = async () => {
+        if (!isFullscreen()) return;
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+      };
+      const bindInitialFullscreenStartTriggers = () => {
+        const candidates = new Set();
+        fullscreenInitialStartSelectors.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => candidates.add(el));
+        });
+        candidates.forEach(el => {
+          if (!el || el.dataset.fullscreenStartBound === '1') return;
+          el.dataset.fullscreenStartBound = '1';
+          el.addEventListener('click', () => {
+            if (disableAppleFullscreen || initialAutoFullscreenTried) return;
+            initialAutoFullscreenTried = true;
+            enterFullscreen().catch(err => console.warn('Vollbild konnte nicht gestartet werden', err)).finally(syncFullscreenButton);
+          }, { capture: true });
+        });
+      };
+      fullscreenEnterBtn?.addEventListener('click', async () => {
+        try {
+          await enterFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht gestartet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      fullscreenExitBtn?.addEventListener('click', async () => {
+        try {
+          await exitFullscreen();
+        } catch (err) {
+          console.warn('Vollbild konnte nicht beendet werden', err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      document.addEventListener('fullscreenchange', syncFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindInitialFullscreenStartTriggers, { once: true });
+      } else {
+        bindInitialFullscreenStartTriggers();
+      }
+      syncFullscreenButton();
+    })();
+  </script>
+</body></html>
