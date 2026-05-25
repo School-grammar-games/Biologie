@@ -1241,6 +1241,120 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
+
+    /* edubiosim-fullscreen styles */
+    :root{--fullscreen-scale:0.85;}
+    .fullscreen-enter-btn,
+    .fullscreen-exit-btn{
+      position:fixed;
+      left:16px;
+      right:auto;
+      bottom:16px;
+      z-index:2147483645;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.72);
+      background:rgba(255,255,255,.92);
+      color:#182033;
+      font-weight:900;
+      line-height:1.1;
+      white-space:normal;
+      box-shadow:0 12px 30px rgba(0,0,0,.20);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      cursor:pointer;
+    }
+    .fullscreen-enter-btn{display:inline-flex;}
+    .fullscreen-exit-btn{display:none;}
+    .fullscreen-enter-btn svg,
+    .fullscreen-exit-btn svg{width:22px;height:22px;display:block;flex:0 0 auto;}
+    html:fullscreen .fullscreen-exit-btn,
+    html.fullscreen-active .fullscreen-exit-btn{display:inline-flex;}
+    html:-webkit-full-screen .fullscreen-exit-btn{display:inline-flex;}
+    html:fullscreen .fullscreen-enter-btn,
+    html.fullscreen-active .fullscreen-enter-btn{display:none;}
+    html:-webkit-full-screen .fullscreen-enter-btn{display:none;}
+    .fullscreen-enter-btn:hover,
+    .fullscreen-exit-btn:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,0,0,.24);}
+    .fullscreen-enter-btn:focus-visible,
+    .fullscreen-exit-btn:focus-visible{outline:3px solid rgba(21,135,123,.35);outline-offset:3px;}
+
+    html.apple-focus-active,
+    body.apple-focus-active{
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      overscroll-behavior:none;
+    }
+    body.apple-focus-active{
+      position:fixed;
+      left:0;
+      right:0;
+      background-attachment:scroll;
+    }
+    html.apple-focus-active .edubiosim-focus-root{
+      position:fixed !important;
+      top:0;
+      left:50%;
+      right:auto;
+      bottom:auto;
+      z-index:2147483000;
+      width:calc(100vw / var(--fullscreen-scale));
+      max-width:none !important;
+      height:calc(100vh / var(--fullscreen-scale));
+      height:calc(100dvh / var(--fullscreen-scale));
+      max-height:none !important;
+      margin:0 !important;
+      box-sizing:border-box;
+      overflow:auto;
+      overscroll-behavior:contain;
+      -webkit-overflow-scrolling:touch;
+      transform:translateX(-50%) scale(var(--fullscreen-scale));
+      transform-origin:top center;
+    }
+    html.apple-focus-active .fullscreen-exit-btn{
+      left:calc(16px + env(safe-area-inset-left));
+      bottom:calc(16px + env(safe-area-inset-bottom));
+      z-index:2147483646;
+    }
+    html.apple-focus-device .fullscreen-enter-btn{
+      left:calc(16px + env(safe-area-inset-left));
+      bottom:calc(16px + env(safe-area-inset-bottom));
+    }
+
+    /* edubiosim-apple-textwrap */
+    @supports (-webkit-touch-callout: none){
+      button,
+      .btn,
+      .smallbtn,
+      .tab,
+      .tab-btn,
+      .badge,
+      .chip,
+      .pill,
+      .tag,
+      .topic-tag,
+      .sim-feature-tag,
+      .card-label,
+      .label,
+      .worksheet-btn,
+      [class*="badge"],
+      [class*="chip"],
+      [class*="pill"],
+      [class*="tag"],
+      [class*="tab"]{
+        min-width:0;
+        max-width:100%;
+        white-space:normal;
+        word-break:normal;
+        overflow-wrap:anywhere;
+        -webkit-hyphens:auto;
+        hyphens:auto;
+      }
+    }
 </style>
   <script data-goatcounter="https://biologie-simulationen.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
@@ -1676,7 +1790,7 @@ Die Auswertung erfolgt über zwei Ebenen. In der Hauptanzeige werden die DNA-Ban
 
 Besonders wertvoll ist die Verbindung aus historischem Kontext und experimenteller Rekonstruktion. Die konkurrierenden Replikationsmodelle – konservativ, semikonservativ und dispersiv – werden inhaltlich vorbereitet und können anschließend anhand der eigenen Versuchsergebnisse geprüft werden. Unterstützungsmodus, Undo-Funktion, Reset und Screenshot-Export erleichtern dabei den Einsatz im Unterricht und machen die Simulation zu einem gut strukturierten Werkzeug für entdeckendes und auswertendes Lernen.`,
     path: 'Meselson-Stahl-Versuch/Meselson_Stahl.html',
-    icon: '������', grade: 'Jahrgangsstufe 9 und 12',
+    icon: '\ud83e\uddea', grade: 'Jahrgangsstufe 9 und 12',
     topics: ['Molekularbiologie','DNA-Replikation','Isotopenmarkierung','Zentrifugation'],
     features: ['Experimentablauf','Modellvergleich','Auswertung','Arbeitsblatt'],
     demo: false
@@ -2941,5 +3055,226 @@ document.querySelectorAll('.feature-video').forEach(function(video) {
 });
 </script>
   <script async src="language-toggle.js"></script>
+
+  <!-- edubiosim-fullscreen -->
+  <button id="fullscreenEnterBtn" class="fullscreen-enter-btn" type="button" aria-label="Vollbildmodus starten" title="Vollbildmodus starten">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M6 11V6h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M17 6h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 17v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11 22H6v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Vollbild</span>
+  </button>
+  <button id="fullscreenExitBtn" class="fullscreen-exit-btn" type="button" aria-label="Vollbildmodus verlassen" title="Vollbildmodus verlassen">
+    <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+      <path d="M5 3.8h10.5c1 0 1.8.8 1.8 1.8v16.8c0 1-.8 1.8-1.8 1.8H5V3.8Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M15.2 14h8.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M20.2 9.4 24.8 14l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.2 13.7h.1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span>Exit</span>
+  </button>
+  <script>
+    // edubiosim-fullscreen
+    (() => {
+      const fullscreenEnterBtn = document.getElementById('fullscreenEnterBtn');
+      const fullscreenExitBtn = document.getElementById('fullscreenExitBtn');
+      const fullscreenRoot = document.documentElement;
+      const fullscreenCopy = {
+        focusText: 'Fokusmodus',
+        focusEnter: 'Fokusmodus starten',
+        focusExit: 'Fokusmodus verlassen',
+        warnEnter: 'Vollbild konnte nicht gestartet werden',
+        warnExit: 'Vollbild konnte nicht beendet werden'
+      };
+      const fullscreenInitialStartSelectors = [
+        '#startSimulationBtn',
+        '#startSimulation',
+        '#introStart',
+        '#introStartBtn',
+        '#introModalStartBtn',
+        '#startModal .start-btn',
+        '#startModal #startSimulationBtn',
+        '#startModal #startSimulation',
+        '#introModal .im-start-btn',
+        '#introOverlay #introStart',
+        '#introBackdrop #introStartBtn',
+        '#startMenu .btn-start',
+        '.menu-overlay .btn-start',
+        '.start-modal .start-btn',
+        '.intro-modal .intro-start',
+        '.intro-modal .start-btn',
+        '[data-initial-start]'
+      ];
+      const fullscreenInitialCloseSelectors = [
+        '#introModalCloseX',
+        '#introModalManualCloseBtn',
+        '#introClose',
+        '#introCloseBtn',
+        '#startModalClose',
+        '#startModal .close',
+        '#startModal .modalClose',
+        '#introModal .im-close-x',
+        '#introModal .im-close-btn',
+        '.intro-modal .close',
+        '.intro-modal .modalClose',
+        '[data-initial-close]'
+      ];
+      const fullscreenBackdropSelectors = [
+        '#introModal',
+        '#startModal',
+        '#introOverlay',
+        '#introBackdrop',
+        '.intro-modal',
+        '.start-modal',
+        '.menu-overlay'
+      ];
+      const focusRootSelectors = [
+        '.app',
+        '#app',
+        '.simulation-app',
+        '.sim-app',
+        '.container',
+        '.wrap',
+        '.wrapper',
+        '.page',
+        '.site-shell',
+        'main'
+      ];
+      let initialAutoFullscreenTried = false;
+      let appleFocusScrollY = 0;
+      let focusRoot = null;
+      const isAppleTouchDevice = () => {
+        const ua = navigator.userAgent || '';
+        const platform = navigator.platform || '';
+        return /iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      };
+      const disableAppleFullscreen = isAppleTouchDevice();
+      const useAppleFocusMode = false;
+      const isNativeFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const isAppleFocusActive = () => fullscreenRoot.classList.contains('apple-focus-active');
+      const isFullscreen = () => isNativeFullscreen() || isAppleFocusActive();
+      const getFocusRoot = () => {
+        if (focusRoot && focusRoot.isConnected) return focusRoot;
+        for (const selector of focusRootSelectors) {
+          const candidate = document.querySelector(selector);
+          if (candidate && candidate !== fullscreenEnterBtn && candidate !== fullscreenExitBtn) {
+            focusRoot = candidate;
+            return focusRoot;
+          }
+        }
+        focusRoot = document.body;
+        return focusRoot;
+      };
+      const setAppleFocusButtonCopy = () => {
+        if (!useAppleFocusMode || !fullscreenEnterBtn) return;
+        const label = fullscreenEnterBtn.querySelector('span');
+        if (label) label.textContent = fullscreenCopy.focusText;
+        fullscreenEnterBtn.setAttribute('aria-label', fullscreenCopy.focusEnter);
+        fullscreenEnterBtn.setAttribute('title', fullscreenCopy.focusEnter);
+        fullscreenExitBtn?.setAttribute('aria-label', fullscreenCopy.focusExit);
+        fullscreenExitBtn?.setAttribute('title', fullscreenCopy.focusExit);
+      };
+      const syncFullscreenButton = () => fullscreenRoot.classList.toggle('fullscreen-active', isFullscreen());
+      const enterAppleFocusMode = () => {
+        if (isAppleFocusActive()) return;
+        appleFocusScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+        const root = getFocusRoot();
+        root.classList.add('edubiosim-focus-root');
+        document.body.style.top = `-${appleFocusScrollY}px`;
+        fullscreenRoot.classList.add('apple-focus-active');
+        document.body.classList.add('apple-focus-active');
+      };
+      const exitAppleFocusMode = () => {
+        if (!isAppleFocusActive()) return;
+        fullscreenRoot.classList.remove('apple-focus-active');
+        document.body.classList.remove('apple-focus-active');
+        document.body.style.top = '';
+        getFocusRoot().classList.remove('edubiosim-focus-root');
+        window.scrollTo(0, appleFocusScrollY);
+      };
+      const enterFullscreen = async () => {
+        if (disableAppleFullscreen || isFullscreen()) return;
+        if (!disableAppleFullscreen && (useAppleFocusMode || !fullscreenRoot.requestFullscreen)) {
+          enterAppleFocusMode();
+          return;
+        }
+        if (fullscreenRoot.requestFullscreen) await fullscreenRoot.requestFullscreen();
+        else if (fullscreenRoot.webkitRequestFullscreen) await fullscreenRoot.webkitRequestFullscreen();
+      };
+      const exitFullscreen = async () => {
+        if (!isFullscreen()) return;
+        if (isAppleFocusActive()) {
+          exitAppleFocusMode();
+          return;
+        }
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+      };
+      const tryInitialFullscreen = () => {
+        if (disableAppleFullscreen || initialAutoFullscreenTried) return;
+        initialAutoFullscreenTried = true;
+        enterFullscreen().catch(err => console.warn(fullscreenCopy.warnEnter, err)).finally(syncFullscreenButton);
+      };
+      const bindInitialFullscreenStartTriggers = () => {
+        const bindClick = (el, handler) => {
+          if (!el || el.dataset.fullscreenStartBound === '1') return;
+          el.dataset.fullscreenStartBound = '1';
+          el.addEventListener('click', handler, { capture: true });
+        };
+        fullscreenInitialStartSelectors.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => bindClick(el, tryInitialFullscreen));
+        });
+        fullscreenInitialCloseSelectors.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => bindClick(el, tryInitialFullscreen));
+        });
+        fullscreenBackdropSelectors.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => bindClick(el, event => {
+            if (event.target === el) tryInitialFullscreen();
+          }));
+        });
+      };
+      fullscreenEnterBtn?.addEventListener('click', async () => {
+        try {
+          await enterFullscreen();
+        } catch (err) {
+          console.warn(fullscreenCopy.warnEnter, err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      fullscreenExitBtn?.addEventListener('click', async () => {
+        try {
+          await exitFullscreen();
+        } catch (err) {
+          console.warn(fullscreenCopy.warnExit, err);
+        } finally {
+          syncFullscreenButton();
+        }
+      });
+      document.addEventListener('fullscreenchange', syncFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !isAppleFocusActive()) return;
+        exitAppleFocusMode();
+        syncFullscreenButton();
+      });
+      if (disableAppleFullscreen) {
+        fullscreenRoot.classList.add('apple-focus-device');
+        fullscreenEnterBtn?.setAttribute('hidden', '');
+        fullscreenExitBtn?.setAttribute('hidden', '');
+      } else if (useAppleFocusMode) {
+        fullscreenRoot.classList.add('apple-focus-device');
+        setAppleFocusButtonCopy();
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindInitialFullscreenStartTriggers, { once: true });
+      } else {
+        bindInitialFullscreenStartTriggers();
+      }
+      syncFullscreenButton();
+    })();
+  </script>
 </body>
 </html>
