@@ -1,5 +1,5 @@
 # =============================================
-# EduBioSim.de – Apache Konfiguration
+# EduBioSim.de - Apache Konfiguration
 # =============================================
 
 # --- HTTPS erzwingen ---
@@ -15,6 +15,8 @@ RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
 # Alte Hauptseite (DE) -> neue Startseite
 RedirectMatch 301 ^/Biologie/Offizielle%20Webseite/Offizielle%20Webseite\.html$ /
 RedirectMatch 301 ^/Biologie/Offizielle%20Webseite/Offizielle_Webseite_EN\.html$ /index_EN.html
+RedirectMatch 301 ^/Biologie/?$ /
+RedirectMatch 301 ^/Biologie/(.*)$ /$1
 
 # --- Fehlerseiten ---
 ErrorDocument 404 /index.html
@@ -24,7 +26,7 @@ Header always set X-Content-Type-Options "nosniff"
 Header always set X-Frame-Options "SAMEORIGIN"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
-# --- Cache für statische Dateien ---
+# --- Cache fuer statische Dateien ---
 <FilesMatch "\.(webp|jpg|jpeg|png|gif|svg|mp4|mp3|woff2|woff|css|js)$">
   Header set Cache-Control "max-age=2592000, public"
 </FilesMatch>

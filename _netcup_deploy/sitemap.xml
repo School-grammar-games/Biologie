@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- === HAUPTSEITE (hÃ¶chste PrioritÃ¤t) === -->
+  <!-- Hauptseiten -->
   <url>
     <loc>https://www.edubiosim.de/</loc>
     <changefreq>monthly</changefreq>
@@ -11,14 +11,30 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- === SIMULATIONEN (DE) === -->
+
+  <!-- Simulationen DE -->
   <url>
-    <loc>https://www.edubiosim.de/Schall_Hoervorgang/Schall_und_Hoervorgang.html</loc>
+    <loc>https://www.edubiosim.de/Angepasstheit_Insekten/Insektenforschung.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Mitose_und_Meiose/Mitose_Meiose.html</loc>
+    <loc>https://www.edubiosim.de/Artbildung/Artbildung.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Attrappenversuche/Attrappenversuche.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Evolution_Kaeferspiel/Kaefer_under_Pressure.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -38,17 +54,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Artbildung/Artbildung.html</loc>
+    <loc>https://www.edubiosim.de/Mitose_und_Meiose/Mitose_Meiose.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.edubiosim.de/Evolution_Kaeferspiel/Kaefer_under_Pressure.html</loc>
+    <loc>https://www.edubiosim.de/Mitose_und_Meiose/Bilder_Chromosome/Meiose.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -58,12 +69,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Attrappenversuche/Attrappenversuche.html</loc>
+    <loc>https://www.edubiosim.de/Schall_Hoervorgang/Schall_und_Hoervorgang.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Angepasstheit_Insekten/Insektenforschung.html</loc>
+    <loc>https://www.edubiosim.de/Strahlengang_Akkommodation/Strahlengang_und_Akkommodation.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -73,18 +84,34 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Strahlengang_Akkommodation/Strahlengang_und_Akkommodation.html</loc>
+    <loc>https://www.edubiosim.de/Verdauung/Simulation_Gallensaft.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-  <!-- === SIMULATIONEN (EN) === -->
+
+  <!-- Simulationen EN -->
   <url>
-    <loc>https://www.edubiosim.de/Schall_Hoervorgang/Schall_und_Hoervorgang_EN.html</loc>
+    <loc>https://www.edubiosim.de/Angepasstheit_Insekten/Insektenforschung_EN.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Mitose_und_Meiose/Mitose_Meiose_EN.html</loc>
+    <loc>https://www.edubiosim.de/Artbildung/Artbildung_EN.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Attrappenversuche/Attrappenversuche_EN.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese_EN.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Evolution_Kaeferspiel/Kaefer_under_Pressure_EN.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -104,17 +131,12 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Artbildung/Artbildung_EN.html</loc>
+    <loc>https://www.edubiosim.de/Mitose_und_Meiose/Mitose_Meiose_EN.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Einflussfaktoren_Fotosynthese/Einflussfaktoren_Fotosynthese_EN.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.edubiosim.de/Evolution_Kaeferspiel/Kaefer_under_Pressure_EN.html</loc>
+    <loc>https://www.edubiosim.de/Mitose_und_Meiose/Bilder_Chromosome/Meiose_EN.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -124,17 +146,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/Attrappenversuche/Attrappenversuche_EN.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.edubiosim.de/Angepasstheit_Insekten/Insektenforschung_EN.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.edubiosim.de/Verdauung/Verdauung_EN.html</loc>
+    <loc>https://www.edubiosim.de/Schall_Hoervorgang/Schall_und_Hoervorgang_EN.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -144,18 +156,65 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/impressum.html</loc>
+    <loc>https://www.edubiosim.de/Verdauung/Verdauung_EN.html</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/datenschutz.html</loc>
+    <loc>https://www.edubiosim.de/Verdauung/Simulation_Gallensaft_EN.html</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Potpourri -->
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/01_Emulsion.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.edubiosim.de/kontakt.html</loc>
+    <loc>https://www.edubiosim.de/Potpourri/02_Diffusion.html</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/03_Wasserwiderstand.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/03_Wasserwiderstand_Buchner.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/04_Photosynthese_Unterstufe.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/04_Photosynthese_Unterstufe_Buchner.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/05_Enzym_Katalase.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/06_Osmose_Plasmolyse.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/08_Samenverbreitung_Wind.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.edubiosim.de/Potpourri/09_Molek%C3%BClbaukasten.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
