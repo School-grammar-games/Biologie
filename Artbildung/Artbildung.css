@@ -2425,3 +2425,75 @@ button:focus-visible{
     align-items:center !important;
   }
 }
+
+/* --- Mobile Landscape 780x360: Inline-Exportergebnis scrollbar machen ---
+   Nur der mobile Querformatmodus benötigt hier eine Ausnahme vom sonst
+   gewollten fixed-height/overflow-hidden Simulationslayout. */
+@media (min-width: 761px) and (max-width: 900px) and (max-height: 480px) and (orientation: landscape){
+  html.inline-export-open,
+  body.inline-export-open{
+    height:auto !important;
+    min-height:100dvh !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    overscroll-behavior-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  body.inline-export-open{
+    display:block !important;
+  }
+
+  body.inline-export-open .app{
+    display:grid !important;
+    height:calc(100dvh - 42px) !important;
+    min-height:calc(100dvh - 42px) !important;
+    overflow:hidden !important;
+  }
+
+  body.inline-export-open .inline-export-result{
+    display:block !important;
+    width:100% !important;
+    padding:8px !important;
+    overflow:visible !important;
+  }
+
+  body.inline-export-open .inline-export-card{
+    width:calc(100vw - 16px) !important;
+    margin:0 auto 18px !important;
+    padding:10px !important;
+    overflow:visible !important;
+  }
+
+  body.inline-export-open .inline-export-header{
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:flex-start !important;
+    gap:8px !important;
+  }
+
+  body.inline-export-open .inline-export-header h2{
+    font-size:16px !important;
+    line-height:1.15 !important;
+  }
+
+  body.inline-export-open .inline-export-header p{
+    font-size:12px !important;
+    line-height:1.25 !important;
+  }
+
+  body.inline-export-open #inlineExportCloseBtn{
+    flex:0 0 auto !important;
+    min-height:32px !important;
+    height:32px !important;
+    padding:5px 10px !important;
+    font-size:12px !important;
+  }
+
+  body.inline-export-open .inline-export-preview{
+    display:block !important;
+    width:100% !important;
+    height:auto !important;
+    max-height:none !important;
+  }
+}
